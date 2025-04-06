@@ -1,1 +1,56 @@
-<p>navbar works!</p>
+<nav class="w-full py-8 shadow-md bg-white">
+  <!-- Container for centering content with max width -->
+  <div class="max-w-8xl w-full mx-auto flex items-center justify-between">
+    <!-- Logo (Centered with Navigation) -->
+    <div class="flex-shrink-0">
+      <a routerLink="/">
+        <img
+          src="/assets/images/settings/logo-berry.png"
+          alt="Logo"
+          class="h-14 w-auto"
+        />
+      </a>
+    </div>
+
+    <div class="flex gap-10">
+      <ul
+        class="hidden md:flex gap-6 font-medium text-base uppercase tracking-wide"
+      >
+        <li><a routerLink="/" routerLinkActive="text-blue-600">Home</a></li>
+        <li>
+          <a routerLink="/collection" routerLinkActive="text-blue-600"
+            >Collection</a
+          >
+        </li>
+        <li>
+          <a routerLink="/product" routerLinkActive="text-blue-600">Product</a>
+        </li>
+        <li>
+          <a routerLink="/mega-menu" routerLinkActive="text-blue-600"
+            >Mega Menu</a
+          >
+        </li>
+        <li>
+          <a routerLink="/blogs" routerLinkActive="text-blue-600">Blogs</a>
+        </li>
+        <li>
+          <a routerLink="/pages" routerLinkActive="text-blue-600">Pages</a>
+        </li>
+        <li>
+          <a routerLink="/seller" routerLinkActive="text-blue-600">Seller</a>
+        </li>
+      </ul>
+
+      <!-- Icons -->
+      <div class="flex items-center gap-4 text-xl">
+        <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
+        <i class="ri-search-line cursor-pointer"></i>
+        <i class="ri-heart-line hover:text-red-500 cursor-pointer"></i>
+        <i
+          class="ri-shopping-cart-line hover:text-green-600 cursor-pointer"
+        ></i>
+        <i class="ri-user-line hover:text-purple-600 cursor-pointer"></i>
+      </div>
+    </div>
+  </div>
+</nav>
