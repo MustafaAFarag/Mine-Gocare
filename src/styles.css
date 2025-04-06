@@ -1,21 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Light mode (default) */
+
 :root {
   --text-color: #22060e;
   --body-bg-color: #fafaf2;
   --hover-color: #a01a40;
 }
-
-/* Remove or comment out the media query if you don't want automatic dark mode */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #f5e6e9;
-    --body-bg-color: #1a0912;
-    --hover-color: #e05676;
-  }
-} */
 
 /* Use gocare class instead of dark-mode */
 .gocare {
@@ -24,14 +18,8 @@
   --hover-color: #e05676;
 }
 
-@layer utilities {
-  /* Custom max-width class */
-  .max-w-8xl {
-    max-width: 1440px; /* or whatever value you prefer */
-  }
-}
-
 body {
   background-color: var(--body-bg-color);
   color: var(--text-color);
+  font-family: "Montserrat", sans-serif;
 }

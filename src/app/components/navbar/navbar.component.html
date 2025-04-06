@@ -1,3 +1,4 @@
+<app-navbar-banner></app-navbar-banner>
 <nav class="w-full py-8 shadow-md bg-white">
   <!-- Container for centering content with max width -->
   <div class="max-w-8xl w-full mx-auto flex items-center justify-between">
@@ -13,44 +14,73 @@
     </div>
 
     <div class="flex gap-10">
-      <ul
-        class="hidden md:flex gap-6 font-medium text-base uppercase tracking-wide"
-      >
-        <li><a routerLink="/" routerLinkActive="text-blue-600">Home</a></li>
-        <li>
+      <ul class="hidden md:flex font-semibold gap-6 text-base tracking-wide">
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
+          <a routerLink="/" routerLinkActive="text-blue-600">Home</a>
+        </li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/collection" routerLinkActive="text-blue-600"
             >Collection</a
           >
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
-        <li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/product" routerLinkActive="text-blue-600">Product</a>
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
-        <li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/mega-menu" routerLinkActive="text-blue-600"
             >Mega Menu</a
           >
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
-        <li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/blogs" routerLinkActive="text-blue-600">Blogs</a>
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
-        <li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/pages" routerLinkActive="text-blue-600">Pages</a>
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
-        <li>
+        <li class="flex items-center gap-1" class="hover:text-hover-color">
           <a routerLink="/seller" routerLinkActive="text-blue-600">Seller</a>
+          <span class="dropdown-icon">
+            <i class="ri-arrow-down-s-line"></i>
+          </span>
         </li>
       </ul>
 
       <!-- Icons -->
-      <div class="flex items-center gap-4 text-xl">
+      <div class="flex items-center gap-4 text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
-        <i class="ri-heart-line hover:text-red-500 cursor-pointer"></i>
-        <i
-          class="ri-shopping-cart-line hover:text-green-600 cursor-pointer"
-        ></i>
-        <i class="ri-user-line hover:text-purple-600 cursor-pointer"></i>
+        <i class="ri-heart-line cursor-pointer"></i>
+        <i class="ri-shopping-cart-line cursor-pointer"></i>
+        <i class="ri-user-line cursor-pointer"></i>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- Add this to your styles for hover effect -->
+<style>
+  .dropdown-icon {
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+
+  li:hover .dropdown-icon {
+    transform: rotate(180deg);
+  }
+</style>
