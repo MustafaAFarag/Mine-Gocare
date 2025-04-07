@@ -2,8 +2,8 @@
 <nav class="w-full py-8 shadow-md relative z-20">
   <!-- Container for centering content with max width -->
   <div class="max-w-8xl w-full mx-auto flex items-center justify-between">
-    <!-- Hamburger Menu (visible only on mobile) -->
-    <div class="flex md:hidden ml-3">
+    <!-- Hamburger Menu (visible on mobile, md, and lg) -->
+    <div class="flex xl:hidden ml-3">
       <button
         class="text-2xl"
         aria-label="Toggle menu"
@@ -19,8 +19,8 @@
       </button>
     </div>
 
-    <!-- Logo (Centered) -->
-    <div class="flex-1 flex justify-end gap-2 mr-5 md:flex-none md:order-first">
+    <!-- Logo (visible in mobile and up to lg) -->
+    <div class="flex-1 flex justify-end gap-2 mr-5 xl:flex-none xl:order-first">
       <a routerLink="/" (click)="closeMobileMenu()">
         <img
           src="/assets/images/settings/logo-berry.png"
@@ -29,7 +29,8 @@
         />
       </a>
 
-      <div class="flex items-center gap-2 text-xl md:hidden">
+      <!-- Mobile icons (only visible below xl) -->
+      <div class="flex items-center gap-2 text-xl xl:hidden">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
@@ -38,8 +39,8 @@
       </div>
     </div>
 
-    <!-- Desktop Navigation (hidden on mobile) -->
-    <div class="hidden md:flex flex-1 justify-end items-center gap-10">
+    <!-- Desktop Navigation (visible only on xl and up) -->
+    <div class="hidden xl:flex flex-1 justify-end items-center gap-10">
       <div>
         <ul class="flex font-semibold gap-6 text-[1rem] tracking-wide">
           <li class="flex items-center gap-1 hover:text-hover-color">
@@ -90,7 +91,7 @@
         </ul>
       </div>
 
-      <!-- Icons (aligned right) -->
+      <!-- Icons (desktop) -->
       <div class="flex items-center gap-4 text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
@@ -101,245 +102,3 @@
     </div>
   </div>
 </nav>
-
-<!-- Overlay for mobile menu -->
-<div
-  class="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"
-  [ngClass]="{
-    'hidden opacity-0': !isMobileMenuOpen(),
-    'block opacity-100': isMobileMenuOpen()
-  }"
-  (click)="closeMobileMenu()"
-></div>
-
-<!-- Mobile menu (absolute positioned with slide-in effect) -->
-<div
-  class="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-lg z-40 transform transition-transform duration-300 md:hidden"
-  [ngClass]="{
-    'translate-x-0': isMobileMenuOpen(),
-    '-translate-x-full': !isMobileMenuOpen()
-  }"
->
-  <!-- Mobile menu header -->
-  <div class="flex justify-between items-center p-4 border-b">
-    <a routerLink="/" (click)="closeMobileMenu()">
-      <img
-        src="/assets/images/settings/logo-berry.png"
-        alt="Logo"
-        class="h-10 w-auto"
-      />
-    </a>
-    <button (click)="closeMobileMenu()" class="text-2xl">
-      <i class="ri-close-line"></i>
-    </button>
-  </div>
-
-  <!-- Mobile menu content -->
-  <div class="overflow-y-auto h-full pb-20">
-    <ul class="py-4 px-6 font-semibold tracking-wide">
-      <li class="py-2">
-        <a
-          routerLink="/"
-          routerLinkActive="text-blue-600"
-          (click)="closeMobileMenu()"
-          >Home</a
-        >
-      </li>
-
-      <!-- Collection dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/collection"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Collection</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <!-- Add your dropdown items here -->
-          <div class="py-1">
-            <a routerLink="/collection/category1" (click)="closeMobileMenu()"
-              >Category 1</a
-            >
-          </div>
-          <div class="py-1">
-            <a routerLink="/collection/category2" (click)="closeMobileMenu()"
-              >Category 2</a
-            >
-          </div>
-        </div>
-      </li>
-
-      <!-- Product dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/product"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Product</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <div class="py-1">
-            <a routerLink="/product/new" (click)="closeMobileMenu()"
-              >New Arrivals</a
-            >
-          </div>
-          <div class="py-1">
-            <a routerLink="/product/featured" (click)="closeMobileMenu()"
-              >Featured</a
-            >
-          </div>
-        </div>
-      </li>
-
-      <!-- Mega Menu dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/mega-menu"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Mega Menu</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <div class="py-1">
-            <a routerLink="/mega-menu/option1" (click)="closeMobileMenu()"
-              >Option 1</a
-            >
-          </div>
-          <div class="py-1">
-            <a routerLink="/mega-menu/option2" (click)="closeMobileMenu()"
-              >Option 2</a
-            >
-          </div>
-        </div>
-      </li>
-
-      <!-- Blogs dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/blogs"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Blogs</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <div class="py-1">
-            <a routerLink="/blogs/latest" (click)="closeMobileMenu()">Latest</a>
-          </div>
-          <div class="py-1">
-            <a routerLink="/blogs/trending" (click)="closeMobileMenu()"
-              >Trending</a
-            >
-          </div>
-        </div>
-      </li>
-
-      <!-- Pages dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/pages"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Pages</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <div class="py-1">
-            <a routerLink="/pages/about" (click)="closeMobileMenu()">About</a>
-          </div>
-          <div class="py-1">
-            <a routerLink="/pages/contact" (click)="closeMobileMenu()"
-              >Contact</a
-            >
-          </div>
-        </div>
-      </li>
-
-      <!-- Seller dropdown -->
-      <li class="py-2 border-b">
-        <div
-          class="flex justify-between items-center cursor-pointer"
-          (click)="toggleDropdown($event)"
-        >
-          <a
-            routerLink="/seller"
-            routerLinkActive="text-blue-600"
-            (click)="$event.stopPropagation()"
-            >Seller</a
-          >
-          <i class="ri-arrow-down-s-line transition-transform duration-300"></i>
-        </div>
-        <div class="mobile-dropdown-content hidden pl-4 pt-2">
-          <div class="py-1">
-            <a routerLink="/seller/register" (click)="closeMobileMenu()"
-              >Register</a
-            >
-          </div>
-          <div class="py-1">
-            <a routerLink="/seller/login" (click)="closeMobileMenu()">Login</a>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<style>
-  .dropdown-icon {
-    display: inline-flex;
-    align-items: center;
-    transition: transform 0.3s ease;
-  }
-
-  li:hover .dropdown-icon {
-    transform: rotate(180deg);
-  }
-
-  /* Animation for mobile menu dropdowns */
-  .mobile-dropdown-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-
-  .mobile-dropdown-content.hidden {
-    max-height: 0;
-  }
-
-  .mobile-dropdown-content:not(.hidden) {
-    max-height: 500px;
-  }
-
-  /* Prevent body scrolling when menu is open */
-  body.menu-open {
-    overflow: hidden;
-  }
-</style>
