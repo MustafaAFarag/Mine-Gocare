@@ -1,19 +1,51 @@
-<div>
-  <div class="relative bg-gray-100 flex items-center justify-center rounded-lg">
-    <img
-      *ngIf="productDetails?.mainImageUrl"
-      [src]="getFullImageUrl(productDetails.mainImageUrl)"
-      alt="Product Image"
-      class="object-cover h-full w-full rounded"
-    />
-  </div>
+<div *ngIf="images.length > 0">
+  <p-galleria
+    [value]="images"
+    [showItemNavigators]="true"
+    [showThumbnailNavigators]="false"
+    [responsiveOptions]="responsiveOptions"
+    [circular]="true"
+    [numVisible]="5"
+    [containerStyle]="{ 'max-width': '640px' }"
+  >
+    <ng-template pTemplate="item" let-item>
+      <img
+        [src]="item.itemImageSrc"
+        style="width: 100%; display: block"
+        [alt]="item.alt"
+      />
+    </ng-template>
 
-  <div class="flex gap-2 mt-4 overflow-x-auto">
-    <img
-      *ngFor="let image of productDetails?.gallaryImageUrls"
-      [src]="getFullImageUrl(image.imageUrl)"
-      class="w-20 h-20 object-contain rounded"
-      alt="Gallery"
-    />
-  </div>
+    <ng-template pTemplate="thumbnail" let-item>
+      <img
+        [src]="item.thumbnailImageSrc"
+        style="width: 100%; display: block"
+        [alt]="item.alt"
+      />
+    </ng-template>
+  </p-galleria>
 </div>
+
+<!-- Fallback in case no images are available -->
+<div
+  *ngIf="images.length === 0"
+  class="relative bg-gray-100 flex items-center justify-center rounded-lg h-64"
+>
+  <img
+    src="assets/default-image.jpg"
+    alt="Default Product Image"
+    class="object-cover h-full w-full rounded"
+  />
+</div>
+
+<style>
+  :host ::ng-deep .p-galleria-prev-button,
+  :host ::ng-deep .p-galleria-next-button {
+    background-color: gray;
+  }
+
+  :host ::ng-deep .p-galleria-prev-button:hover,
+  :host ::ng-deep .p-galleria-next-button:hover {
+    background-color: darkgray;
+  }
+</style>

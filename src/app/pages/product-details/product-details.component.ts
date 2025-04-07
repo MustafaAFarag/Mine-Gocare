@@ -5,10 +5,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../model/Employee';
-import { environment } from '../../../enviroments/enviroment';
 import { ProductInfoTabsComponent } from '../../features/product-details/product-info-tabs/product-info-tabs.component';
 import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
 import { ProductInfoComponent } from '../../features/product-details/product-info/product-info.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-product-details',
@@ -20,6 +20,7 @@ import { ProductInfoComponent } from '../../features/product-details/product-inf
     ProductInfoTabsComponent,
     ProductImageGalleryComponent,
     ProductInfoComponent,
+    ButtonModule,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',

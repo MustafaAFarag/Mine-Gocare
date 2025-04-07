@@ -7,7 +7,7 @@ module.exports = {
         "hover-color": "#a01a40",
       },
       maxWidth: {
-        "8xl": "1440px", // Your custom max width
+        "8xl": "1400px", // Your custom max width
       },
       fontFamily: {
         sans: ["Montserrat", "sans-serif"], // Add Montserrat as the default font for 'sans'
