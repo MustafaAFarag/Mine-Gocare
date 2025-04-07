@@ -1,0 +1,19 @@
+<div>
+  <div class="relative bg-gray-100 flex items-center justify-center rounded-lg">
+    <img
+      *ngIf="productDetails?.mainImageUrl"
+      [src]="getFullImageUrl(productDetails.mainImageUrl)"
+      alt="Product Image"
+      class="object-cover h-full w-full rounded"
+    />
+  </div>
+
+  <div class="flex gap-2 mt-4 overflow-x-auto">
+    <img
+      *ngFor="let image of productDetails?.gallaryImageUrls"
+      [src]="getFullImageUrl(image.imageUrl)"
+      class="w-20 h-20 object-contain rounded"
+      alt="Gallery"
+    />
+  </div>
+</div>

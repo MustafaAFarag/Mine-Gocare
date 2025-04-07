@@ -1,1 +1,11 @@
-<p>product-details works!</p>
+<app-breadcrumb></app-breadcrumb>
+<section class="p-6 max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+  <!-- Left: Image Gallery -->
+  <app-product-image-gallery
+    [productDetails]="productDetails"
+  ></app-product-image-gallery>
+
+  <!-- Right: Product Info -->
+  <app-product-info [productDetails]="productDetails"></app-product-info>
+</section>
+<app-product-info-tabs></app-product-info-tabs>

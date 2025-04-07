@@ -13,6 +13,13 @@ export const routes: Routes = [
             (m) => m.HomepageComponent
           ),
       },
+      {
+        path: 'product-details',
+        loadComponent: () =>
+          import('./pages/product-details/product-details.component').then(
+            (m) => m.ProductDetailsComponent
+          ),
+      },
     ],
   },
 ];
