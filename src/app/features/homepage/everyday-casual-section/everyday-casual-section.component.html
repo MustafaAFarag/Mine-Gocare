@@ -1,0 +1,45 @@
+<section class="everyday-casual-section py-16 bg-gray-50">
+  <div class="container mx-auto px-4 max-w-8xl">
+    <h2 class="text-3xl font-bold text-center">EVERYDAY CASUAL</h2>
+    <div class="flex justify-center my-4">
+      <div class="w-24 h-1 bg-red-500"></div>
+    </div>
+
+    <div class="category-tabs flex justify-center flex-wrap gap-4 mb-8">
+      @for (category of categories; track category) {
+      <button
+        class="px-4 py-2 text-sm font-medium"
+        [class.text-red-600]="selectedCategory === category"
+        [class.border-b-2]="selectedCategory === category"
+        [class.border-red-600]="selectedCategory === category"
+        (click)="selectCategory(category)"
+      >
+        {{ category }}
+      </button>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (product of filteredProducts; track product.id) {
+      <div
+        class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+      >
+        <img
+          [src]="product.image"
+          [alt]="product.name"
+          class="w-full h-64 object-cover rounded-md mb-4"
+        />
+        <h3 class="text-lg font-medium">{{ product.name }}</h3>
+        <p class="text-red-600 font-bold mt-2">
+          ${{ product.price.toFixed(2) }}
+        </p>
+        <button
+          class="mt-4 bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded w-full"
+        >
+          Add to Cart
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</section>

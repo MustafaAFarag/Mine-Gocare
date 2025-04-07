@@ -1,0 +1,20 @@
+<section class="categories-section py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">SHOP BY CATEGORY</h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      @for (category of categories; track category.name) {
+      <div class="flex flex-col items-center">
+        <div class="category-image-container mb-4">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            class="rounded-full w-40 h-40 object-cover border-transparent hover:ring-4 hover:ring-hover-color transition-all duration-300"
+          />
+        </div>
+        <h3 class="text-lg font-medium text-center">{{ category.name }}</h3>
+      </div>
+      }
+    </div>
+  </div>
+</section>
