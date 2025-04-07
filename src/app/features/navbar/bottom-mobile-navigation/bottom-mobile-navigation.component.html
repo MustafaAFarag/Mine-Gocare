@@ -1,0 +1,59 @@
+<div
+  class="fixed bottom-0 left-0 w-full bg-white shadow-lg border-t border-gray-200 md:hidden z-30"
+>
+  <div class="flex justify-between items-center px-4 py-3">
+    <a
+      routerLink="/"
+      class="flex flex-col items-center text-center"
+      routerLinkActive="text-red-500"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <i class="ri-home-4-line text-xl"></i>
+      <span class="text-xs mt-1">Home</span>
+    </a>
+
+    <a
+      routerLink="/search"
+      class="flex flex-col items-center text-center"
+      routerLinkActive="text-red-500"
+    >
+      <i class="ri-search-line text-xl"></i>
+      <span class="text-xs mt-1">Search</span>
+    </a>
+
+    <a
+      routerLink="/cart"
+      class="flex flex-col items-center text-center"
+      routerLinkActive="text-red-500"
+    >
+      <div class="relative">
+        <i class="ri-shopping-cart-line text-xl"></i>
+        <span
+          *ngIf="cartCount > 0"
+          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
+        >
+          {{ cartCount }}
+        </span>
+      </div>
+      <span class="text-xs mt-1">Cart</span>
+    </a>
+
+    <a
+      routerLink="/wishlist"
+      class="flex flex-col items-center text-center"
+      routerLinkActive="text-red-500"
+    >
+      <i class="ri-heart-line text-xl"></i>
+      <span class="text-xs mt-1">Wishlist</span>
+    </a>
+
+    <a
+      routerLink="/user"
+      class="flex flex-col items-center text-center"
+      routerLinkActive="text-red-500"
+    >
+      <i class="ri-user-line text-xl"></i>
+      <span class="text-xs mt-1">User</span>
+    </a>
+  </div>
+</div>
