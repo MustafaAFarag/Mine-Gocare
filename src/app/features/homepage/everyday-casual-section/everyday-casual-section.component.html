@@ -1,17 +1,15 @@
 <section class="everyday-casual-section py-16 bg-gray-50">
   <div class="container mx-auto px-4 max-w-8xl">
-    <h2 class="text-3xl font-bold text-center">EVERYDAY CASUAL</h2>
+    <h2 class="text-4xl font-extrabold text-center">EVERYDAY CASUAL</h2>
     <div class="flex justify-center my-4">
-      <div class="w-24 h-1 bg-red-500"></div>
+      <div class="w-24 h-1 bg-hover-color"></div>
     </div>
 
     <div class="category-tabs flex justify-center flex-wrap gap-4 mb-8">
       @for (category of categories; track category) {
       <button
-        class="px-4 py-2 text-sm font-medium"
-        [class.text-red-600]="selectedCategory === category"
-        [class.border-b-2]="selectedCategory === category"
-        [class.border-red-600]="selectedCategory === category"
+        class="px-4 py-2 text-lg font-bold"
+        [class.text-hover-color]="selectedCategory === category"
         (click)="selectCategory(category)"
       >
         {{ category }}

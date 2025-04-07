@@ -1,8 +1,12 @@
 <section class="insta-shop-section py-16">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-12">INSTA SHOP</h2>
+  <div class="container mx-auto px-4 max-w-8xl">
+    <!-- Heading -->
+    <h2 class="text-4xl font-extrabold mb-12 relative inline-block z-10">
+      INSTA SHOP
+      <div class="absolute bottom-0 left-0 w-full h-2 bg-[#cca5a8]"></div>
+    </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       @for (post of instaPosts; track post.id) {
       <div class="insta-image-container relative overflow-hidden group">
         <img
