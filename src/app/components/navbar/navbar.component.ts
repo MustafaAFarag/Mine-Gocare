@@ -61,6 +61,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // Toggle mobile menu with signal update
   toggleMobileMenu(): void {
+    console.log('Toggling mobile menu'); // Debugging line
     const newState = !this.isMobileMenuOpen();
     this.isMobileMenuOpen.set(newState);
 

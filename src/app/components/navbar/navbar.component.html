@@ -1,9 +1,11 @@
 <app-navbar-banner></app-navbar-banner>
 <nav class="w-full py-8 shadow-md relative z-20">
   <!-- Container for centering content with max width -->
-  <div class="max-w-8xl w-full mx-auto flex items-center justify-between">
+  <div
+    class="max-w-8xl lg:px-10 2xl:px-0 w-full mx-auto flex items-center justify-between"
+  >
     <!-- Hamburger Menu (visible on mobile, md, and lg) -->
-    <div class="flex xl:hidden ml-3">
+    <div class="flex lg:hidden ml-3">
       <button
         class="text-2xl"
         aria-label="Toggle menu"
@@ -20,17 +22,17 @@
     </div>
 
     <!-- Logo (visible in mobile and up to lg) -->
-    <div class="flex-1 flex justify-end gap-2 mr-5 xl:flex-none xl:order-first">
+    <div class="flex-1 flex justify-end gap-2 mr-5 lg:flex-none lg:order-first">
       <a routerLink="/" (click)="closeMobileMenu()">
         <img
           src="/assets/images/settings/logo-berry.png"
           alt="Logo"
-          class="h-12 mr-5 xl:mr-0 xl:h-14 w-auto"
+          class="h-12 mr-5 lg:mr-0 lg:h-14 w-auto"
         />
       </a>
 
       <!-- Mobile icons (only visible below xl) -->
-      <div class="flex items-center gap-2 text-xl xl:hidden">
+      <div class="flex items-center gap-2 text-xl lg:hidden">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
@@ -40,9 +42,11 @@
     </div>
 
     <!-- Desktop Navigation (visible only on xl and up) -->
-    <div class="hidden xl:flex flex-1 justify-end items-center gap-10">
+    <div class="hidden lg:flex flex-1 justify-end items-center gap-10">
       <div>
-        <ul class="flex font-semibold gap-6 text-[1rem] tracking-wide">
+        <ul
+          class="flex font-semibold gap-6 lg:text-sm xl:text-[1rem] tracking-wide"
+        >
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/" routerLinkActive="text-blue-600">Home</a>
           </li>
@@ -50,55 +54,98 @@
             <a routerLink="/collection" routerLinkActive="text-blue-600"
               >Collection</a
             >
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/product-details" routerLinkActive="text-blue-600"
               >Product</a
             >
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/mega-menu" routerLinkActive="text-blue-600"
               >Mega Menu</a
             >
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/blogs" routerLinkActive="text-blue-600">Blogs</a>
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/pages" routerLinkActive="text-blue-600">Pages</a>
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/seller" routerLinkActive="text-blue-600">Seller</a>
-            <span class="dropdown-icon">
-              <i class="ri-arrow-down-s-line"></i>
-            </span>
           </li>
         </ul>
       </div>
 
       <!-- Icons (desktop) -->
-      <div class="flex items-center gap-4 text-2xl">
+      <div class="flex items-center gap-4 text-xl xl:text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
         <i class="ri-shopping-cart-line cursor-pointer"></i>
         <i class="ri-user-line cursor-pointer"></i>
       </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sliding Menu -->
+  <div
+    *ngIf="isMobileMenuOpen()"
+    class="fixed top-0 left-0 w-3/4 h-full bg-white shadow-lg z-30 transition-all duration-500 ease-out mobile-menu"
+    [ngClass]="{
+      'translate-x-0 transition-all duration-300': isMobileMenuOpen(),
+      '-translate-x-full': !isMobileMenuOpen()
+    }"
+  >
+    <div class="flex flex-col py-8 px-6">
+      <!-- Close Button (X) for mobile menu -->
+      <button
+        class="absolute top-4 right-4 text-2xl text-black"
+        (click)="closeMobileMenu()"
+      >
+        <i class="ri-close-line"></i>
+      </button>
+
+      <!-- Logo at the top of the sliding menu -->
+      <a routerLink="/" (click)="closeMobileMenu()" class="mb-6">
+        <img
+          src="/assets/images/settings/logo-berry.png"
+          alt="Logo"
+          class="h-12 w-auto"
+        />
+      </a>
+
+      <!-- Links on the left side -->
+      <a routerLink="/" (click)="closeMobileMenu()" class="py-4 text-left"
+        >Home</a
+      >
+      <a
+        routerLink="/collection"
+        (click)="closeMobileMenu()"
+        class="py-4 text-left"
+        >Collection</a
+      >
+      <a
+        routerLink="/product-details"
+        (click)="closeMobileMenu()"
+        class="py-4 text-left"
+        >Product</a
+      >
+      <a
+        routerLink="/mega-menu"
+        (click)="closeMobileMenu()"
+        class="py-4 text-left"
+        >Mega Menu</a
+      >
+      <a routerLink="/blogs" (click)="closeMobileMenu()" class="py-4 text-left"
+        >Blogs</a
+      >
+      <a routerLink="/pages" (click)="closeMobileMenu()" class="py-4 text-left"
+        >Pages</a
+      >
+      <a routerLink="/seller" (click)="closeMobileMenu()" class="py-4 text-left"
+        >Seller</a
+      >
     </div>
   </div>
 </nav>
