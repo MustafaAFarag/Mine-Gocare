@@ -101,7 +101,7 @@ export class ProductImageGalleryComponent
       const galleryTop =
         galleryElement.getBoundingClientRect().top + window.scrollY;
       const galleryHeight = galleryElement.clientHeight;
-      const bufferZone = 50;
+      const bufferZone = 30;
 
       if (scrollPosition > galleryTop + bufferZone) {
         this.isSticky = true;

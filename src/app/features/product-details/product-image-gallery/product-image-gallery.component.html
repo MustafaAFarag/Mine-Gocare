@@ -8,8 +8,8 @@
 <!-- Show gallery when images are loaded -->
 <div
   *ngIf="!loadingImages && images.length > 0"
-  [ngClass]="{ sticky: isSticky }"
   id="product-gallery"
+  [class.sticky-active]="isSticky"
 >
   <p-galleria
     [value]="images"
@@ -61,15 +61,15 @@
     background: darkgray;
   }
 
-  .sticky {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition:
-      top 0.3s ease-in-out,
-      z-index 0s 0.3s; /* Smooth transition */
+  @media (min-width: 1024px) {
+    .sticky-active {
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      transition:
+        top 0.3s ease-in-out,
+        z-index 0s 0.3s;
+    }
   }
 
   :host ::ng-deep .sticky .p-galleria {
