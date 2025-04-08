@@ -21,17 +21,13 @@
     [containerStyle]="{ 'max-width': '640px' }"
   >
     <ng-template pTemplate="item" let-item>
-      <img
-        [src]="item.itemImageSrc"
-        style="width: 100%; display: block"
-        [alt]="item.alt"
-      />
+      <img [src]="item.itemImageSrc" class="w-full block" [alt]="item.alt" />
     </ng-template>
 
     <ng-template pTemplate="thumbnail" let-item>
       <img
         [src]="item.thumbnailImageSrc"
-        style="width: 100%; display: block"
+        class="block w-full h-auto"
         [alt]="item.alt"
       />
     </ng-template>

@@ -2,9 +2,9 @@
   <app-loading></app-loading>
 </div>
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="p-6 overflow-x-hidden">
   <app-breadcrumb></app-breadcrumb>
-  <section class="p-6 max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+  <section class="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
     <!-- Left: Image Gallery -->
     <app-product-image-gallery
       [productDetails]="productDetails"
