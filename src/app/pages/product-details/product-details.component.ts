@@ -34,7 +34,6 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProductDetailsAPI();
-    console.log('Product Variants', this.productDetails.productVariants);
   }
 
   fetchProductDetailsAPI() {

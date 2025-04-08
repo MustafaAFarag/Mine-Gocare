@@ -3,7 +3,10 @@
     <img src="assets/images/trending.gif" class="w-8 h-8 inline" />
     <span>Selling fast! 5 people have this in their carts</span>
   </div>
-  <h1 *ngIf="productDetails" class="text-2xl font-bold text-gray-900">
+  <h1
+    *ngIf="productDetails?.productName"
+    class="text-2xl font-bold text-gray-900"
+  >
     {{ productDetails.productName.en }}
   </h1>
 
