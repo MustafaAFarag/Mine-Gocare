@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="productDetails">
   <div class="flex items-center">
     <img src="assets/images/trending.gif" class="w-8 h-8 inline" />
     <span>Selling fast! 5 people have this in their carts</span>
@@ -31,9 +31,9 @@
   ></div>
 
   <div class="flex items-center gap-4 mt-6">
-    @for (variant of productDetails.productVariants; track $index) {
-    <span>{{ variant.variantName.en }}</span>
-    }
+    <ng-container *ngFor="let variant of productDetails.productVariants">
+      <span>{{ variant.variantName.en }}</span>
+    </ng-container>
   </div>
 
   <div class="flex font-bold border-b gap-5 mt-5">
@@ -114,19 +114,16 @@
           <span class="text-base">Days</span>
         </div>
         <span class="text-xl font-semibold">:</span>
-        <!-- Colon between Days and Hours -->
         <div class="text-center">
           <span class="block text-xl font-semibold">15</span>
           <span class="text-base">Hours</span>
         </div>
         <span class="text-xl font-semibold">:</span>
-        <!-- Colon between Hours and Minutes -->
         <div class="text-center">
           <span class="block text-xl font-semibold">30</span>
           <span class="text-base">Min</span>
         </div>
         <span class="text-xl font-semibold">:</span>
-        <!-- Colon between Minutes and Seconds -->
         <div class="text-center">
           <span class="block text-xl font-semibold">45</span>
           <span class="text-base">Sec</span>

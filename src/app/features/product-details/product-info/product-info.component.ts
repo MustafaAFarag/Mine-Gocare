@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './product-info.component.css',
 })
 export class ProductInfoComponent {
+  @Input() productDetails!: Product;
+
   counter: number = 1;
   totalPrice: number = 296.0;
 
@@ -23,5 +25,4 @@ export class ProductInfoComponent {
       this.totalPrice = this.counter * 296.0;
     }
   }
-  @Input() productDetails!: Product;
 }
