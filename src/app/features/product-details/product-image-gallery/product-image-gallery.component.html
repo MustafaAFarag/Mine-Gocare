@@ -1,4 +1,12 @@
-<div *ngIf="images.length > 0">
+<!-- Show loading indicator while images are being prepared -->
+<div *ngIf="loadingImages" class="flex items-center justify-center h-64">
+  <div
+    class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"
+  ></div>
+</div>
+
+<!-- Show gallery when images are loaded -->
+<div *ngIf="!loadingImages && images.length > 0">
   <p-galleria
     [value]="images"
     [showItemNavigators]="true"
@@ -28,11 +36,11 @@
 
 <!-- Fallback in case no images are available -->
 <div
-  *ngIf="images.length === 0"
+  *ngIf="!loadingImages && !imagesLoaded && images.length === 0"
   class="relative bg-gray-100 flex items-center justify-center rounded-lg h-64"
 >
   <img
-    src="assets/default-image.jpg"
+    src="assets/default-image.png"
     alt="Default Product Image"
     class="object-cover h-full w-full rounded"
   />
@@ -47,5 +55,9 @@
   :host ::ng-deep .p-galleria-prev-button:hover,
   :host ::ng-deep .p-galleria-next-button:hover {
     background-color: darkgray;
+  }
+
+  :host ::ng-deep .p-galleria-thumbnails-content {
+    background: darkgray;
   }
 </style>
