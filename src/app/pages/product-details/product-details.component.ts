@@ -8,7 +8,7 @@ import { Product } from '../../model/Employee';
 import { ProductInfoTabsComponent } from '../../features/product-details/product-info-tabs/product-info-tabs.component';
 import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
 import { ProductInfoComponent } from '../../features/product-details/product-info/product-info.component';
-import { ButtonModule } from 'primeng/button';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-product-details',
@@ -20,13 +20,14 @@ import { ButtonModule } from 'primeng/button';
     ProductInfoTabsComponent,
     ProductImageGalleryComponent,
     ProductInfoComponent,
-    ButtonModule,
+    LoadingComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent implements OnInit {
-  productDetails: Product;
+  productDetails!: Product;
+  isLoading: boolean = true;
 
   constructor(public productService: ProductService) {
     this.productDetails = {} as Product;
@@ -39,6 +40,7 @@ export class ProductDetailsComponent implements OnInit {
   fetchProductDetailsAPI() {
     this.productService.getProductDetails().subscribe((response: any) => {
       this.productDetails = response.result;
+      this.isLoading = false;
       console.log('PRODUCT DETAILS', this.productDetails);
     });
   }
