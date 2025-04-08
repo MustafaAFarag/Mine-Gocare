@@ -22,6 +22,7 @@ export class ProductImageGalleryComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() productDetails!: Product;
+  private boundScrollHandler: any;
 
   images: any[] = [];
   imagesLoaded = false;
@@ -57,10 +58,8 @@ export class ProductImageGalleryComponent
     // Use ngAfterViewInit only for DOM manipulations or scroll setup
     if (typeof window !== 'undefined' && !this.galleryInitialized) {
       this.galleryInitialized = true;
-      window.addEventListener(
-        'scroll',
-        this.debounce(this.onScroll.bind(this), 50),
-      );
+      this.boundScrollHandler = this.onScroll.bind(this);
+      window.addEventListener('scroll', this.boundScrollHandler);
 
       // Setup stopStickyAt logic after view initialization
       setTimeout(() => {
@@ -78,11 +77,8 @@ export class ProductImageGalleryComponent
   }
 
   ngOnDestroy() {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener(
-        'scroll',
-        this.debounce(this.onScroll.bind(this), 50),
-      );
+    if (typeof window !== 'undefined' && this.boundScrollHandler) {
+      window.removeEventListener('scroll', this.boundScrollHandler);
     }
   }
 
