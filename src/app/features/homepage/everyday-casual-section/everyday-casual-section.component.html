@@ -1,42 +1,42 @@
 <section class="everyday-casual-section py-16">
-  <div class="container mx-auto px-4 max-w-8xl">
-    <h2 class="text-4xl font-extrabold text-center">EVERYDAY CASUAL</h2>
-    <div class="flex justify-center my-4">
-      <div class="w-24 h-1 bg-hover-color"></div>
+  <div class="container mx-auto max-w-8xl px-4">
+    <h2 class="text-center text-4xl font-extrabold">EVERYDAY CASUAL</h2>
+    <div class="my-4 flex justify-center">
+      <div class="h-1 w-24 bg-hover-color"></div>
     </div>
 
-    <div class="category-tabs flex justify-center flex-wrap gap-4 mb-8">
+    <div class="category-tabs mb-8 flex flex-wrap justify-center gap-4">
       @for (category of categories; track category) {
-      <button
-        class="px-4 py-2 text-lg font-bold"
-        [class.text-hover-color]="selectedCategory === category"
-        (click)="selectCategory(category)"
-      >
-        {{ category }}
-      </button>
+        <button
+          class="px-4 py-2 text-lg font-bold"
+          [class.text-hover-color]="selectedCategory === category"
+          (click)="selectCategory(category)"
+        >
+          {{ category }}
+        </button>
       }
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
       @for (product of filteredProducts; track product.id) {
-      <div
-        class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-      >
-        <img
-          [src]="product.image"
-          [alt]="product.name"
-          class="w-full h-64 object-cover rounded-md mb-4"
-        />
-        <h3 class="text-lg font-medium">{{ product.name }}</h3>
-        <p class="text-red-600 font-bold mt-2">
-          ${{ product.price.toFixed(2) }}
-        </p>
-        <button
-          class="mt-4 bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded w-full"
+        <div
+          class="rounded-lg bg-white p-4 shadow-md transition-shadow duration-300 hover:shadow-lg"
         >
-          Add to Cart
-        </button>
-      </div>
+          <img
+            [src]="product.image"
+            [alt]="product.name"
+            class="mb-4 h-64 w-full rounded-md object-cover"
+          />
+          <h3 class="text-lg font-medium">{{ product.name }}</h3>
+          <p class="mt-2 font-bold text-red-600">
+            ${{ product.price.toFixed(2) }}
+          </p>
+          <button
+            class="mt-4 w-full rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
+          >
+            Add to Cart
+          </button>
+        </div>
       }
     </div>
   </div>

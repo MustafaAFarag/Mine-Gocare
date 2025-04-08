@@ -9,7 +9,7 @@ export class ProductService {
 
   getProductDetails() {
     return this.http.get(
-      'https://gocare-back-develop.salonspace1.com/api/services/WebApp/Product/GetProductDetails?productId=1&ProductVariantId=2'
+      'https://gocare-back-develop.salonspace1.com/api/services/WebApp/Product/GetProductDetails?productId=1&ProductVariantId=2',
     );
   }
 }

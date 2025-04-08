@@ -1,7 +1,7 @@
 <!-- Show loading indicator while images are being prepared -->
-<div *ngIf="loadingImages" class="flex items-center justify-center h-64">
+<div *ngIf="loadingImages" class="flex h-64 items-center justify-center">
   <div
-    class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"
+    class="h-12 w-12 animate-spin rounded-full border-b-2 border-gray-900"
   ></div>
 </div>
 
@@ -21,13 +21,13 @@
     [containerStyle]="{ 'max-width': '640px' }"
   >
     <ng-template pTemplate="item" let-item>
-      <img [src]="item.itemImageSrc" class="w-full block" [alt]="item.alt" />
+      <img [src]="item.itemImageSrc" class="block w-full" [alt]="item.alt" />
     </ng-template>
 
     <ng-template pTemplate="thumbnail" let-item>
       <img
         [src]="item.thumbnailImageSrc"
-        class="block w-full h-auto"
+        class="block h-auto w-full"
         [alt]="item.alt"
       />
     </ng-template>
@@ -37,12 +37,12 @@
 <!-- Fallback in case no images are available -->
 <div
   *ngIf="!loadingImages && !imagesLoaded && images.length === 0"
-  class="relative bg-gray-100 flex items-center justify-center rounded-lg h-64"
+  class="relative flex h-64 items-center justify-center rounded-lg bg-gray-100"
 >
   <img
     src="assets/default-image.png"
     alt="Default Product Image"
-    class="object-cover h-full w-full rounded"
+    class="h-full w-full rounded object-cover"
   />
 </div>
 
@@ -67,7 +67,9 @@
     z-index: 100;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: top 0.3s ease-in-out, z-index 0s 0.3s; /* Smooth transition */
+    transition:
+      top 0.3s ease-in-out,
+      z-index 0s 0.3s; /* Smooth transition */
   }
 
   :host ::ng-deep .sticky .p-galleria {

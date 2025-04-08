@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-breadcrumb',
   imports: [],
   templateUrl: './breadcrumb.component.html',
-  styleUrl: './breadcrumb.component.css'
+  styleUrl: './breadcrumb.component.css',
 })
-export class BreadcrumbComponent {
-
-}
+export class BreadcrumbComponent {}

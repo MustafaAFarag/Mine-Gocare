@@ -1,21 +1,21 @@
 <section class="categories-section py-16">
-  <div class="container mx-auto px-4 max-w-8xl">
-    <h2 class="text-4xl font-extrabold mb-12 relative inline-block z-10">
+  <div class="container mx-auto max-w-8xl px-4">
+    <h2 class="relative z-10 mb-12 inline-block text-4xl font-extrabold">
       SHOP BY CATEGORY
-      <div class="absolute bottom-0 left-0 w-full h-2 bg-[#cca5a8]"></div>
+      <div class="absolute bottom-0 left-0 h-2 w-full bg-[#cca5a8]"></div>
     </h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
       @for (category of categories; track category.name) {
-      <div class="flex flex-col items-center">
-        <div class="category-image-container mb-4">
-          <img
-            [src]="category.image"
-            [alt]="category.name"
-            class="rounded-full w-40 h-40 object-cover border-transparent hover:ring-4 hover:ring-hover-color transition-all duration-300"
-          />
+        <div class="flex flex-col items-center">
+          <div class="category-image-container mb-4">
+            <img
+              [src]="category.image"
+              [alt]="category.name"
+              class="h-40 w-40 rounded-full border-transparent object-cover transition-all duration-300 hover:ring-4 hover:ring-hover-color"
+            />
+          </div>
+          <h3 class="text-center text-lg font-medium">{{ category.name }}</h3>
         </div>
-        <h3 class="text-lg font-medium text-center">{{ category.name }}</h3>
-      </div>
       }
     </div>
   </div>

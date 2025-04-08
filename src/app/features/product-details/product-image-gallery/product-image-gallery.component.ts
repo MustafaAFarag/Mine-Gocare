@@ -59,7 +59,7 @@ export class ProductImageGalleryComponent
       this.galleryInitialized = true;
       window.addEventListener(
         'scroll',
-        this.debounce(this.onScroll.bind(this), 50)
+        this.debounce(this.onScroll.bind(this), 50),
       );
 
       // Setup stopStickyAt logic after view initialization
@@ -81,7 +81,7 @@ export class ProductImageGalleryComponent
     if (typeof window !== 'undefined') {
       window.removeEventListener(
         'scroll',
-        this.debounce(this.onScroll.bind(this), 50)
+        this.debounce(this.onScroll.bind(this), 50),
       );
     }
   }
@@ -128,7 +128,7 @@ export class ProductImageGalleryComponent
       this.images.push({
         itemImageSrc: this.getFullImageUrl(this.productDetails.mainImageUrl),
         thumbnailImageSrc: this.getFullImageUrl(
-          this.productDetails.mainImageUrl
+          this.productDetails.mainImageUrl,
         ),
         alt: 'Main Product Image',
         title: 'Main Product Image',
@@ -162,7 +162,7 @@ export class ProductImageGalleryComponent
     if (!relativePath) return 'assets/default-image.png';
     return `${environment.apiUrl}/Attachments${relativePath.replace(
       /\\/g,
-      '/'
+      '/',
     )}`;
   }
 }

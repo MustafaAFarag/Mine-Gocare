@@ -8,9 +8,8 @@ describe('EverydayCasualSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EverydayCasualSectionComponent]
-    })
-    .compileComponents();
+      imports: [EverydayCasualSectionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(EverydayCasualSectionComponent);
     component = fixture.componentInstance;

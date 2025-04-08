@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-navbar-banner',
   imports: [],
   templateUrl: './navbar-banner.component.html',
-  styleUrl: './navbar-banner.component.css'
+  styleUrl: './navbar-banner.component.css',
 })
-export class NavbarBannerComponent {
-
-}
+export class NavbarBannerComponent {}

@@ -10,14 +10,14 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('./pages/homepage/homepage.component').then(
-            (m) => m.HomepageComponent
+            (m) => m.HomepageComponent,
           ),
       },
       {
         path: 'product-details',
         loadComponent: () =>
           import('./pages/product-details/product-details.component').then(
-            (m) => m.ProductDetailsComponent
+            (m) => m.ProductDetailsComponent,
           ),
       },
     ],

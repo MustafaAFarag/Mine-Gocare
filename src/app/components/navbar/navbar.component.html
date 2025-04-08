@@ -1,11 +1,11 @@
 <app-navbar-banner></app-navbar-banner>
-<nav class="w-full py-8 shadow-md relative z-20">
+<nav class="relative z-20 w-full py-8 shadow-md">
   <!-- Container for centering content with max width -->
   <div
-    class="max-w-8xl lg:px-10 2xl:px-0 w-full mx-auto flex items-center justify-between"
+    class="mx-auto flex w-full max-w-8xl items-center justify-between lg:px-10 2xl:px-0"
   >
     <!-- Hamburger Menu (visible on mobile, md, and lg) -->
-    <div class="flex lg:hidden ml-3">
+    <div class="ml-3 flex lg:hidden">
       <button
         class="text-2xl"
         aria-label="Toggle menu"
@@ -15,19 +15,19 @@
           class="ri-menu-line"
           [ngClass]="{
             'ri-close-line': isMobileMenuOpen(),
-            'ri-menu-line': !isMobileMenuOpen()
+            'ri-menu-line': !isMobileMenuOpen(),
           }"
         ></i>
       </button>
     </div>
 
     <!-- Logo (visible in mobile and up to lg) -->
-    <div class="flex-1 flex justify-end gap-2 mr-5 lg:flex-none lg:order-first">
+    <div class="mr-5 flex flex-1 justify-end gap-2 lg:order-first lg:flex-none">
       <a routerLink="/" (click)="closeMobileMenu()">
         <img
           src="/assets/images/settings/logo-berry.png"
           alt="Logo"
-          class="h-12 mr-5 lg:mr-0 lg:h-14 w-auto"
+          class="mr-5 h-12 w-auto lg:mr-0 lg:h-14"
         />
       </a>
 
@@ -42,10 +42,10 @@
     </div>
 
     <!-- Desktop Navigation (visible only on xl and up) -->
-    <div class="hidden lg:flex flex-1 justify-end items-center gap-10">
+    <div class="hidden flex-1 items-center justify-end gap-10 lg:flex">
       <div>
         <ul
-          class="flex font-semibold gap-6 lg:text-sm xl:text-[1rem] tracking-wide"
+          class="flex gap-6 font-semibold tracking-wide lg:text-sm xl:text-[1rem]"
         >
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/" routerLinkActive="text-blue-600">Home</a>
@@ -91,16 +91,16 @@
   <!-- Mobile Sliding Menu -->
   <div
     *ngIf="isMobileMenuOpen()"
-    class="fixed top-0 left-0 w-3/4 h-full bg-white shadow-lg z-30 transition-all duration-500 ease-out mobile-menu"
+    class="mobile-menu fixed left-0 top-0 z-30 h-full w-3/4 bg-white shadow-lg transition-all duration-500 ease-out"
     [ngClass]="{
       'translate-x-0 transition-all duration-300': isMobileMenuOpen(),
-      '-translate-x-full': !isMobileMenuOpen()
+      '-translate-x-full': !isMobileMenuOpen(),
     }"
   >
-    <div class="flex flex-col py-8 px-6">
+    <div class="flex flex-col px-6 py-8">
       <!-- Close Button (X) for mobile menu -->
       <button
-        class="absolute top-4 right-4 text-2xl text-black"
+        class="absolute right-4 top-4 text-2xl text-black"
         (click)="closeMobileMenu()"
       >
         <i class="ri-close-line"></i>

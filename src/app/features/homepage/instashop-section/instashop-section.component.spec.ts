@@ -8,9 +8,8 @@ describe('InstashopSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InstashopSectionComponent]
-    })
-    .compileComponents();
+      imports: [InstashopSectionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InstashopSectionComponent);
     component = fixture.componentInstance;

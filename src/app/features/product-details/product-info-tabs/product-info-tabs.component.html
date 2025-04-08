@@ -1,12 +1,12 @@
-<div class="m-16 max-w-8xl mx-auto">
+<div class="m-16 mx-auto max-w-8xl">
   <!-- Tab Headers -->
   <div class="flex gap-6 border-b-2 border-gray-300 bg-gray-200 p-5">
     <button
-      class="px-6 py-3 font-semibold text-sm"
+      class="px-6 py-3 text-sm font-semibold"
       [ngClass]="{
-        'bg-red-100 border-2 border-gray-300  text-hover-color ':
+        'border-2 border-gray-300 bg-red-100 text-hover-color':
           activeTab === 'description',
-        'bg-gray-100 text-gray-900': activeTab !== 'description'
+        'bg-gray-100 text-gray-900': activeTab !== 'description',
       }"
       (click)="activeTab = 'description'"
     >
@@ -14,11 +14,11 @@
     </button>
 
     <button
-      class="px-6 py-3 font-semibold text-sm"
+      class="px-6 py-3 text-sm font-semibold"
       [ngClass]="{
-        'bg-red-100 border-2 border-gray-300  text-hover-color ':
+        'border-2 border-gray-300 bg-red-100 text-hover-color':
           activeTab === 'review',
-        'bg-gray-100 text-gray-900': activeTab !== 'review'
+        'bg-gray-100 text-gray-900': activeTab !== 'review',
       }"
       (click)="activeTab = 'review'"
     >
@@ -26,11 +26,11 @@
     </button>
 
     <button
-      class="px-6 py-3 font-semibold text-sm"
+      class="px-6 py-3 text-sm font-semibold"
       [ngClass]="{
-        'bg-red-100 border-2 border-gray-300  text-hover-color':
+        'border-2 border-gray-300 bg-red-100 text-hover-color':
           activeTab === 'qa',
-        'bg-gray-100 text-gray-900': activeTab !== 'qa'
+        'bg-gray-100 text-gray-900': activeTab !== 'qa',
       }"
       (click)="activeTab = 'qa'"
     >
@@ -39,10 +39,10 @@
   </div>
 
   <!-- Tab Content -->
-  <div class="p-6 border-2 border-t-0 border-gray-300 bg-white rounded-b-md">
+  <div class="rounded-b-md border-2 border-t-0 border-gray-300 bg-white p-6">
     <ng-container [ngSwitch]="activeTab">
       <div *ngSwitchCase="'description'">
-        <p class="text-gray-700 leading-relaxed">
+        <p class="leading-relaxed text-gray-700">
           This is the product description. It includes features, usage, and
           other useful info. You can dynamically bind this later with
           `productDetails.description.en`.
@@ -50,11 +50,11 @@
       </div>
 
       <div *ngSwitchCase="'review'">
-        <p class="text-gray-500 italic">Reviews will be available soon.</p>
+        <p class="italic text-gray-500">Reviews will be available soon.</p>
       </div>
 
       <div *ngSwitchCase="'qa'">
-        <p class="text-gray-500 italic">
+        <p class="italic text-gray-500">
           Questions and Answers section is coming soon.
         </p>
       </div>

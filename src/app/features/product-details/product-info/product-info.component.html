@@ -1,31 +1,31 @@
 <div *ngIf="productDetails">
   <div class="flex items-center">
-    <img src="assets/images/trending.gif" class="w-8 h-8 inline" />
+    <img src="assets/images/trending.gif" class="inline h-8 w-8" />
     <span>Selling fast! 5 people have this in their carts</span>
   </div>
   <h1
     *ngIf="productDetails?.productName"
-    class="text-2xl font-bold text-gray-900"
+    class="text-center text-2xl font-bold text-gray-900 md:text-left"
   >
     {{ productDetails.productName.en }}
   </h1>
 
-  <div class="flex items-center mt-2">
+  <div class="mt-2 flex items-center">
     <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
       <i
         [ngClass]="{
           'ri-star-fill text-yellow-400': i < 3,
-          'ri-star-line text-gray-400': i >= 3
+          'ri-star-line text-gray-400': i >= 3,
         }"
       ></i>
     </ng-container>
     <span class="mx-2">|</span>
-    <span class="text-gray-600 text-sm">(0 Reviews)</span>
+    <span class="text-sm text-gray-600">(0 Reviews)</span>
   </div>
 
   <div class="mt-4">
-    <span class="text-gray-600 font-semibold uppercase">Price:</span>
-    <span class="text-hover-color text-xl font-semibold"> EGP296.00 </span>
+    <span class="font-semibold uppercase text-gray-600">Price:</span>
+    <span class="text-xl font-semibold text-hover-color"> EGP296.00 </span>
   </div>
 
   <div
@@ -33,13 +33,13 @@
     [innerHTML]="productDetails.description.en"
   ></div>
 
-  <div class="flex items-center gap-4 mt-6">
+  <div class="mt-6 flex items-center gap-4">
     <ng-container *ngFor="let variant of productDetails.productVariants">
       <span>{{ variant.variantName.en }}</span>
     </ng-container>
   </div>
 
-  <div class="flex font-bold border-b gap-5 mt-5">
+  <div class="mt-5 flex gap-5 border-b font-bold">
     <span>Min QTY : 1</span>
     <span>Max QTY : 5</span>
     <span>Percentage : 32</span>
@@ -52,44 +52,44 @@
   </div>
 
   <div
-    class="bg-gray-100 inline-flex items-center justify-between mt-5 p-2 rounded"
+    class="mt-5 inline-flex items-center justify-between rounded bg-gray-100 p-2"
   >
     <i
-      class="ri-arrow-left-s-line text-lg font-bold text-black bg-white p-1 rounded cursor-pointer"
+      class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
       (click)="decreaseCounter()"
     ></i>
     <span class="mx-10 font-bold text-black">{{ counter }}</span>
     <i
-      class="ri-arrow-right-s-line text-lg font-bold text-black bg-white p-1 rounded cursor-pointer"
+      class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
       (click)="increaseCounter()"
     ></i>
   </div>
 
-  <div class="flex gap-4 mt-6">
+  <div class="mt-6 flex gap-4">
     <button
-      class="bg-hover-color text-white px-6 py-4 font-semibold hover:bg-pink-800"
+      class="bg-hover-color px-6 py-4 font-semibold text-white hover:bg-pink-800"
     >
-      <i class="ri-shopping-cart-line cursor-pointer text-xl mr-2"></i>
+      <i class="ri-shopping-cart-line mr-2 cursor-pointer text-xl"></i>
       Add To Cart
     </button>
     <button
-      class="bg-hover-color text-white px-6 py-4 font-semibold hover:bg-pink-700"
+      class="bg-hover-color px-6 py-4 font-semibold text-white hover:bg-pink-700"
     >
       Buy Now
     </button>
   </div>
 
-  <div class="text-[#646464] flex gap-7 font-semibold mt-5">
+  <div class="mt-5 flex gap-7 font-semibold text-[#646464]">
     <div>
-      <i class="ri-heart-fill text-lg mr-2 cursor-pointer"></i>
+      <i class="ri-heart-fill mr-2 cursor-pointer text-lg"></i>
       <span class="">Add To Wishlist</span>
     </div>
     <div>
-      <i class="ri-refresh-line text-lg mr-2 cursor-pointer"></i>
+      <i class="ri-refresh-line mr-2 cursor-pointer text-lg"></i>
       <span class="">Add To Compare</span>
     </div>
     <div>
-      <i class="ri-share-line text-lg mr-2 cursor-pointer"></i>
+      <i class="ri-share-line mr-2 cursor-pointer text-lg"></i>
       <span class="">Share</span>
     </div>
   </div>
@@ -97,19 +97,19 @@
   <div>
     <p>Please Hurry only 10 Left In Stock</p>
     <div
-      class="h-2 bg-gradient-to-tr from-green-400 to-green-700 mt-2 rounded-md"
+      class="mt-2 h-2 rounded-md bg-gradient-to-tr from-green-400 to-green-700"
     ></div>
-    <div class="border-t-2 border-dotted border-gray-400 my-4"></div>
+    <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
   </div>
 
   <div class="">
     <div class="flex items-center gap-3">
       <i class="ri-time-line text-2xl"></i>
-      <span class="font-bold text-lg">Sales Ends In</span>
+      <span class="text-lg font-bold">Sales Ends In</span>
     </div>
     <!-- Countdown Box -->
     <div
-      class="mt-4 py-4 px-20 bg-red-200 border-2 border-dotted border-red-500 rounded-md inline-block"
+      class="mt-4 inline-block rounded-md border-2 border-dotted border-red-500 bg-red-200 px-20 py-4"
     >
       <div class="flex gap-4">
         <div class="text-center">
@@ -134,11 +134,11 @@
       </div>
     </div>
   </div>
-  <div class="border-t-2 border-dotted border-gray-400 my-4"></div>
+  <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
   <div>
-    <h3 class="text-2xl font-semibold mb-5">Product Info</h3>
-    <ul class="grid grid-cols-2 gap-2 text-[#646464] text-base">
+    <h3 class="mb-5 text-2xl font-semibold">Product Info</h3>
+    <ul class="grid grid-cols-2 gap-2 text-base text-[#646464]">
       <li>SKU: EG0102MFF05</li>
       <li>Unit: Piece</li>
       <li>Quantity: 10 Items Left</li>
@@ -146,11 +146,11 @@
     </ul>
   </div>
 
-  <div class="border-t-2 border-dotted border-gray-400 my-4"></div>
+  <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
   <div>
-    <h3 class="text-2xl font-semibold my-5">Delivery Details</h3>
-    <div class="flex flex-col text-[#646464] text-base">
+    <h3 class="my-5 text-2xl font-semibold">Delivery Details</h3>
+    <div class="flex flex-col text-base text-[#646464]">
       <div>
         <i class="ri-truck-line mr-2"></i>
         <span>3-5 Business days</span>
@@ -162,24 +162,24 @@
     </div>
   </div>
 
-  <fieldset class="border-2 border-dotted border-gray-400 rounded-md p-4 mt-10">
-    <legend class="text-lg font-semibold px-2 text-gray-800">
+  <fieldset class="mt-10 rounded-md border-2 border-dotted border-gray-400 p-4">
+    <legend class="px-2 text-lg font-semibold text-gray-800">
       Guaranteed Safe Checkout
     </legend>
     <img
       src="assets/images/theme/data/payments.png"
       alt="payments"
-      class="w-[20rem] mt-2"
+      class="mt-2 w-[20rem]"
     />
   </fieldset>
-  <fieldset class="border-2 border-dotted border-gray-400 rounded-md p-4 mt-10">
-    <legend class="text-lg font-semibold px-2 text-gray-800">
+  <fieldset class="mt-10 rounded-md border-2 border-dotted border-gray-400 p-4">
+    <legend class="px-2 text-lg font-semibold text-gray-800">
       Secure Checkout
     </legend>
     <img
       src="assets/images/theme/data/payments.png"
       alt="payments"
-      class="w-[20rem] mt-2"
+      class="mt-2 w-[20rem]"
     />
   </fieldset>
 </div>
