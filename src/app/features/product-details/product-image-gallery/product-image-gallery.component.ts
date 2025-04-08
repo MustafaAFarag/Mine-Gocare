@@ -18,7 +18,9 @@ import { GalleriaModule } from 'primeng/galleria';
   templateUrl: './product-image-gallery.component.html',
   styleUrl: './product-image-gallery.component.css',
 })
-export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
+export class ProductImageGalleryComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() productDetails!: Product;
 
   images: any[] = [];
@@ -27,6 +29,7 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   isProcessing = false;
   isSticky = false;
   stopStickyAt: number = 0;
+  galleryInitialized = false; // Added flag to track gallery initialization
 
   responsiveOptions: any[] = [
     { breakpoint: '1024px', numVisible: 5 },
@@ -35,6 +38,10 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   ];
 
   private debounceTimeout: any;
+
+  ngOnInit() {
+    // Perform any initialization logic here, avoiding async operations
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (
@@ -47,12 +54,15 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if (typeof window !== 'undefined') {
+    // Use ngAfterViewInit only for DOM manipulations or scroll setup
+    if (typeof window !== 'undefined' && !this.galleryInitialized) {
+      this.galleryInitialized = true;
       window.addEventListener(
         'scroll',
         this.debounce(this.onScroll.bind(this), 50)
       );
 
+      // Setup stopStickyAt logic after view initialization
       setTimeout(() => {
         const galleryElement = document.getElementById('product-gallery');
         if (galleryElement) {
@@ -76,7 +86,6 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Debounce function
   debounce(func: Function, wait: number) {
     return (...args: any[]) => {
       clearTimeout(this.debounceTimeout);
@@ -92,19 +101,15 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
       const galleryTop =
         galleryElement.getBoundingClientRect().top + window.scrollY;
       const galleryHeight = galleryElement.clientHeight;
-
-      // Set a small buffer zone (e.g., 50px)
       const bufferZone = 50;
 
-      // Make sticky when we scroll past the gallery's initial position
       if (scrollPosition > galleryTop + bufferZone) {
         this.isSticky = true;
       } else if (scrollPosition < galleryTop - bufferZone) {
         this.isSticky = false;
       }
 
-      // Stop the sticky effect after scrolling a certain distance
-      if (scrollPosition > galleryTop + galleryHeight) {
+      if (scrollPosition > galleryTop + galleryHeight - bufferZone) {
         this.isSticky = false;
       }
 
@@ -118,6 +123,7 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
     this.loadingImages = true;
     this.imagesLoaded = false;
     this.images = [];
+
     if (this.productDetails?.mainImageUrl) {
       this.images.push({
         itemImageSrc: this.getFullImageUrl(this.productDetails.mainImageUrl),
@@ -128,6 +134,7 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
         title: 'Main Product Image',
       });
     }
+
     if (this.productDetails?.gallaryImageUrls?.length) {
       this.productDetails.gallaryImageUrls.forEach((image, index) => {
         this.images.push({
@@ -138,9 +145,11 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
         });
       });
     }
-    setTimeout(() => {
+
+    // Use Promise.resolve() to avoid unexpected async issues
+    Promise.resolve().then(() => {
       this.finishLoading();
-    }, 500);
+    });
   }
 
   finishLoading(): void {
