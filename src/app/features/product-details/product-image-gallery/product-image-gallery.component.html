@@ -6,7 +6,11 @@
 </div>
 
 <!-- Show gallery when images are loaded -->
-<div *ngIf="!loadingImages && images.length > 0">
+<div
+  *ngIf="!loadingImages && images.length > 0"
+  [ngClass]="{ sticky: isSticky }"
+  id="product-gallery"
+>
   <p-galleria
     [value]="images"
     [showItemNavigators]="true"
@@ -59,5 +63,22 @@
 
   :host ::ng-deep .p-galleria-thumbnails-content {
     background: darkgray;
+  }
+
+  .sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: top 0.3s ease; /* Smooth transition */
+  }
+
+  :host ::ng-deep .sticky .p-galleria {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 </style>

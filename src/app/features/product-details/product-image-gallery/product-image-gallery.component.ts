@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { environment } from '../../../../enviroments/enviroment';
 import { Product } from '../../../model/Employee';
 import { CommonModule } from '@angular/common';
@@ -11,28 +18,23 @@ import { GalleriaModule } from 'primeng/galleria';
   templateUrl: './product-image-gallery.component.html',
   styleUrl: './product-image-gallery.component.css',
 })
-export class ProductImageGalleryComponent {
+export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   @Input() productDetails!: Product;
 
   images: any[] = [];
   imagesLoaded = false;
   loadingImages = true;
-  isProcessing = false; // Flag to prevent duplicate processing
+  isProcessing = false;
+  isSticky = false;
+  stopStickyAt: number = 0;
 
   responsiveOptions: any[] = [
-    {
-      breakpoint: '1024px',
-      numVisible: 5,
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 3,
-    },
-    {
-      breakpoint: '560px',
-      numVisible: 1,
-    },
+    { breakpoint: '1024px', numVisible: 5 },
+    { breakpoint: '768px', numVisible: 3 },
+    { breakpoint: '560px', numVisible: 1 },
   ];
+
+  private debounceTimeout: any;
 
   ngOnChanges(changes: SimpleChanges) {
     if (
@@ -44,20 +46,78 @@ export class ProductImageGalleryComponent {
     }
   }
 
-  loadImages() {
-    // Prevent multiple simultaneous calls
-    if (this.isProcessing) {
-      return;
-    }
+  ngAfterViewInit() {
+    if (typeof window !== 'undefined') {
+      window.addEventListener(
+        'scroll',
+        this.debounce(this.onScroll.bind(this), 50)
+      );
 
+      setTimeout(() => {
+        const galleryElement = document.getElementById('product-gallery');
+        if (galleryElement) {
+          const galleriaContainer = galleryElement.querySelector('.p-galleria');
+          if (galleriaContainer) {
+            this.stopStickyAt =
+              galleryElement.offsetTop + galleriaContainer.clientHeight;
+            console.log('Stop sticky at:', this.stopStickyAt);
+          }
+        }
+      }, 500);
+    }
+  }
+
+  ngOnDestroy() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener(
+        'scroll',
+        this.debounce(this.onScroll.bind(this), 50)
+      );
+    }
+  }
+
+  // Debounce function
+  debounce(func: Function, wait: number) {
+    return (...args: any[]) => {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(() => func(...args), wait);
+    };
+  }
+
+  onScroll() {
+    const scrollPosition = window.scrollY;
+    const galleryElement = document.getElementById('product-gallery');
+
+    if (galleryElement) {
+      const galleryTop =
+        galleryElement.getBoundingClientRect().top + window.scrollY;
+      const galleryHeight = galleryElement.clientHeight;
+
+      // Set a small buffer zone (e.g., 50px)
+      const bufferZone = 50;
+
+      // Make sticky when we scroll past the gallery's initial position
+      if (scrollPosition > galleryTop + bufferZone) {
+        this.isSticky = true;
+      } else if (scrollPosition < galleryTop - bufferZone) {
+        this.isSticky = false;
+      }
+
+      // Stop the sticky effect after scrolling a certain distance
+      if (scrollPosition > galleryTop + galleryHeight) {
+        this.isSticky = false;
+      }
+
+      console.log('Scroll:', scrollPosition, 'isSticky:', this.isSticky);
+    }
+  }
+
+  loadImages() {
+    if (this.isProcessing) return;
     this.isProcessing = true;
     this.loadingImages = true;
     this.imagesLoaded = false;
     this.images = [];
-
-    console.log('Loading images...', this.productDetails); // Debug log
-
-    // Process main image immediately if available
     if (this.productDetails?.mainImageUrl) {
       this.images.push({
         itemImageSrc: this.getFullImageUrl(this.productDetails.mainImageUrl),
@@ -68,12 +128,7 @@ export class ProductImageGalleryComponent {
         title: 'Main Product Image',
       });
     }
-
-    // Add gallery images if available
-    if (
-      this.productDetails?.gallaryImageUrls &&
-      this.productDetails.gallaryImageUrls.length > 0
-    ) {
+    if (this.productDetails?.gallaryImageUrls?.length) {
       this.productDetails.gallaryImageUrls.forEach((image, index) => {
         this.images.push({
           itemImageSrc: this.getFullImageUrl(image.imageUrl),
@@ -83,7 +138,6 @@ export class ProductImageGalleryComponent {
         });
       });
     }
-
     setTimeout(() => {
       this.finishLoading();
     }, 500);
