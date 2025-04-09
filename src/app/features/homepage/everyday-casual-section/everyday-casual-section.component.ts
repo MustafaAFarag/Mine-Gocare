@@ -18,23 +18,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './everyday-casual-section.component.html',
   styleUrl: './everyday-casual-section.component.css',
 })
-export class EverydayCasualSectionComponent implements OnInit, OnChanges {
+export class EverydayCasualSectionComponent {
   @Input() categories: Category[] = [];
   @Input() products: Product[] = [];
   @Input() isLoadingProducts!: boolean;
-
-  ngOnInit(): void {
-    console.log('OnInit - isLoadingProducts:', this.isLoadingProducts);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isLoadingProducts']) {
-      console.log(
-        'OnChanges - isLoadingProducts changed to:',
-        changes['isLoadingProducts'].currentValue,
-      );
-    }
-  }
 
   getFullImageUrl(relativePath?: string): string {
     if (!relativePath) return 'assets/default-image.png';

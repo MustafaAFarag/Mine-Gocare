@@ -1,7 +1,7 @@
-export interface Product {
+export interface ProductDetails {
   id: number;
   mainImageUrl: string;
-  name: ProductName;
+  productName: ProductName;
   description: Description;
   targetAudience: any;
   brandId: number;
@@ -120,11 +120,4 @@ interface Name5 {
 interface GallaryImageUrl2 {
   id: number;
   imageUrl: string;
-}
-
-export interface ProductApiResponse {
-  result: {
-    items: Product[];
-    totalCount: number;
-  };
 }

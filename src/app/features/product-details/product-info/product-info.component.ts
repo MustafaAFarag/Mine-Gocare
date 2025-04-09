@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Product } from '../../../model/Product';
 import { CommonModule } from '@angular/common';
+import { ProductDetails } from '../../../model/ProductDetail';
 
 @Component({
   selector: 'app-product-info',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './product-info.component.css',
 })
 export class ProductInfoComponent {
-  @Input() productDetails!: Product;
+  @Input() productDetails!: ProductDetails;
 
   counter: number = 1;
   totalPrice: number = 296.0;
