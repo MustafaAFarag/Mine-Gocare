@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { environment } from '../../../../enviroments/enviroment';
-import { Product } from '../../../model/Employee';
+import { Product } from '../../../model/Product';
 import { CommonModule } from '@angular/common';
 import { GalleriaModule } from 'primeng/galleria';
 

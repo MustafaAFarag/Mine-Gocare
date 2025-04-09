@@ -121,3 +121,10 @@ export interface GallaryImageUrl2 {
   id: number;
   imageUrl: string;
 }
+
+export interface ProductApiResponse {
+  result: {
+    items: Product[];
+    totalCount: number;
+  };
+}

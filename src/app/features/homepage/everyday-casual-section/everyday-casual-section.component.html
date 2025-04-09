@@ -1,38 +1,30 @@
 <section class="everyday-casual-section py-16">
   <div class="container mx-auto max-w-8xl px-4">
-    <h2 class="text-center text-2xl font-extrabold lg:text-4xl">
-      EVERYDAY CASUAL
-    </h2>
+    <h2 class="text-center text-4xl font-extrabold">EVERYDAY CASUAL</h2>
     <div class="my-4 flex justify-center">
       <div class="h-1 w-24 bg-hover-color"></div>
     </div>
 
     <div class="category-tabs mb-8 flex flex-wrap justify-center gap-4">
       @for (category of categories; track category) {
-        <button
-          class="px-4 py-2 text-base lg:text-lg"
-          [class.text-hover-color]="selectedCategory === category"
-          (click)="selectCategory(category)"
-        >
-          {{ category }}
+        <button class="px-4 py-2 text-lg font-medium uppercase">
+          {{ category.name.en }}
         </button>
       }
     </div>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-      @for (product of filteredProducts; track product.id) {
+      @for (product of products; track product.id) {
         <div
           class="rounded-lg bg-white p-4 shadow-md transition-shadow duration-300 hover:shadow-lg"
         >
           <img
-            [src]="product.image"
+            [src]="getFullImageUrl(product.mainImageUrl)"
             [alt]="product.name"
             class="mb-4 h-64 w-full rounded-md object-cover"
           />
-          <h3 class="text-lg font-medium">{{ product.name }}</h3>
-          <p class="mt-2 font-bold text-red-600">
-            ${{ product.price.toFixed(2) }}
-          </p>
+          <h3 class="text-lg font-medium">{{ product.name.en }}</h3>
+          <p class="mt-2 font-bold text-red-600">$30.00</p>
           <button
             class="mt-4 w-full rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
           >
