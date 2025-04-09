@@ -1,6 +1,8 @@
 <section class="everyday-casual-section py-16">
   <div class="container mx-auto max-w-8xl px-4">
-    <h2 class="text-center text-4xl font-extrabold">EVERYDAY CASUAL</h2>
+    <h2 class="text-center text-2xl font-extrabold lg:text-4xl">
+      EVERYDAY CASUAL
+    </h2>
     <div class="my-4 flex justify-center">
       <div class="h-1 w-24 bg-hover-color"></div>
     </div>
@@ -8,7 +10,7 @@
     <div class="category-tabs mb-8 flex flex-wrap justify-center gap-4">
       @for (category of categories; track category) {
         <button
-          class="px-4 py-2 text-lg font-bold"
+          class="px-4 py-2 text-base lg:text-lg"
           [class.text-hover-color]="selectedCategory === category"
           (click)="selectCategory(category)"
         >
