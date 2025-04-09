@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
-import { Product } from '../../model/Product';
 import { ProductInfoTabsComponent } from '../../features/product-details/product-info-tabs/product-info-tabs.component';
 import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
 import { ProductInfoComponent } from '../../features/product-details/product-info/product-info.component';

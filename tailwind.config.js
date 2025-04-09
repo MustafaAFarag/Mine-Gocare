@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         "hover-color": "#a01a40",
+        "special-gray": "#323232",
       },
       maxWidth: {
         "8xl": "1400px", // Your custom max width

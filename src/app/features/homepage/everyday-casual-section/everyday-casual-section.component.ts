@@ -4,6 +4,7 @@ import {
   OnInit,
   OnChanges,
   SimpleChanges,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Category } from '../../../model/Categories';
 import { environment } from '../../../../enviroments/enviroment';
@@ -22,6 +23,15 @@ export class EverydayCasualSectionComponent {
   @Input() categories: Category[] = [];
   @Input() products: Product[] = [];
   @Input() isLoadingProducts!: boolean;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['products']) {
+      console.log('Products changed:', this.products);
+      this.cdr.detectChanges(); // Forces Angular to refresh the view
+    }
+  }
 
   getFullImageUrl(relativePath?: string): string {
     if (!relativePath) return 'assets/default-image.png';

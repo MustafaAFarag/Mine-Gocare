@@ -41,6 +41,7 @@ export class HomepageComponent implements OnInit {
       next: (res) => {
         this.categories = res.result;
         this.isLoadingCategories = false;
+        console.log('Catone', this.categories[0]);
       },
       error: () => {
         this.isLoadingCategories = false;

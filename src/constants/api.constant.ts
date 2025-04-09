@@ -1,7 +1,7 @@
 export const ApiEndPoint = {
-  allCategoriesApi: 'api/services/WebApp/ProductCategory/SearchAll',
+  allCategoriesApi: 'api/services/ClientApp/ProductCategory/SearchAll',
   getAllProductVariantsForClient:
-    'api/services/WebApp/Product/GetAllProductVariantsForClient',
+    'api/services/ClientApp/Product/GetAllProductVariantsForClient',
   getProductDetails:
-    'api/services/WebApp/Product/GetProductDetails?productId=1&ProductVariantId=2',
+    'api/services/ClientApp/Product/GetProductDetails?productId=1&ProductVariantId=2',
 };
