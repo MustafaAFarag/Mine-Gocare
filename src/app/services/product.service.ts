@@ -55,9 +55,9 @@ export class ProductService {
 
   // Product Details API
 
-  getProductDetails() {
+  getProductDetails(productId: string, variantId: string) {
     return this.http.get(
-      `${environment.apiUrl}/${ApiEndPoint.getProductDetails}`,
+      `${environment.apiUrl}/${ApiEndPoint.getProductDetails}?productId=${productId}&ProductVariantId=${variantId}`,
     );
   }
 }

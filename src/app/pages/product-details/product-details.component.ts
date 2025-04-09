@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/breadcrumb.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { ProductInfoTabsComponent } from '../../features/product-details/product-info-tabs/product-info-tabs.component';
@@ -29,19 +29,29 @@ export class ProductDetailsComponent implements OnInit {
   productDetails!: ProductDetails;
   isLoading: boolean = true;
 
-  constructor(public productService: ProductService) {
+  constructor(
+    public productService: ProductService,
+    private route: ActivatedRoute,
+  ) {
     this.productDetails = {} as ProductDetails;
   }
 
   ngOnInit(): void {
-    this.fetchProductDetailsAPI();
+    this.route.params.subscribe((params) => {
+      const productId = params['productId'];
+      const variantId = params['variantId'];
+      console.log('Product ID:', productId);
+      this.fetchProductDetailsAPI(productId, variantId);
+    });
   }
 
-  fetchProductDetailsAPI() {
-    this.productService.getProductDetails().subscribe((response: any) => {
-      this.productDetails = response.result;
-      this.isLoading = false;
-      console.log('PRODUCT DETAILS', this.productDetails);
-    });
+  fetchProductDetailsAPI(productId: string, variantId: string) {
+    this.productService
+      .getProductDetails(productId, variantId)
+      .subscribe((response: any) => {
+        this.productDetails = response.result;
+        this.isLoading = false;
+        console.log('PRODUCT DETAILS', this.productDetails);
+      });
   }
 }
