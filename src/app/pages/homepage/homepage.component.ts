@@ -41,7 +41,6 @@ export class HomepageComponent implements OnInit {
       next: (res) => {
         this.categories = res.result;
         this.isLoadingCategories = false;
-        console.log('Catone', this.categories[0]);
       },
       error: () => {
         this.isLoadingCategories = false;
@@ -55,7 +54,6 @@ export class HomepageComponent implements OnInit {
       next: (res) => {
         this.products = res.result.items;
         this.isLoadingProducts = false;
-        console.log('productone', this.products[0]);
       },
       error: () => {
         this.isLoadingProducts = false;
