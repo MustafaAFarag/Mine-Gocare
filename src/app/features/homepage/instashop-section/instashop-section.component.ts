@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-instashop-section',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './instashop-section.component.html',
   styleUrl: './instashop-section.component.css',
 })
