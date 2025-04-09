@@ -13,11 +13,13 @@
     </div>
 
     <div class="category-tabs mb-8 flex flex-wrap justify-center gap-4">
-      @for (category of categories; track category) {
-        <button class="px-4 py-2 text-lg font-medium uppercase">
-          {{ category.name.en }}
-        </button>
-      }
+      <button
+        *ngFor="let category of categories"
+        class="px-4 py-2 text-lg font-medium uppercase"
+        (click)="onCategoryClick(category.id)"
+      >
+        {{ category.name.en }}
+      </button>
     </div>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -50,6 +52,7 @@
           <!-- Product details -->
           <h3 class="text-lg font-medium">{{ product.name.en }}</h3>
           <p class="text-special-gray text-sm">{{ product.brand.en }}</p>
+          <p></p>
           <div class="mb-4 mt-2 text-lg font-bold text-black">
             <p
               *ngIf="product.priceBeforeDiscount === product.priceAfterDiscount"
