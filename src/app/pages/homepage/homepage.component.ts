@@ -54,7 +54,7 @@ export class HomepageComponent implements OnInit {
       next: (res) => {
         this.products = res.result.items;
         this.isLoadingProducts = false;
-        console.log(this.products[0]);
+        console.log('productone', this.products[0]);
       },
       error: () => {
         this.isLoadingProducts = false;

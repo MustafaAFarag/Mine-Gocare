@@ -9,6 +9,7 @@ import { ProductInfoTabsComponent } from '../../features/product-details/product
 import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
 import { ProductInfoComponent } from '../../features/product-details/product-info/product-info.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { ProductDetails } from '../../model/ProductDetail';
 
 @Component({
   selector: 'app-product-details',
@@ -26,11 +27,11 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
   styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent implements OnInit {
-  productDetails!: Product;
+  productDetails!: ProductDetails;
   isLoading: boolean = true;
 
   constructor(public productService: ProductService) {
-    this.productDetails = {} as Product;
+    this.productDetails = {} as ProductDetails;
   }
 
   ngOnInit(): void {

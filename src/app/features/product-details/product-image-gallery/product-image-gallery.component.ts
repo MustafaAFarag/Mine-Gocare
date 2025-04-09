@@ -10,6 +10,7 @@ import { environment } from '../../../../enviroments/enviroment';
 import { Product } from '../../../model/Product';
 import { CommonModule } from '@angular/common';
 import { GalleriaModule } from 'primeng/galleria';
+import { ProductDetails } from '../../../model/ProductDetail';
 
 @Component({
   selector: 'app-product-image-gallery',
@@ -21,7 +22,7 @@ import { GalleriaModule } from 'primeng/galleria';
 export class ProductImageGalleryComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Input() productDetails!: Product;
+  @Input() productDetails!: ProductDetails;
   private boundScrollHandler: any;
 
   images: any[] = [];
