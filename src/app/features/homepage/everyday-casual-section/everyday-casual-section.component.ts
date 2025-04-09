@@ -23,6 +23,7 @@ export class EverydayCasualSectionComponent {
   @Input() categories: Category[] = [];
   @Input() products: Product[] = [];
   @Input() isLoadingProducts!: boolean;
+  @Input() selectedCategory: any;
 
   @Output() categorySelected = new EventEmitter<number>(); // Emit category ID when clicked
 

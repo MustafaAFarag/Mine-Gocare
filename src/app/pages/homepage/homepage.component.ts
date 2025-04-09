@@ -29,12 +29,12 @@ export class HomepageComponent implements OnInit {
   isLoadingCategories: boolean = true;
   isLoadingProducts: boolean = true;
   categoriesID: number[] = []; // Array to hold selected category IDs
+  selectedCategory: Category | null = null; // Track the selected category
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.fetchCategoriesAPI();
-    this.fetchProductsAPI();
   }
 
   fetchCategoriesAPI() {
@@ -44,6 +44,13 @@ export class HomepageComponent implements OnInit {
         console.log('Categories fetched:', res.result);
         this.categories = res.result;
         this.isLoadingCategories = false;
+
+        // Set the first category as the default selected category
+        if (this.categories.length > 0) {
+          this.selectedCategory = this.categories[0];
+          this.categoriesID = [this.selectedCategory.id];
+          this.fetchProductsAPI(); // Fetch products for the default selected category
+        }
       },
       error: () => {
         console.error('Error fetching categories');
@@ -56,7 +63,9 @@ export class HomepageComponent implements OnInit {
   fetchProductsAPI() {
     console.log('Fetching products with categoriesID:', this.categoriesID);
     this.productService
-      .getAllProductVariantsForClient({ categoryId: this.categoriesID })
+      .getAllProductVariantsForClient({
+        categoryId: this.categoriesID,
+      })
       .subscribe({
         next: (res) => {
           console.log('Products fetched:', res.result.items);
@@ -77,7 +86,12 @@ export class HomepageComponent implements OnInit {
     // Replace the current categoriesID with the selected category ID
     this.categoriesID = [categoryId]; // Only one category is selected at a time
 
+    // Find the selected category object from the categories array
+    this.selectedCategory =
+      this.categories.find((category) => category.id === categoryId) || null;
+
     console.log('Updated categoriesID:', this.categoriesID);
+    console.log('Updated selectedCategory:', this.selectedCategory);
 
     // Re-fetch products with the updated category ID
     this.fetchProductsAPI();

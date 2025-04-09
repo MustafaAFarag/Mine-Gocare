@@ -15,8 +15,11 @@
     <div class="category-tabs mb-8 flex flex-wrap justify-center gap-4">
       <button
         *ngFor="let category of categories"
-        class="px-4 py-2 text-lg font-medium uppercase"
+        class="px-4 py-2 text-lg font-semibold uppercase"
         (click)="onCategoryClick(category.id)"
+        [ngClass]="{
+          'text-hover-color': category.id === selectedCategory?.id,
+        }"
       >
         {{ category.name.en }}
       </button>
