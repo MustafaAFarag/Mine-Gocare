@@ -25,7 +25,7 @@ import { Product } from '../../model/Product';
 })
 export class HomepageComponent implements OnInit {
   categories: Category[] = [];
-  products: any[] = [];
+  products: Product[] = [];
   isLoadingCategories: boolean = true;
   isLoadingProducts: boolean = true;
 

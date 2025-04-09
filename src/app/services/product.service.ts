@@ -4,6 +4,7 @@ import { environment } from '../../enviroments/enviroment';
 import { ApiEndPoint } from '../../constants/api.constant';
 import { Observable } from 'rxjs';
 import { Category } from '../model/Categories';
+import { Product, ProductApiResponse } from '../model/Product';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,7 @@ export class ProductService {
       brandId?: number[];
       sortBy?: number;
     } = {},
-  ) {
+  ): Observable<ProductApiResponse> {
     const body = {
       paging: {
         pageNumber: filters.pageNumber ?? 1,
@@ -46,7 +47,7 @@ export class ProductService {
       sortBy: filters.sortBy ?? 0,
     };
 
-    return this.http.post<any>(
+    return this.http.post<ProductApiResponse>(
       `${environment.apiUrl}/${ApiEndPoint.getAllProductVariantsForClient}`,
       body,
     );

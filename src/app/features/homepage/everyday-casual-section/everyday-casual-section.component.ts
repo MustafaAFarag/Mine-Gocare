@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Category } from '../../../model/Categories';
 import { environment } from '../../../../enviroments/enviroment';
+import { Product } from '../../../model/Product';
 
 @Component({
   selector: 'app-everyday-casual-section',
@@ -10,7 +11,7 @@ import { environment } from '../../../../enviroments/enviroment';
 })
 export class EverydayCasualSectionComponent {
   @Input() categories: Category[] = [];
-  @Input() products: any[] = [];
+  @Input() products: Product[] = [];
 
   getFullImageUrl(relativePath?: string): string {
     if (!relativePath) return 'assets/default-image.png';

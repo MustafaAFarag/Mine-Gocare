@@ -1,7 +1,7 @@
 export interface Product {
   id: number;
   mainImageUrl: string;
-  productName: ProductName;
+  name: ProductName;
   description: Description;
   targetAudience: any;
   brandId: number;
