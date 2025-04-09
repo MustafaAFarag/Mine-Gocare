@@ -53,7 +53,6 @@ export class HomepageComponent implements OnInit {
     this.productService.getAllProductVariantsForClient().subscribe({
       next: (res) => {
         this.products = res.result.items;
-        console.log('PRODUCTS', this.products);
         this.isLoadingProducts = false;
       },
       error: () => {

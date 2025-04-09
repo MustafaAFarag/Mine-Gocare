@@ -1,4 +1,11 @@
-<section class="everyday-casual-section py-16">
+<div *ngIf="isLoadingProducts">
+  <app-loading></app-loading>
+</div>
+
+<section
+  class="everyday-casual-section py-16"
+  *ngIf="!isLoadingProducts && products.length"
+>
   <div class="container mx-auto max-w-8xl px-4">
     <h2 class="text-center text-4xl font-extrabold">EVERYDAY CASUAL</h2>
     <div class="my-4 flex justify-center">
