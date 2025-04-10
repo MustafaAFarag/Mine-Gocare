@@ -3,4 +3,6 @@ export const ApiEndPoint = {
   getAllProductVariantsForClient:
     'api/services/ClientApp/Product/GetAllProductVariantsForClient',
   getProductDetails: 'api/services/ClientApp/Product/GetProductDetails',
+  SignInManually: 'api/services/AdminApp/SignIn/SignInManually',
+  SignUpManually: 'api/services/ClientApp/SignUp/SignUpManually',
 };

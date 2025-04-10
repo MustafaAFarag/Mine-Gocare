@@ -1,0 +1,42 @@
+<form [formGroup]="loginForm" (ngSubmit)="login()" class="flex flex-col gap-3">
+  <p-message
+    *ngIf="errorMessage"
+    severity="error"
+    text="{{ errorMessage }}"
+  ></p-message>
+
+  <label>Email</label>
+  <input
+    pInputText
+    formControlName="emailAddress"
+    placeholder="Email"
+    class="w-full"
+  />
+
+  <label>Password</label>
+  <input
+    pPassword
+    formControlName="password"
+    [feedback]="false"
+    placeholder="Password"
+    class="w-full"
+  />
+
+  <div class="flex items-center justify-between">
+    <p-checkbox formControlName="rememberClient" binary="true"></p-checkbox>
+    <label class="ml-2">Remember Me</label>
+  </div>
+
+  <button
+    pButton
+    type="submit"
+    label="Login"
+    [loading]="loading"
+    class="w-full"
+  ></button>
+
+  <p class="mt-4 text-center text-sm">
+    Don't have an account?
+    <a (click)="switch.emit()" class="cursor-pointer text-blue-500">Sign up</a>
+  </p>
+</form>

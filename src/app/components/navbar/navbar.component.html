@@ -91,7 +91,8 @@
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
         <i class="ri-shopping-cart-line cursor-pointer"></i>
-        <i class="ri-user-line cursor-pointer"></i>
+        <i class="ri-user-line cursor-pointer" (click)="showAuthModal()"></i>
+        <app-auth-modal [visible]="authVisible"></app-auth-modal>
       </div>
     </div>
   </div>

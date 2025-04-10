@@ -1,0 +1,48 @@
+<form
+  [formGroup]="signupForm"
+  (ngSubmit)="signup()"
+  class="flex flex-col gap-3"
+>
+  <p-message
+    *ngIf="errorMessage"
+    severity="error"
+    text="{{ errorMessage }}"
+  ></p-message>
+
+  <div class="grid grid-cols-2 gap-2">
+    <input pInputText formControlName="firstName" placeholder="First Name" />
+    <input pInputText formControlName="lastName" placeholder="Last Name" />
+  </div>
+
+  <input pInputText formControlName="emailAddress" placeholder="Email" />
+  <input
+    pInputText
+    formControlName="mobileNumber"
+    placeholder="Mobile Number"
+  />
+  <input
+    pPassword
+    formControlName="password"
+    placeholder="Password"
+    [feedback]="false"
+  />
+  <input
+    pPassword
+    formControlName="confirmPassword"
+    placeholder="Confirm Password"
+    [feedback]="false"
+  />
+
+  <button
+    pButton
+    type="submit"
+    label="Sign Up"
+    [loading]="loading"
+    class="w-full"
+  ></button>
+
+  <p class="mt-4 text-center text-sm">
+    Already have an account?
+    <a (click)="switch.emit()" class="cursor-pointer text-blue-500">Login</a>
+  </p>
+</form>

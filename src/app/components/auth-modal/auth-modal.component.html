@@ -1,0 +1,38 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '50vw', maxWidth: '800px' }"
+  [contentStyle]="{ padding: '0', overflow: 'hidden' }"
+  [baseZIndex]="10000"
+  [showHeader]="false"
+  [transitionOptions]="'300ms cubic-bezier(0.4, 0, 0.2, 1)'"
+  styleClass="auth-modal-anim"
+>
+  <div class="flex h-full w-full">
+    <!-- Left: Auth Form -->
+    <div class="flex w-1/2 flex-col justify-center bg-white p-8">
+      <h2 class="mb-4 text-2xl font-semibold">
+        {{ isLoginMode ? "Login" : "Sign Up" }}
+      </h2>
+
+      <app-login-form
+        *ngIf="isLoginMode"
+        (switch)="toggleMode()"
+        (closeModal)="close()"
+      ></app-login-form>
+      <app-signup-form
+        *ngIf="!isLoginMode"
+        (switch)="toggleMode()"
+        (closeModal)="close()"
+      ></app-signup-form>
+    </div>
+
+    <!-- Right: Image -->
+    <div
+      class="hidden w-1/2 bg-cover bg-center md:block"
+      style="background-image: url(&quot;/assets/default-image.png&quot;)"
+    ></div>
+  </div>
+</p-dialog>

@@ -11,17 +11,24 @@ import {
 import { RouterLink } from '@angular/router';
 import { NavbarBannerComponent } from '../navbar-banner/navbar-banner.component';
 import { isPlatformBrowser } from '@angular/common';
+import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, CommonModule, NavbarBannerComponent],
+  imports: [
+    RouterLink,
+    CommonModule,
+    NavbarBannerComponent,
+    AuthModalComponent,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   // Using signal instead of boolean
   isMobileMenuOpen = signal(false);
+  authVisible = false;
 
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
@@ -103,5 +110,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  showAuthModal() {
+    this.authVisible = true;
   }
 }
