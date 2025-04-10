@@ -1,32 +1,30 @@
-import { Component, Input } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { LoginFormComponent } from '../login-form/login-form.component';
-import { SignupFormComponent } from '../signup-form/signup-form.component';
 import { CommonModule } from '@angular/common';
+import { SignupFormComponent } from '../signup-form/signup-form.component';
 
 @Component({
   selector: 'app-auth-modal',
   imports: [
     DialogModule,
     LoginFormComponent,
-    SignupFormComponent,
     CommonModule,
+    SignupFormComponent,
   ],
   templateUrl: './auth-modal.component.html',
-  styleUrls: ['./auth-modal.component.css'],
+  styleUrl: './auth-modal.component.css',
 })
 export class AuthModalComponent {
-  @Input() visible = false;
-  isLoginMode = true;
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
+  isLoginMode: boolean = true;
 
-  constructor(public authService: AuthService) {}
-
+  // Toggle between login and signup forms
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
   }
-
-  close() {
-    this.visible = false;
+  closeDialog() {
+    this.visibleChange.emit(false);
   }
 }

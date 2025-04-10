@@ -7,10 +7,14 @@ import {
   inject,
   PLATFORM_ID,
   Signal,
+  Output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavbarBannerComponent } from '../navbar-banner/navbar-banner.component';
 import { isPlatformBrowser } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 
 @Component({
@@ -20,15 +24,25 @@ import { AuthModalComponent } from '../auth-modal/auth-modal.component';
     RouterLink,
     CommonModule,
     NavbarBannerComponent,
+    DialogModule,
+    ButtonModule,
+    InputTextModule,
     AuthModalComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  // Using signal instead of boolean
   isMobileMenuOpen = signal(false);
-  authVisible = false;
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = !this.visible;
+  }
+
+  toggleMode(isLoginMode: boolean) {
+    this.visible = true;
+  }
 
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
@@ -110,9 +124,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       }
     }
-  }
-
-  showAuthModal() {
-    this.authVisible = true;
   }
 }

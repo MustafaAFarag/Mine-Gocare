@@ -1,17 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+
 import { MessageModule } from 'primeng/message';
 
 @Component({
@@ -21,65 +17,23 @@ import { MessageModule } from 'primeng/message';
   styleUrls: ['./signup-form.component.css'],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
+    RadioButtonModule,
     CheckboxModule,
+
     MessageModule,
   ],
   providers: [MessageService],
 })
 export class SignupFormComponent {
-  @Output() switch = new EventEmitter<void>();
-  @Output() closeModal = new EventEmitter<void>();
+  @Output() toggle = new EventEmitter<boolean>();
+  selectedGender: number = 1; // Default to 'Men'
 
-  signupForm: FormGroup;
-  loading = false;
-  errorMessage = '';
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private messageService: MessageService,
-  ) {
-    this.signupForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      emailAddress: ['', [Validators.required, Validators.email]],
-      phoneCode: ['+1'],
-      mobileNumber: [0, Validators.required],
-      countryCode: ['US'],
-      deviceToken: ['browser-uuid'],
-      isEmailConfirmed: [true],
-      isPhoneConfirmed: [true],
-      isAutomaticSignIn: [true],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-      gender: [0],
-      profileImageUrl: [''],
-      thumbImageUrl: [''],
-    });
-  }
-
-  signup() {
-    if (this.signupForm.invalid) return;
-
-    this.loading = true;
-    this.authService.signup(this.signupForm.value).subscribe({
-      next: () => {
-        this.loading = false;
-        this.closeModal.emit();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Signup successful',
-        });
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMessage = err?.message || 'Signup failed';
-      },
-    });
+  toggleMode() {
+    this.toggle.emit(true);
   }
 }
