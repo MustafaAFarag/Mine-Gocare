@@ -1,33 +1,46 @@
 <div class="text-black">
   <div class="flex flex-col items-center gap-5">
     <h2 class="text-center text-2xl font-semibold">Sign In</h2>
-    <p class="max-w-lg text-center text-gray-500">
+    <p
+      class="hidden max-w-lg text-center text-sm text-gray-500 lg:block lg:text-base"
+    >
       dive back into your world with a simple sign-in. your next adventure
       awaits - let's get started!
     </p>
   </div>
 
   <form class="flex flex-col gap-3">
-    <label class="mt-5 text-lg">Email</label>
-    <input
-      placeholder="Email"
-      class="w-full border border-gray-300 bg-white p-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
+    <div>
+      <label class="mt-5 text-sm lg:text-lg">Email</label>
+      <input
+        id="email"
+        type="email"
+        [(ngModel)]="loginObject.email"
+        name="email"
+        placeholder="Email"
+        class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
+      />
+    </div>
 
-    <label class="text-lg">Password</label>
+    <label class="text-sm lg:text-lg">Password</label>
     <input
+      type="password"
+      [(ngModel)]="loginObject.password"
+      name="password"
       placeholder="Password"
-      class="w-full border border-gray-300 bg-white p-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
     />
 
-    <div class="flex items-center justify-end text-base text-special-gray">
+    <div
+      class="flex items-center justify-end text-xs text-special-gray lg:text-sm"
+    >
       <a href="#">Forgot Password?</a>
     </div>
 
     <button
       type="submit"
-      label="Login"
-      class="w-full border border-gray-300 bg-hover-color p-2 text-base font-bold uppercase text-white focus:outline-none focus:ring-2"
+      (click)="onLoginSubmit()"
+      class="w-full border border-gray-300 bg-hover-color p-2 text-sm font-bold uppercase text-white focus:outline-none focus:ring-2 lg:text-base"
     >
       Login
     </button>
@@ -40,15 +53,15 @@
 
   <p class="text-center text-sm">
     Don't have an account?
-    <a (click)="toggle.emit()" class="cursor-pointer text-blue-500"
-      >Register Now</a
+    <a (click)="toggle.emit()" class="cursor-pointer text-hover-color">
+      <br />Register Now</a
     >
   </p>
 
   <button
     type="submit"
     label="Login"
-    class="mt-5 w-full border border-hover-color bg-transparent p-2 text-base text-hover-color focus:outline-none focus:ring-2"
+    class="mt-5 w-full border border-hover-color bg-transparent p-2 text-sm text-hover-color focus:outline-none focus:ring-2 lg:text-base"
   >
     <i class="ri-smartphone-line mr-2"></i>
     <span>Login with Mobile Number</span>
