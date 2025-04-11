@@ -1,130 +1,62 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../../enviroments/enviroment';
-import { ApiEndPoint } from '../../constants/api.constant';
-
-interface LoginRequest {
-  emailAddress: string;
-  mobileNumber: string;
-  password: string;
-  deviceToken: string;
-  rememberClient: boolean;
-}
-
-interface LoginResponse {
-  result: {
-    accessToken: string;
-    expireInSeconds: number;
-    userId: number;
-    userName: string;
-  };
-  success: boolean;
-  error?: any;
-}
-
-interface SignupRequest {
-  emailAddress: string;
-  phoneCode: string;
-  mobileNumber: number;
-  countryCode: string;
-  deviceToken: string;
-  isEmailConfirmed: boolean;
-  isPhoneConfirmed: boolean;
-  isAutomaticSignIn: boolean;
-  firstName: string;
-  lastName: string;
-  password: string;
-  confirmPassword: string;
-  gender: number;
-  profileImageUrl: string;
-  thumbImageUrl: string;
-}
-
-interface SignupResponse {
-  success: boolean;
-  error?: any;
-  result?: any;
-}
+import { LoginRequest, LoginResponse } from '../model/Auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = `${environment.apiUrl}/${ApiEndPoint.SignInManually}`;
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(
-    this.hasToken(),
-  );
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private apiUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/AdminApp/SignIn/SignInManually';
+
+  private userSubject = new BehaviorSubject<any>(null);
+  user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, credentials).pipe(
-      tap((response) => {
-        if (response.success && response.result?.accessToken) {
-          this.storeToken(
-            response.result.accessToken,
-            credentials.rememberClient,
-          );
-          this.isAuthenticatedSubject.next(true);
+  login(emailOrPhone: string, password: string): Observable<any> {
+    console.log('Trying to login with:', emailOrPhone, password);
+
+    if (!emailOrPhone || !password) {
+      throw new Error('Email/Phone and Password are required');
+    }
+
+    const headers = new HttpHeaders({
+      'accept-language': 'en',
+      countryid: '224',
+      'abp.tenantid': '1',
+    });
+
+    const body = {
+      emailAddress: emailOrPhone.includes('@') ? emailOrPhone : null, // Assumes email if '@' is present
+      mobileNumber: emailOrPhone.includes('@') ? null : emailOrPhone, // Assumes phone if no '@'
+      password: password,
+    };
+
+    console.log('Request body:', body);
+
+    return this.http.post<LoginResponse>(this.apiUrl, body, { headers }).pipe(
+      tap((res) => {
+        if (res.success) {
+          console.log('Login successful:', res);
+          this.userSubject.next(res.result);
+          localStorage.setItem('accessToken', res.result.accessToken);
+          localStorage.setItem('user', JSON.stringify(res.result));
+        } else {
+          console.warn('Login failed response:', res);
         }
       }),
     );
   }
 
-  logout(): void {
-    this.clearToken();
-    this.isAuthenticatedSubject.next(false);
+  logout() {
+    this.userSubject.next(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
   }
 
-  private storeToken(token: string, remember: boolean): void {
-    if (this.isBrowser()) {
-      if (remember) {
-        localStorage.setItem('accessToken', token);
-      } else {
-        sessionStorage.setItem('accessToken', token);
-      }
-    }
-  }
-
-  private clearToken(): void {
-    if (this.isBrowser()) {
-      localStorage.removeItem('accessToken');
-      sessionStorage.removeItem('accessToken');
-    }
-  }
-
-  private hasToken(): boolean {
-    return (
-      this.isBrowser() &&
-      !!(
-        localStorage.getItem('accessToken') ||
-        sessionStorage.getItem('accessToken')
-      )
-    );
-  }
-
-  getToken(): string | null {
-    return this.isBrowser()
-      ? localStorage.getItem('accessToken') ||
-          sessionStorage.getItem('accessToken')
-      : null;
-  }
-
-  signup(data: SignupRequest): Observable<SignupResponse> {
-    const signupUrl = `${environment.apiUrl}/${ApiEndPoint.SignUpManually}`;
-    return this.http.post<SignupResponse>(signupUrl, data).pipe(
-      tap((response) => {
-        if (response.success && data.isAutomaticSignIn) {
-          this.isAuthenticatedSubject.next(true);
-          // Optional: handle auto-login token here if API returns one
-        }
-      }),
-    );
-  }
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined'; // Ensures code runs only in the browser
+  get currentUser() {
+    return this.userSubject.value;
   }
 }

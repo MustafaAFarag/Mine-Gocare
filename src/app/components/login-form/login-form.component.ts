@@ -1,32 +1,93 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
-  imports: [CommonModule, FormsModule],
-  providers: [],
+  imports: [CommonModule, ReactiveFormsModule],
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
+  loginForm!: FormGroup;
+  loading = false;
+  errorMessage = '';
 
-  loginObject = {
-    email: '',
-    password: '',
-  };
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
-  constructor(private router: Router) {}
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
+      password: ['', [Validators.required]],
+    });
 
-  onLoginSubmit() {
-    console.log('Login form submitted:', this.loginObject);
+    console.log('Login form initialized', this.loginForm);
   }
 
-  // Emit the toggle event to switch to the signup form
-  toggleMode() {
+  onLoginSubmit() {
+    if (this.loginForm.invalid) return;
+
+    this.loading = true;
+    this.errorMessage = ''; // Clear any previous error messages
+    const { identifier, password } = this.loginForm.value;
+
+    this.authService.login(identifier, password).subscribe({
+      next: (res) => {
+        console.log('✅ Auth success:', res);
+        this.loading = false;
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMessage =
+          err.message ||
+          'Login failed. Please check your credentials and try again.';
+        console.error('❌ Login error:', err);
+      },
+    });
+  }
+
+  toggleMode(): void {
     this.toggle.emit(false);
+  }
+
+  emailOrPhoneValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return { required: true };
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[0-9]{10,15}$/;
+
+    const isEmail = emailPattern.test(value);
+    const isPhone = phonePattern.test(value);
+
+    if (!isEmail && !isPhone) {
+      return { emailOrPhone: true };
+    }
+
+    return null;
+  }
+
+  get identifier() {
+    return this.loginForm.get('identifier');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 }

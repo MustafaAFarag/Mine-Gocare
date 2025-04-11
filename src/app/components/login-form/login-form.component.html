@@ -9,27 +9,32 @@
     </p>
   </div>
 
-  <form class="flex flex-col gap-3">
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onLoginSubmit()"
+    class="flex flex-col gap-3"
+    novalidate
+  >
     <div>
-      <label class="mt-5 text-sm lg:text-lg">Email</label>
+      <label class="mt-5 text-sm lg:text-lg">Email or Phone</label>
       <input
-        id="email"
-        type="email"
-        [(ngModel)]="loginObject.email"
-        name="email"
-        placeholder="Email"
+        id="identifier"
+        type="text"
+        formControlName="identifier"
+        placeholder="Email or Phone"
         class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
       />
     </div>
 
-    <label class="text-sm lg:text-lg">Password</label>
-    <input
-      type="password"
-      [(ngModel)]="loginObject.password"
-      name="password"
-      placeholder="Password"
-      class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
-    />
+    <div>
+      <label class="text-sm lg:text-lg">Password</label>
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+        class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
+      />
+    </div>
 
     <div
       class="flex items-center justify-end text-xs text-special-gray lg:text-sm"
@@ -39,12 +44,17 @@
 
     <button
       type="submit"
-      (click)="onLoginSubmit()"
+      [disabled]="loading"
       class="w-full border border-gray-300 bg-hover-color p-2 text-sm font-bold uppercase text-white focus:outline-none focus:ring-2 lg:text-base"
     >
-      Login
+      {{ loading ? "Logging in..." : "Login" }}
     </button>
+
+    <div *ngIf="errorMessage" class="mt-2 text-center text-sm text-red-500">
+      {{ errorMessage }}
+    </div>
   </form>
+
   <div class="my-4 flex items-center">
     <div class="flex-grow border-t border-gray-300"></div>
     <span class="mx-2 text-gray-500">OR</span>
@@ -53,14 +63,13 @@
 
   <p class="text-center text-sm">
     Don't have an account?
-    <a (click)="toggle.emit()" class="cursor-pointer text-hover-color">
-      <br />Register Now</a
-    >
+    <a (click)="toggleMode()" class="cursor-pointer text-hover-color">
+      <br />Register Now
+    </a>
   </p>
 
   <button
-    type="submit"
-    label="Login"
+    type="button"
     class="mt-5 w-full border border-hover-color bg-transparent p-2 text-sm text-hover-color focus:outline-none focus:ring-2 lg:text-base"
   >
     <i class="ri-smartphone-line mr-2"></i>
