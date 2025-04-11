@@ -1,6 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model/Auth';
 
 @Injectable({
@@ -19,18 +24,29 @@ export class AuthService {
     console.log('Trying to login with:', emailOrPhone, password);
 
     if (!emailOrPhone || !password) {
-      throw new Error('Email/Phone and Password are required');
+      return throwError(
+        () => new Error('Email/Phone and Password are required'),
+      );
     }
 
     const headers = new HttpHeaders({
       'accept-language': 'en',
       countryid: '224',
       'abp.tenantid': '1',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     });
 
+    // Format phone number to include country code if it's a phone number
+    const formattedPhone = emailOrPhone.includes('@')
+      ? null
+      : emailOrPhone.startsWith('+')
+        ? emailOrPhone
+        : `+2${emailOrPhone}`;
+
     const body = {
-      emailAddress: emailOrPhone.includes('@') ? emailOrPhone : null, // Assumes email if '@' is present
-      mobileNumber: emailOrPhone.includes('@') ? null : emailOrPhone, // Assumes phone if no '@'
+      emailAddress: emailOrPhone.includes('@') ? emailOrPhone : null,
+      mobileNumber: formattedPhone,
       password: password,
     };
 
@@ -45,7 +61,21 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(res.result));
         } else {
           console.warn('Login failed response:', res);
+          throw new Error('Login failed');
         }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Login error:', error);
+        let errorMessage = 'An error occurred during login';
+        if (error.error instanceof ErrorEvent) {
+          // Client-side error
+          errorMessage = error.error.message;
+        } else {
+          // Server-side error
+          errorMessage =
+            error.error?.message || `Server returned code ${error.status}`;
+        }
+        return throwError(() => new Error(errorMessage));
       }),
     );
   }
