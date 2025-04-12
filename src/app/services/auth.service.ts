@@ -19,11 +19,12 @@ export class AuthService {
   user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = this.getLocalStorageItem('user');
     if (savedUser) {
       this.userSubject.next(JSON.parse(savedUser));
     }
   }
+
   login(emailOrPhone: string, password: string): Observable<any> {
     console.log('Trying to login with:', emailOrPhone, password);
 
@@ -41,7 +42,6 @@ export class AuthService {
       Accept: 'application/json',
     });
 
-    // Format phone number to include country code if it's a phone number
     const formattedPhone = emailOrPhone.includes('@')
       ? null
       : emailOrPhone.startsWith('+')
@@ -61,8 +61,8 @@ export class AuthService {
         if (res.success) {
           console.log('Login successful:', res);
           this.userSubject.next(res.result);
-          localStorage.setItem('accessToken', res.result.accessToken);
-          localStorage.setItem('user', JSON.stringify(res.result));
+          this.setLocalStorageItem('accessToken', res.result.accessToken);
+          this.setLocalStorageItem('user', JSON.stringify(res.result));
         } else {
           console.warn('Login failed response:', res);
           throw new Error('Login failed');
@@ -72,10 +72,8 @@ export class AuthService {
         console.error('Login error:', error);
         let errorMessage = 'An error occurred during login';
         if (error.error instanceof ErrorEvent) {
-          // Client-side error
           errorMessage = error.error.message;
         } else {
-          // Server-side error
           errorMessage =
             error.error?.message || `Server returned code ${error.status}`;
         }
@@ -86,11 +84,32 @@ export class AuthService {
 
   logout() {
     this.userSubject.next(null);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
+    this.removeLocalStorageItem('accessToken');
+    this.removeLocalStorageItem('user');
   }
 
   get currentUser() {
     return this.userSubject.value;
+  }
+
+  // LocalStorage Helpers
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && !!window.localStorage;
+  }
+
+  private getLocalStorageItem(key: string): string | null {
+    return this.isBrowser() ? localStorage.getItem(key) : null;
+  }
+
+  private setLocalStorageItem(key: string, value: string): void {
+    if (this.isBrowser()) {
+      localStorage.setItem(key, value);
+    }
+  }
+
+  private removeLocalStorageItem(key: string): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem(key);
+    }
   }
 }

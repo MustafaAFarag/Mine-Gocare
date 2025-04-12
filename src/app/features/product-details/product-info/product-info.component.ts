@@ -52,9 +52,10 @@ export class ProductInfoComponent {
     const item: CartItem = {
       productId: product.id, // Product ID
       name: product.productName.en, // Product name (assuming the product name is in an object with `en` as key)
-      price: product.productVariants[0].priceAfterDiscount, // Price after discount
+      afterPrice: product.productVariants[0].priceAfterDiscount, // Price after discount
+      beforePrice: product.productVariants[0].priceBeforeDiscount,
       quantity: 1, // Default quantity of 1 (you can adjust this as needed)
-      imageUrl: product.mainImageUrl, // Image URL
+      image: product.mainImageUrl, // Image URL
     };
 
     // Log the created CartItem for debugging

@@ -9,7 +9,7 @@ import {
   Signal,
   Output,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NavbarBannerComponent } from '../navbar-banner/navbar-banner.component';
 import { isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
@@ -55,9 +55,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.visible = true;
   }
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
+
+  navigateToCart() {}
 
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;

@@ -36,7 +36,9 @@
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
-        <i class="ri-shopping-cart-line cursor-pointer"></i>
+        <a [routerLink]="['/cart']">
+          <i class="ri-shopping-cart-line cursor-pointer"></i>
+        </a>
         <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
       </div>
     </div>
@@ -90,7 +92,9 @@
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
-        <i class="ri-shopping-cart-line cursor-pointer"></i>
+        <a [routerLink]="['/cart']">
+          <i class="ri-shopping-cart-line cursor-pointer"></i>
+        </a>
         @if (currentUser) {
           <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
         } @else {

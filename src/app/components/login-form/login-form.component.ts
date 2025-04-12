@@ -59,6 +59,7 @@ export class LoginFormComponent implements OnInit {
       next: (res) => {
         console.log('✅ Auth success:', res);
         this.loading = false;
+        this.loginForm.reset(); // Reset the form fields
         this.loginSuccess.emit();
         this.router.navigate(['/']);
       },
