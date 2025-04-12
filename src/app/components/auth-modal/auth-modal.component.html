@@ -16,6 +16,7 @@
       <app-login-form
         *ngIf="isLoginMode"
         (toggle)="toggleMode()"
+        (loginSuccess)="handleLoginSuccess()"
       ></app-login-form>
       <app-signup-form
         *ngIf="!isLoginMode"

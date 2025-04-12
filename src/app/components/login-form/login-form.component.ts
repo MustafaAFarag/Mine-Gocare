@@ -20,9 +20,11 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
+  @Output() loginSuccess = new EventEmitter<void>();
   loginForm!: FormGroup;
   loading = false;
   errorMessage = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +42,14 @@ export class LoginFormComponent implements OnInit {
   }
 
   onLoginSubmit() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      // Mark all controls as touched to show validation messages
+      Object.keys(this.loginForm.controls).forEach((key) => {
+        const control = this.loginForm.get(key);
+        control?.markAsTouched();
+      });
+      return;
+    }
 
     this.loading = true;
     this.errorMessage = ''; // Clear any previous error messages
@@ -50,6 +59,7 @@ export class LoginFormComponent implements OnInit {
       next: (res) => {
         console.log('✅ Auth success:', res);
         this.loading = false;
+        this.loginSuccess.emit();
         this.router.navigate(['/']);
       },
       error: (err) => {
@@ -81,6 +91,10 @@ export class LoginFormComponent implements OnInit {
     }
 
     return null;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   get identifier() {

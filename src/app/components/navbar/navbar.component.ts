@@ -40,6 +40,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.visible = !this.visible;
   }
 
+  onVisibleChange(newValue: boolean) {
+    console.log('Dialog visibility changed:', newValue);
+
+    this.visible = newValue;
+  }
+
   toggleMode(isLoginMode: boolean) {
     this.visible = true;
   }

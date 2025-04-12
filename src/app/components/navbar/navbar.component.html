@@ -158,4 +158,7 @@
   </div>
 </nav>
 
-<app-auth-modal [(visible)]="visible"></app-auth-modal>
+<app-auth-modal
+  [(visible)]="visible"
+  (visibleChange)="onVisibleChange($event)"
+></app-auth-modal>
