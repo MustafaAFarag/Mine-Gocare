@@ -34,6 +34,8 @@ export class EverydayCasualSectionComponent {
   ) {}
 
   onCategoryClick(categoryId: number): void {
+    console.log('clicked');
+
     this.categorySelected.emit(categoryId); // Emit the selected category's ID
   }
 

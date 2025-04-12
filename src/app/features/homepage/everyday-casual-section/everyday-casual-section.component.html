@@ -43,25 +43,21 @@
 
             <div class="icon-wrapper absolute right-2 top-2 z-10">
               <i
-                class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl shadow"
+                class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
               ></i>
 
               <i
-                class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl shadow"
+                class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
               ></i>
               <i
-                class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl shadow"
+                class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
               ></i>
             </div>
           </div>
 
           <!-- Product details -->
           <h3 class="text-lg font-medium">{{ product.name.en }}</h3>
-          <p class="text-special-gray text-sm">{{ product.brand.en }}</p>
-          <p>
-            ID : {{ product.productId }} -- Variant : {{ product.variantId }}
-          </p>
-          <p></p>
+          <p class="text-sm text-special-gray">{{ product.brand.en }}</p>
           <div class="mb-4 mt-2 text-lg font-bold text-black">
             <p
               *ngIf="product.priceBeforeDiscount === product.priceAfterDiscount"
@@ -119,24 +115,52 @@
 </section>
 
 <style>
-  .product-card:hover .extra-icon-1 {
+  /* Default styles for mobile and tablet */
+  .extra-icon-1,
+  .extra-icon-2 {
     opacity: 1;
     transform: translateY(40px);
   }
 
-  .product-card:hover .extra-icon-2 {
-    opacity: 1;
+  .extra-icon-2 {
     transform: translateY(80px);
+  }
+
+  .limited-time-wrapper {
+    animation: slide-left 5s linear infinite;
+  }
+
+  /* Hover effects for lg screens and up */
+  @media (min-width: 1024px) {
+    .extra-icon-1,
+    .extra-icon-2 {
+      opacity: 0;
+
+      transform: translateY(0);
+    }
+
+    .product-card:hover .extra-icon-1 {
+      opacity: 1;
+      transform: translateY(40px);
+    }
+
+    .product-card:hover .extra-icon-2 {
+      opacity: 1;
+      transform: translateY(80px);
+    }
+
+    .limited-time-wrapper {
+      animation: none;
+    }
+
+    .product-card:hover .limited-time-wrapper {
+      animation: slide-left 5s linear infinite;
+    }
   }
 
   .extra-icon-1,
   .extra-icon-2 {
     transition: all 0.5s ease;
-    opacity: 0;
-  }
-
-  .product-card:hover .limited-time-wrapper {
-    animation: slide-left 5s linear infinite;
   }
 
   @keyframes slide-left {
