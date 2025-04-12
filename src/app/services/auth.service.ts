@@ -18,8 +18,12 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
-
+  constructor(private http: HttpClient) {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      this.userSubject.next(JSON.parse(savedUser));
+    }
+  }
   login(emailOrPhone: string, password: string): Observable<any> {
     console.log('Trying to login with:', emailOrPhone, password);
 

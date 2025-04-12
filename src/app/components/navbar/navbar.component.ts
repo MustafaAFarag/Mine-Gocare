@@ -16,6 +16,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthModalComponent } from '../auth-modal/auth-modal.component';
+import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { User } from '../../model/User';
 
 @Component({
   selector: 'app-navbar',
@@ -35,6 +38,8 @@ import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 export class NavbarComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = signal(false);
   visible: boolean = false;
+  userSubscription!: Subscription;
+  currentUser!: User;
 
   showDialog() {
     this.visible = !this.visible;
@@ -50,22 +55,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.visible = true;
   }
 
-  private platformId = inject(PLATFORM_ID);
-  private isBrowser: boolean;
-
-  constructor() {
+  constructor(private authService: AuthService) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser: boolean;
+
   ngOnInit(): void {
-    // Only add event listener if in browser environment
+    this.userSubscription = this.authService.user$.subscribe((user) => {
+      this.currentUser = user;
+      console.log('Current user:', this.currentUser);
+    });
+
     if (this.isBrowser) {
       window.addEventListener('resize', this.handleResize);
     }
   }
 
   ngOnDestroy(): void {
-    // Only remove event listener if in browser environment
+    // Clean up subscription
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+
     if (this.isBrowser) {
       window.removeEventListener('resize', this.handleResize);
     }
