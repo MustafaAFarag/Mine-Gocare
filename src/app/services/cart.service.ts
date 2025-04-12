@@ -1,6 +1,7 @@
-import { Injectable, signal } from '@angular/core';
-import { Cart, CartItem, CART_STORAGE_KEY } from '../model/Cart';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Cart, CartItem, CART_STORAGE_KEY } from '../model/Cart';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,25 @@ export class CartService {
   cart$ = this.cartSubject.asObservable();
 
   constructor() {
-    // Load cart from localStorage on service initialization
     this.loadCart();
+  }
+
+  // Selector: only cart items
+  get cartItems$(): Observable<CartItem[]> {
+    return this.cart$.pipe(map((cart) => cart.items));
+  }
+
+  // Selector: only total
+  get cartTotal$(): Observable<number> {
+    return this.cart$.pipe(map((cart) => cart.total));
+  }
+
+  // Generates key based on login state
+  private getStorageKey(): string {
+    const userId = this.cartSubject.value.userId;
+    return userId
+      ? `${CART_STORAGE_KEY}_${userId}`
+      : `${CART_STORAGE_KEY}_guest`;
   }
 
   private getInitialCart(): Cart {
@@ -22,7 +40,7 @@ export class CartService {
   }
 
   private loadCart(): void {
-    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+    const storedCart = localStorage.getItem(this.getStorageKey());
     if (storedCart) {
       try {
         const cart = JSON.parse(storedCart);
@@ -35,28 +53,35 @@ export class CartService {
   }
 
   private saveCart(cart: Cart): void {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    localStorage.setItem(this.getStorageKey(), JSON.stringify(cart));
     this.cartSubject.next(cart);
   }
 
   addToCart(item: CartItem): void {
-    const currentCart = this.cartSubject.value;
-    const existingItem = currentCart.items.find(
+    if (item.quantity <= 0) return;
+
+    const currentCart = structuredClone(this.cartSubject.value);
+    const existingIndex = currentCart.items.findIndex(
       (i) => i.productId === item.productId,
     );
 
-    if (existingItem) {
-      existingItem.quantity += item.quantity;
+    if (existingIndex > -1) {
+      const existingItem = currentCart.items[existingIndex];
+      const updatedItem = {
+        ...existingItem,
+        quantity: existingItem.quantity + item.quantity,
+      };
+      currentCart.items[existingIndex] = updatedItem;
     } else {
-      currentCart.items.push(item);
+      currentCart.items = [...currentCart.items, item];
     }
 
     currentCart.total = this.calculateTotal(currentCart.items);
     this.saveCart(currentCart);
   }
 
-  removeFromCart(productId: string): void {
-    const currentCart = this.cartSubject.value;
+  removeFromCart(productId: number): void {
+    const currentCart = structuredClone(this.cartSubject.value);
     currentCart.items = currentCart.items.filter(
       (item) => item.productId !== productId,
     );
@@ -64,47 +89,50 @@ export class CartService {
     this.saveCart(currentCart);
   }
 
-  updateQuantity(productId: string, quantity: number): void {
+  updateQuantity(productId: number, quantity: number): void {
     if (quantity < 1) {
       this.removeFromCart(productId);
       return;
     }
 
-    const currentCart = this.cartSubject.value;
-    const item = currentCart.items.find((i) => i.productId === productId);
+    const currentCart = structuredClone(this.cartSubject.value);
+    const index = currentCart.items.findIndex((i) => i.productId === productId);
 
-    if (item) {
-      item.quantity = quantity;
+    if (index > -1) {
+      const updatedItem = {
+        ...currentCart.items[index],
+        quantity,
+      };
+      currentCart.items[index] = updatedItem;
       currentCart.total = this.calculateTotal(currentCart.items);
       this.saveCart(currentCart);
     }
   }
 
   clearCart(): void {
+    localStorage.removeItem(this.getStorageKey());
     const emptyCart = this.getInitialCart();
-    this.saveCart(emptyCart);
-  }
-
-  private calculateTotal(items: CartItem[]): number {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
+    this.cartSubject.next(emptyCart);
   }
 
   getCart(): Cart {
     return this.cartSubject.value;
   }
 
-  // Method to handle user login - merge guest cart with user cart
   handleUserLogin(userId: string): void {
-    const currentCart = this.cartSubject.value;
-    currentCart.userId = userId;
-    this.saveCart(currentCart);
-    // Here you would typically also sync with the backend
+    const guestCart = this.getCart();
+    guestCart.userId = userId;
+
+    this.saveCart(guestCart);
   }
 
-  // Method to handle user logout - clear userId but keep items
   handleUserLogout(): void {
     const currentCart = this.cartSubject.value;
     delete currentCart.userId;
     this.saveCart(currentCart);
+  }
+
+  private calculateTotal(items: CartItem[]): number {
+    return items.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 }

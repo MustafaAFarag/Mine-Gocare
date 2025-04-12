@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Product } from '../../../model/Product';
 import { CommonModule } from '@angular/common';
 import { ProductDetails } from '../../../model/ProductDetail';
+import { CartService } from '../../../services/cart.service';
+import { CartItem } from '../../../model/Cart';
 
 @Component({
   selector: 'app-product-info',
@@ -39,5 +40,27 @@ export class ProductInfoComponent {
       this.counter--;
       this.totalPrice = this.counter * this.unitPrice;
     }
+  }
+
+  constructor(private cartService: CartService) {}
+
+  addToCart(product: ProductDetails): void {
+    // Log the incoming product details for debugging
+    console.log('Product Details:', product);
+
+    // Create the CartItem object
+    const item: CartItem = {
+      productId: product.id, // Product ID
+      name: product.productName.en, // Product name (assuming the product name is in an object with `en` as key)
+      price: product.productVariants[0].priceAfterDiscount, // Price after discount
+      quantity: 1, // Default quantity of 1 (you can adjust this as needed)
+      imageUrl: product.mainImageUrl, // Image URL
+    };
+
+    // Log the created CartItem for debugging
+    console.log('Item to be added to Cart:', item);
+
+    // Add the item to the cart using the CartService
+    this.cartService.addToCart(item);
   }
 }
