@@ -144,4 +144,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  logout(): void {
+    this.authService.logout();
+    this.closeMobileMenu();
+  }
 }

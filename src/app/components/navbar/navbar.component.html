@@ -42,7 +42,7 @@
     </div>
 
     <!-- Desktop Navigation (visible only on xl and up) -->
-    <div class="hidden flex-1 items-center justify-end gap-10 lg:flex">
+    <div class="hidden flex-1 items-center justify-end gap-6 lg:flex">
       <div>
         <ul
           class="flex gap-6 font-semibold tracking-wide lg:text-sm xl:text-[1rem]"
@@ -91,7 +91,11 @@
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
         <i class="ri-shopping-cart-line cursor-pointer"></i>
-        <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+        @if (currentUser) {
+          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
+        } @else {
+          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+        }
       </div>
     </div>
   </div>
