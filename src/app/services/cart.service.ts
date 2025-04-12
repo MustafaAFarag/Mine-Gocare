@@ -26,10 +26,7 @@ export class CartService {
 
   // Generates key based on login state
   private getStorageKey(): string {
-    const userId = this.cartSubject.value.userId;
-    return userId
-      ? `${CART_STORAGE_KEY}_${userId}`
-      : `${CART_STORAGE_KEY}_guest`;
+    return CART_STORAGE_KEY;
   }
 
   private getInitialCart(): Cart {

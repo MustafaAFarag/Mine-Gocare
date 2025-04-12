@@ -13,4 +13,4 @@ export interface Cart {
   userId?: string; // Optional since guest users won't have a userId
 }
 
-export const CART_STORAGE_KEY = 'gocare_cart';
+export const CART_STORAGE_KEY = 'cart';

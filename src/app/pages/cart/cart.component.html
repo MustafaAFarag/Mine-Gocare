@@ -1,1 +1,117 @@
-<p>cart works!</p>
+<div class="container mx-auto px-4 py-8">
+  <!-- Cart Header -->
+  <div class="mb-8">
+    <h1 class="mb-2 text-center text-3xl font-bold">Cart</h1>
+    <div class="flex items-center justify-center text-sm text-gray-500">
+      <span>HOME</span>
+      <span class="mx-2">/</span>
+      <span>CART</span>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white shadow-sm">
+    <!-- Cart Table Header -->
+    <div
+      class="grid grid-cols-6 gap-4 border-b bg-gray-100 p-4 text-xl font-bold text-gray-900"
+    >
+      <div class="pl-4">Image</div>
+      <div class="">Product Name</div>
+      <div class="text-center">Price</div>
+      <div class="text-center">Quantity</div>
+      <div class="text-center">Total</div>
+      <div class="text-center">Action</div>
+    </div>
+
+    <!-- Cart Items -->
+    <div
+      *ngFor="let item of cartItems"
+      class="grid grid-cols-6 items-center gap-4 border-b p-4"
+    >
+      <!-- Product Image -->
+      <div class="col-span-1">
+        <img
+          [src]="getFullImageUrl(item.image)"
+          alt="{{ item.name }}"
+          class="h-20 w-20 object-cover"
+        />
+      </div>
+
+      <!-- Product Name -->
+      <div class="col-span-1">
+        <h3 class="font-medium text-gray-800">{{ item.name }}</h3>
+      </div>
+
+      <!-- Price -->
+      <div class="col-span-1 text-center">
+        <span class="font-bold text-gray-900">
+          ${{ item.afterPrice.toFixed(2) }}
+        </span>
+        <span class="text-sm text-special-gray line-through">
+          ${{ item.beforePrice.toFixed(2) }}
+        </span>
+        <div class="text-lg font-bold text-hover-color">
+          You Save : ${{ getSavings(item).toFixed(2) }}
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="col-span-1 flex items-center justify-center text-center">
+        <div class="flex w-28 items-center rounded-md border">
+          <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <i class="ri-subtract-line"></i>
+          </button>
+          <input
+            type="text"
+            [value]="item.quantity"
+            class="w-10 border-none bg-white text-center focus:outline-none"
+            readonly
+          />
+          <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <i class="ri-add-line"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="col-span-1 text-center">
+        <div class="font-bold text-orange-500">
+          ${{ getItemTotal(item).toFixed(2) }}
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="col-span-1 text-center">
+        <button class="text-hover-color hover:text-red-500">
+          <i class="ri-close-line text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="flex justify-end border-b p-4">
+      <div class="text-right">
+        <div class="flex items-center justify-end gap-8 font-medium">
+          <span>Total Price :</span>
+          <span class="text-xl font-bold text-gray-900"
+            >${{ getCartTotal().toFixed(2) }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Actions -->
+    <div class="flex justify-between p-4">
+      <button
+        class="rounded bg-orange-400 px-6 py-3 text-white transition hover:bg-orange-500"
+      >
+        Continue Shopping
+      </button>
+      <button
+        class="rounded bg-orange-400 px-6 py-3 text-white transition hover:bg-orange-500"
+      >
+        Check Out
+      </button>
+    </div>
+  </div>
+</div>
