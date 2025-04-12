@@ -62,7 +62,15 @@ export class AuthService {
           console.log('Login successful:', res);
           this.userSubject.next(res.result);
           this.setLocalStorageItem('accessToken', res.result.accessToken);
-          this.setLocalStorageItem('user', JSON.stringify(res.result));
+          const {
+            accessToken,
+            encryptedAccessToken,
+            refreshToken,
+            refreshTokenExpiration,
+            expireInSeconds,
+            ...safeUserData
+          } = res.result;
+          this.setLocalStorageItem('user', JSON.stringify(safeUserData));
         } else {
           console.warn('Login failed response:', res);
           throw new Error('Login failed');

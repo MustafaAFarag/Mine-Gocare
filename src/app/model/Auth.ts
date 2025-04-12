@@ -9,7 +9,10 @@ export interface LoginRequest {
 export interface LoginResponse {
   result: {
     accessToken: string;
+    encryptedAccessToken: string;
     refreshToken: string;
+    refreshTokenExpiration: string;
+    expireInSeconds: number;
     userId: number;
     fullName: string;
     profileImageUrl: string;
