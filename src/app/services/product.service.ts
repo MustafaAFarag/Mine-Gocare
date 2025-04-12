@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
-import { ApiEndPoint } from '../../constants/api.constant';
+import { ApiEndPoint } from '../constants/api.constant';
 import { Observable } from 'rxjs';
 import { Category } from '../model/Categories';
 import { Product, ProductApiResponse } from '../model/Product';

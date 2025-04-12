@@ -3,12 +3,16 @@
     <img src="assets/images/trending.gif" class="inline h-8 w-8" />
     <span>Selling fast! 5 people have this in their carts</span>
   </div>
-  <h1
+  <h2
     *ngIf="productDetails?.productName"
     class="my-4 text-center text-2xl font-bold text-gray-900 md:text-left"
   >
     {{ productDetails.productName.en }}
-  </h1>
+  </h2>
+
+  <p class="mb-2 text-lg font-medium">
+    {{ productDetails.brandName.en }} -- {{ productDetails.category.name.en }}
+  </p>
 
   <div class="flex items-center justify-center md:justify-start">
     <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
@@ -20,12 +24,16 @@
       ></i>
     </ng-container>
     <span class="mx-2">|</span>
-    <span class="text-sm text-gray-600">(0 Reviews)</span>
+    <span class="text-sm font-semibold text-gray-600">
+      {{ productDetails.productVariants[0].rating }} Ratings
+    </span>
   </div>
 
   <div class="mt-4 text-center md:text-left">
     <span class="font-semibold uppercase text-gray-600">Price:</span>
-    <span class="text-xl font-semibold text-hover-color"> EGP296.00 </span>
+    <span class="text-xl font-semibold text-hover-color">
+      {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
+    </span>
   </div>
 
   <div
@@ -33,7 +41,7 @@
     [innerHTML]="productDetails.description.en"
   ></div>
 
-  <div class="mt-6 flex items-center gap-4">
+  <div *ngIf="productDetails.hasVariant" class="mt-6 flex items-center gap-4">
     <ng-container *ngFor="let variant of productDetails.productVariants">
       <span>{{ variant.variantName.en }}</span>
     </ng-container>
@@ -41,7 +49,8 @@
 
   <div class="mt-4">
     <p class="text-lg font-semibold text-gray-800">
-      Total Price: <span class="text-hover-color">EGP{{ totalPrice }}</span>
+      Total Price:
+      <span class="text-hover-color">EGP{{ totalPrice.toFixed(2) }}</span>
     </p>
   </div>
 

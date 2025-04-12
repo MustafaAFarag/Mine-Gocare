@@ -5,25 +5,39 @@ import { ProductDetails } from '../../../model/ProductDetail';
 
 @Component({
   selector: 'app-product-info',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './product-info.component.html',
   styleUrl: './product-info.component.css',
 })
 export class ProductInfoComponent {
-  @Input() productDetails!: ProductDetails;
+  private _productDetails!: ProductDetails;
+
+  @Input()
+  set productDetails(value: ProductDetails) {
+    this._productDetails = value;
+    if (value && value.productVariants?.length > 0) {
+      this.unitPrice = value.productVariants[0]?.priceAfterDiscount ?? 0;
+      this.totalPrice = this.unitPrice;
+    }
+  }
+  get productDetails() {
+    return this._productDetails;
+  }
 
   counter: number = 1;
-  totalPrice: number = 296.0;
+  unitPrice: number = 0;
+  totalPrice: number = 0;
 
   increaseCounter() {
     this.counter++;
-    this.totalPrice = this.counter * 296;
+    this.totalPrice = this.counter * this.unitPrice;
   }
 
   decreaseCounter() {
     if (this.counter > 1) {
       this.counter--;
-      this.totalPrice = this.counter * 296.0;
+      this.totalPrice = this.counter * this.unitPrice;
     }
   }
 }
