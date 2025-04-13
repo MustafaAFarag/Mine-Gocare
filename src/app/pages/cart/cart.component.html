@@ -3,7 +3,15 @@
   <app-breadcrumb [soloRoute]="'Cart'"></app-breadcrumb>
 
   <!-- Cart Content -->
-  <div class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white shadow-sm">
+
+  <div *ngIf="cartItems.length === 0">
+    <app-cart-no-products></app-cart-no-products>
+  </div>
+
+  <div
+    *ngIf="cartItems.length > 0"
+    class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white shadow-sm"
+  >
     <!-- Cart Table Header - Hidden on mobile -->
     <div
       class="hidden grid-cols-6 gap-4 border-b bg-gray-100 p-4 text-sm font-bold text-gray-900 md:grid lg:text-base xl:text-xl"

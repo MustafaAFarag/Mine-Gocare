@@ -7,11 +7,17 @@ import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
+import { CartNoProductsComponent } from '../../components/cart-no-products/cart-no-products.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, AuthModalComponent],
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    AuthModalComponent,
+    CartNoProductsComponent,
+  ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })

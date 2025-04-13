@@ -1,0 +1,28 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Cart Header and Breadcrumb are already implemented, so I'm not including them -->
+
+  <!-- Empty Cart Content -->
+  <div class="rounded-lg bg-gray-50 p-12 text-center">
+    <!-- Empty Cart Illustration -->
+    <div class="mb-6 flex justify-center">
+      <img src="assets/svg/empty-items.svg" alt="Empty Cart" class="h-64" />
+    </div>
+
+    <!-- Empty Cart Message -->
+    <h2 class="mb-3 text-2xl font-bold text-gray-800">No Items Added</h2>
+    <p class="mb-8 text-gray-600">
+      It appears that nothing has been added to your cart.
+    </p>
+
+    <!-- Shop Now Button -->
+    <div class="flex justify-center">
+      <a
+        routerLink="/"
+        class="cursor-pointer rounded bg-hover-color px-6 py-3 text-white transition hover:bg-red-900"
+      >
+        <i class="ri-shopping-bag-line mr-2"></i>
+        Shop Now
+      </a>
+    </div>
+  </div>
+</div>

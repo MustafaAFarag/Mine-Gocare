@@ -61,7 +61,6 @@ export class LoginFormComponent implements OnInit {
         this.loading = false;
         this.loginForm.reset(); // Reset the form fields
         this.loginSuccess.emit();
-        this.router.navigate(['/']);
       },
       error: (err) => {
         this.loading = false;
