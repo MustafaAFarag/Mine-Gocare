@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { getFullImageUrl } from '../../lib/utils';
 
@@ -19,7 +19,10 @@ export class CartSidebarComponent {
 
   getFullImageUrl = getFullImageUrl;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+  ) {}
 
   get cartItems$() {
     return this.cartService.cartItems$;

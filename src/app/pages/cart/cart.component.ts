@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartItem, CART_STORAGE_KEY } from '../../model/Cart';
 import { getFullImageUrl } from '../../lib/utils';
@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 import { CartNoProductsComponent } from '../../components/cart-no-products/cart-no-products.component';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -22,9 +23,10 @@ import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   showAuthModal: boolean = false;
+  private cartSubscription?: Subscription;
 
   constructor(
     private router: Router,
@@ -56,9 +58,6 @@ export class CartComponent implements OnInit {
   // Remove item from cart
   removeItem(productId: number): void {
     this.cartService.removeFromCart(productId);
-    this.cartItems = this.cartItems.filter(
-      (item) => item.productId !== productId,
-    );
   }
 
   // Update item quantity
@@ -68,10 +67,6 @@ export class CartComponent implements OnInit {
       return;
     }
     this.cartService.updateQuantity(productId, newQuantity);
-    const item = this.cartItems.find((item) => item.productId === productId);
-    if (item) {
-      item.quantity = newQuantity;
-    }
   }
 
   // Navigate to product details
@@ -91,17 +86,16 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit() {
-    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (storedCart) {
-      try {
-        const cart = JSON.parse(storedCart);
-        this.cartItems = cart.items;
-        console.log('Cart loaded from localStorage:', cart);
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
-    } else {
-      console.log('No cart found in localStorage');
+    // Subscribe to cart changes
+    this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
+      this.cartItems = items;
+    });
+  }
+
+  ngOnDestroy() {
+    // Clean up subscription
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
     }
   }
 }

@@ -32,9 +32,16 @@
       Spend ${{ getRemainingForFreeShipping(total).toFixed(2) }} More And Enjoy
       Free Shipping!
     </p>
+    <p
+      class="mb-2 text-base text-gray-600"
+      *ngIf="getRemainingForFreeShipping(total) === 0"
+    >
+      🎉 <span class="text-hover-color">Congratulations</span>! Enjoy Free
+      Shipping On Us!
+    </p>
     <div class="h-2 overflow-hidden rounded-full bg-gray-200">
       <div
-        class="h-full rounded-full bg-orange-400"
+        class="h-full rounded-full bg-hover-color"
         [style.width.%]="getProgressPercentage(total)"
       >
         <div
@@ -49,7 +56,7 @@
   <!-- Clear Cart Button -->
   <div class="flex justify-end px-4 py-2" *ngIf="(cartItems$ | async)?.length">
     <button
-      class="text-base font-medium text-orange-500 hover:text-orange-600"
+      class="text-base font-medium text-hover-color hover:text-red-900"
       (click)="clearCart()"
     >
       Clear Cart
@@ -132,25 +139,25 @@
     <!-- Subtotal -->
     <div class="mb-4 flex items-center justify-between">
       <span class="font-medium">Sub Total:</span>
-      <span class="font-bold text-orange-500">
+      <span class="font-bold text-hover-color">
         ${{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
       </span>
     </div>
 
     <!-- Action Buttons -->
     <div class="grid grid-cols-2 gap-4">
-      <a
+      <button
+        class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
         routerLink="/cart"
-        class="rounded bg-gray-100 px-4 py-3 text-center font-medium text-gray-800 transition hover:bg-gray-200"
+        (click)="closeCart()"
       >
         View Cart
-      </a>
-      <a
-        routerLink="/checkout"
-        class="rounded bg-orange-400 px-4 py-3 text-center font-medium text-white transition hover:bg-orange-500"
+      </button>
+      <button
+        class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
       >
         Check Out
-      </a>
+      </button>
     </div>
   </div>
 </div>

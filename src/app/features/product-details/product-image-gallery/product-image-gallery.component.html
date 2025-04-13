@@ -10,7 +10,6 @@
   *ngIf="!loadingImages && images.length > 0"
   id="product-gallery"
   [class.sticky-active]="isSticky"
-  class="z-0"
 >
   <p-galleria
     [value]="images"
@@ -66,7 +65,7 @@
     .sticky-active {
       position: sticky;
       top: 1rem;
-      z-index: 100;
+      z-index: 10;
       transition:
         top 0.3s ease-in-out,
         z-index 0s 0.3s;
