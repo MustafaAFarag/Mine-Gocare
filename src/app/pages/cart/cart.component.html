@@ -42,13 +42,19 @@
               </div>
             </div>
           </div>
-          <button class="text-hover-color hover:text-red-500">
+          <button
+            class="text-hover-color hover:text-red-500"
+            (click)="removeItem(item.productId)"
+          >
             <i class="ri-close-line text-2xl"></i>
           </button>
         </div>
         <div class="mt-4 flex items-center justify-between">
           <div class="flex items-center rounded-md border">
-            <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <button
+              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              (click)="updateQuantity(item.productId, item.quantity - 1)"
+            >
               <i class="ri-subtract-line"></i>
             </button>
             <input
@@ -57,7 +63,10 @@
               class="w-10 border-none bg-white text-center focus:outline-none"
               readonly
             />
-            <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <button
+              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              (click)="updateQuantity(item.productId, item.quantity + 1)"
+            >
               <i class="ri-add-line"></i>
             </button>
           </div>
@@ -105,7 +114,10 @@
         <!-- Quantity -->
         <div class="col-span-1 flex items-center justify-center text-center">
           <div class="flex items-center rounded-md border">
-            <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <button
+              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              (click)="updateQuantity(item.productId, item.quantity - 1)"
+            >
               <i class="ri-subtract-line"></i>
             </button>
             <input
@@ -114,7 +126,10 @@
               class="w-10 border-none bg-white text-center focus:outline-none"
               readonly
             />
-            <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+            <button
+              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              (click)="updateQuantity(item.productId, item.quantity + 1)"
+            >
               <i class="ri-add-line"></i>
             </button>
           </div>
@@ -129,7 +144,10 @@
 
         <!-- Action -->
         <div class="col-span-1 text-center">
-          <button class="bg-gray-200 px-1 text-hover-color hover:text-red-500">
+          <button
+            class="bg-gray-200 px-1 text-hover-color hover:text-red-500"
+            (click)="removeItem(item.productId)"
+          >
             <i class="ri-close-line text-2xl"></i>
           </button>
         </div>
@@ -154,11 +172,13 @@
     >
       <button
         class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
+        (click)="continueShopping()"
       >
         Continue Shopping
       </button>
       <button
         class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
+        (click)="handleCheckout()"
       >
         Check Out
       </button>

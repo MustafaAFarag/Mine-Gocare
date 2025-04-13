@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { CartItem, CART_STORAGE_KEY } from '../../model/Cart';
 import { getFullImageUrl } from '../../lib/utils';
 import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/breadcrumb.component';
+import { Router } from '@angular/router';
+import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,6 +16,12 @@ import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/b
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
+
+  constructor(
+    private router: Router,
+    private cartService: CartService,
+    private authService: AuthService,
+  ) {}
 
   // Add the utility function to the component
   getFullImageUrl = getFullImageUrl;
@@ -33,6 +42,43 @@ export class CartComponent implements OnInit {
       (total, item) => total + this.getItemTotal(item),
       0,
     );
+  }
+
+  // Remove item from cart
+  removeItem(productId: number): void {
+    this.cartService.removeFromCart(productId);
+    this.cartItems = this.cartItems.filter(
+      (item) => item.productId !== productId,
+    );
+  }
+
+  // Update item quantity
+  updateQuantity(productId: number, newQuantity: number): void {
+    if (newQuantity < 1) {
+      this.removeItem(productId);
+      return;
+    }
+    this.cartService.updateQuantity(productId, newQuantity);
+    const item = this.cartItems.find((item) => item.productId === productId);
+    if (item) {
+      item.quantity = newQuantity;
+    }
+  }
+
+  // Navigate to product details
+  continueShopping(): void {
+    this.router.navigate(['/product-details/1/2']);
+  }
+
+  // Handle checkout
+  handleCheckout(): void {
+    if (this.authService.isAuthenticated) {
+      // TODO: Implement checkout logic for authenticated users
+      console.log('Proceeding to checkout...');
+    } else {
+      // Redirect to login page
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnInit() {

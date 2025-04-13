@@ -100,6 +100,10 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+  get isAuthenticated(): boolean {
+    return !!this.currentUser;
+  }
+
   // LocalStorage Helpers
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && !!window.localStorage;
