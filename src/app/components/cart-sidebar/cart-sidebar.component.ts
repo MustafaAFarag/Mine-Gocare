@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { getFullImageUrl } from '../../lib/utils';
+import { CartSidebarService } from '../../services/cart-sidebar.service';
 
 @Component({
   selector: 'app-cart-sidebar',
@@ -12,7 +13,7 @@ import { getFullImageUrl } from '../../lib/utils';
   styleUrls: ['./cart-sidebar.component.css'],
 })
 export class CartSidebarComponent {
-  isOpen = true;
+  isOpen = false;
 
   // Free shipping threshold
   freeShippingThreshold = 1000;
@@ -22,7 +23,13 @@ export class CartSidebarComponent {
   constructor(
     private cartService: CartService,
     private router: Router,
-  ) {}
+    private cartSidebarService: CartSidebarService,
+  ) {
+    // Subscribe to the cart sidebar state
+    this.cartSidebarService.isOpen$.subscribe((isOpen) => {
+      this.isOpen = isOpen;
+    });
+  }
 
   get cartItems$() {
     return this.cartService.cartItems$;
@@ -33,15 +40,15 @@ export class CartSidebarComponent {
   }
 
   closeCart(): void {
-    this.isOpen = false;
+    this.cartSidebarService.closeCart();
   }
 
   openCart(): void {
-    this.isOpen = true;
+    this.cartSidebarService.openCart();
   }
 
   toggleCart(): void {
-    this.isOpen = !this.isOpen;
+    this.cartSidebarService.toggleCart();
   }
 
   removeFromCart(productId: number): void {

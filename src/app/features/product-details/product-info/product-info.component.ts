@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductDetails } from '../../../model/ProductDetail';
 import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../model/Cart';
+import { CartSidebarService } from '../../../services/cart-sidebar.service';
 
 @Component({
   selector: 'app-product-info',
@@ -42,7 +43,10 @@ export class ProductInfoComponent {
     }
   }
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private cartSidebarService: CartSidebarService,
+  ) {}
 
   addToCart(product: ProductDetails): void {
     // Log the incoming product details for debugging
@@ -50,12 +54,12 @@ export class ProductInfoComponent {
 
     // Create the CartItem object
     const item: CartItem = {
-      productId: product.id, // Product ID
-      name: product.productName.en, // Product name (assuming the product name is in an object with `en` as key)
-      afterPrice: product.productVariants[0].priceAfterDiscount, // Price after discount
+      productId: product.id,
+      name: product.productName.en,
+      afterPrice: product.productVariants[0].priceAfterDiscount,
       beforePrice: product.productVariants[0].priceBeforeDiscount,
-      quantity: 1, // Default quantity of 1 (you can adjust this as needed)
-      image: product.mainImageUrl, // Image URL
+      quantity: this.counter,
+      image: product.mainImageUrl,
     };
 
     // Log the created CartItem for debugging
@@ -63,5 +67,8 @@ export class ProductInfoComponent {
 
     // Add the item to the cart using the CartService
     this.cartService.addToCart(item);
+
+    // Open the cart sidebar
+    this.cartSidebarService.openCart();
   }
 }
