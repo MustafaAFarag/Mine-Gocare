@@ -17,6 +17,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
 
@@ -39,7 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = signal(false);
   visible: boolean = false;
   userSubscription!: Subscription;
+  cartSubscription!: Subscription;
   currentUser!: User;
+  cartCount = 0;
 
   showDialog() {
     this.visible = !this.visible;
@@ -57,6 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -73,15 +77,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
       console.log('Current user:', this.currentUser);
     });
 
+    this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
+      this.cartCount = items.reduce((total, item) => total + item.quantity, 0);
+    });
+
     if (this.isBrowser) {
       window.addEventListener('resize', this.handleResize);
     }
   }
 
   ngOnDestroy(): void {
-    // Clean up subscription
+    // Clean up subscriptions
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
     }
 
     if (this.isBrowser) {

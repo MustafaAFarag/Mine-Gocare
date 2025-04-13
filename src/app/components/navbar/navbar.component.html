@@ -93,7 +93,15 @@
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
         <a [routerLink]="['/cart']">
-          <i class="ri-shopping-cart-line cursor-pointer"></i>
+          <div class="relative">
+            <i class="ri-shopping-cart-line"></i>
+            <span
+              *ngIf="cartCount > 0"
+              class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-sm text-white"
+            >
+              {{ cartCount }}
+            </span>
+          </div>
         </a>
         @if (currentUser) {
           <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
@@ -142,7 +150,7 @@
         >Collection</a
       >
       <a
-        routerLink="/product-details"
+        routerLink="/product-details/1/2"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
         >Product</a

@@ -14,19 +14,20 @@ export class CartService {
     this.loadCart();
   }
 
-  // Selector: only cart items
   get cartItems$(): Observable<CartItem[]> {
     return this.cart$.pipe(map((cart) => cart.items));
   }
 
-  // Selector: only total
   get cartTotal$(): Observable<number> {
     return this.cart$.pipe(map((cart) => cart.total));
   }
 
-  // Generates key based on login state
   private getStorageKey(): string {
     return CART_STORAGE_KEY;
+  }
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
   }
 
   private getInitialCart(): Cart {
@@ -37,6 +38,8 @@ export class CartService {
   }
 
   private loadCart(): void {
+    if (!this.isBrowser()) return;
+
     const storedCart = localStorage.getItem(this.getStorageKey());
     if (storedCart) {
       try {
@@ -50,6 +53,8 @@ export class CartService {
   }
 
   private saveCart(cart: Cart): void {
+    if (!this.isBrowser()) return;
+
     localStorage.setItem(this.getStorageKey(), JSON.stringify(cart));
     this.cartSubject.next(cart);
   }
@@ -107,7 +112,9 @@ export class CartService {
   }
 
   clearCart(): void {
-    localStorage.removeItem(this.getStorageKey());
+    if (this.isBrowser()) {
+      localStorage.removeItem(this.getStorageKey());
+    }
     const emptyCart = this.getInitialCart();
     this.cartSubject.next(emptyCart);
   }
@@ -119,7 +126,6 @@ export class CartService {
   handleUserLogin(userId: string): void {
     const guestCart = this.getCart();
     guestCart.userId = userId;
-
     this.saveCart(guestCart);
   }
 

@@ -85,15 +85,21 @@
 
         <!-- Price -->
         <div class="col-span-1 text-center">
-          <span class="font-bold text-gray-900"
-            >${{ item.afterPrice.toFixed(2) }}</span
-          >
-          <span class="ml-2 text-sm text-special-gray line-through"
-            >${{ item.beforePrice.toFixed(2) }}</span
-          >
-          <div class="text-base font-bold text-hover-color xl:text-lg">
-            You Save: ${{ getSavings(item).toFixed(2) }}
-          </div>
+          @if (item.afterPrice !== item.beforePrice) {
+            <span class="font-bold text-gray-900"
+              >${{ item.afterPrice.toFixed(2) }}</span
+            >
+            <span class="ml-2 text-sm text-special-gray line-through"
+              >${{ item.beforePrice.toFixed(2) }}</span
+            >
+            <div class="text-base font-bold text-hover-color xl:text-lg">
+              You Save: ${{ getSavings(item).toFixed(2) }}
+            </div>
+          } @else {
+            <span class="font-bold text-gray-900"
+              >${{ item.afterPrice.toFixed(2) }}</span
+            >
+          }
         </div>
 
         <!-- Quantity -->
