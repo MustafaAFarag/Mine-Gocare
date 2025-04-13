@@ -8,6 +8,7 @@ import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 import { CartNoProductsComponent } from '../../components/cart-no-products/cart-no-products.component';
+import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 
 @Component({
   selector: 'app-cart',

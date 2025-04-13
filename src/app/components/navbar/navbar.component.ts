@@ -8,6 +8,7 @@ import {
   PLATFORM_ID,
   Signal,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NavbarBannerComponent } from '../navbar-banner/navbar-banner.component';
@@ -20,6 +21,7 @@ import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
+import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 
 @Component({
   selector: 'app-navbar',
@@ -32,11 +34,14 @@ import { User } from '../../model/User';
     ButtonModule,
     InputTextModule,
     AuthModalComponent,
+    CartSidebarComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  @ViewChild(CartSidebarComponent) cartSidebar!: CartSidebarComponent;
+
   isMobileMenuOpen = signal(false);
   visible: boolean = false;
   userSubscription!: Subscription;
@@ -50,12 +55,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onVisibleChange(newValue: boolean) {
     console.log('Dialog visibility changed:', newValue);
-
     this.visible = newValue;
   }
 
   toggleMode(isLoginMode: boolean) {
     this.visible = true;
+  }
+
+  toggleCart(): void {
+    this.cartSidebar.toggleCart();
   }
 
   constructor(

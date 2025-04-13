@@ -1,0 +1,156 @@
+<div
+  class="fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300"
+  [class.opacity-0]="!isOpen"
+  [class.invisible]="!isOpen"
+  (click)="closeCart()"
+></div>
+
+<div
+  class="fixed bottom-0 right-0 top-0 z-[999] flex w-[80vw] transform flex-col overflow-hidden bg-white shadow-lg transition-transform duration-300 ease-in-out lg:max-w-md"
+  [class.translate-x-0]="isOpen"
+  [class.translate-x-full]="!isOpen"
+>
+  <!-- Cart Header -->
+  <div class="flex items-center justify-between border-b p-4">
+    <h2 class="text-xl font-bold">
+      My Cart ({{ (cartItems$ | async)?.length || 0 }})
+    </h2>
+    <button
+      class="text-gray-500 hover:text-gray-700 focus:outline-none"
+      (click)="closeCart()"
+    >
+      <i class="ri-close-line text-xl"></i>
+    </button>
+  </div>
+
+  <!-- Free Shipping Progress -->
+  <div class="border-b p-4" *ngIf="cartTotal$ | async as total">
+    <p
+      class="mb-2 text-base text-gray-600"
+      *ngIf="getRemainingForFreeShipping(total) > 0"
+    >
+      Spend ${{ getRemainingForFreeShipping(total).toFixed(2) }} More And Enjoy
+      Free Shipping!
+    </p>
+    <div class="h-2 overflow-hidden rounded-full bg-gray-200">
+      <div
+        class="h-full rounded-full bg-orange-400"
+        [style.width.%]="getProgressPercentage(total)"
+      >
+        <div
+          class="absolute -right-2 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-400"
+        >
+          <i class="ri-truck-line text-xs text-white"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear Cart Button -->
+  <div class="flex justify-end px-4 py-2" *ngIf="(cartItems$ | async)?.length">
+    <button
+      class="text-base font-medium text-orange-500 hover:text-orange-600"
+      (click)="clearCart()"
+    >
+      Clear Cart
+    </button>
+  </div>
+
+  <!-- Cart Items -->
+  <div class="flex-1 overflow-y-auto p-4">
+    <ng-container *ngIf="(cartItems$ | async)?.length; else emptyCart">
+      <div
+        *ngFor="let item of cartItems$ | async"
+        class="flex items-center gap-4 border-b py-4"
+      >
+        <!-- Product Image -->
+        <div class="h-20 w-20 flex-shrink-0">
+          <img
+            [src]="getFullImageUrl(item.image)"
+            [alt]="item.name"
+            class="h-full w-full object-cover"
+          />
+        </div>
+
+        <!-- Product Details -->
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-800">{{ item.name }}</h3>
+              <p class="text-sm font-medium text-gray-500">
+                {{ item.quantity }} x ${{ item.afterPrice.toFixed(2) }}
+              </p>
+            </div>
+            <button
+              class="bg-gray-200 px-2 text-lg text-hover-color hover:text-red-900"
+              (click)="removeFromCart(item.productId)"
+            >
+              <i class="ri-delete-bin-line"></i>
+            </button>
+          </div>
+
+          <!-- Quantity Controls -->
+          <div class="mt-2 flex items-center">
+            <div class="ml-auto flex items-center">
+              <button
+                class="flex h-6 w-6 items-center justify-center rounded-l border text-gray-500 hover:text-gray-700"
+                (click)="updateQuantity(item.productId, item.quantity - 1)"
+              >
+                <i class="ri-subtract-line"></i>
+              </button>
+              <span
+                class="flex h-6 w-8 items-center justify-center border-b border-t"
+              >
+                {{ item.quantity }}
+              </span>
+              <button
+                class="flex h-6 w-6 items-center justify-center rounded-r border text-gray-500 hover:text-gray-700"
+                (click)="updateQuantity(item.productId, item.quantity + 1)"
+              >
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyCart>
+      <div class="flex h-full flex-col items-center justify-center py-12">
+        <div class="mb-4 rounded-full bg-gray-100 p-4">
+          <i class="ri-shopping-cart-line text-4xl text-gray-400"></i>
+        </div>
+        <p class="text-lg font-medium text-gray-600">
+          Your cart is currently empty
+        </p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Cart Footer -->
+  <div class="border-t p-4" *ngIf="(cartItems$ | async)?.length">
+    <!-- Subtotal -->
+    <div class="mb-4 flex items-center justify-between">
+      <span class="font-medium">Sub Total:</span>
+      <span class="font-bold text-orange-500">
+        ${{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
+      </span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="grid grid-cols-2 gap-4">
+      <a
+        routerLink="/cart"
+        class="rounded bg-gray-100 px-4 py-3 text-center font-medium text-gray-800 transition hover:bg-gray-200"
+      >
+        View Cart
+      </a>
+      <a
+        routerLink="/checkout"
+        class="rounded bg-orange-400 px-4 py-3 text-center font-medium text-white transition hover:bg-orange-500"
+      >
+        Check Out
+      </a>
+    </div>
+  </div>
+</div>
