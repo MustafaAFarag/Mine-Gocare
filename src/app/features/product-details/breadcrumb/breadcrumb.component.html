@@ -1,14 +1,20 @@
 <div class="py-10 text-center">
   <h3 class="mb-4 text-xl font-semibold lg:text-3xl">
-    Maybelline New York Fit Me Matte
+    {{ name || soloRoute }}
   </h3>
   <div
     class="mx-auto text-xs font-semibold uppercase text-gray-500 lg:text-base"
   >
-    <a href="#">Home</a>
-    <span> / </span>
-    <a href="#">Product</a>
-    <span> / </span>
-    <a href="#">Maybelline New York Fit Me Matte</a>
+    @if (this.router.url.includes("/product-details")) {
+      <a href="#">Home</a>
+      <span> / </span>
+      <a href="#">Product</a>
+      <span> / </span>
+      <a href="#">{{ name }}</a>
+    } @else {
+      <a href="#">Home</a>
+      <span> / </span>
+      <a href="#">{{ soloRoute }}</a>
+    }
   </div>
 </div>

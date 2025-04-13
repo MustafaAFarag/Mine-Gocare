@@ -1,13 +1,6 @@
 <div class="container mx-auto px-4 py-8">
   <!-- Cart Header -->
-  <div class="mb-8">
-    <h1 class="mb-2 text-center text-3xl font-bold">Cart</h1>
-    <div class="flex items-center justify-center text-sm text-gray-500">
-      <span>HOME</span>
-      <span class="mx-2">/</span>
-      <span>CART</span>
-    </div>
-  </div>
+  <app-breadcrumb [soloRoute]="'Cart'"></app-breadcrumb>
 
   <!-- Cart Content -->
   <div class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white shadow-sm">
@@ -57,7 +50,7 @@
 
       <!-- Quantity -->
       <div class="col-span-1 flex items-center justify-center text-center">
-        <div class="flex w-28 items-center rounded-md border">
+        <div class="flex items-center rounded-md border">
           <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
             <i class="ri-subtract-line"></i>
           </button>
@@ -75,14 +68,14 @@
 
       <!-- Total -->
       <div class="col-span-1 text-center">
-        <div class="font-bold text-orange-500">
+        <div class="font-bold text-hover-color">
           ${{ getItemTotal(item).toFixed(2) }}
         </div>
       </div>
 
       <!-- Action -->
       <div class="col-span-1 text-center">
-        <button class="text-hover-color hover:text-red-500">
+        <button class="bg-gray-200 px-1 text-hover-color hover:text-red-500">
           <i class="ri-close-line text-2xl"></i>
         </button>
       </div>
@@ -93,7 +86,7 @@
       <div class="text-right">
         <div class="flex items-center justify-end gap-8 font-medium">
           <span>Total Price :</span>
-          <span class="text-xl font-bold text-gray-900"
+          <span class="text-xl font-bold text-hover-color"
             >${{ getCartTotal().toFixed(2) }}</span
           >
         </div>
@@ -103,12 +96,12 @@
     <!-- Cart Actions -->
     <div class="flex justify-between p-4">
       <button
-        class="rounded bg-orange-400 px-6 py-3 text-white transition hover:bg-orange-500"
+        class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
       >
         Continue Shopping
       </button>
       <button
-        class="rounded bg-orange-400 px-6 py-3 text-white transition hover:bg-orange-500"
+        class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
       >
         Check Out
       </button>

@@ -3,7 +3,7 @@
 </div>
 
 <div *ngIf="!isLoading" class="p-6 lg:overflow-x-clip">
-  <app-breadcrumb></app-breadcrumb>
+  <app-breadcrumb [name]="productDetails.productName.en"></app-breadcrumb>
   <section class="mx-auto grid max-w-8xl grid-cols-1 gap-8 md:grid-cols-2">
     <!-- Left: Image Gallery -->
     <app-product-image-gallery

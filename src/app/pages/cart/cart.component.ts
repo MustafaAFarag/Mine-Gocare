@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartItem, CART_STORAGE_KEY } from '../../model/Cart';
 import { getFullImageUrl } from '../../lib/utils';
+import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
