@@ -12,6 +12,9 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../enviroments/enviroment';
 import { Router } from '@angular/router';
+import { CartService } from '../../../services/cart.service';
+import { CartItem } from '../../../model/Cart';
+import { CartSidebarService } from '../../../services/cart-sidebar.service';
 
 @Component({
   selector: 'app-everyday-casual-section',
@@ -31,6 +34,8 @@ export class EverydayCasualSectionComponent {
   constructor(
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private cartService: CartService,
+    private cartSidebarService: CartSidebarService,
   ) {}
 
   onCategoryClick(categoryId: number): void {
@@ -41,6 +46,20 @@ export class EverydayCasualSectionComponent {
 
   navigateToProductDetails(productId: number, variantId: number): void {
     this.router.navigate([`/product-details/${productId}/${variantId}`]);
+  }
+
+  addToCart(product: Product): void {
+    const cartItem: CartItem = {
+      productId: product.productId,
+      name: product.name.en,
+      image: product.mainImageUrl,
+      afterPrice: product.priceAfterDiscount,
+      beforePrice: product.priceBeforeDiscount,
+      quantity: 1,
+    };
+
+    this.cartService.addToCart(cartItem);
+    this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }
 
   ngOnChanges(changes: SimpleChanges): void {

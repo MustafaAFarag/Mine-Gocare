@@ -36,10 +36,15 @@
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
         <i class="ri-heart-line cursor-pointer"></i>
-        <i
-          class="ri-shopping-cart-line cursor-pointer"
-          (click)="toggleCart()"
-        ></i>
+        <div class="relative cursor-pointer" (click)="toggleCart()">
+          <i class="ri-shopping-cart-line"></i>
+          <span
+            *ngIf="cartCount > 0"
+            class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-sm text-white"
+          >
+            {{ cartCount }}
+          </span>
+        </div>
         <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
       </div>
     </div>

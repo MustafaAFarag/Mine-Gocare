@@ -39,15 +39,15 @@
       🎉 <span class="text-hover-color">Congratulations</span>! Enjoy Free
       Shipping On Us!
     </p>
-    <div class="h-2 overflow-hidden rounded-full bg-gray-200">
+    <div class="h-2 rounded-full bg-gray-200">
       <div
-        class="h-full rounded-full bg-hover-color"
+        class="relative h-full rounded-full bg-hover-color"
         [style.width.%]="getProgressPercentage(total)"
       >
         <div
-          class="absolute -right-2 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-400"
+          class="absolute right-0 top-2 flex h-6 w-6 -translate-y-4 items-center justify-center rounded-full bg-hover-color"
         >
-          <i class="ri-truck-line text-xs text-white"></i>
+          <i class="ri-truck-line text-sm text-white"></i>
         </div>
       </div>
     </div>

@@ -6,15 +6,15 @@
     class="mx-auto text-xs font-semibold uppercase text-gray-500 lg:text-base"
   >
     @if (this.router.url.includes("/product-details")) {
-      <a href="#">Home</a>
+      <span>Home</span>
       <span> / </span>
-      <a href="#">Product</a>
+      <span>Product</span>
       <span> / </span>
-      <a href="#">{{ name }}</a>
+      <span>{{ name }}</span>
     } @else {
-      <a href="#">Home</a>
+      <span>Home</span>
       <span> / </span>
-      <a href="#">{{ soloRoute }}</a>
+      <span>{{ soloRoute }}</span>
     }
   </div>
 </div>
