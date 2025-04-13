@@ -184,4 +184,9 @@
       </button>
     </div>
   </div>
+
+  <app-auth-modal
+    [(visible)]="showAuthModal"
+    (visibleChange)="showAuthModal = $event"
+  ></app-auth-modal>
 </div>

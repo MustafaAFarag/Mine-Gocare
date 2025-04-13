@@ -6,16 +6,18 @@ import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/b
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
+import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent],
+  imports: [CommonModule, BreadcrumbComponent, AuthModalComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
+  showAuthModal: boolean = false;
 
   constructor(
     private router: Router,
@@ -76,8 +78,8 @@ export class CartComponent implements OnInit {
       // TODO: Implement checkout logic for authenticated users
       console.log('Proceeding to checkout...');
     } else {
-      // Redirect to login page
-      this.router.navigate(['/login']);
+      // Show auth modal instead of redirecting
+      this.showAuthModal = true;
     }
   }
 
