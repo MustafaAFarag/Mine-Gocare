@@ -7,13 +7,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model/Auth';
+import { ApiEndPoint } from '../constants/api.constant';
+import { environment } from '../../enviroments/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/AdminApp/SignIn/SignInManually';
+  private loginUrl = `${environment.apiUrl}/${ApiEndPoint.SignInManually}`;
+  private signupUrl = `${environment.apiUrl}/${ApiEndPoint.SignUpManually}`;
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
@@ -26,14 +28,6 @@ export class AuthService {
   }
 
   login(emailOrPhone: string, password: string): Observable<any> {
-    console.log('Trying to login with:', emailOrPhone, password);
-
-    if (!emailOrPhone || !password) {
-      return throwError(
-        () => new Error('Email/Phone and Password are required'),
-      );
-    }
-
     const headers = new HttpHeaders({
       'accept-language': 'en',
       countryid: '224',
@@ -42,24 +36,25 @@ export class AuthService {
       Accept: 'application/json',
     });
 
-    const formattedPhone = emailOrPhone.includes('@')
-      ? null
-      : emailOrPhone.startsWith('+')
-        ? emailOrPhone
-        : `+2${emailOrPhone}`;
+    const isEmail = emailOrPhone.includes('@');
+    let formattedPhone: string | null = null;
+
+    if (!isEmail) {
+      // Remove leading 0 from phone numbers like "01069004741" -> "1069004741"
+      formattedPhone = emailOrPhone.startsWith('0')
+        ? emailOrPhone.substring(1)
+        : emailOrPhone;
+    }
 
     const body = {
-      emailAddress: emailOrPhone.includes('@') ? emailOrPhone : null,
-      mobileNumber: formattedPhone,
+      emailAddress: isEmail ? emailOrPhone : null,
+      mobileNumber: isEmail ? null : formattedPhone,
       password: password,
     };
 
-    console.log('Request body:', body);
-
-    return this.http.post<LoginResponse>(this.apiUrl, body, { headers }).pipe(
+    return this.http.post<LoginResponse>(this.loginUrl, body, { headers }).pipe(
       tap((res) => {
         if (res.success) {
-          console.log('Login successful:', res);
           this.userSubject.next(res.result);
           this.setLocalStorageItem('accessToken', res.result.accessToken);
           const {
@@ -72,13 +67,64 @@ export class AuthService {
           } = res.result;
           this.setLocalStorageItem('user', JSON.stringify(safeUserData));
         } else {
-          console.warn('Login failed response:', res);
           throw new Error('Login failed');
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Login error:', error);
         let errorMessage = 'An error occurred during login';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else {
+          errorMessage =
+            error.error?.message || `Server returned code ${error.status}`;
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+    );
+  }
+
+  signup(signupData: {
+    firstName: string;
+    lastName: string;
+    emailAddress?: string;
+    mobileNumber?: string;
+    password: string;
+    confirmPassword: string;
+    countryCode: string;
+    gender: number;
+  }): Observable<any> {
+    const headers = new HttpHeaders({
+      'accept-language': 'en',
+      countryid: '224',
+      'abp.tenantid': '1',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    // Clean up data to send only either email or mobile
+    const body: any = {
+      firstName: signupData.firstName,
+      lastName: signupData.lastName,
+      password: signupData.password,
+      confirmPassword: signupData.confirmPassword,
+      countryCode: signupData.countryCode,
+      gender: signupData.gender,
+    };
+
+    if (signupData.emailAddress) {
+      body.emailAddress = signupData.emailAddress;
+    } else if (signupData.mobileNumber) {
+      body.mobileNumber = signupData.mobileNumber;
+    }
+
+    return this.http.post<any>(this.signupUrl, body, { headers }).pipe(
+      tap((res) => {
+        if (!res.success) {
+          throw new Error('Signup failed');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'An error occurred during signup';
         if (error.error instanceof ErrorEvent) {
           errorMessage = error.error.message;
         } else {
