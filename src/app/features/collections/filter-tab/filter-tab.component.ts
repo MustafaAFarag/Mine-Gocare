@@ -29,6 +29,7 @@ export class FilterTabComponent {
   @Input() showCategories: boolean = true;
   @Input() showBrands: boolean = true;
   @Input() showColors: boolean = true;
+  @Input() isMobile: boolean = false;
 
   @Output() filterToggled = new EventEmitter<
     'categories' | 'brands' | 'colors'
@@ -36,6 +37,7 @@ export class FilterTabComponent {
   @Output() categoryToggled = new EventEmitter<Category>();
   @Output() filterRemoved = new EventEmitter<string>();
   @Output() allFiltersCleared = new EventEmitter<void>();
+  @Output() closeFilterSidebar = new EventEmitter<void>();
 
   toggleFilter(section: 'categories' | 'brands' | 'colors'): void {
     this.filterToggled.emit(section);
@@ -51,5 +53,9 @@ export class FilterTabComponent {
 
   clearAllFilters(): void {
     this.allFiltersCleared.emit();
+  }
+
+  closeSidebar(): void {
+    this.closeFilterSidebar.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -45,6 +45,8 @@ export class CollectionsComponent implements OnInit {
   showColors: boolean = true;
   products: Product[] = [];
   isLoading: boolean = true;
+  isMobile: boolean = false;
+  showFilterSidebar: boolean = false;
 
   // Active filters
   activeFilters: string[] = ['Baby Essentials'];
@@ -54,7 +56,18 @@ export class CollectionsComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
-  ) {}
+  ) {
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 1024;
+  }
 
   ngOnInit(): void {
     this.fetchProductsAPI();
@@ -168,6 +181,14 @@ export class CollectionsComponent implements OnInit {
 
   handleAllFiltersCleared(): void {
     this.clearAllFilters();
+  }
+
+  toggleFilterSidebar(): void {
+    this.showFilterSidebar = !this.showFilterSidebar;
+  }
+
+  closeFilterSidebar(): void {
+    this.showFilterSidebar = false;
   }
 
   navigateToProductDetails(productId: number, variantId: number): void {

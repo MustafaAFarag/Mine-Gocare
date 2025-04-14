@@ -5,7 +5,7 @@
     <a
       routerLink="/"
       class="flex flex-col items-center text-center"
-      routerLinkActive="text-red-500"
+      routerLinkActive="text-hover-color"
       [routerLinkActiveOptions]="{ exact: true }"
     >
       <i class="ri-home-4-line"></i>
@@ -15,7 +15,7 @@
     <a
       routerLink="/search"
       class="flex flex-col items-center text-center"
-      routerLinkActive="text-red-500"
+      routerLinkActive="text-hover-color"
     >
       <i class="ri-search-line"></i>
       <span class="mt-1 text-sm">Search</span>
@@ -24,13 +24,13 @@
     <a
       routerLink="/cart"
       class="flex flex-col items-center text-center"
-      routerLinkActive="text-red-500"
+      routerLinkActive="text-hover-color"
     >
       <div class="relative">
         <i class="ri-shopping-cart-line"></i>
         <span
           *ngIf="cartCount > 0"
-          class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-sm text-white"
+          class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
         >
           {{ cartCount }}
         </span>
@@ -41,7 +41,7 @@
     <a
       routerLink="/wishlist"
       class="flex flex-col items-center text-center"
-      routerLinkActive="text-red-500"
+      routerLinkActive="text-hover-color"
     >
       <i class="ri-heart-line"></i>
       <span class="mt-1 text-sm">Wishlist</span>
@@ -50,7 +50,7 @@
     <a
       routerLink="/user"
       class="flex flex-col items-center text-center"
-      routerLinkActive="text-red-500"
+      routerLinkActive="text-hover-color"
     >
       <i class="ri-user-line"></i>
       <span class="mt-1 text-sm">User</span>
