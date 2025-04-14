@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartItem, CART_STORAGE_KEY } from '../../model/Cart';
 import { getFullImageUrl } from '../../lib/utils';
-import { BreadcrumbComponent } from '../../features/product-details/breadcrumb/breadcrumb.component';
+import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';

@@ -27,104 +27,7 @@
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
       @for (product of products; track product.productId) {
-        <div
-          class="product-card cursor-pointer border border-gray-200 bg-white p-4 shadow-md transition-shadow duration-300 hover:shadow-lg"
-        >
-          <!-- Image container with relative positioning -->
-          <div class="relative mb-4 h-64 w-full">
-            <img
-              [src]="getFullImageUrl(product.mainImageUrl)"
-              [alt]="product.name"
-              class="h-full w-full rounded-md object-contain"
-              (click)="
-                navigateToProductDetails(product.productId, product.variantId)
-              "
-            />
-
-            <div class="icon-wrapper absolute right-2 top-2 z-10">
-              <i
-                class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-              ></i>
-
-              <i
-                class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-                (click)="addToCart(product)"
-              ></i>
-              <i
-                class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-              ></i>
-            </div>
-          </div>
-
-          <!-- Product details -->
-          <div
-            (click)="
-              navigateToProductDetails(product.productId, product.variantId)
-            "
-          >
-            <h3 class="text-lg font-medium">{{ product.name.en }}</h3>
-            <p class="text-sm text-special-gray">{{ product.brand.en }}</p>
-            <div class="mb-4 mt-2 text-lg font-bold text-black">
-              <p
-                *ngIf="
-                  product.priceBeforeDiscount === product.priceAfterDiscount
-                "
-              >
-                {{ product.priceBeforeDiscount | currency: "USD" }}
-              </p>
-              <p
-                *ngIf="
-                  product.priceBeforeDiscount !== product.priceAfterDiscount
-                "
-              >
-                {{ product.priceAfterDiscount | currency: "USD" }}
-                <span class="text-sm text-gray-400 line-through">{{
-                  product.priceBeforeDiscount | currency: "USD"
-                }}</span>
-                <span class="text-hover-color">
-                  {{ product.discountPercentage.toFixed(2) }}% off</span
-                >
-              </p>
-            </div>
-          </div>
-          <div
-            class="overflow-hidden border-t-2 border-red-500 py-2"
-            (click)="
-              navigateToProductDetails(product.productId, product.variantId)
-            "
-          >
-            <div class="limited-time-wrapper flex gap-8 whitespace-nowrap">
-              <div class="limited-time-item flex items-center gap-2">
-                <i class="ri-discount-percent-fill text-hover-color"></i>
-                <span
-                  >Limited Time Offer :
-                  {{ product.discountPercentage.toFixed(2) }}% off</span
-                >
-              </div>
-              <div class="limited-time-item flex items-center gap-2">
-                <i class="ri-discount-percent-fill text-hover-color"></i>
-                <span
-                  >Limited Time Offer :
-                  {{ product.discountPercentage.toFixed(2) }}% off</span
-                >
-              </div>
-              <div class="limited-time-item flex items-center gap-2">
-                <i class="ri-discount-percent-fill text-hover-color"></i>
-                <span
-                  >Limited Time Offer :
-                  {{ product.discountPercentage.toFixed(2) }}% off</span
-                >
-              </div>
-              <div class="limited-time-item flex items-center gap-2">
-                <i class="ri-discount-percent-fill text-hover-color"></i>
-                <span
-                  >Limited Time Offer :
-                  {{ product.discountPercentage.toFixed(2) }}% off</span
-                >
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-product-card [product]="product"></app-product-card>
       }
     </div>
   </div>
@@ -151,7 +54,6 @@
     .extra-icon-1,
     .extra-icon-2 {
       opacity: 0;
-
       transform: translateY(0);
     }
 
