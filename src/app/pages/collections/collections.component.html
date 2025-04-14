@@ -1,202 +1,258 @@
 <div class="container mx-auto max-w-8xl py-8">
-  <app-breadcrumb [soloRoute]="'Collections'"></app-breadcrumb>
-  <div class="mt-8 flex flex-col gap-6 md:flex-row">
-    <!-- Sidebar Filters -->
-    <div class="w-full md:w-1/4">
-      <app-filter-tab
-        [categories]="categories"
-        [brands]="brands"
-        [colors]="colors"
-        [activeFilters]="activeFilters"
-        [showCategories]="showCategories"
-        [showBrands]="showBrands"
-        [showColors]="showColors"
-        (filterToggled)="handleFilterToggled($event)"
-        (categoryToggled)="handleCategoryToggled($event)"
-        (filterRemoved)="handleFilterRemoved($event)"
-        (allFiltersCleared)="handleAllFiltersCleared()"
-      ></app-filter-tab>
-    </div>
+  <!-- Loading State -->
+  <div
+    *ngIf="isLoading"
+    class="flex flex-col items-center justify-center py-12"
+  >
+    <app-loading></app-loading>
+    <p class="mt-4 text-gray-600">Loading products...</p>
+  </div>
 
-    <!-- Main Content -->
-    <div class="w-full md:w-3/4">
-      <!-- Banner -->
-      <div class="mb-6 overflow-hidden rounded-lg bg-gray-100">
-        <div class="relative">
-          <img
-            src="/assets/images/settings/maintainance.png"
-            alt="Fashion Collection"
-            class="h-64 w-full object-cover"
-          />
-          <div
-            class="absolute inset-0 flex flex-col justify-center px-8 md:px-16"
-          ></div>
-        </div>
+  <!-- Content when loaded -->
+  <div *ngIf="!isLoading">
+    <app-breadcrumb [soloRoute]="'Collections'"></app-breadcrumb>
+    <div class="mt-8 flex flex-col gap-6 md:flex-row">
+      <!-- Sidebar Filters -->
+      <div class="w-full md:w-1/4">
+        <app-filter-tab
+          [categories]="categories"
+          [brands]="brands"
+          [colors]="colors"
+          [activeFilters]="activeFilters"
+          [showCategories]="showCategories"
+          [showBrands]="showBrands"
+          [showColors]="showColors"
+          (filterToggled)="handleFilterToggled($event)"
+          (categoryToggled)="handleCategoryToggled($event)"
+          (filterRemoved)="handleFilterRemoved($event)"
+          (allFiltersCleared)="handleAllFiltersCleared()"
+        ></app-filter-tab>
       </div>
 
-      <!-- Sorting and View Options -->
-      <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex gap-4">
+      <!-- Main Content -->
+      <div class="w-full md:w-3/4">
+        <!-- Banner -->
+        <div class="mb-6 overflow-hidden rounded-lg bg-gray-100">
           <div class="relative">
-            <select
-              class="appearance-none rounded-md border bg-white py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-300"
-            >
-              <option
-                *ngFor="let option of sortOptions"
-                [selected]="option === selectedSort"
+            <img
+              src="/assets/images/settings/maintainance.png"
+              alt="Fashion Collection"
+              class="h-64 w-full object-cover"
+            />
+            <div
+              class="absolute inset-0 flex flex-col justify-center px-8 md:px-16"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Sorting and View Options -->
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex gap-4">
+            <div class="relative">
+              <select
+                class="appearance-none rounded-md border bg-white py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-300"
               >
-                {{ option }}
-              </option>
-            </select>
-            <i
-              class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
-            ></i>
-          </div>
-
-          <div class="relative">
-            <select
-              class="appearance-none rounded-md border bg-white py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-300"
-            >
-              <option>Sort Item</option>
-              <option>Newest</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-            </select>
-            <i
-              class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
-            ></i>
-          </div>
-        </div>
-
-        <div class="flex gap-2">
-          <button
-            (click)="setViewMode('grid2')"
-            [ngClass]="{
-              'bg-orange-500 text-white': viewMode === 'grid2',
-              'bg-gray-200 text-gray-600': viewMode !== 'grid2',
-            }"
-            class="rounded p-2"
-          >
-            <i class="ri-layout-2-line"></i>
-          </button>
-          <button
-            (click)="setViewMode('grid3')"
-            [ngClass]="{
-              'bg-orange-500 text-white': viewMode === 'grid3',
-              'bg-gray-200 text-gray-600': viewMode !== 'grid3',
-            }"
-            class="rounded p-2"
-          >
-            <i class="ri-layout-3-line"></i>
-          </button>
-          <button
-            (click)="setViewMode('grid4')"
-            [ngClass]="{
-              'bg-orange-500 text-white': viewMode === 'grid4',
-              'bg-gray-200 text-gray-600': viewMode !== 'grid4',
-            }"
-            class="rounded p-2"
-          >
-            <i class="ri-layout-4-line"></i>
-          </button>
-          <button
-            (click)="setViewMode('list')"
-            [ngClass]="{
-              'bg-orange-500 text-white': viewMode === 'list',
-              'bg-gray-200 text-gray-600': viewMode !== 'list',
-            }"
-            class="rounded p-2"
-          >
-            <i class="ri-list-check"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Grid View -->
-      <div
-        *ngIf="viewMode === 'grid2'"
-        class="grid grid-cols-1 gap-6 md:grid-cols-2"
-      >
-        <ng-container *ngFor="let product of products">
-          <ng-container
-            *ngTemplateOutlet="productGridItem; context: { $implicit: product }"
-          ></ng-container>
-        </ng-container>
-      </div>
-
-      <div
-        *ngIf="viewMode === 'grid3'"
-        class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
-      >
-        <ng-container *ngFor="let product of products">
-          <ng-container
-            *ngTemplateOutlet="productGridItem; context: { $implicit: product }"
-          ></ng-container>
-        </ng-container>
-      </div>
-
-      <div
-        *ngIf="viewMode === 'grid4'"
-        class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-      >
-        <ng-container *ngFor="let product of products">
-          <ng-container
-            *ngTemplateOutlet="productGridItem; context: { $implicit: product }"
-          ></ng-container>
-        </ng-container>
-      </div>
-
-      <!-- List View -->
-      <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
-        <div
-          *ngFor="let product of products"
-          class="flex overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md"
-        >
-          <!-- Product Image -->
-          <div class="relative w-1/3">
-            <div class="overflow-hidden">
-              <img
-                [src]="product.image"
-                [alt]="product.name"
-                class="aspect-square w-full object-cover"
-              />
+                <option
+                  *ngFor="let option of sortOptions"
+                  [selected]="option === selectedSort"
+                >
+                  {{ option }}
+                </option>
+              </select>
+              <i
+                class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
+              ></i>
             </div>
+
+            <div class="relative">
+              <select
+                class="appearance-none rounded-md border bg-white py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              >
+                <option>Sort Item</option>
+                <option>Newest</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+              </select>
+              <i
+                class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
+              ></i>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
             <button
-              class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow"
+              (click)="setViewMode('grid2')"
+              [ngClass]="{
+                'bg-orange-500 text-white': viewMode === 'grid2',
+                'bg-gray-200 text-gray-600': viewMode !== 'grid2',
+              }"
+              class="rounded p-2"
             >
-              <i class="ri-heart-line text-gray-400 hover:text-orange-500"></i>
+              <i class="ri-layout-2-line"></i>
+            </button>
+            <button
+              (click)="setViewMode('grid3')"
+              [ngClass]="{
+                'bg-orange-500 text-white': viewMode === 'grid3',
+                'bg-gray-200 text-gray-600': viewMode !== 'grid3',
+              }"
+              class="rounded p-2"
+            >
+              <i class="ri-layout-3-line"></i>
+            </button>
+            <button
+              (click)="setViewMode('grid4')"
+              [ngClass]="{
+                'bg-orange-500 text-white': viewMode === 'grid4',
+                'bg-gray-200 text-gray-600': viewMode !== 'grid4',
+              }"
+              class="rounded p-2"
+            >
+              <i class="ri-layout-4-line"></i>
+            </button>
+            <button
+              (click)="setViewMode('list')"
+              [ngClass]="{
+                'bg-orange-500 text-white': viewMode === 'list',
+                'bg-gray-200 text-gray-600': viewMode !== 'list',
+              }"
+              class="rounded p-2"
+            >
+              <i class="ri-list-check"></i>
             </button>
           </div>
+        </div>
 
-          <!-- Product Details -->
-          <div class="w-2/3 p-4">
-            <!-- Rating -->
-            <div class="mb-2 flex items-center">
-              <div class="flex">
-                <i class="ri-star-fill text-yellow-400"></i>
-                <i class="ri-star-line text-gray-300"></i>
-                <i class="ri-star-line text-gray-300"></i>
-                <i class="ri-star-line text-gray-300"></i>
-                <i class="ri-star-line text-gray-300"></i>
+        <!-- Grid View -->
+        <div
+          *ngIf="viewMode === 'grid2'"
+          class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2"
+        >
+          <app-product-card
+            *ngFor="let product of products"
+            [product]="product"
+          ></app-product-card>
+        </div>
+
+        <div
+          *ngIf="viewMode === 'grid3'"
+          class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+        >
+          <app-product-card
+            *ngFor="let product of products"
+            [product]="product"
+          ></app-product-card>
+        </div>
+
+        <div
+          *ngIf="viewMode === 'grid4'"
+          class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+          <app-product-card
+            *ngFor="let product of products"
+            [product]="product"
+          ></app-product-card>
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
+          <div
+            *ngFor="let product of products"
+            class="flex overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md"
+          >
+            <!-- Product Image -->
+            <div class="relative w-1/5">
+              <div class="relative pt-[100%]">
+                <img
+                  [src]="getFullImageUrl(product.mainImageUrl)"
+                  [alt]="product.name.en"
+                  class="absolute inset-0 h-full w-full object-cover"
+                  (click)="
+                    navigateToProductDetails(
+                      product.productId,
+                      product.variantId
+                    )
+                  "
+                />
+                <button
+                  class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow"
+                >
+                  <i
+                    [class]="
+                      product.isInWishlist
+                        ? 'ri-heart-fill text-sm text-red-500'
+                        : 'ri-heart-line text-sm text-gray-400'
+                    "
+                  ></i>
+                </button>
+
+                <!-- Discount Badge -->
+                <div
+                  *ngIf="product.discountPercentage > 0"
+                  class="absolute left-2 top-2 rounded-md bg-red-500 px-2 py-1 text-xs text-white"
+                >
+                  -{{ product.discountPercentage.toFixed(0) }}%
+                </div>
               </div>
-              <span class="ml-1 text-sm text-gray-500">{{
-                product.rating
-              }}</span>
             </div>
 
-            <!-- Product Name -->
-            <h3 class="mb-2 font-medium text-gray-800">{{ product.name }}</h3>
+            <!-- Product Details -->
+            <div class="flex w-4/5 flex-col p-4">
+              <!-- Brand -->
+              <p class="mb-1 text-xs text-gray-500">{{ product.brand.en }}</p>
 
-            <!-- Category -->
-            <p class="text-sm text-gray-600">{{ product.category }}</p>
-
-            <!-- Add to Cart Button -->
-            <div class="mt-4">
-              <button
-                class="rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
+              <!-- Product Name -->
+              <h3
+                class="mb-2 cursor-pointer font-medium text-gray-800"
+                (click)="
+                  navigateToProductDetails(product.productId, product.variantId)
+                "
               >
-                Add to Cart
-              </button>
+                {{ product.name.en }}
+              </h3>
+
+              <!-- Price -->
+              <div class="flex items-center gap-2">
+                <span class="font-semibold"
+                  >{{ product.priceAfterDiscount }}
+                  {{ product.currency.name.en }}</span
+                >
+                <span
+                  *ngIf="product.discountPercentage > 0"
+                  class="text-sm text-gray-500 line-through"
+                >
+                  {{ product.priceBeforeDiscount }}
+                  {{ product.currency.name.en }}
+                </span>
+              </div>
+
+              <!-- Rating -->
+              <div *ngIf="product.rating > 0" class="mt-2 flex items-center">
+                <div class="flex">
+                  <i class="ri-star-fill text-yellow-400"></i>
+                  <span class="ml-1 text-sm text-gray-500">{{
+                    product.rating
+                  }}</span>
+                </div>
+              </div>
+
+              <!-- Stock Status -->
+              <div
+                *ngIf="product.lowQuantity"
+                class="mt-2 text-xs text-orange-500"
+              >
+                Only {{ product.stockCount }} left in stock
+              </div>
+
+              <!-- Add to Cart Button -->
+              <div class="mt-auto pt-4">
+                <button
+                  class="rounded-md bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600"
+                  (click)="addToCart(product)"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -204,47 +260,3 @@
     </div>
   </div>
 </div>
-
-<!-- Template for Grid Product Items -->
-<ng-template #productGridItem let-product>
-  <div
-    class="overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md"
-  >
-    <!-- Product Image -->
-    <div class="relative">
-      <div class="overflow-hidden">
-        <img
-          [src]="product.image"
-          [alt]="product.name"
-          class="aspect-square w-full object-cover"
-        />
-      </div>
-      <button
-        class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow"
-      >
-        <i class="ri-heart-line text-gray-400 hover:text-orange-500"></i>
-      </button>
-    </div>
-
-    <!-- Product Details -->
-    <div class="p-4">
-      <!-- Rating -->
-      <div class="mb-2 flex items-center">
-        <div class="flex">
-          <i class="ri-star-fill text-yellow-400"></i>
-          <i class="ri-star-line text-gray-300"></i>
-          <i class="ri-star-line text-gray-300"></i>
-          <i class="ri-star-line text-gray-300"></i>
-          <i class="ri-star-line text-gray-300"></i>
-        </div>
-        <span class="ml-1 text-sm text-gray-500">{{ product.rating }}</span>
-      </div>
-
-      <!-- Product Name -->
-      <h3 class="mb-2 font-medium text-gray-800">{{ product.name }}</h3>
-
-      <!-- Category -->
-      <p class="text-sm text-gray-600">{{ product.category }}</p>
-    </div>
-  </div>
-</ng-template>

@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
 import { FilterTabComponent } from '../../features/collections/filter-tab/filter-tab.component';
-
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  rating: number;
-  category: string;
-}
+import { ProductService } from '../../services/product.service';
+import { Product } from '../../model/Product';
+import { getFullImageUrl } from '../../lib/utils';
+import { ProductCardComponent } from '../../components/product-card/product-card.component';
+import { Router } from '@angular/router';
+import { CartService } from '../../services/cart.service';
+import { CartSidebarService } from '../../services/cart-sidebar.service';
+import { CartItem } from '../../model/Cart';
 
 interface Category {
   name: string;
@@ -28,18 +28,54 @@ interface Color {
 @Component({
   selector: 'app-collections',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, FilterTabComponent],
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    FilterTabComponent,
+    ProductCardComponent,
+    LoadingComponent,
+  ],
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css'],
 })
-export class CollectionsComponent {
+export class CollectionsComponent implements OnInit {
   // Filter states
   showCategories: boolean = true;
   showBrands: boolean = true;
   showColors: boolean = true;
+  products: Product[] = [];
+  isLoading: boolean = true;
 
   // Active filters
   activeFilters: string[] = ['Baby Essentials'];
+
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private cartService: CartService,
+    private cartSidebarService: CartSidebarService,
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchProductsAPI();
+  }
+
+  fetchProductsAPI() {
+    this.isLoading = true;
+    this.productService.getAllProductVariantsForClient().subscribe({
+      next: (res) => {
+        console.log('Products fetched:', res.result.items);
+        this.products = res.result.items;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching products:', err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  getFullImageUrl = getFullImageUrl;
 
   // Categories
   categories: Category[] = [
@@ -60,31 +96,6 @@ export class CollectionsComponent {
 
   // Colors
   colors: Color[] = [{ name: 'Burgundy' }, { name: 'Brown' }];
-
-  // Products
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Tiny Treasures',
-      image: '/assets/default-image.png',
-      rating: 0,
-      category: 'Baby Toys',
-    },
-    {
-      id: 2,
-      name: 'Baby Bliss',
-      image: '/assets/default-image.png',
-      rating: 0,
-      category: 'Baby Footwear',
-    },
-    {
-      id: 3,
-      name: 'Baby Bliss',
-      image: '/assets/default-image.png',
-      rating: 0,
-      category: 'Baby Footwear',
-    },
-  ];
 
   // View mode (grid or list)
   viewMode: 'grid2' | 'grid3' | 'grid4' | 'list' = 'grid3';
@@ -157,5 +168,23 @@ export class CollectionsComponent {
 
   handleAllFiltersCleared(): void {
     this.clearAllFilters();
+  }
+
+  navigateToProductDetails(productId: number, variantId: number): void {
+    this.router.navigate([`/product-details/${productId}/${variantId}`]);
+  }
+
+  addToCart(product: Product): void {
+    const cartItem: CartItem = {
+      productId: product.productId,
+      name: product.name.en,
+      image: product.mainImageUrl,
+      afterPrice: product.priceAfterDiscount,
+      beforePrice: product.priceBeforeDiscount,
+      quantity: 1,
+    };
+
+    this.cartService.addToCart(cartItem);
+    this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }
 }

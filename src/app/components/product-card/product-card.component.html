@@ -1,12 +1,12 @@
 <div
-  class="product-card cursor-pointer border border-gray-200 bg-white p-4 shadow-md transition-shadow duration-300 hover:shadow-lg"
+  class="product-card flex h-full cursor-pointer flex-col border border-gray-200 bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
 >
   <!-- Image container with relative positioning -->
-  <div class="relative mb-4 h-64 w-full">
+  <div class="relative h-64 w-full">
     <img
       [src]="getFullImageUrl(product.mainImageUrl)"
       [alt]="product.name"
-      class="h-full w-full rounded-md object-contain"
+      class="absolute inset-0 h-full w-full object-contain"
       (click)="navigateToProductDetails(product.productId, product.variantId)"
     />
 
@@ -26,10 +26,13 @@
   </div>
 
   <!-- Product details -->
-  <div (click)="navigateToProductDetails(product.productId, product.variantId)">
-    <h3 class="text-lg font-medium">{{ product.name.en }}</h3>
+  <div
+    class="flex flex-grow flex-col p-4"
+    (click)="navigateToProductDetails(product.productId, product.variantId)"
+  >
+    <h3 class="line-clamp-1 text-lg font-medium">{{ product.name.en }}</h3>
     <p class="text-sm text-special-gray">{{ product.brand.en }}</p>
-    <div class="mb-4 mt-2 text-lg font-bold text-black">
+    <div class="mb-4 mt-2 text-base font-bold text-black">
       <p *ngIf="product.priceBeforeDiscount === product.priceAfterDiscount">
         {{ product.priceBeforeDiscount | currency: "USD" }}
       </p>
@@ -39,41 +42,41 @@
           product.priceBeforeDiscount | currency: "USD"
         }}</span>
         <span class="text-hover-color">
-          {{ product.discountPercentage.toFixed(2) }}% off</span
+          {{ product.discountPercentage.toFixed(0) }}% off</span
         >
       </p>
     </div>
   </div>
   <div
-    class="overflow-hidden border-t-2 border-red-500 py-2"
+    class="mt-auto overflow-hidden border-t-2 border-red-500 p-2"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
   >
     <div class="limited-time-wrapper flex gap-8 whitespace-nowrap">
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(2) }}%
+          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
           off</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(2) }}%
+          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
           off</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(2) }}%
+          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
           off</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(2) }}%
+          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
           off</span
         >
       </div>

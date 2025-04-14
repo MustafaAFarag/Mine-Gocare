@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         "hover-color": "#a01a40",
         "special-gray": "#323232",
+        "bg-color": "#fafaf2",
       },
       maxWidth: {
         "8xl": "1400px", // Your custom max width
