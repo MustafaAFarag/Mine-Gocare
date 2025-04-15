@@ -61,7 +61,7 @@
         <div class="mb-6 overflow-hidden rounded-lg bg-gray-100">
           <div class="relative">
             <img
-              src="/assets/images/settings/maintainance.png"
+              src="/assets/images/settings/insta2-berry.jpg"
               alt="Fashion Collection"
               class="h-64 w-full object-cover"
             />
@@ -201,15 +201,15 @@
         <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
           <div
             *ngFor="let product of products"
-            class="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
+            class="product-card flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
           >
             <!-- Product Image -->
-            <div class="relative w-full sm:w-1/5">
+            <div class="relative w-full sm:w-2/5">
               <div class="relative pt-[100%]">
                 <img
                   [src]="getFullImageUrl(product.mainImageUrl)"
                   [alt]="product.name.en"
-                  class="absolute inset-0 h-full w-full object-cover"
+                  class="absolute inset-0 h-full w-full cursor-pointer object-cover"
                   (click)="
                     navigateToProductDetails(
                       product.productId,
@@ -217,36 +217,39 @@
                     )
                   "
                 />
-                <button
-                  class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow"
-                >
+                <div class="icon-wrapper absolute right-2 top-2 z-10">
                   <i
-                    [class]="
-                      product.isInWishlist
-                        ? 'ri-heart-fill text-sm text-red-500'
-                        : 'ri-heart-line text-sm text-gray-400'
-                    "
+                    class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
                   ></i>
-                </button>
 
-                <!-- Discount Badge -->
+                  <i
+                    class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                    (click)="addToCart(product)"
+                  ></i>
+                  <i
+                    class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                  ></i>
+                </div>
+
+                <!-- Add to cart button that appears on hover -->
                 <div
-                  *ngIf="product.discountPercentage > 0"
-                  class="absolute left-2 top-2 rounded-md bg-red-500 px-2 py-1 text-xs text-white"
+                  class="add-to-cart-btn absolute bottom-2 left-0 right-0 m-2 translate-y-full transform bg-hover-color p-2 text-center text-white opacity-0 transition-all"
                 >
-                  -{{ product.discountPercentage.toFixed(0) }}%
+                  <button (click)="addToCart(product)" class="w-full">
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             </div>
 
             <!-- Product Details -->
-            <div class="flex w-full flex-col p-4 sm:w-4/5">
+            <div class="flex w-full flex-col justify-center p-4 sm:w-4/5">
               <!-- Brand -->
-              <p class="mb-1 text-xs text-gray-500">{{ product.brand.en }}</p>
+              <p class="mb-1 text-sm text-gray-500">{{ product.brand.en }}</p>
 
               <!-- Product Name -->
               <h3
-                class="mb-2 cursor-pointer font-medium text-gray-800"
+                class="mb-2 cursor-pointer text-lg font-medium text-gray-800"
                 (click)="
                   navigateToProductDetails(product.productId, product.variantId)
                 "
@@ -267,6 +270,12 @@
                   {{ product.priceBeforeDiscount }}
                   {{ product.currency.name.en }}
                 </span>
+                <span
+                  *ngIf="product.discountPercentage > 0"
+                  class="text-hover-color"
+                >
+                  {{ product.discountPercentage.toFixed(0) }}% off
+                </span>
               </div>
 
               <!-- Rating -->
@@ -286,16 +295,6 @@
               >
                 Only {{ product.stockCount }} left in stock
               </div>
-
-              <!-- Add to Cart Button -->
-              <div class="mt-auto pt-4">
-                <button
-                  class="rounded-md bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600"
-                  (click)="addToCart(product)"
-                >
-                  Add to Cart
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -303,3 +302,77 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Default styles for mobile and tablet */
+  .extra-icon-1,
+  .extra-icon-2 {
+    opacity: 1;
+    transform: translateY(30px);
+  }
+
+  .extra-icon-2 {
+    transform: translateY(60px);
+  }
+
+  .add-to-cart-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .limited-time-wrapper {
+    animation: slide-left 5s linear infinite;
+  }
+
+  /* Hover effects for lg screens and up */
+  @media (min-width: 1024px) {
+    .extra-icon-1,
+    .extra-icon-2 {
+      opacity: 0;
+      transform: translateY(0);
+    }
+
+    .add-to-cart-btn {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    .product-card:hover .extra-icon-1 {
+      opacity: 1;
+      transform: translateY(40px);
+    }
+
+    .product-card:hover .extra-icon-2 {
+      opacity: 1;
+      transform: translateY(80px);
+    }
+
+    .product-card:hover .add-to-cart-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .limited-time-wrapper {
+      animation: none;
+    }
+
+    .product-card:hover .limited-time-wrapper {
+      animation: slide-left 5s linear infinite;
+    }
+  }
+
+  .extra-icon-1,
+  .extra-icon-2,
+  .add-to-cart-btn {
+    transition: all 0.5s ease;
+  }
+
+  @keyframes slide-left {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+</style>
