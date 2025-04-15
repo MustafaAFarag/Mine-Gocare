@@ -61,26 +61,62 @@
       </div>
 
       <div class="space-y-3">
-        <div
-          *ngFor="let category of categories"
-          class="flex cursor-pointer items-center"
-          (click)="toggleCategory(category)"
-        >
+        <!-- Parent categories and subcategories -->
+        <div *ngFor="let category of categories" class="category-item">
           <div
-            class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
-            [ngClass]="{
-              'border-hover-color bg-hover-color': category.selected,
-              'border-gray-300': !category.selected,
-            }"
+            class="flex cursor-pointer items-center"
+            (click)="toggleCategory(category)"
           >
-            <i
-              *ngIf="category.selected"
-              class="ri-check-line text-xs text-white"
-            ></i>
+            <!-- Checkbox -->
+            <div
+              class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+              [ngClass]="{
+                'border-hover-color bg-hover-color': category.selected,
+                'border-gray-300': !category.selected,
+              }"
+            >
+              <i
+                *ngIf="category.selected"
+                class="ri-check-line text-xs text-white"
+              ></i>
+            </div>
+
+            <!-- Category name -->
+            <span [ngClass]="{ 'text-hover-color': category.selected }">
+              {{ category.name }}
+            </span>
           </div>
-          <span [ngClass]="{ 'text-hover-color': category.selected }">{{
-            category.name
-          }}</span>
+
+          <!-- Subcategories (indented) - always displayed -->
+          <div
+            *ngIf="category.isParent && category.subcategories"
+            class="ml-6 mt-2 space-y-2"
+          >
+            <div
+              *ngFor="let subcategory of category.subcategories"
+              class="flex cursor-pointer items-center"
+              (click)="toggleCategory(subcategory)"
+            >
+              <!-- Subcategory checkbox -->
+              <div
+                class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                [ngClass]="{
+                  'border-hover-color bg-hover-color': subcategory.selected,
+                  'border-gray-300': !subcategory.selected,
+                }"
+              >
+                <i
+                  *ngIf="subcategory.selected"
+                  class="ri-check-line text-xs text-white"
+                ></i>
+              </div>
+
+              <!-- Subcategory name -->
+              <span [ngClass]="{ 'text-hover-color': subcategory.selected }">
+                {{ subcategory.name }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 interface Category {
   name: string;
   selected: boolean;
+  subcategories?: Category[];
+  isParent?: boolean;
 }
 
 interface Brand {

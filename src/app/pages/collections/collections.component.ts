@@ -15,6 +15,8 @@ import { CartItem } from '../../model/Cart';
 interface Category {
   name: string;
   selected: boolean;
+  subcategories?: Category[];
+  isParent?: boolean;
 }
 
 interface Brand {
@@ -92,9 +94,27 @@ export class CollectionsComponent implements OnInit {
 
   // Categories
   categories: Category[] = [
-    { name: 'Baby Essentials', selected: true },
+    {
+      name: 'Baby Essentials',
+      selected: true,
+      isParent: true,
+      subcategories: [
+        { name: 'Diapers', selected: false },
+        { name: 'Baby Food', selected: false },
+        { name: 'Baby Care', selected: false },
+      ],
+    },
     { name: 'Soft Toys', selected: false },
-    { name: 'Clothes', selected: false },
+    {
+      name: 'Clothes',
+      selected: false,
+      isParent: true,
+      subcategories: [
+        { name: 'Tops', selected: false },
+        { name: 'Bottoms', selected: false },
+        { name: 'Sets', selected: false },
+      ],
+    },
     { name: 'Baby Toys', selected: false },
     { name: 'Baby Footwear', selected: false },
   ];
@@ -135,6 +155,16 @@ export class CollectionsComponent implements OnInit {
 
     if (category.selected && !this.activeFilters.includes(category.name)) {
       this.activeFilters.push(category.name);
+
+      // If selecting a parent category, select all its subcategories
+      if (category.isParent && category.subcategories) {
+        category.subcategories.forEach((sub) => {
+          sub.selected = true;
+          if (!this.activeFilters.includes(sub.name)) {
+            this.activeFilters.push(sub.name);
+          }
+        });
+      }
     } else if (
       !category.selected &&
       this.activeFilters.includes(category.name)
@@ -142,23 +172,53 @@ export class CollectionsComponent implements OnInit {
       this.activeFilters = this.activeFilters.filter(
         (filter) => filter !== category.name,
       );
+
+      // If deselecting a parent category, deselect all its subcategories
+      if (category.isParent && category.subcategories) {
+        category.subcategories.forEach((sub) => {
+          sub.selected = false;
+          this.activeFilters = this.activeFilters.filter(
+            (filter) => filter !== sub.name,
+          );
+        });
+      }
     }
   }
 
   removeFilter(filter: string): void {
     this.activeFilters = this.activeFilters.filter((f) => f !== filter);
 
-    // Also update the category selection
-    const category = this.categories.find((c) => c.name === filter);
-    if (category) {
-      category.selected = false;
+    // Find and update the category or subcategory selection
+    for (const category of this.categories) {
+      if (category.name === filter) {
+        category.selected = false;
+        return;
+      }
+
+      // Check subcategories
+      if (category.isParent && category.subcategories) {
+        for (const subcategory of category.subcategories) {
+          if (subcategory.name === filter) {
+            subcategory.selected = false;
+            return;
+          }
+        }
+      }
     }
   }
 
   clearAllFilters(): void {
     this.activeFilters = [];
+
+    // Deselect all categories and subcategories
     this.categories.forEach((category) => {
       category.selected = false;
+
+      if (category.isParent && category.subcategories) {
+        category.subcategories.forEach((sub) => {
+          sub.selected = false;
+        });
+      }
     });
   }
 
