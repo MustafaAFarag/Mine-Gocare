@@ -131,6 +131,8 @@ export class SignupFormComponent implements OnInit {
           summary: 'Success',
           detail: 'Account created successfully!',
         });
+        this.loading = false;
+        this.toggle.emit(true);
         this.router.navigate(['/product-details/1/2']);
       },
       error: (error) => {
