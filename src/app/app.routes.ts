@@ -26,6 +26,13 @@ export const routes: Routes = [
         path: 'collections',
         component: CollectionsComponent,
       },
+      {
+        path: 'contact-us',
+        loadComponent: () =>
+          import('./pages/contact-us/contact-us.component').then(
+            (m) => m.ContactUsComponent,
+          ),
+      },
     ],
   },
 ];
