@@ -27,17 +27,21 @@ export class EverydayCasualSectionComponent {
   @Input() isLoadingProducts!: boolean;
   @Input() selectedCategory: any;
 
+  isCategoryLoading: boolean = false;
+
   @Output() categorySelected = new EventEmitter<number>(); // Emit category ID when clicked
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   onCategoryClick(categoryId: number): void {
+    this.isCategoryLoading = true;
     this.categorySelected.emit(categoryId); // Emit the selected category's ID
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['products']) {
       console.log('Products changed:', this.products);
+      this.isCategoryLoading = false;
       this.cdr.detectChanges();
     }
   }

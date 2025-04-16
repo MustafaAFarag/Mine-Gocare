@@ -25,7 +25,14 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div *ngIf="isCategoryLoading" class="my-8 flex justify-center">
+      <app-loading></app-loading>
+    </div>
+
+    <div
+      *ngIf="!isCategoryLoading"
+      class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+    >
       @for (product of products; track product.productId) {
         <app-product-card [product]="product"></app-product-card>
       }
