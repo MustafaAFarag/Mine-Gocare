@@ -48,6 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   cartSubscription!: Subscription;
   currentUser!: User;
   cartCount = 0;
+  isPagesDropdownOpen: boolean = false;
 
   showDialog() {
     this.visible = !this.visible;
@@ -167,6 +168,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  // Toggle Pages dropdown in mobile menu
+  togglePagesDropdown(): void {
+    this.isPagesDropdownOpen = !this.isPagesDropdownOpen;
   }
 
   logout(): void {

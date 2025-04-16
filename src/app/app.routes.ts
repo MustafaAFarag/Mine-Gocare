@@ -33,6 +33,27 @@ export const routes: Routes = [
             (m) => m.ContactUsComponent,
           ),
       },
+      {
+        path: 'privacy-policy',
+        loadComponent: () =>
+          import('./pages/privacy-policy/privacy-policy.component').then(
+            (m) => m.PrivacyPolicyComponent,
+          ),
+      },
+      {
+        path: 'refund-policy',
+        loadComponent: () =>
+          import('./pages/refund-policy/refund-policy.component').then(
+            (m) => m.RefundPolicyComponent,
+          ),
+      },
+      {
+        path: 'terms-and-conditions',
+        loadComponent: () =>
+          import(
+            './pages/terms-and-conditions/terms-and-conditions.component'
+          ).then((m) => m.TermsAndConditionsComponent),
+      },
     ],
   },
 ];

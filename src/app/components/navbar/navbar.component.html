@@ -78,15 +78,33 @@
             >
             <i class="ri-arrow-down-s-line text-sm"></i>
           </li>
-          <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/contact-us" routerLinkActive="text-blue-600"
-              >Contact Us</a
-            >
-            <i class="ri-arrow-down-s-line text-sm"></i>
-          </li>
-          <li class="flex items-center gap-1 hover:text-hover-color">
+          <li
+            class="group relative flex items-center gap-1 hover:text-hover-color"
+          >
             <a routerLink="/pages" routerLinkActive="text-blue-600">Pages</a>
             <i class="ri-arrow-down-s-line text-sm"></i>
+            <!-- Pages dropdown menu -->
+            <div
+              class="absolute left-0 top-full hidden rounded-md bg-white p-4 shadow-md group-hover:block"
+            >
+              <ul class="flex min-w-[200px] flex-col gap-5">
+                <li class="text-gray-900 hover:text-hover-color">
+                  <a routerLink="/privacy-policy">Privacy Policies</a>
+                </li>
+                <li class="text-gray-900 hover:text-hover-color">
+                  <a routerLink="/contact-us">Contact Us</a>
+                </li>
+                <li class="text-gray-900 hover:text-hover-color">
+                  <a routerLink="/refund-policy">Refund Policies</a>
+                </li>
+                <li class="text-gray-900 hover:text-hover-color">
+                  <a routerLink="/terms-and-conditions">Terms and Conditions</a>
+                </li>
+                <li class="text-gray-900 hover:text-hover-color">
+                  <a routerLink="/about-us">About Us</a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/seller" routerLinkActive="text-blue-600">Seller</a>
@@ -167,15 +185,54 @@
         class="py-4 text-left"
         >Mega Menu</a
       >
-      <a
-        routerLink="/contact-us"
-        (click)="closeMobileMenu()"
-        class="py-4 text-left"
-        >Contact us</a
-      >
-      <a routerLink="/pages" (click)="closeMobileMenu()" class="py-4 text-left"
-        >Pages</a
-      >
+
+      <!-- Pages with dropdown -->
+      <div class="py-4">
+        <div class="flex items-center justify-between">
+          <span class="text-left">Pages</span>
+          <i
+            class="ri-arrow-down-s-line cursor-pointer"
+            (click)="togglePagesDropdown()"
+          ></i>
+        </div>
+        <div *ngIf="isPagesDropdownOpen" class="mt-2 pl-4">
+          <a
+            routerLink="/pages/privacy-policy"
+            (click)="closeMobileMenu()"
+            class="block py-2"
+          >
+            Privacy Policies
+          </a>
+          <a
+            routerLink="/pages/contact-us"
+            (click)="closeMobileMenu()"
+            class="block py-2"
+          >
+            Contact Us
+          </a>
+          <a
+            routerLink="/pages/refund-policy"
+            (click)="closeMobileMenu()"
+            class="block py-2"
+          >
+            Refund Policies
+          </a>
+          <a
+            routerLink="/pages/terms-and-conditions"
+            (click)="closeMobileMenu()"
+            class="block py-2"
+          >
+            Terms and Conditions
+          </a>
+          <a
+            routerLink="/pages/about-us"
+            (click)="closeMobileMenu()"
+            class="block py-2"
+          >
+            About Us
+          </a>
+        </div>
+      </div>
       <a routerLink="/seller" (click)="closeMobileMenu()" class="py-4 text-left"
         >Seller</a
       >
