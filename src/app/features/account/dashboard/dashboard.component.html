@@ -1,0 +1,87 @@
+<!-- Main Content -->
+<div class="w-full">
+  <!-- Welcome Section -->
+  <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <h2 class="mb-2 text-2xl font-bold text-gray-800">
+      Hello, {{ getFullName() }} !
+    </h2>
+    <p class="mb-4 text-gray-600">
+      From your My Account Dashboard you have the ability to view a snapshot of
+      your recent account activity and update your account information. Select a
+      link below to view or edit information.
+    </p>
+
+    <!-- Stats Cards -->
+    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <!-- Balance Card -->
+      <div class="border-l-4 border-orange-400 py-2 pl-4">
+        <div class="flex items-center">
+          <div class="mr-4 text-orange-400">
+            <i class="ri-wallet-3-line text-3xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-orange-400">
+              ${{ user.balance }}
+            </h3>
+            <p class="text-gray-500">Balance</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Points Card -->
+      <div class="border-l-4 border-orange-400 py-2 pl-4">
+        <div class="flex items-center">
+          <div class="mr-4 text-orange-400">
+            <i class="ri-coins-line text-3xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-orange-400">
+              {{ user.totalPoints }}
+            </h3>
+            <p class="text-gray-500">Total Points</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Card -->
+      <div class="border-l-4 border-orange-400 py-2 pl-4">
+        <div class="flex items-center">
+          <div class="mr-4 text-orange-400">
+            <i class="ri-shopping-bag-line text-3xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-orange-400">
+              {{ user.totalOrders }}
+            </h3>
+            <p class="text-gray-500">Total Orders</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Information -->
+  <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <h3 class="mb-4 text-xl font-bold text-gray-800">Account Information</h3>
+    <ul class="ml-2 list-inside list-disc space-y-2 text-gray-600">
+      <li>Full Name: {{ getFullName() }}</li>
+      <li>Phone: {{ user.phone }}</li>
+      <li>Address: {{ user.address }}</li>
+    </ul>
+  </div>
+
+  <!-- Login Details -->
+  <div class="rounded-lg bg-white p-6 shadow-sm">
+    <h3 class="mb-4 text-xl font-bold text-gray-800">Login Details</h3>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div>
+        <p class="text-gray-600">Email: {{ user.email }}</p>
+        <a href="#" class="text-orange-400 hover:underline">Edit</a>
+      </div>
+      <div>
+        <p class="text-gray-600">Password: ••••••</p>
+        <a href="#" class="text-orange-400 hover:underline">Edit</a>
+      </div>
+    </div>
+  </div>
+</div>

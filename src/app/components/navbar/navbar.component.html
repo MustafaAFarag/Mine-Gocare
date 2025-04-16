@@ -35,7 +35,9 @@
       <div class="flex items-center gap-2 text-xl lg:hidden">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
-        <i class="ri-heart-line cursor-pointer"></i>
+        @if (currentUser) {
+          <i class="ri-heart-line cursor-pointer"></i>
+        }
         <div class="relative cursor-pointer" (click)="toggleCart()">
           <i class="ri-shopping-cart-line"></i>
           <span
@@ -45,7 +47,12 @@
             {{ cartCount }}
           </span>
         </div>
-        <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+        @if (currentUser) {
+          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
+          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
+        } @else {
+          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+        }
       </div>
     </div>
 
@@ -114,7 +121,9 @@
       <div class="flex items-center gap-4 text-xl xl:text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer"></i>
-        <i class="ri-heart-line cursor-pointer"></i>
+        @if (currentUser) {
+          <i class="ri-heart-line cursor-pointer"></i>
+        }
         <div class="relative cursor-pointer" (click)="toggleCart()">
           <i class="ri-shopping-cart-line"></i>
           <span
@@ -125,6 +134,7 @@
           </span>
         </div>
         @if (currentUser) {
+          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
           <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
         } @else {
           <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>

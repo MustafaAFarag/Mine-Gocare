@@ -1,0 +1,43 @@
+<!-- Sidebar -->
+<div class="w-full rounded-lg bg-white shadow-sm">
+  <!-- User Profile -->
+  <div class="border-b p-6">
+    <div class="flex items-center">
+      <div
+        class="mr-4 flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 text-xl font-bold text-gray-700"
+      >
+        {{ getInitials() }}
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-800">{{ getFullName() }}</h3>
+        <p class="text-sm text-gray-500">{{ user.email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <div class="py-2">
+    <ul>
+      <li *ngFor="let item of sidebarItems">
+        <a
+          [routerLink]="item.route"
+          [class.bg-orange-50]="item.active"
+          [class.text-orange-500]="item.active"
+          class="flex items-center px-6 py-3 hover:bg-gray-50"
+        >
+          <i [class]="item.icon" class="mr-3 text-lg"></i>
+          <span>{{ item.name }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Logout Button -->
+  <div class="p-4">
+    <button
+      class="flex w-full items-center justify-center rounded bg-orange-400 py-3 text-white transition hover:bg-orange-500"
+    >
+      <i class="ri-logout-box-line mr-2"></i> Logout
+    </button>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<app-breadcrumb [soloRoute]="'Account'"></app-breadcrumb>
+
+<div class="container mx-auto max-w-8xl px-4 py-8">
+  <div class="flex flex-col gap-6 md:flex-row">
+    <app-sidebar-tab></app-sidebar-tab>
+    <div class="w-full md:w-3/4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
