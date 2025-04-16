@@ -234,16 +234,6 @@ export class CollectionsComponent implements OnInit {
   // View mode (grid or list)
   viewMode: 'grid2' | 'grid3' | 'grid4' | 'list' = 'grid3';
 
-  // Sort options
-  sortOptions: string[] = [
-    'Ascending Order',
-    'Descending Order',
-    'Price: Low to High',
-    'Price: High to Low',
-    'Newest First',
-  ];
-  selectedSort: string = 'Ascending Order';
-
   // Methods
   toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
     if (section === 'categories') this.showCategories = !this.showCategories;
@@ -567,5 +557,23 @@ export class CollectionsComponent implements OnInit {
         product.priceAfterDiscount <= this.currentMaxPrice;
       return meetsMinPrice && meetsMaxPrice;
     });
+  }
+
+  // Add this method to handle price sorting
+  applySortOrder(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const sortValue = selectElement.value;
+
+    if (sortValue === 'price-asc') {
+      // Sort products by price ascending (low to high)
+      this.filteredProducts = [...this.filteredProducts].sort(
+        (a, b) => a.priceAfterDiscount - b.priceAfterDiscount,
+      );
+    } else if (sortValue === 'price-desc') {
+      // Sort products by price descending (high to low)
+      this.filteredProducts = [...this.filteredProducts].sort(
+        (a, b) => b.priceAfterDiscount - a.priceAfterDiscount,
+      );
+    }
   }
 }
