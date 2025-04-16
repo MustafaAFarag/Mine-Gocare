@@ -7,7 +7,8 @@ import { ProductService } from '../../services/product.service';
 import { Product } from '../../model/Product';
 import { getFullImageUrl } from '../../lib/utils';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { CartSidebarService } from '../../services/cart-sidebar.service';
 import { CartItem } from '../../model/Cart';
@@ -85,9 +86,14 @@ export class CollectionsComponent implements OnInit {
   // Add ViewChild reference to the filter tab components (both mobile and desktop versions)
   @ViewChild(FilterTabComponent) filterTabComponent!: FilterTabComponent;
 
+  // Add sortOrder as a class property
+  sortOrder: string = '';
+
   constructor(
     private productService: ProductService,
     private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
   ) {
@@ -105,47 +111,214 @@ export class CollectionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true; // Page loading when initializing
-    this.fetchCategoriesAPI();
-    this.fetchProductsAPI(); // This sets productsLoading internally
-  }
 
-  fetchCategoriesAPI() {
+    // Fetch categories first, as we need them to map names to IDs
     this.categoriesLoading = true;
     this.productService.getCategories().subscribe({
       next: (res) => {
         console.log('Categories Fetched', res.result);
         this.categories = this.transformCategories(res.result);
         this.categoriesLoading = false;
+
+        // Now read URL parameters after categories are loaded
+        this.processUrlParameters();
       },
       error: (error) => {
         console.error('Error Fetching categories', error);
         this.categoriesLoading = false;
+        this.isLoading = false;
       },
     });
   }
 
-  // Transform API categories to our UI format
-  transformCategories(apiCategories: ApiCategory[]): Category[] {
-    return apiCategories.map((cat) => ({
-      name: cat.name.en,
-      selected: false,
-      id: cat.id,
-      isParent: cat.hasSubCategories,
-      level: 0, // Top level category
-      subcategories: cat.subCategories?.map((subCat) => ({
-        name: subCat.name.en,
-        selected: false,
-        id: subCat.id,
-        isParent: subCat.hasSubCategories,
-        level: 1, // Middle level category
-        subcategories: subCat.subCategories?.map((subSubCat) => ({
-          name: subSubCat.name.en,
-          selected: false,
-          id: subSubCat.id,
-          level: 2, // Bottom level category
-        })),
-      })),
-    }));
+  // New method to process URL parameters
+  private processUrlParameters(): void {
+    // Get query parameters from URL
+    this.route.queryParams.subscribe((params) => {
+      // Reset filters before applying new ones from URL
+      this.resetAllFilters(false); // false means don't update URL (to avoid circular updates)
+
+      // Apply category filters from URL (names to IDs)
+      if (params['category']) {
+        const categoryNames = params['category'].split(',');
+        this.selectedCategoryIds = this.getCategoryIdsFromNames(
+          categoryNames,
+          0,
+        );
+
+        // Update selected state in categories
+        this.updateCategorySelectionState();
+      }
+
+      if (params['subcategory']) {
+        const subCategoryNames = params['subcategory'].split(',');
+        this.selectedSubCategoryIds = this.getCategoryIdsFromNames(
+          subCategoryNames,
+          1,
+        );
+
+        // Update selected state in subcategories
+        this.updateCategorySelectionState();
+      }
+
+      if (params['subsubcategory']) {
+        const subSubCategoryNames = params['subsubcategory'].split(',');
+        this.selectedSubSubCategoryIds = this.getCategoryIdsFromNames(
+          subSubCategoryNames,
+          2,
+        );
+
+        // Update selected state in sub-subcategories
+        this.updateCategorySelectionState();
+      }
+
+      // Apply brand filters from URL
+      if (params['brand']) {
+        this.selectedBrandNames = params['brand'].split(',');
+
+        // Update selected state in brands
+        this.updateBrandSelectionState();
+      }
+
+      // Apply rating filters from URL
+      if (params['rating']) {
+        this.selectedRatings = params['rating'].split(',').map(Number);
+      }
+
+      // Apply price filters from URL
+      if (params['minPrice']) {
+        this.currentMinPrice = Number(params['minPrice']);
+      }
+
+      if (params['maxPrice']) {
+        this.currentMaxPrice = Number(params['maxPrice']);
+      }
+
+      // Apply sort order from URL
+      if (params['sort']) {
+        this.sortOrder = params['sort'];
+      }
+
+      // Apply view mode from URL
+      if (
+        params['viewMode'] &&
+        ['grid2', 'grid3', 'grid4', 'list'].includes(params['viewMode'])
+      ) {
+        this.viewMode = params['viewMode'] as
+          | 'grid2'
+          | 'grid3'
+          | 'grid4'
+          | 'list';
+      }
+
+      // Update active filters array for display
+      this.rebuildActiveFilters();
+
+      // Fetch products with applied filters
+      this.fetchProductsAPI();
+    });
+  }
+
+  // Helper to rebuild active filters array based on selected items
+  private rebuildActiveFilters(): void {
+    this.activeFilters = [];
+
+    // Add category names to active filters
+    for (const category of this.categories) {
+      if (category.selected) {
+        this.activeFilters.push(category.name);
+      }
+
+      if (category.subcategories) {
+        for (const subcategory of category.subcategories) {
+          if (subcategory.selected) {
+            this.activeFilters.push(subcategory.name);
+          }
+
+          if (subcategory.subcategories) {
+            for (const subSubcategory of subcategory.subcategories) {
+              if (subSubcategory.selected) {
+                this.activeFilters.push(subSubcategory.name);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Add brand names to active filters
+    for (const brandName of this.selectedBrandNames) {
+      if (!this.activeFilters.includes(brandName)) {
+        this.activeFilters.push(brandName);
+      }
+    }
+
+    // Add ratings to active filters
+    for (const rating of this.selectedRatings) {
+      const ratingText = `${rating} rating`;
+      if (!this.activeFilters.includes(ratingText)) {
+        this.activeFilters.push(ratingText);
+      }
+    }
+
+    // Add price filter if set
+    if (
+      this.currentMinPrice !== this.absoluteMinPrice ||
+      this.currentMaxPrice !== this.absoluteMaxPrice
+    ) {
+      let priceFilterText;
+
+      if (this.currentMaxPrice === this.absoluteMaxPrice) {
+        priceFilterText = `Price: ${this.currentMinPrice}+ ${this.currency}`;
+      } else {
+        priceFilterText = `Price: ${this.currentMinPrice}-${this.currentMaxPrice} ${this.currency}`;
+      }
+
+      this.activeFilters.push(priceFilterText);
+    }
+  }
+
+  // Update selected state in categories based on IDs
+  private updateCategorySelectionState(): void {
+    // Update top-level categories
+    for (const category of this.categories) {
+      if (category.id && this.selectedCategoryIds.includes(category.id)) {
+        category.selected = true;
+      }
+
+      // Update subcategories
+      if (category.subcategories) {
+        for (const subcategory of category.subcategories) {
+          if (
+            subcategory.id &&
+            this.selectedSubCategoryIds.includes(subcategory.id)
+          ) {
+            subcategory.selected = true;
+          }
+
+          // Update sub-subcategories
+          if (subcategory.subcategories) {
+            for (const subSubcategory of subcategory.subcategories) {
+              if (
+                subSubcategory.id &&
+                this.selectedSubSubCategoryIds.includes(subSubcategory.id)
+              ) {
+                subSubcategory.selected = true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Update selected state in brands
+  private updateBrandSelectionState(): void {
+    for (const brand of this.brands) {
+      if (brand.en && this.selectedBrandNames.includes(brand.en)) {
+        brand.selected = true;
+      }
+    }
   }
 
   fetchProductsAPI() {
@@ -294,6 +467,9 @@ export class CollectionsComponent implements OnInit {
       }
     }
 
+    // Update URL parameters
+    this.updateUrlParams();
+
     // Refresh products when categories change
     this.fetchProductsAPI();
   }
@@ -321,6 +497,9 @@ export class CollectionsComponent implements OnInit {
       }
     }
 
+    // Update URL parameters
+    this.updateUrlParams();
+
     // Refresh products when brands change
     this.fetchProductsAPI();
   }
@@ -337,6 +516,7 @@ export class CollectionsComponent implements OnInit {
             (id) => id !== category.id,
           );
         }
+        this.updateUrlParams();
         this.fetchProductsAPI();
         return;
       }
@@ -351,6 +531,7 @@ export class CollectionsComponent implements OnInit {
                 (id) => id !== subcategory.id,
               );
             }
+            this.updateUrlParams();
             this.fetchProductsAPI();
             return;
           }
@@ -366,6 +547,7 @@ export class CollectionsComponent implements OnInit {
                       (id) => id !== subSubcategory.id,
                     );
                 }
+                this.updateUrlParams();
                 this.fetchProductsAPI();
                 return;
               }
@@ -384,6 +566,7 @@ export class CollectionsComponent implements OnInit {
             (name) => name !== brand.en,
           );
         }
+        this.updateUrlParams();
         this.fetchProductsAPI();
         return;
       }
@@ -395,14 +578,8 @@ export class CollectionsComponent implements OnInit {
   }
 
   clearAllFilters(): void {
-    this.activeFilters = [];
-    this.selectedCategoryIds = [];
-    this.selectedSubCategoryIds = [];
-    this.selectedSubSubCategoryIds = [];
-    this.selectedBrandNames = [];
-    this.selectedRatings = [];
-    this.currentMinPrice = this.absoluteMinPrice;
-    this.currentMaxPrice = this.absoluteMaxPrice;
+    // Use the resetAllFilters method we created earlier
+    this.resetAllFilters(true);
 
     // Deselect all categories and subcategories
     this.categories.forEach((category) => {
@@ -429,8 +606,202 @@ export class CollectionsComponent implements OnInit {
     this.fetchProductsAPI();
   }
 
+  // Helper method to update URL parameters
+  private updateUrlParams(shouldReplace: boolean = true): void {
+    const queryParams: any = {};
+
+    // Get category names from IDs and add to URL if selected
+    if (this.selectedCategoryIds.length > 0) {
+      const categoryNames = this.getCategoryNamesFromIds(
+        this.selectedCategoryIds,
+        0,
+      );
+      if (categoryNames.length > 0) {
+        queryParams['category'] = categoryNames.join(',');
+      }
+    }
+
+    if (this.selectedSubCategoryIds.length > 0) {
+      const subCategoryNames = this.getCategoryNamesFromIds(
+        this.selectedSubCategoryIds,
+        1,
+      );
+      if (subCategoryNames.length > 0) {
+        queryParams['subcategory'] = subCategoryNames.join(',');
+      }
+    }
+
+    if (this.selectedSubSubCategoryIds.length > 0) {
+      const subSubCategoryNames = this.getCategoryNamesFromIds(
+        this.selectedSubSubCategoryIds,
+        2,
+      );
+      if (subSubCategoryNames.length > 0) {
+        queryParams['subsubcategory'] = subSubCategoryNames.join(',');
+      }
+    }
+
+    // Add brands to URL if selected
+    if (this.selectedBrandNames.length > 0) {
+      queryParams['brand'] = this.selectedBrandNames.join(',');
+    }
+
+    // Add ratings to URL if selected
+    if (this.selectedRatings.length > 0) {
+      queryParams['rating'] = this.selectedRatings.join(',');
+    }
+
+    // Add price range to URL if not default
+    if (this.currentMinPrice !== this.absoluteMinPrice) {
+      queryParams['minPrice'] = this.currentMinPrice;
+    }
+
+    if (this.currentMaxPrice !== this.absoluteMaxPrice) {
+      queryParams['maxPrice'] = this.currentMaxPrice;
+    }
+
+    // Add sort order to URL if set
+    if (this.sortOrder) {
+      queryParams['sort'] = this.sortOrder;
+    }
+
+    // Add view mode to URL
+    queryParams['viewMode'] = this.viewMode;
+
+    // Update URL without triggering navigation
+    const url = this.router
+      .createUrlTree([], {
+        relativeTo: this.route,
+        queryParams,
+      })
+      .toString();
+
+    this.location.replaceState(url);
+  }
+
+  // Helper method to get category names from IDs
+  private getCategoryNamesFromIds(ids: number[], level: number): string[] {
+    const names: string[] = [];
+
+    if (level === 0) {
+      // Top-level categories
+      for (const id of ids) {
+        const category = this.categories.find((cat) => cat.id === id);
+        if (category) {
+          names.push(encodeURIComponent(category.name));
+        }
+      }
+    } else if (level === 1) {
+      // Subcategories (middle level)
+      for (const id of ids) {
+        for (const category of this.categories) {
+          if (category.subcategories) {
+            const subcategory = category.subcategories.find(
+              (sub) => sub.id === id,
+            );
+            if (subcategory) {
+              names.push(encodeURIComponent(subcategory.name));
+              break;
+            }
+          }
+        }
+      }
+    } else if (level === 2) {
+      // Sub-subcategories (lowest level)
+      for (const id of ids) {
+        for (const category of this.categories) {
+          if (category.subcategories) {
+            for (const subcategory of category.subcategories) {
+              if (subcategory.subcategories) {
+                const subSubcategory = subcategory.subcategories.find(
+                  (subSub) => subSub.id === id,
+                );
+                if (subSubcategory) {
+                  names.push(encodeURIComponent(subSubcategory.name));
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return names;
+  }
+
+  // Helper method to get category IDs from names
+  private getCategoryIdsFromNames(names: string[], level: number): number[] {
+    const ids: number[] = [];
+    const decodedNames = names.map((name) => decodeURIComponent(name));
+
+    if (level === 0) {
+      // Top-level categories
+      for (const name of decodedNames) {
+        const category = this.categories.find((cat) => cat.name === name);
+        if (category && category.id) {
+          ids.push(category.id);
+        }
+      }
+    } else if (level === 1) {
+      // Subcategories (middle level)
+      for (const name of decodedNames) {
+        for (const category of this.categories) {
+          if (category.subcategories) {
+            const subcategory = category.subcategories.find(
+              (sub) => sub.name === name,
+            );
+            if (subcategory && subcategory.id) {
+              ids.push(subcategory.id);
+              break;
+            }
+          }
+        }
+      }
+    } else if (level === 2) {
+      // Sub-subcategories (lowest level)
+      for (const name of decodedNames) {
+        for (const category of this.categories) {
+          if (category.subcategories) {
+            for (const subcategory of category.subcategories) {
+              if (subcategory.subcategories) {
+                const subSubcategory = subcategory.subcategories.find(
+                  (subSub) => subSub.name === name,
+                );
+                if (subSubcategory && subSubcategory.id) {
+                  ids.push(subSubcategory.id);
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return ids;
+  }
+
+  // Helper to reset all filters without necessarily updating URL (for initial load)
+  resetAllFilters(updateUrl: boolean = true): void {
+    this.activeFilters = [];
+    this.selectedCategoryIds = [];
+    this.selectedSubCategoryIds = [];
+    this.selectedSubSubCategoryIds = [];
+    this.selectedBrandNames = [];
+    this.selectedRatings = [];
+    this.currentMinPrice = this.absoluteMinPrice;
+    this.currentMaxPrice = this.absoluteMaxPrice;
+
+    // Only update URL if specified (to avoid circular updates)
+    if (updateUrl) {
+      this.updateUrlParams();
+    }
+  }
+
   setViewMode(mode: 'grid2' | 'grid3' | 'grid4' | 'list'): void {
     this.viewMode = mode;
+    this.updateUrlParams();
   }
 
   // Methods for FilterTabComponent
@@ -502,6 +873,9 @@ export class CollectionsComponent implements OnInit {
       );
     }
 
+    // Update URL parameters
+    this.updateUrlParams();
+
     this.filterProductsByRating();
   }
 
@@ -545,6 +919,9 @@ export class CollectionsComponent implements OnInit {
     // Add the new price filter
     this.activeFilters.push(priceFilterText);
 
+    // Update URL parameters
+    this.updateUrlParams();
+
     // Filter products by price
     this.filterProductsByPrice();
   }
@@ -559,21 +936,48 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
-  // Add this method to handle price sorting
+  // Update applySortOrder method
   applySortOrder(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
-    const sortValue = selectElement.value;
+    this.sortOrder = selectElement.value;
 
-    if (sortValue === 'price-asc') {
+    // Update URL parameters
+    this.updateUrlParams();
+
+    if (this.sortOrder === 'price-asc') {
       // Sort products by price ascending (low to high)
       this.filteredProducts = [...this.filteredProducts].sort(
         (a, b) => a.priceAfterDiscount - b.priceAfterDiscount,
       );
-    } else if (sortValue === 'price-desc') {
+    } else if (this.sortOrder === 'price-desc') {
       // Sort products by price descending (high to low)
       this.filteredProducts = [...this.filteredProducts].sort(
         (a, b) => b.priceAfterDiscount - a.priceAfterDiscount,
       );
     }
+  }
+
+  // Transform API categories to our UI format
+  transformCategories(apiCategories: ApiCategory[]): Category[] {
+    return apiCategories.map((cat) => ({
+      name: cat.name.en,
+      selected: false,
+      id: cat.id,
+      isParent: cat.hasSubCategories,
+      level: 0, // Top level category
+      subcategories: cat.subCategories?.map((subCat) => ({
+        name: subCat.name.en,
+        selected: false,
+        id: subCat.id,
+        isParent: subCat.hasSubCategories,
+        level: 1, // Middle level category
+        subcategories: subCat.subCategories?.map((subSubCat) => ({
+          name: subSubCat.name.en,
+          selected: false,
+          id: subSubCat.id,
+          level: 2, // Bottom level category,
+        })),
+      })),
+    }));
   }
 }
