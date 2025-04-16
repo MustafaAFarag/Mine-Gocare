@@ -1,5 +1,5 @@
 <div class="container mx-auto max-w-8xl px-3 py-8">
-  <!-- Loading State -->
+  <!-- Initial Loading State (entire page) -->
   <div
     *ngIf="isLoading"
     class="flex flex-col items-center justify-center py-12"
@@ -26,6 +26,7 @@
           [showBrands]="showBrands"
           [showColors]="showColors"
           [isMobile]="true"
+          [categoriesLoading]="categoriesLoading"
           (filterToggled)="handleFilterToggled($event)"
           (categoryToggled)="handleCategoryToggled($event)"
           (filterRemoved)="handleFilterRemoved($event)"
@@ -48,6 +49,7 @@
           [showCategories]="showCategories"
           [showBrands]="showBrands"
           [showColors]="showColors"
+          [categoriesLoading]="categoriesLoading"
           (filterToggled)="handleFilterToggled($event)"
           (categoryToggled)="handleCategoryToggled($event)"
           (filterRemoved)="handleFilterRemoved($event)"
@@ -166,134 +168,147 @@
           </div>
         </div>
 
-        <!-- Grid View -->
+        <!-- Products Loading Indicator -->
         <div
-          *ngIf="viewMode === 'grid2'"
-          class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2"
+          *ngIf="productsLoading"
+          class="flex flex-col items-center justify-center py-12"
         >
-          <app-product-card
-            *ngFor="let product of products"
-            [product]="product"
-          ></app-product-card>
+          <app-loading></app-loading>
         </div>
 
-        <div
-          *ngIf="viewMode === 'grid3'"
-          class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
-        >
-          <app-product-card
-            *ngFor="let product of products"
-            [product]="product"
-          ></app-product-card>
-        </div>
-
-        <div
-          *ngIf="viewMode === 'grid4'"
-          class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        >
-          <app-product-card
-            *ngFor="let product of products"
-            [product]="product"
-          ></app-product-card>
-        </div>
-
-        <!-- List View -->
-        <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
+        <!-- Grid View - only show when not loading products -->
+        <div *ngIf="!productsLoading">
           <div
-            *ngFor="let product of products"
-            class="product-card flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
+            *ngIf="viewMode === 'grid2'"
+            class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2"
           >
-            <!-- Product Image -->
-            <div class="relative w-full sm:w-2/5">
-              <div class="relative pt-[100%]">
-                <img
-                  [src]="getFullImageUrl(product.mainImageUrl)"
-                  [alt]="product.name.en"
-                  class="absolute inset-0 h-full w-full cursor-pointer object-cover"
+            <app-product-card
+              *ngFor="let product of products"
+              [product]="product"
+            ></app-product-card>
+          </div>
+
+          <div
+            *ngIf="viewMode === 'grid3'"
+            class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+          >
+            <app-product-card
+              *ngFor="let product of products"
+              [product]="product"
+            ></app-product-card>
+          </div>
+
+          <div
+            *ngIf="viewMode === 'grid4'"
+            class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          >
+            <app-product-card
+              *ngFor="let product of products"
+              [product]="product"
+            ></app-product-card>
+          </div>
+
+          <!-- List View -->
+          <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
+            <div
+              *ngFor="let product of products"
+              class="product-card flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
+            >
+              <!-- Product Image -->
+              <div class="relative w-full sm:w-2/5">
+                <div class="relative pt-[100%]">
+                  <img
+                    [src]="getFullImageUrl(product.mainImageUrl)"
+                    [alt]="product.name.en"
+                    class="absolute inset-0 h-full w-full cursor-pointer object-cover"
+                    (click)="
+                      navigateToProductDetails(
+                        product.productId,
+                        product.variantId
+                      )
+                    "
+                  />
+                  <div class="icon-wrapper absolute right-2 top-2 z-10">
+                    <i
+                      class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                    ></i>
+
+                    <i
+                      class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      (click)="addToCart(product)"
+                    ></i>
+                    <i
+                      class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                    ></i>
+                  </div>
+
+                  <!-- Add to cart button that appears on hover -->
+                  <div
+                    class="add-to-cart-btn absolute bottom-2 left-0 right-0 m-2 translate-y-full transform bg-hover-color p-2 text-center text-white opacity-0 transition-all"
+                  >
+                    <button (click)="addToCart(product)" class="w-full">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product Details -->
+              <div class="flex w-full flex-col justify-center p-4 sm:w-4/5">
+                <!-- Brand -->
+                <p class="mb-1 text-sm text-gray-500">{{ product.brand.en }}</p>
+
+                <!-- Product Name -->
+                <h3
+                  class="mb-2 cursor-pointer text-lg font-medium text-gray-800"
                   (click)="
                     navigateToProductDetails(
                       product.productId,
                       product.variantId
                     )
                   "
-                />
-                <div class="icon-wrapper absolute right-2 top-2 z-10">
-                  <i
-                    class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-                  ></i>
+                >
+                  {{ product.name.en }}
+                </h3>
 
-                  <i
-                    class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-                    (click)="addToCart(product)"
-                  ></i>
-                  <i
-                    class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-                  ></i>
+                <!-- Price -->
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold"
+                    >{{ product.priceAfterDiscount }}
+                    {{ product.currency.name.en }}</span
+                  >
+                  <span
+                    *ngIf="product.discountPercentage > 0"
+                    class="text-sm text-gray-500 line-through"
+                  >
+                    {{ product.priceBeforeDiscount }}
+                    {{ product.currency.name.en }}
+                  </span>
+                  <span
+                    *ngIf="product.discountPercentage > 0"
+                    class="text-hover-color"
+                  >
+                    {{ product.discountPercentage.toFixed(0) }}% off
+                  </span>
                 </div>
 
-                <!-- Add to cart button that appears on hover -->
+                <!-- Rating -->
+                <div *ngIf="product.rating > 0" class="mt-2 flex items-center">
+                  <div class="flex">
+                    <i class="ri-star-fill text-yellow-400"></i>
+                    <span class="ml-1 text-sm text-gray-500">{{
+                      product.rating
+                    }}</span>
+                  </div>
+                </div>
+
+                <!-- Stock Status -->
                 <div
-                  class="add-to-cart-btn absolute bottom-2 left-0 right-0 m-2 translate-y-full transform bg-hover-color p-2 text-center text-white opacity-0 transition-all"
+                  *ngIf="product.lowQuantity"
+                  class="mt-2 text-xs text-orange-500"
                 >
-                  <button (click)="addToCart(product)" class="w-full">
-                    Add to Cart
-                  </button>
+                  Only {{ product.stockCount }} left in stock
                 </div>
-              </div>
-            </div>
-
-            <!-- Product Details -->
-            <div class="flex w-full flex-col justify-center p-4 sm:w-4/5">
-              <!-- Brand -->
-              <p class="mb-1 text-sm text-gray-500">{{ product.brand.en }}</p>
-
-              <!-- Product Name -->
-              <h3
-                class="mb-2 cursor-pointer text-lg font-medium text-gray-800"
-                (click)="
-                  navigateToProductDetails(product.productId, product.variantId)
-                "
-              >
-                {{ product.name.en }}
-              </h3>
-
-              <!-- Price -->
-              <div class="flex items-center gap-2">
-                <span class="font-semibold"
-                  >{{ product.priceAfterDiscount }}
-                  {{ product.currency.name.en }}</span
-                >
-                <span
-                  *ngIf="product.discountPercentage > 0"
-                  class="text-sm text-gray-500 line-through"
-                >
-                  {{ product.priceBeforeDiscount }}
-                  {{ product.currency.name.en }}
-                </span>
-                <span
-                  *ngIf="product.discountPercentage > 0"
-                  class="text-hover-color"
-                >
-                  {{ product.discountPercentage.toFixed(0) }}% off
-                </span>
-              </div>
-
-              <!-- Rating -->
-              <div *ngIf="product.rating > 0" class="mt-2 flex items-center">
-                <div class="flex">
-                  <i class="ri-star-fill text-yellow-400"></i>
-                  <span class="ml-1 text-sm text-gray-500">{{
-                    product.rating
-                  }}</span>
-                </div>
-              </div>
-
-              <!-- Stock Status -->
-              <div
-                *ngIf="product.lowQuantity"
-                class="mt-2 text-xs text-orange-500"
-              >
-                Only {{ product.stockCount }} left in stock
               </div>
             </div>
           </div>

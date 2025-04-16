@@ -6,6 +6,8 @@ interface Category {
   selected: boolean;
   subcategories?: Category[];
   isParent?: boolean;
+  id?: number;
+  level?: number;
 }
 
 interface Brand {
@@ -32,6 +34,7 @@ export class FilterTabComponent {
   @Input() showBrands: boolean = true;
   @Input() showColors: boolean = true;
   @Input() isMobile: boolean = false;
+  @Input() categoriesLoading: boolean = false;
 
   @Output() filterToggled = new EventEmitter<
     'categories' | 'brands' | 'colors'
