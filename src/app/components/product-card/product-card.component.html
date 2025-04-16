@@ -3,6 +3,13 @@
 >
   <!-- Image container with relative positioning -->
   <div class="relative h-64 w-full">
+    <div class="absolute bottom-2 left-2 z-10 bg-gray-100 px-2 py-1 shadow">
+      <span class="flex items-center font-medium">
+        <i class="ri-star-fill mr-1 text-sm text-yellow-400"></i>
+        {{ product.rating.toFixed(1) }}
+      </span>
+    </div>
+
     <img
       [src]="getFullImageUrl(product.mainImageUrl)"
       [alt]="product.name"

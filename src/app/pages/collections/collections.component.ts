@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -34,6 +34,11 @@ interface Color {
   name: string;
 }
 
+interface RatingOption {
+  value: number;
+  selected: boolean;
+}
+
 @Component({
   selector: 'app-collections',
   standalone: true,
@@ -51,7 +56,8 @@ export class CollectionsComponent implements OnInit {
   // Filter states
   showCategories: boolean = true;
   showBrands: boolean = true;
-  showColors: boolean = true;
+  showRatings: boolean = true;
+  showPrice: boolean = true;
   products: Product[] = [];
   filteredProducts: Product[] = [];
   isLoading: boolean = true;
@@ -67,6 +73,17 @@ export class CollectionsComponent implements OnInit {
   selectedSubCategoryIds: number[] = [];
   selectedSubSubCategoryIds: number[] = [];
   selectedBrandNames: string[] = [];
+  selectedRatings: number[] = [];
+
+  // Price filter properties
+  absoluteMinPrice: number = 0;
+  absoluteMaxPrice: number = 5000;
+  currentMinPrice: number = 0;
+  currentMaxPrice: number = 5000;
+  currency: string = 'EGP';
+
+  // Add ViewChild reference to the filter tab components (both mobile and desktop versions)
+  @ViewChild(FilterTabComponent) filterTabComponent!: FilterTabComponent;
 
   constructor(
     private productService: ProductService,
@@ -214,9 +231,6 @@ export class CollectionsComponent implements OnInit {
   // Brands
   brands: Brand[] = [];
 
-  // Colors
-  colors: Color[] = [{ name: 'Burgundy' }, { name: 'Brown' }];
-
   // View mode (grid or list)
   viewMode: 'grid2' | 'grid3' | 'grid4' | 'list' = 'grid3';
 
@@ -231,10 +245,11 @@ export class CollectionsComponent implements OnInit {
   selectedSort: string = 'Ascending Order';
 
   // Methods
-  toggleFilter(section: 'categories' | 'brands' | 'colors'): void {
+  toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
     if (section === 'categories') this.showCategories = !this.showCategories;
     if (section === 'brands') this.showBrands = !this.showBrands;
-    if (section === 'colors') this.showColors = !this.showColors;
+    if (section === 'ratings') this.showRatings = !this.showRatings;
+    if (section === 'price') this.showPrice = !this.showPrice;
   }
 
   toggleCategory(category: Category): void {
@@ -385,12 +400,19 @@ export class CollectionsComponent implements OnInit {
     }
   }
 
+  handleAllFiltersCleared(): void {
+    this.clearAllFilters();
+  }
+
   clearAllFilters(): void {
     this.activeFilters = [];
     this.selectedCategoryIds = [];
     this.selectedSubCategoryIds = [];
     this.selectedSubSubCategoryIds = [];
     this.selectedBrandNames = [];
+    this.selectedRatings = [];
+    this.currentMinPrice = this.absoluteMinPrice;
+    this.currentMaxPrice = this.absoluteMaxPrice;
 
     // Deselect all categories and subcategories
     this.categories.forEach((category) => {
@@ -422,7 +444,9 @@ export class CollectionsComponent implements OnInit {
   }
 
   // Methods for FilterTabComponent
-  handleFilterToggled(section: 'categories' | 'brands' | 'colors'): void {
+  handleFilterToggled(
+    section: 'categories' | 'brands' | 'ratings' | 'price',
+  ): void {
     this.toggleFilter(section);
   }
 
@@ -436,10 +460,6 @@ export class CollectionsComponent implements OnInit {
 
   handleFilterRemoved(filter: string): void {
     this.removeFilter(filter);
-  }
-
-  handleAllFiltersCleared(): void {
-    this.clearAllFilters();
   }
 
   toggleFilterSidebar(): void {
@@ -466,5 +486,86 @@ export class CollectionsComponent implements OnInit {
 
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
+  }
+
+  // New methods for rating and price filters
+  handleRatingToggled(rating: RatingOption): void {
+    if (rating.selected) {
+      // Add rating to the active filters
+      const ratingText = `${rating.value} rating`;
+      if (!this.activeFilters.includes(ratingText)) {
+        this.activeFilters.push(ratingText);
+      }
+
+      if (!this.selectedRatings.includes(rating.value)) {
+        this.selectedRatings.push(rating.value);
+      }
+    } else {
+      // Remove rating from the active filters
+      const ratingText = `${rating.value} rating`;
+      this.activeFilters = this.activeFilters.filter(
+        (filter) => filter !== ratingText,
+      );
+
+      this.selectedRatings = this.selectedRatings.filter(
+        (r) => r !== rating.value,
+      );
+    }
+
+    this.filterProductsByRating();
+  }
+
+  filterProductsByRating(): void {
+    if (this.selectedRatings.length === 0) {
+      // No rating filter, reset to all products filtered by other criteria
+      this.fetchProductsAPI();
+      return;
+    }
+
+    // Find the minimum rating from selected ratings
+    const minRating = Math.min(...this.selectedRatings);
+
+    // Filter products by minimum rating
+    this.filteredProducts = this.products.filter(
+      (product) => product.rating >= minRating,
+    );
+  }
+
+  handlePriceRangeChanged(priceRange: {
+    min: number;
+    max: number | null;
+  }): void {
+    this.currentMinPrice = priceRange.min;
+    this.currentMaxPrice =
+      priceRange.max !== null ? priceRange.max : this.absoluteMaxPrice;
+
+    // Update filter text
+    let priceFilterText = '';
+    if (priceRange.max === null) {
+      priceFilterText = `Price: ${priceRange.min}+ ${this.currency}`;
+    } else {
+      priceFilterText = `Price: ${priceRange.min}-${priceRange.max} ${this.currency}`;
+    }
+
+    // Remove any existing price filter
+    this.activeFilters = this.activeFilters.filter(
+      (filter) => !filter.startsWith('Price:'),
+    );
+
+    // Add the new price filter
+    this.activeFilters.push(priceFilterText);
+
+    // Filter products by price
+    this.filterProductsByPrice();
+  }
+
+  filterProductsByPrice(): void {
+    this.filteredProducts = this.products.filter((product) => {
+      const meetsMinPrice = product.priceAfterDiscount >= this.currentMinPrice;
+      const meetsMaxPrice =
+        this.currentMaxPrice === null ||
+        product.priceAfterDiscount <= this.currentMaxPrice;
+      return meetsMinPrice && meetsMaxPrice;
+    });
   }
 }
