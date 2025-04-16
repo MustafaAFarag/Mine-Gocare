@@ -24,6 +24,10 @@ interface Category {
 
 interface Brand {
   name: string;
+  id?: number;
+  selected?: boolean;
+  en?: string;
+  ar?: string;
 }
 
 interface Color {
@@ -49,17 +53,20 @@ export class CollectionsComponent implements OnInit {
   showBrands: boolean = true;
   showColors: boolean = true;
   products: Product[] = [];
+  filteredProducts: Product[] = [];
   isLoading: boolean = true;
   productsLoading: boolean = false;
   isMobile: boolean = false;
   showFilterSidebar: boolean = false;
   categoriesLoading: boolean = true;
+  brandsLoading: boolean = false;
 
   // Active filters
   activeFilters: string[] = [];
   selectedCategoryIds: number[] = [];
   selectedSubCategoryIds: number[] = [];
   selectedSubSubCategoryIds: number[] = [];
+  selectedBrandNames: string[] = [];
 
   constructor(
     private productService: ProductService,
@@ -145,6 +152,16 @@ export class CollectionsComponent implements OnInit {
       next: (res) => {
         console.log('Products fetched:', res.result.items);
         this.products = res.result.items;
+
+        if (this.selectedBrandNames.length > 0) {
+          this.filteredProducts = this.products.filter((product) =>
+            this.selectedBrandNames.includes(product.brand.en),
+          );
+        } else {
+          this.filteredProducts = this.products;
+        }
+
+        this.extractBrandsFromProducts();
         this.isLoading = false;
         this.productsLoading = false;
       },
@@ -156,18 +173,46 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
+  // Extract available brands from products for the filter
+  extractBrandsFromProducts() {
+    if (!this.brandsLoading && this.products.length > 0) {
+      // Only extract brands if we haven't already done it
+      if (this.brands.length === 0) {
+        const uniqueBrands = new Map();
+
+        this.products.forEach((product) => {
+          // Using the English name as key to avoid duplicates
+          const brandKey = product.brand.en;
+          if (!uniqueBrands.has(brandKey)) {
+            uniqueBrands.set(brandKey, {
+              name: product.brand.en,
+              en: product.brand.en,
+              ar: product.brand.ar,
+              id: uniqueBrands.size + 1, // Generate a simple numeric ID
+              selected: this.selectedBrandNames.includes(product.brand.en), // Set selected state based on current filters
+            });
+          }
+        });
+
+        this.brands = Array.from(uniqueBrands.values());
+      } else {
+        // Update existing brands selection status
+        this.brands.forEach((brand) => {
+          if (brand.en) {
+            brand.selected = this.selectedBrandNames.includes(brand.en);
+          }
+        });
+      }
+    }
+  }
+
   getFullImageUrl = getFullImageUrl;
 
   // Categories
   categories: Category[] = [];
 
   // Brands
-  brands: Brand[] = [
-    { name: 'Aero Edge' },
-    { name: 'Trail Blaze' },
-    { name: 'Velocity Vibe' },
-    { name: 'BeachBliss Surfboards' },
-  ];
+  brands: Brand[] = [];
 
   // Colors
   colors: Color[] = [{ name: 'Burgundy' }, { name: 'Brown' }];
@@ -248,6 +293,33 @@ export class CollectionsComponent implements OnInit {
     this.fetchProductsAPI();
   }
 
+  toggleBrand(brand: Brand): void {
+    brand.selected = !brand.selected;
+
+    if (brand.selected) {
+      if (!this.activeFilters.includes(brand.name)) {
+        this.activeFilters.push(brand.name);
+      }
+
+      if (brand.en && !this.selectedBrandNames.includes(brand.en)) {
+        this.selectedBrandNames.push(brand.en);
+      }
+    } else {
+      this.activeFilters = this.activeFilters.filter(
+        (filter) => filter !== brand.name,
+      );
+
+      if (brand.en) {
+        this.selectedBrandNames = this.selectedBrandNames.filter(
+          (name) => name !== brand.en,
+        );
+      }
+    }
+
+    // Refresh products when brands change
+    this.fetchProductsAPI();
+  }
+
   removeFilter(filter: string): void {
     this.activeFilters = this.activeFilters.filter((f) => f !== filter);
 
@@ -297,6 +369,20 @@ export class CollectionsComponent implements OnInit {
         }
       }
     }
+
+    // Check brands
+    for (const brand of this.brands) {
+      if (brand.name === filter) {
+        brand.selected = false;
+        if (brand.en) {
+          this.selectedBrandNames = this.selectedBrandNames.filter(
+            (name) => name !== brand.en,
+          );
+        }
+        this.fetchProductsAPI();
+        return;
+      }
+    }
   }
 
   clearAllFilters(): void {
@@ -304,6 +390,7 @@ export class CollectionsComponent implements OnInit {
     this.selectedCategoryIds = [];
     this.selectedSubCategoryIds = [];
     this.selectedSubSubCategoryIds = [];
+    this.selectedBrandNames = [];
 
     // Deselect all categories and subcategories
     this.categories.forEach((category) => {
@@ -322,6 +409,11 @@ export class CollectionsComponent implements OnInit {
       }
     });
 
+    // Deselect all brands
+    this.brands.forEach((brand) => {
+      brand.selected = false;
+    });
+
     this.fetchProductsAPI();
   }
 
@@ -336,6 +428,10 @@ export class CollectionsComponent implements OnInit {
 
   handleCategoryToggled(category: Category): void {
     this.toggleCategory(category);
+  }
+
+  handleBrandToggled(brand: Brand): void {
+    this.toggleBrand(brand);
   }
 
   handleFilterRemoved(filter: string): void {

@@ -27,8 +27,10 @@
           [showColors]="showColors"
           [isMobile]="true"
           [categoriesLoading]="categoriesLoading"
+          [brandsLoading]="brandsLoading"
           (filterToggled)="handleFilterToggled($event)"
           (categoryToggled)="handleCategoryToggled($event)"
+          (brandToggled)="handleBrandToggled($event)"
           (filterRemoved)="handleFilterRemoved($event)"
           (allFiltersCleared)="handleAllFiltersCleared()"
           (closeFilterSidebar)="closeFilterSidebar()"
@@ -50,8 +52,10 @@
           [showBrands]="showBrands"
           [showColors]="showColors"
           [categoriesLoading]="categoriesLoading"
+          [brandsLoading]="brandsLoading"
           (filterToggled)="handleFilterToggled($event)"
           (categoryToggled)="handleCategoryToggled($event)"
+          (brandToggled)="handleBrandToggled($event)"
           (filterRemoved)="handleFilterRemoved($event)"
           (allFiltersCleared)="handleAllFiltersCleared()"
         ></app-filter-tab>
@@ -176,14 +180,34 @@
           <app-loading></app-loading>
         </div>
 
+        <!-- No Products Found Message -->
+        <div
+          *ngIf="!productsLoading && filteredProducts.length === 0"
+          class="flex flex-col items-center justify-center py-12 text-center"
+        >
+          <i class="ri-shopping-bag-line mb-4 text-5xl text-gray-400"></i>
+          <h3 class="mb-2 text-xl font-medium text-gray-700">
+            No products found
+          </h3>
+          <p class="text-gray-500">
+            Try adjusting your filters or clearing them to see more products.
+          </p>
+          <button
+            (click)="clearAllFilters()"
+            class="mt-4 rounded-md bg-hover-color px-4 py-2 text-white hover:bg-opacity-90"
+          >
+            Clear All Filters
+          </button>
+        </div>
+
         <!-- Grid View - only show when not loading products -->
-        <div *ngIf="!productsLoading">
+        <div *ngIf="!productsLoading && filteredProducts.length > 0">
           <div
             *ngIf="viewMode === 'grid2'"
             class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2"
           >
             <app-product-card
-              *ngFor="let product of products"
+              *ngFor="let product of filteredProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -193,7 +217,7 @@
             class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
           >
             <app-product-card
-              *ngFor="let product of products"
+              *ngFor="let product of filteredProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -203,7 +227,7 @@
             class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           >
             <app-product-card
-              *ngFor="let product of products"
+              *ngFor="let product of filteredProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -211,7 +235,7 @@
           <!-- List View -->
           <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
             <div
-              *ngFor="let product of products"
+              *ngFor="let product of filteredProducts"
               class="product-card flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
             >
               <!-- Product Image -->

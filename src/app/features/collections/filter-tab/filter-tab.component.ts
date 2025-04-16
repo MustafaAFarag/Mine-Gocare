@@ -12,6 +12,10 @@ interface Category {
 
 interface Brand {
   name: string;
+  id?: number;
+  selected?: boolean;
+  en?: string;
+  ar?: string;
 }
 
 interface Color {
@@ -35,11 +39,13 @@ export class FilterTabComponent {
   @Input() showColors: boolean = true;
   @Input() isMobile: boolean = false;
   @Input() categoriesLoading: boolean = false;
+  @Input() brandsLoading: boolean = false;
 
   @Output() filterToggled = new EventEmitter<
     'categories' | 'brands' | 'colors'
   >();
   @Output() categoryToggled = new EventEmitter<Category>();
+  @Output() brandToggled = new EventEmitter<Brand>();
   @Output() filterRemoved = new EventEmitter<string>();
   @Output() allFiltersCleared = new EventEmitter<void>();
   @Output() closeFilterSidebar = new EventEmitter<void>();
@@ -50,6 +56,10 @@ export class FilterTabComponent {
 
   toggleCategory(category: Category): void {
     this.categoryToggled.emit(category);
+  }
+
+  toggleBrand(brand: Brand): void {
+    this.brandToggled.emit(brand);
   }
 
   removeFilter(filter: string): void {

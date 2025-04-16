@@ -210,13 +210,43 @@
         ></i>
       </div>
 
-      <div class="space-y-3">
+      <!-- Loading Indicator -->
+      <div *ngIf="brandsLoading" class="flex justify-center py-4">
+        <div
+          class="h-6 w-6 animate-spin rounded-full border-2 border-t-2 border-hover-color"
+        ></div>
+      </div>
+
+      <!-- Empty Brands -->
+      <div
+        *ngIf="!brandsLoading && brands.length === 0"
+        class="py-4 text-center text-gray-500"
+      >
+        No brands available
+      </div>
+
+      <div class="space-y-3" *ngIf="!brandsLoading && brands.length > 0">
         <div
           *ngFor="let brand of brands"
           class="flex cursor-pointer items-center"
+          (click)="toggleBrand(brand)"
         >
-          <div class="mr-2 h-4 w-4 rounded border border-gray-300"></div>
-          <span>{{ brand.name }}</span>
+          <!-- Checkbox -->
+          <div
+            class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+            [ngClass]="{
+              'border-hover-color bg-hover-color': brand.selected,
+              'border-gray-300': !brand.selected,
+            }"
+          >
+            <i
+              *ngIf="brand.selected"
+              class="ri-check-line text-xs text-white"
+            ></i>
+          </div>
+          <span [ngClass]="{ 'text-hover-color': brand.selected }">
+            {{ brand.name }}
+          </span>
         </div>
       </div>
     </div>
