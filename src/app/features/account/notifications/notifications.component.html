@@ -1,1 +1,60 @@
-<p>notifications works!</p>
+<div class="container mx-auto px-4 py-8">
+  <!-- Notifications List -->
+  <div class="md:col-span-3">
+    <div class="overflow-hidden rounded-lg bg-white shadow-sm">
+      <div class="flex items-center justify-between border-b p-6">
+        <h2 class="text-xl font-bold text-gray-800">Notifications</h2>
+        <button
+          (click)="markAllAsRead()"
+          class="text-sm text-orange-500 hover:text-orange-600"
+        >
+          Mark all as read
+        </button>
+      </div>
+
+      <div class="divide-y">
+        <div
+          *ngFor="let notification of notifications"
+          class="p-6 transition hover:bg-gray-50"
+          [class.bg-orange-50]="!notification.read"
+          (click)="markAsRead(notification)"
+        >
+          <div class="flex">
+            <!-- Notification Dot -->
+            <div class="mt-1 flex-shrink-0">
+              <span
+                class="mr-3 inline-block h-2 w-2 rounded-full"
+                [ngClass]="{
+                  'bg-green-500': notification.type === 'success',
+                  'bg-red-500': notification.type === 'error',
+                  'bg-yellow-500': notification.type === 'warning',
+                  'bg-blue-500': notification.type === 'info',
+                }"
+              ></span>
+            </div>
+
+            <!-- Notification Content -->
+            <div class="flex-1">
+              <p class="mb-2 text-gray-800">{{ notification.message }}</p>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="ri-time-line mr-1"></i>
+                <span>{{ notification.timestamp }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State (shown when no notifications) -->
+        <div *ngIf="notifications.length === 0" class="p-10 text-center">
+          <div class="mb-4 text-5xl text-gray-400">
+            <i class="ri-notification-off-line"></i>
+          </div>
+          <h3 class="mb-1 text-lg font-medium text-gray-700">
+            No notifications yet
+          </h3>
+          <p class="text-gray-500">We'll notify you when something arrives!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

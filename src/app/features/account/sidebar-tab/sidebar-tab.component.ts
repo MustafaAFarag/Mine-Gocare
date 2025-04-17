@@ -57,12 +57,7 @@ export class SidebarTabComponent implements OnInit {
       route: '/account/orders',
       active: false,
     },
-    {
-      name: 'Downloads',
-      icon: 'ri-download-line',
-      route: '/account/downloads',
-      active: false,
-    },
+
     {
       name: 'Refund History',
       icon: 'ri-refund-line',
