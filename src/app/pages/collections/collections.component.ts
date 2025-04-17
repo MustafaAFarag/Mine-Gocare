@@ -571,6 +571,50 @@ export class CollectionsComponent implements OnInit {
         return;
       }
     }
+
+    // Check ratings (format: "X rating")
+    if (filter.endsWith(' rating')) {
+      const ratingStr = filter.split(' ')[0];
+      const ratingValue = parseInt(ratingStr, 10);
+
+      if (!isNaN(ratingValue) && this.selectedRatings.includes(ratingValue)) {
+        this.selectedRatings = this.selectedRatings.filter(
+          (r) => r !== ratingValue,
+        );
+
+        // Update the UI in the filter tab component
+        if (this.filterTabComponent) {
+          const ratingOption = this.filterTabComponent.ratingOptions.find(
+            (r) => r.value === ratingValue,
+          );
+          if (ratingOption) {
+            ratingOption.selected = false;
+          }
+        }
+
+        this.updateUrlParams();
+        this.filterProductsByRating();
+        return;
+      }
+    }
+
+    // Check if it's a price filter
+    if (filter.startsWith('Price:')) {
+      // Reset price to default
+      this.currentMinPrice = this.absoluteMinPrice;
+      this.currentMaxPrice = this.absoluteMaxPrice;
+
+      // Reset UI in filter component
+      if (this.filterTabComponent) {
+        this.filterTabComponent.priceRanges.forEach((range) => {
+          range.selected = false;
+        });
+      }
+
+      this.updateUrlParams();
+      this.fetchProductsAPI();
+      return;
+    }
   }
 
   handleAllFiltersCleared(): void {
@@ -602,6 +646,11 @@ export class CollectionsComponent implements OnInit {
     this.brands.forEach((brand) => {
       brand.selected = false;
     });
+
+    // Reset rating UI in the filterTabComponent if it exists
+    if (this.filterTabComponent) {
+      this.filterTabComponent.resetRatingCheckboxes();
+    }
 
     this.fetchProductsAPI();
   }
@@ -903,21 +952,26 @@ export class CollectionsComponent implements OnInit {
     this.currentMaxPrice =
       priceRange.max !== null ? priceRange.max : this.absoluteMaxPrice;
 
-    // Update filter text
-    let priceFilterText = '';
-    if (priceRange.max === null) {
-      priceFilterText = `Price: ${priceRange.min}+ ${this.currency}`;
-    } else {
-      priceFilterText = `Price: ${priceRange.min}-${priceRange.max} ${this.currency}`;
-    }
-
     // Remove any existing price filter
     this.activeFilters = this.activeFilters.filter(
       (filter) => !filter.startsWith('Price:'),
     );
 
-    // Add the new price filter
-    this.activeFilters.push(priceFilterText);
+    // Only add the price filter to active filters if it's not the default range
+    if (
+      this.currentMinPrice !== this.absoluteMinPrice ||
+      this.currentMaxPrice !== this.absoluteMaxPrice
+    ) {
+      // Add the new price filter
+      let priceFilterText = '';
+      if (priceRange.max === null) {
+        priceFilterText = `Price: ${priceRange.min}+ ${this.currency}`;
+      } else {
+        priceFilterText = `Price: ${priceRange.min}-${priceRange.max} ${this.currency}`;
+      }
+
+      this.activeFilters.push(priceFilterText);
+    }
 
     // Update URL parameters
     this.updateUrlParams();
@@ -959,25 +1013,33 @@ export class CollectionsComponent implements OnInit {
 
   // Transform API categories to our UI format
   transformCategories(apiCategories: ApiCategory[]): Category[] {
-    return apiCategories.map((cat) => ({
-      name: cat.name.en,
-      selected: false,
-      id: cat.id,
-      isParent: cat.hasSubCategories,
-      level: 0, // Top level category
-      subcategories: cat.subCategories?.map((subCat) => ({
-        name: subCat.name.en,
+    if (apiCategories.length === 0) {
+      return [];
+    }
+
+    // Only process the first category from the API response
+    const firstCategory = apiCategories[0];
+    return [
+      {
+        name: firstCategory.name.en,
         selected: false,
-        id: subCat.id,
-        isParent: subCat.hasSubCategories,
-        level: 1, // Middle level category
-        subcategories: subCat.subCategories?.map((subSubCat) => ({
-          name: subSubCat.name.en,
+        id: firstCategory.id,
+        isParent: firstCategory.hasSubCategories,
+        level: 0, // Top level category
+        subcategories: firstCategory.subCategories?.map((subCat) => ({
+          name: subCat.name.en,
           selected: false,
-          id: subSubCat.id,
-          level: 2, // Bottom level category,
+          id: subCat.id,
+          isParent: subCat.hasSubCategories,
+          level: 1, // Middle level category
+          subcategories: subCat.subCategories?.map((subSubCat) => ({
+            name: subSubCat.name.en,
+            selected: false,
+            id: subSubCat.id,
+            level: 2, // Bottom level category,
+          })),
         })),
-      })),
-    }));
+      },
+    ];
   }
 }

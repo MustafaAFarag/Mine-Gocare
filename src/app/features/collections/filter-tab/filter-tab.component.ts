@@ -111,6 +111,18 @@ export class FilterTabComponent {
     this.ratingToggled.emit(rating);
   }
 
+  resetRatingCheckboxes(): void {
+    // Reset all rating options to unselected
+    this.ratingOptions.forEach((rating) => {
+      rating.selected = false;
+    });
+
+    // Reset all price ranges to unselected
+    this.priceRanges.forEach((range) => {
+      range.selected = false;
+    });
+  }
+
   selectPriceRange(priceRange: PriceRange): void {
     // Deselect all other price ranges
     this.priceRanges.forEach((range) => {
@@ -129,7 +141,7 @@ export class FilterTabComponent {
         max: priceRange.max,
       });
     } else {
-      // If deselected, reset to full range
+      // If deselected, reset to full range but don't add to active filters
       this.priceRangeChanged.emit({
         min: this.absoluteMinPrice,
         max: this.absoluteMaxPrice,
