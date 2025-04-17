@@ -21,9 +21,9 @@
       <li *ngFor="let item of sidebarItems">
         <a
           [routerLink]="item.route"
-          [class.bg-orange-50]="item.active"
-          [class.text-orange-500]="item.active"
-          class="flex items-center px-6 py-3 hover:bg-gray-50"
+          [class.bg-red-100]="item.active"
+          [class.text-hover-color]="item.active"
+          class="flex items-center px-6 py-3 hover:bg-red-200"
         >
           <i [class]="item.icon" class="mr-3 text-lg"></i>
           <span>{{ item.name }}</span>
@@ -35,7 +35,7 @@
   <!-- Logout Button -->
   <div class="p-4">
     <button
-      class="flex w-full items-center justify-center rounded bg-orange-400 py-3 text-white transition hover:bg-orange-500"
+      class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-red-800"
     >
       <i class="ri-logout-box-line mr-2"></i> Logout
     </button>

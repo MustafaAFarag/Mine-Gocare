@@ -1,1 +1,75 @@
-<p>address works!</p>
+<div class="rounded-lg bg-white p-6 shadow-sm">
+  <!-- Address Book Header -->
+  <div class="mb-6 flex items-center justify-between">
+    <h2 class="text-xl font-bold text-gray-800">Address Book</h2>
+    <button
+      (click)="addNewAddress()"
+      class="flex items-center rounded bg-orange-400 px-4 py-2 text-white transition hover:bg-orange-500"
+    >
+      <i class="ri-add-line mr-1"></i> Add New
+    </button>
+  </div>
+
+  <!-- Address Cards -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      *ngFor="let address of addresses"
+      class="overflow-hidden rounded-lg border"
+    >
+      <!-- Address Type Label -->
+      <div class="flex items-center justify-between border-b p-4">
+        <h3 class="font-medium text-gray-800">{{ address.name }}</h3>
+        <span
+          class="rounded-md px-3 py-1 text-sm font-medium"
+          [ngClass]="getTypeClass(address.type)"
+        >
+          {{ getTypeLabel(address.type) }}
+        </span>
+      </div>
+
+      <!-- Address Details -->
+      <div class="p-4">
+        <p class="mb-2 text-gray-700">
+          {{ address.street }}, {{ address.city }}<br />
+          {{ address.state }}, {{ address.country }} {{ address.zipCode }}
+        </p>
+        <p class="flex items-center text-gray-700">
+          <span class="mr-2 text-gray-500">Phone:</span> {{ address.phone }}
+        </p>
+      </div>
+
+      <!-- Address Actions -->
+      <div class="flex border-t">
+        <button
+          (click)="editAddress(address.id)"
+          class="flex-1 border-r py-3 text-gray-700 transition hover:bg-gray-50"
+        >
+          Edit
+        </button>
+        <button
+          (click)="removeAddress(address.id)"
+          class="flex-1 py-3 text-gray-700 transition hover:bg-gray-50"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State (shown when no addresses) -->
+    <div
+      *ngIf="addresses.length === 0"
+      class="col-span-full py-8 text-center text-gray-500"
+    >
+      <div class="flex flex-col items-center">
+        <i class="ri-map-pin-line mb-2 text-4xl text-gray-400"></i>
+        <p>No addresses saved yet.</p>
+        <button
+          (click)="addNewAddress()"
+          class="mt-4 rounded bg-orange-400 px-4 py-2 text-white transition hover:bg-orange-500"
+        >
+          Add Your First Address
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,109 @@
-<p>bank-details works!</p>
+<div class="rounded-lg bg-white p-6 shadow-sm">
+  <!-- Bank Details Section -->
+  <h2 class="mb-6 text-xl font-bold text-gray-800">Bank Details</h2>
+
+  <form [formGroup]="bankDetailsForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Bank Account Number -->
+    <div class="flex items-center gap-4">
+      <label for="bankAccountNumber" class="w-1/5 text-gray-600">
+        Bank Account Number
+      </label>
+      <div class="w-4/5">
+        <input
+          type="text"
+          id="bankAccountNumber"
+          formControlName="bankAccountNumber"
+          placeholder="Enter Bank Account Number"
+          class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+        />
+      </div>
+    </div>
+
+    <!-- Bank Name -->
+    <div class="flex items-center gap-4">
+      <label for="bankName" class="w-1/5 text-gray-600"> Bank Name </label>
+      <div class="w-4/5">
+        <input
+          type="text"
+          id="bankName"
+          formControlName="bankName"
+          placeholder="Enter Bank Name"
+          class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+        />
+      </div>
+    </div>
+
+    <!-- Holder Name -->
+    <div class="flex items-center gap-4">
+      <label for="holderName" class="w-1/5 text-gray-600"> Holder Name </label>
+      <div class="w-4/5">
+        <input
+          type="text"
+          id="holderName"
+          formControlName="holderName"
+          placeholder="Enter Bank Holder Name"
+          class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+        />
+      </div>
+    </div>
+
+    <!-- Swift -->
+    <div class="flex items-center gap-4">
+      <label for="swift" class="w-1/5 text-gray-600"> Swift </label>
+      <div class="w-4/5">
+        <input
+          type="text"
+          id="swift"
+          formControlName="swift"
+          placeholder="Enter Swift"
+          class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+        />
+      </div>
+    </div>
+
+    <!-- IFSC -->
+    <div class="flex items-center gap-4">
+      <label for="ifsc" class="w-1/5 text-gray-600"> IFSC </label>
+      <div class="w-4/5">
+        <input
+          type="text"
+          id="ifsc"
+          formControlName="ifsc"
+          placeholder="Enter IFSC"
+          class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+        />
+      </div>
+    </div>
+
+    <!-- Payment Details Section -->
+    <div class="pt-6">
+      <h2 class="mb-6 text-xl font-bold text-gray-800">Payment Details</h2>
+
+      <!-- Paypal Email -->
+      <div class="flex items-center gap-4">
+        <label for="paypalEmail" class="w-1/5 text-gray-600">
+          Paypal Email
+        </label>
+        <div class="w-4/5">
+          <input
+            type="email"
+            id="paypalEmail"
+            formControlName="paypalEmail"
+            placeholder="Enter Paypal Email"
+            class="w-full rounded-md border border-gray-200 bg-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hover-color"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end pt-4">
+      <button
+        type="submit"
+        class="rounded bg-hover-color px-8 py-3 font-medium uppercase tracking-wider text-white transition hover:bg-red-800"
+      >
+        SAVE
+      </button>
+    </div>
+  </form>
+</div>

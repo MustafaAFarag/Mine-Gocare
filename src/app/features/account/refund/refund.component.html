@@ -1,1 +1,88 @@
-<p>refund works!</p>
+<div class="rounded-lg bg-white p-6 shadow-sm">
+  <h2 class="mb-6 text-xl font-bold text-gray-800">Refund</h2>
+
+  <!-- Refund History Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <!-- Table Header -->
+      <thead>
+        <tr class="border-b">
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Order</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Reason</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">
+            Created At
+          </th>
+        </tr>
+      </thead>
+
+      <!-- Table Body -->
+      <tbody>
+        <tr
+          *ngFor="let request of refundRequests"
+          class="border-b hover:bg-gray-50"
+        >
+          <td class="px-4 py-4 font-medium text-gray-700">
+            {{ request.orderNumber }}
+          </td>
+          <td class="px-4 py-4">
+            <span
+              class="rounded-md px-3 py-1 text-sm font-medium"
+              [ngClass]="getStatusClass(request.status)"
+            >
+              {{ request.status | titlecase }}
+            </span>
+          </td>
+          <td class="px-4 py-4 text-gray-700">{{ request.reason }}</td>
+          <td class="px-4 py-4 text-gray-700">{{ request.createdAt }}</td>
+        </tr>
+
+        <!-- Empty State (shown when no refund requests) -->
+        <tr *ngIf="refundRequests.length === 0">
+          <td colspan="4" class="py-8 text-center text-gray-500">
+            <div class="flex flex-col items-center">
+              <i class="ri-refund-2-line mb-2 text-4xl text-gray-400"></i>
+              <p>No refund requests found.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    *ngIf="refundRequests.length > 0"
+    class="mt-4 flex items-center justify-center p-4"
+  >
+    <button
+      (click)="previousPage()"
+      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
+      [disabled]="currentPage === 1"
+      [class.opacity-50]="currentPage === 1"
+    >
+      <i class="ri-arrow-left-s-line"></i>
+    </button>
+
+    <button
+      *ngFor="let page of [1]"
+      (click)="goToPage(page)"
+      class="mx-1 flex h-9 min-w-[36px] items-center justify-center rounded-md"
+      [class.bg-orange-400]="currentPage === page"
+      [class.text-white]="currentPage === page"
+      [class.hover:bg-gray-100]="currentPage !== page"
+      [class.text-gray-700]="currentPage !== page"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      (click)="nextPage()"
+      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
+      [disabled]="currentPage === totalPages"
+      [class.opacity-50]="currentPage === totalPages"
+    >
+      <i class="ri-arrow-right-s-line"></i>
+    </button>
+  </div>
+</div>

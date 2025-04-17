@@ -1,1 +1,101 @@
-<p>points works!</p>
+<div class="rounded-lg bg-white shadow-sm">
+  <!-- Points Balance -->
+  <div class="flex flex-col p-6 md:flex-row md:items-center md:justify-between">
+    <div class="mb-4 flex items-center md:mb-0">
+      <div class="mr-4 rounded-md bg-red-100 p-3">
+        <i class="ri-coin-line text-2xl text-hover-color"></i>
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-500">Total Points</h3>
+        <p class="text-xl font-bold text-gray-800">{{ totalPoints }}</p>
+      </div>
+    </div>
+    <div class="flex items-center rounded-md bg-gray-50 px-4 py-2">
+      <i class="ri-information-line mr-2 text-gray-500"></i>
+      <span class="text-gray-700"
+        >1 Points = ${{ conversionRate.toFixed(2) }} Balance</span
+      >
+    </div>
+  </div>
+
+  <!-- Transaction History Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <!-- Table Header -->
+      <thead>
+        <tr class="border-b border-t">
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Points</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Remark</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
+        </tr>
+      </thead>
+
+      <!-- Table Body -->
+      <tbody>
+        <tr
+          *ngFor="let transaction of pointTransactions"
+          class="border-b hover:bg-gray-50"
+        >
+          <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
+          <td class="px-4 py-4 text-gray-700">{{ transaction.points }}</td>
+          <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
+          <td class="px-4 py-4">
+            <span
+              class="rounded-md px-3 py-1 text-sm font-medium"
+              [ngClass]="{
+                'bg-red-100 text-red-600': transaction.status === 'debit',
+                'bg-green-100 text-green-600': transaction.status === 'credit',
+              }"
+            >
+              {{ transaction.status === "debit" ? "Debit" : "Credit" }}
+            </span>
+          </td>
+        </tr>
+
+        <!-- Empty State (shown when no transactions) -->
+        <tr *ngIf="pointTransactions.length === 0">
+          <td colspan="4" class="py-8 text-center text-gray-500">
+            <div class="flex flex-col items-center">
+              <i class="ri-coin-line mb-2 text-4xl text-gray-400"></i>
+              <p>No point transactions found.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-center border-t p-4">
+    <button
+      (click)="previousPage()"
+      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
+      [disabled]="currentPage === 1"
+      [class.opacity-50]="currentPage === 1"
+    >
+      <i class="ri-arrow-left-s-line"></i>
+    </button>
+
+    <button
+      *ngFor="let page of [1]"
+      (click)="goToPage(page)"
+      class="mx-1 flex h-9 min-w-[36px] items-center justify-center rounded-md"
+      [class.bg-hover-color]="currentPage === page"
+      [class.text-white]="currentPage === page"
+      [class.hover:bg-gray-100]="currentPage !== page"
+      [class.text-gray-700]="currentPage !== page"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      (click)="nextPage()"
+      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
+      [disabled]="currentPage === totalPages"
+      [class.opacity-50]="currentPage === totalPages"
+    >
+      <i class="ri-arrow-right-s-line"></i>
+    </button>
+  </div>
+</div>
