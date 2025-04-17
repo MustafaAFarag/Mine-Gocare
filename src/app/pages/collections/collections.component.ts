@@ -91,7 +91,7 @@ export class CollectionsComponent implements OnInit {
 
   // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 3; // Show 3 products per page for testing
+  itemsPerPage: number = 12; // Show 3 products per page for testing
   paginatedProducts: Product[] = [];
   totalPages: number = 1;
 
