@@ -89,6 +89,12 @@ export class CollectionsComponent implements OnInit {
   // Add sortOrder as a class property
   sortOrder: string = '';
 
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 3; // Show 3 products per page for testing
+  paginatedProducts: Product[] = [];
+  totalPages: number = 1;
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -209,6 +215,13 @@ export class CollectionsComponent implements OnInit {
           | 'grid3'
           | 'grid4'
           | 'list';
+      }
+
+      // Apply pagination from URL if present
+      if (params['page']) {
+        this.currentPage = Number(params['page']);
+      } else {
+        this.currentPage = 1;
       }
 
       // Update active filters array for display
@@ -352,6 +365,7 @@ export class CollectionsComponent implements OnInit {
         }
 
         this.extractBrandsFromProducts();
+        this.applyPagination();
         this.isLoading = false;
         this.productsLoading = false;
       },
@@ -714,6 +728,9 @@ export class CollectionsComponent implements OnInit {
       queryParams['sort'] = this.sortOrder;
     }
 
+    // Add pagination to URL
+    queryParams['page'] = this.currentPage;
+
     // Add view mode to URL
     queryParams['viewMode'] = this.viewMode;
 
@@ -942,6 +959,7 @@ export class CollectionsComponent implements OnInit {
     this.filteredProducts = this.products.filter(
       (product) => product.rating >= minRating,
     );
+    this.applyPagination();
   }
 
   handlePriceRangeChanged(priceRange: {
@@ -988,6 +1006,7 @@ export class CollectionsComponent implements OnInit {
         product.priceAfterDiscount <= this.currentMaxPrice;
       return meetsMinPrice && meetsMaxPrice;
     });
+    this.applyPagination();
   }
 
   // Update applySortOrder method
@@ -1009,6 +1028,7 @@ export class CollectionsComponent implements OnInit {
         (a, b) => b.priceAfterDiscount - a.priceAfterDiscount,
       );
     }
+    this.applyPagination();
   }
 
   // Transform API categories to our UI format
@@ -1041,5 +1061,79 @@ export class CollectionsComponent implements OnInit {
         })),
       },
     ];
+  }
+
+  // New method for pagination
+  applyPagination(): void {
+    // Calculate total pages
+    this.totalPages = Math.ceil(
+      this.filteredProducts.length / this.itemsPerPage,
+    );
+
+    // Make sure currentPage is within valid range
+    if (this.currentPage < 1) this.currentPage = 1;
+    if (this.currentPage > this.totalPages)
+      this.currentPage = this.totalPages || 1;
+
+    // Get paginated products
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = Math.min(
+      startIndex + this.itemsPerPage,
+      this.filteredProducts.length,
+    );
+    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
+  }
+
+  // Method to change page
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.applyPagination();
+
+      // Update URL with new page number
+      const queryParams = {
+        ...this.route.snapshot.queryParams,
+        page: this.currentPage,
+      };
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
+  // Helper method to generate page array for the pagination UI
+  getPageArray(): any[] {
+    // If there are 5 or fewer pages, show all pages
+    if (this.totalPages <= 5) {
+      return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    }
+
+    const pages = [];
+
+    // Always show first page
+    pages.push(1);
+
+    // Current page is in first 3 pages
+    if (this.currentPage <= 3) {
+      pages.push(2, 3);
+      pages.push({ ellipsis: true });
+      pages.push(this.totalPages);
+    }
+    // Current page is in last 3 pages
+    else if (this.currentPage >= this.totalPages - 2) {
+      pages.push({ ellipsis: true });
+      pages.push(this.totalPages - 2, this.totalPages - 1, this.totalPages);
+    }
+    // Current page is somewhere in the middle
+    else {
+      pages.push({ ellipsis: true });
+      pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
+      pages.push({ ellipsis: true });
+      pages.push(this.totalPages);
+    }
+
+    return pages;
   }
 }

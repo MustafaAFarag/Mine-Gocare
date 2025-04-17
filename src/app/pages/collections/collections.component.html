@@ -211,7 +211,7 @@
             class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2"
           >
             <app-product-card
-              *ngFor="let product of filteredProducts"
+              *ngFor="let product of paginatedProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -221,7 +221,7 @@
             class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
           >
             <app-product-card
-              *ngFor="let product of filteredProducts"
+              *ngFor="let product of paginatedProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -231,7 +231,7 @@
             class="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           >
             <app-product-card
-              *ngFor="let product of filteredProducts"
+              *ngFor="let product of paginatedProducts"
               [product]="product"
             ></app-product-card>
           </div>
@@ -239,7 +239,7 @@
           <!-- List View -->
           <div *ngIf="viewMode === 'list'" class="flex flex-col gap-6">
             <div
-              *ngFor="let product of filteredProducts"
+              *ngFor="let product of paginatedProducts"
               class="product-card flex flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-shadow hover:shadow-md sm:flex-row"
             >
               <!-- Product Image -->
@@ -338,6 +338,63 @@
                   Only {{ product.stockCount }} left in stock
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="mt-8 flex justify-center">
+            <div class="flex items-center gap-2">
+              <!-- Previous Page Button -->
+              <button
+                [disabled]="currentPage === 1"
+                (click)="changePage(currentPage - 1)"
+                [ngClass]="{
+                  'cursor-not-allowed text-gray-400': currentPage === 1,
+                  'hover:bg-orange-500 hover:text-white': currentPage !== 1,
+                }"
+                class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
+              >
+                <i class="ri-arrow-left-s-line"></i>
+              </button>
+
+              <!-- Page Number Buttons with Ellipsis -->
+              <ng-container *ngFor="let page of getPageArray()">
+                <!-- Show ellipsis -->
+                <span
+                  *ngIf="page.ellipsis"
+                  class="flex h-10 items-center justify-center px-2"
+                >
+                  ...
+                </span>
+
+                <!-- Show page number -->
+                <button
+                  *ngIf="!page.ellipsis"
+                  (click)="changePage(page)"
+                  [ngClass]="{
+                    'bg-orange-500 text-white': currentPage === page,
+                    'hover:bg-gray-100': currentPage !== page,
+                  }"
+                  class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
+                >
+                  {{ page }}
+                </button>
+              </ng-container>
+
+              <!-- Next Page Button -->
+              <button
+                [disabled]="currentPage === totalPages"
+                (click)="changePage(currentPage + 1)"
+                [ngClass]="{
+                  'cursor-not-allowed text-gray-400':
+                    currentPage === totalPages,
+                  'hover:bg-orange-500 hover:text-white':
+                    currentPage !== totalPages,
+                }"
+                class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
+              >
+                <i class="ri-arrow-right-s-line"></i>
+              </button>
             </div>
           </div>
         </div>
