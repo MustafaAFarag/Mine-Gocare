@@ -13,6 +13,9 @@
         <i class="ri-phone-fill mr-2 text-hover-color"></i>
         <span>Call Us: +966 550070890</span>
       </div>
+      <button (click)="translateLanguage('en')">English</button>
+      <button (click)="translateLanguage('ar')">Arabic</button>
+      <p>{{ "navbar.hello" | translate }}</p>
     </div>
   </div>
 </nav>
