@@ -19,10 +19,10 @@ export class ContactUsComponent {
   constructor() {}
 
   redirectToWhatsApp() {
-    window.open('https://wa.me/201229996404', '_blank');
+    window.open('https://wa.me/966550070890', '_blank');
   }
 
   redirectToMessenger() {
-    window.open('https://m.me/GoCare.EG', '_blank');
+    window.open('https://m.me/61575296578807', '_blank');
   }
 }

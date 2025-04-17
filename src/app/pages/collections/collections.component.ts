@@ -1037,30 +1037,27 @@ export class CollectionsComponent implements OnInit {
       return [];
     }
 
-    // Only process the first category from the API response
-    const firstCategory = apiCategories[0];
-    return [
-      {
-        name: firstCategory.name.en,
+    // Process all categories from the API response
+    return apiCategories.map((category) => ({
+      name: category.name.en,
+      selected: false,
+      id: category.id,
+      isParent: category.hasSubCategories,
+      level: 0, // Top level category
+      subcategories: category.subCategories?.map((subCat) => ({
+        name: subCat.name.en,
         selected: false,
-        id: firstCategory.id,
-        isParent: firstCategory.hasSubCategories,
-        level: 0, // Top level category
-        subcategories: firstCategory.subCategories?.map((subCat) => ({
-          name: subCat.name.en,
+        id: subCat.id,
+        isParent: subCat.hasSubCategories,
+        level: 1, // Middle level category
+        subcategories: subCat.subCategories?.map((subSubCat) => ({
+          name: subSubCat.name.en,
           selected: false,
-          id: subCat.id,
-          isParent: subCat.hasSubCategories,
-          level: 1, // Middle level category
-          subcategories: subCat.subCategories?.map((subSubCat) => ({
-            name: subSubCat.name.en,
-            selected: false,
-            id: subSubCat.id,
-            level: 2, // Bottom level category,
-          })),
+          id: subSubCat.id,
+          level: 2, // Bottom level category,
         })),
-      },
-    ];
+      })),
+    }));
   }
 
   // New method for pagination
@@ -1118,20 +1115,35 @@ export class CollectionsComponent implements OnInit {
     // Current page is in first 3 pages
     if (this.currentPage <= 3) {
       pages.push(2, 3);
-      pages.push({ ellipsis: true });
-      pages.push(this.totalPages);
+      // Add ellipsis if there are more pages after 3
+      if (this.totalPages > 3) {
+        pages.push({ ellipsis: true });
+        // Add last page if it's not already included
+        if (this.totalPages > 4) {
+          pages.push(this.totalPages);
+        }
+      }
     }
     // Current page is in last 3 pages
     else if (this.currentPage >= this.totalPages - 2) {
       pages.push({ ellipsis: true });
-      pages.push(this.totalPages - 2, this.totalPages - 1, this.totalPages);
+      // Add the last three pages
+      for (let i = this.totalPages - 2; i <= this.totalPages; i++) {
+        if (i > 1) {
+          // Avoid duplicate with first page
+          pages.push(i);
+        }
+      }
     }
     // Current page is somewhere in the middle
     else {
       pages.push({ ellipsis: true });
       pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
-      pages.push({ ellipsis: true });
-      pages.push(this.totalPages);
+      // Add ellipsis if there are more pages after current+1
+      if (this.currentPage + 1 < this.totalPages) {
+        pages.push({ ellipsis: true });
+        pages.push(this.totalPages);
+      }
     }
 
     return pages;
