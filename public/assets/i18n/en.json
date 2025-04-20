@@ -167,5 +167,21 @@
         ]
       }
     }
+  },
+
+  "contactUs": {
+    "header": "Contact Us",
+    "description": "Choose your preferred method to get in touch with our team.",
+    "whatsApp": {
+      "header": "WhatsApp",
+      "description": "Chat with us directly on WhatsApp for quick responses.",
+      "button": "Chat on WhatsApp",
+      "phoneNumber": "+966 5500708904"
+    },
+    "messenger": {
+      "header": "Messenger",
+      "description": "Connect with us on Facebook Messenger.",
+      "button": "Chat on Messenger"
+    }
   }
 }
