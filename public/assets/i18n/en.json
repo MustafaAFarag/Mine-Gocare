@@ -26,5 +26,146 @@
   },
   "insta-shop": {
     "instaShop": "INSTA SHOP"
+  },
+  "privacy-policy": {
+    "title": "Privacy and Policy",
+    "sections": {
+      "informationCollected": {
+        "title": "Information Collected",
+        "points": [
+          "First name, last name, address, area and city, phone and contact numbers, email address, GPS location (mobile site), and ID.",
+          "Past Go Care reservations, favorite beauty centers and salons, customer service inquiries, and certain social networking preferences."
+        ]
+      },
+      "analytics": {
+        "title": "Analytics and Data Tracking",
+        "points": [
+          "Analytics software is used to track and analyze traffic for advertising and promotion.",
+          "Statistics may be shared with third parties without including PII.",
+          "Non-PII includes demographic info, mobile type, screen resolution, OS version, browser, etc."
+        ]
+      },
+      "cookies": {
+        "title": "Use of Cookies and Similar Technologies",
+        "points": [
+          "Cookies, pixel tags, and web beacons enhance user experience and tailor information.",
+          "IP addresses are automatically collected and logged."
+        ]
+      },
+      "useOfInformation": {
+        "title": "Use of Information",
+        "points": [
+          "Used to create accounts, communicate, offer services, promotions, and process payments.",
+          "Cookies remember users for a better website experience."
+        ]
+      },
+      "sharingOfInformation": {
+        "title": "Sharing of Information",
+        "points": [
+          "Information is not sold to third parties.",
+          "PII may be shared with vendors, service providers, beauty centers, or for legal purposes."
+        ]
+      },
+      "userGeneratedContent": {
+        "title": "User-Generated Content",
+        "points": [
+          "Content posted by users may be visible to the general public; privacy is not guaranteed."
+        ]
+      },
+      "handlingNonPII": {
+        "title": "Handling of Non-PII",
+        "points": [
+          "Non-PII may be used for any purpose and shared with affiliates or third parties."
+        ]
+      },
+      "emailAddress": {
+        "title": "Email Address",
+        "points": [
+          "Required for account registration and reservation communication.",
+          "Users can update their email through their account.",
+          "May be shared with beauty centers for reservation purposes."
+        ]
+      },
+      "paymentInformation": {
+        "title": "Payment Information",
+        "points": [
+          "Go Care does not store or collect debit/credit card information.",
+          "Payment methods include cash, credit card, or payment checks."
+        ]
+      },
+      "reservationInfo": {
+        "title": "Reservations Placement Information",
+        "points": [
+          "Personal data collected during reservations is shared with salons with confidentiality."
+        ]
+      },
+      "navigationClickData": {
+        "title": "Navigation and Click Stream Data",
+        "points": ["Collected for analysis and improving user experience."]
+      },
+      "advertising": {
+        "title": "Advertising and Marketing",
+        "points": [
+          "Cookies may be used to measure advertising effectiveness.",
+          "Personal data is not sold or rented without explicit consent."
+        ]
+      },
+      "disclosureOfPersonalInfo": {
+        "title": "Disclosure of Personal Information",
+        "points": [
+          "May be disclosed to staff, service providers, or for legal reasons.",
+          "May be disclosed in events such as mergers or reorganizations."
+        ]
+      },
+      "cookiePolicy": {
+        "title": "Cookies",
+        "points": [
+          "Used for identification and can be managed via browser settings."
+        ]
+      },
+      "protection": {
+        "title": "Protection of Personal Information",
+        "points": ["Secure pages and encryption technology protect data (SSL)."]
+      },
+      "security": {
+        "title": "Security Measures",
+        "points": [
+          "Organizational, technical, and administrative protections are in place.",
+          "No method is 100% secure over the Internet."
+        ]
+      },
+      "thirdParties": {
+        "title": "Third Parties",
+        "points": ["Not responsible for third-party practices or linked sites."]
+      },
+      "servicesInfo": {
+        "title": "Information about Services",
+        "points": [
+          "Users may receive details about discounts, promotions, and campaigns."
+        ]
+      },
+      "policyAmendment": {
+        "title": "Policy Amendment",
+        "points": [
+          "The policy may be updated and will be published on the app or site."
+        ]
+      },
+      "updateInfo": {
+        "title": "Verifying, Updating, and Amending Personal Information",
+        "points": [
+          "Users can update their personal information through their account settings."
+        ]
+      },
+      "deleteData": {
+        "title": "Delete Personal Data",
+        "points": [
+          "Log in to your account.",
+          "Go to the profile page, then Account Settings.",
+          "Click 'Delete Account' to remove your data or account.",
+          "Confirm deletion when prompted.",
+          "We recommend reviewing the policy before deletion."
+        ]
+      }
+    }
   }
 }
