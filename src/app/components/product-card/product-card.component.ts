@@ -82,7 +82,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   addToCart(product: Product): void {
     const cartItem: CartItem = {
       productId: product.productId,
-      name: this.getLocalizedText(product.name),
+      variantId: product.variantId,
+      name: product.name,
       image: product.mainImageUrl,
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,

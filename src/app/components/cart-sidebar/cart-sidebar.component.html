@@ -1,3 +1,4 @@
+<!-- Backdrop -->
 <div
   class="fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity duration-300"
   [class.opacity-0]="!isOpen"
@@ -5,15 +6,16 @@
   (click)="closeCart()"
 ></div>
 
+<!-- Cart Sidebar -->
 <div
   class="fixed bottom-0 right-0 top-0 z-[999] flex w-[80vw] transform flex-col overflow-hidden bg-white shadow-lg transition-transform duration-300 ease-in-out lg:max-w-md"
   [class.translate-x-0]="isOpen"
   [class.translate-x-full]="!isOpen"
 >
-  <!-- Cart Header -->
+  <!-- Header -->
   <div class="flex items-center justify-between border-b p-4">
     <h2 class="text-xl font-bold">
-      My Cart ({{ (cartItems$ | async)?.length || 0 }})
+      {{ "cart.title" | translate }} ({{ (cartItems$ | async)?.length || 0 }})
     </h2>
     <button
       class="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -29,15 +31,16 @@
       class="mb-2 text-base text-gray-600"
       *ngIf="getRemainingForFreeShipping(total) > 0"
     >
-      Spend ${{ getRemainingForFreeShipping(total).toFixed(2) }} More And Enjoy
-      Free Shipping!
+      {{
+        "cart.freeShippingMessage"
+          | translate: { amount: getRemainingForFreeShipping(total).toFixed(2) }
+      }}
     </p>
     <p
       class="mb-2 text-base text-gray-600"
       *ngIf="getRemainingForFreeShipping(total) === 0"
     >
-      🎉 <span class="text-hover-color">Congratulations</span>! Enjoy Free
-      Shipping On Us!
+      {{ "cart.freeShippingCongrats" | translate }}
     </p>
     <div class="h-2 rounded-full bg-gray-200">
       <div
@@ -53,13 +56,13 @@
     </div>
   </div>
 
-  <!-- Clear Cart Button -->
+  <!-- Clear Cart -->
   <div class="flex justify-end px-4 py-2" *ngIf="(cartItems$ | async)?.length">
     <button
       class="text-base font-medium text-hover-color hover:text-red-900"
       (click)="clearCart()"
     >
-      Clear Cart
+      {{ "cart.clearCart" | translate }}
     </button>
   </div>
 
@@ -70,22 +73,29 @@
         *ngFor="let item of cartItems$ | async"
         class="flex items-center gap-4 border-b py-4"
       >
-        <!-- Product Image -->
         <div class="h-20 w-20 flex-shrink-0">
           <img
             [src]="getFullImageUrl(item.image)"
-            [alt]="item.name"
+            [alt]="getLocalizedText(item.name)"
             class="h-full w-full object-cover"
           />
         </div>
 
-        <!-- Product Details -->
         <div class="flex-1">
           <div class="flex items-center justify-between">
             <div>
-              <h3 class="font-medium text-gray-800">{{ item.name }}</h3>
+              <h3 class="font-medium text-gray-800">
+                {{ getLocalizedText(item.name) }}
+              </h3>
               <p class="text-sm font-medium text-gray-500">
-                {{ item.quantity }} x ${{ item.afterPrice.toFixed(2) }}
+                {{
+                  "cart.pricePerUnit"
+                    | translate
+                      : {
+                          quantity: item.quantity,
+                          price: item.afterPrice.toFixed(2),
+                        }
+                }}
               </p>
             </div>
             <button
@@ -122,43 +132,42 @@
       </div>
     </ng-container>
 
+    <!-- Empty Cart -->
     <ng-template #emptyCart>
       <div class="flex h-full flex-col items-center justify-center py-12">
         <div class="mb-4 rounded-full bg-gray-100 p-4">
           <i class="ri-shopping-cart-line text-4xl text-gray-400"></i>
         </div>
         <p class="text-lg font-medium text-gray-600">
-          Your cart is currently empty
+          {{ "cart.empty" | translate }}
         </p>
       </div>
     </ng-template>
   </div>
 
-  <!-- Cart Footer -->
+  <!-- Footer -->
   <div class="border-t p-4" *ngIf="(cartItems$ | async)?.length">
-    <!-- Subtotal -->
     <div class="mb-4 flex items-center justify-between">
-      <span class="font-medium">Sub Total:</span>
+      <span class="font-medium">{{ "cart.subtotal" | translate }}</span>
       <span class="font-bold text-hover-color">
         ${{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
       </span>
     </div>
 
-    <!-- Action Buttons -->
     <div class="grid grid-cols-2 gap-4">
       <button
         class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
         routerLink="/cart"
         (click)="closeCart()"
       >
-        View Cart
+        {{ "cart.viewCart" | translate }}
       </button>
       <button
         routerLink="/cart"
         (click)="closeCart()"
         class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
       >
-        Check Out
+        {{ "cart.checkout" | translate }}
       </button>
     </div>
   </div>

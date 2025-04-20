@@ -4,11 +4,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { getFullImageUrl } from '../../lib/utils';
 import { CartSidebarService } from '../../services/cart-sidebar.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-cart-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './cart-sidebar.component.html',
   styleUrls: ['./cart-sidebar.component.css'],
 })
@@ -22,8 +24,8 @@ export class CartSidebarComponent {
 
   constructor(
     private cartService: CartService,
-    private router: Router,
     private cartSidebarService: CartSidebarService,
+    private languageService: LanguageService,
   ) {
     // Subscribe to the cart sidebar state
     this.cartSidebarService.isOpen$.subscribe((isOpen) => {
@@ -69,5 +71,11 @@ export class CartSidebarComponent {
 
   getProgressPercentage(total: number): number {
     return Math.min(100, (total / this.freeShippingThreshold) * 100);
+  }
+
+  getLocalizedText(textObj: any): string {
+    if (!textObj) return '';
+    const currentLang = this.languageService.getCurrentLanguage();
+    return currentLang === 'ar' && textObj?.ar ? textObj.ar : textObj.en;
   }
 }

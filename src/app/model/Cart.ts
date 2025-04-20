@@ -1,6 +1,7 @@
 export interface CartItem {
   productId: number;
-  name: string;
+  variantId?: number;
+  name: any; // Changed from string to any to support localized name object
   image: string;
   afterPrice: number;
   beforePrice: number;

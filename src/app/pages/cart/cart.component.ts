@@ -10,6 +10,7 @@ import { AuthModalComponent } from '../../components/auth-modal/auth-modal.compo
 import { CartNoProductsComponent } from '../../components/cart-no-products/cart-no-products.component';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 import { Subscription } from 'rxjs';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-cart',
@@ -32,6 +33,7 @@ export class CartComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private authService: AuthService,
+    private languageService: LanguageService,
   ) {}
 
   // Add the utility function to the component
@@ -83,6 +85,12 @@ export class CartComponent implements OnInit, OnDestroy {
       // Show auth modal instead of redirecting
       this.showAuthModal = true;
     }
+  }
+
+  getLocalizedText(textObj: any): string {
+    if (!textObj) return '';
+    const currentLang = this.languageService.getCurrentLanguage();
+    return currentLang === 'ar' && textObj?.ar ? textObj.ar : textObj.en;
   }
 
   ngOnInit() {

@@ -342,5 +342,18 @@
     "or": "OR",
     "haveAccount": "Already have an account?",
     "loginNow": "Login Here"
+  },
+
+  "cart": {
+    "title": "My Cart",
+    "empty": "Your cart is currently empty",
+    "freeShippingMessage": "Spend ${{amount}} More And Enjoy Free Shipping!",
+    "freeShippingCongrats": "🎉 Congratulations! Enjoy Free Shipping On Us!",
+    "clearCart": "Clear Cart",
+    "subtotal": "Sub Total:",
+    "viewCart": "View Cart",
+    "checkout": "Check Out",
+    "quantity": "Quantity",
+    "pricePerUnit": "{{quantity}} x ${{price}}"
   }
 }
