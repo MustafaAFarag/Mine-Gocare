@@ -4,24 +4,34 @@ import { environment } from '../../../../enviroments/enviroment';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { getFullImageUrl } from '../../../lib/utils';
 
 @Component({
   selector: 'app-cateogries-section',
   standalone: true,
-  imports: [LoadingComponent, NgIf, NgFor],
+  imports: [LoadingComponent, NgIf, NgFor, TranslateModule],
   templateUrl: './cateogries-section.component.html',
   styleUrl: './cateogries-section.component.css',
 })
 export class CateogriesSectionComponent {
   @Input() categories: Category[] = [];
   @Input() isLoadingCategories!: boolean;
+  currentLang: string;
 
-  constructor(private router: Router) {}
-
-  getFullImageUrl(relativePath?: string): string {
-    if (!relativePath) return 'assets/default-image.png';
-    return `${environment.apiUrl}/Attachments${relativePath.replace(/\\/g, '/')}`;
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+  ) {
+    this.currentLang =
+      this.translate.currentLang || this.translate.getDefaultLang();
   }
+
+  getCategoryName(category: any): string {
+    return this.currentLang === 'ar' ? category.name.ar : category.name.en;
+  }
+
+  getFullImageUrl = getFullImageUrl;
 
   navigateToCategory(category: Category): void {
     // Encode the category name to handle special characters in the URL

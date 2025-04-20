@@ -13,5 +13,8 @@
     "contactUs": "اتصل بنا",
     "refundPolicy": "سياسة الاسترجاع",
     "termsAndConditions": "الشروط والاحكام"
+  },
+  "categories": {
+    "shopByCategory": "تسوق حسب الفئة"
   }
 }

@@ -13,5 +13,8 @@
     "contactUs": "Contact Us",
     "refundPolicy": "Refund Policy",
     "termsAndConditions": "Terms & Conditions"
+  },
+  "categories": {
+    "shopByCategory": "Shop By Category"
   }
 }

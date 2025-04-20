@@ -10,8 +10,8 @@
     <h2
       class="relative z-10 mb-12 inline-block text-2xl font-extrabold lg:text-4xl"
     >
-      SHOP BY CATEGORY
-      <div class="absolute bottom-0 left-0 h-2 w-full bg-hover-color"></div>
+      {{ "categories.shopByCategory" | translate }}
+      <div class="absolute -bottom-1 left-0 h-2 w-full bg-hover-color"></div>
     </h2>
     <div class="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
       <div
@@ -22,12 +22,12 @@
         <div class="category-image-container mb-4">
           <img
             [src]="getFullImageUrl(category.imageUrl)"
-            [alt]="category.name.en"
+            [alt]="getCategoryName(category)"
             class="h-40 w-40 rounded-full border-transparent object-cover transition-all duration-300 hover:ring-4 hover:ring-hover-color"
           />
         </div>
         <h3 class="text-center text-lg font-medium uppercase">
-          {{ category.name.en }}
+          {{ getCategoryName(category) }}
         </h3>
       </div>
     </div>
