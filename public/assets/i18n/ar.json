@@ -23,5 +23,8 @@
   "product-card": {
     "off": "خصم",
     "limitedTimeOffer": "عرض لفترة محدودة"
+  },
+  "insta-shop": {
+    "instaShop": "تسوق إنستا"
   }
 }

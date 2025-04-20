@@ -23,5 +23,8 @@
   "product-card": {
     "off": "Off",
     "limitedTimeOffer": "Limited Time Offer"
+  },
+  "insta-shop": {
+    "instaShop": "INSTA SHOP"
   }
 }

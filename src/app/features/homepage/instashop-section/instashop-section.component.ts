@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-instashop-section',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './instashop-section.component.html',
   styleUrl: './instashop-section.component.css',
 })
