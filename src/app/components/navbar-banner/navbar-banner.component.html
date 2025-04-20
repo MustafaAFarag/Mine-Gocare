@@ -1,21 +1,43 @@
 <nav class="w-full bg-[#333333]">
-  <div
-    class="mx-auto flex max-w-8xl items-center justify-between text-[#b0b7bc]"
-  >
+  <div class="mx-auto flex max-w-8xl items-center justify-between text-white">
     <div
       class="flex items-center gap-5 p-1 text-xs lg:p-2 lg:text-base xl:gap-8"
     >
       <span class="xl:p-2"
-        >Welcome to Our store
-        <span class="text-hover-color">Berryat</span></span
+        >{{ "navbar-banner.welcome" | translate }}
+        <span class="text-hover-color">{{
+          "navbar-banner.title" | translate
+        }}</span></span
       >
       <div>
         <i class="ri-phone-fill mr-2 text-hover-color"></i>
-        <span>Call Us: +966 550070890</span>
+        <span
+          >{{ "navbar-banner.callUs" | translate }}:
+          {{ "navbar-banner.phone" | translate }}</span
+        >
       </div>
-      <button (click)="translateLanguage('en')">English</button>
-      <button (click)="translateLanguage('ar')">Arabic</button>
-      <p>{{ "navbar.hello" | translate }}</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="translateLanguage('en')"
+        class="rounded px-2 py-1 transition-colors duration-200"
+        [ngClass]="{
+          'bg-hover-color text-white': getCurrentLanguage() === 'en',
+          'hover:text-hover-color': getCurrentLanguage() !== 'en',
+        }"
+      >
+        English
+      </button>
+      <button
+        (click)="translateLanguage('ar')"
+        class="rounded px-2 py-1 transition-colors duration-200"
+        [ngClass]="{
+          'bg-hover-color text-white': getCurrentLanguage() === 'ar',
+          'hover:text-hover-color': getCurrentLanguage() !== 'ar',
+        }"
+      >
+        العربية
+      </button>
     </div>
   </div>
 </nav>

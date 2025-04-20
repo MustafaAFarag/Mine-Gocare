@@ -1,5 +1,17 @@
 {
+  "navbar-banner": {
+    "hello": "مرحبًا",
+    "welcome": "مرحبًا بكم في متجرنا",
+    "callUs": "اتصل بنا",
+    "title": "بريّات",
+    "phone": "+٩٦٦ ٥٥٠٠٧٠٨٩٠"
+  },
   "navbar": {
-    "hello": "مرحبا"
+    "home": "الرئيسية",
+    "collections": "المجموعات",
+    "privacyPolicy": "سياسة الخصوصية",
+    "contactUs": "اتصل بنا",
+    "refundPolicy": "سياسة الاسترجاع",
+    "termsAndConditions": "الشروط والاحكام"
   }
 }

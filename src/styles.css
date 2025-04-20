@@ -24,3 +24,67 @@ body {
   color: var(--text-color);
   font-family: "Montserrat", sans-serif;
 }
+
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+body.rtl .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+body.rtl .mr-5 {
+  margin-right: 0;
+  margin-left: 1.25rem;
+}
+
+body.rtl .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+body.rtl .ltr-only {
+  display: none;
+}
+
+body:not(.rtl) .rtl-only {
+  display: none;
+}
+
+body.rtl .mobile-menu {
+  left: auto;
+  right: 0;
+}
+
+body.rtl .mobile-menu.translate-x-0 {
+  transform: translateX(0);
+}
+
+body.rtl .mobile-menu.-translate-x-full {
+  transform: translateX(100%);
+}
+
+body.rtl .text-left {
+  text-align: right;
+}
+
+body.rtl .right-4 {
+  right: auto;
+  left: 1rem;
+}

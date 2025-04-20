@@ -63,34 +63,36 @@
           class="flex font-semibold tracking-wide lg:gap-4 lg:text-[0.8rem] xl:gap-6 xl:text-[0.9rem]"
         >
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/" routerLinkActive="text-blue-600">Home</a>
+            <a routerLink="/" routerLinkActive="text-blue-600">{{
+              "navbar.home" | translate
+            }}</a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/collections" routerLinkActive="text-blue-600"
-              >Collection</a
-            >
+            <a routerLink="/collections" routerLinkActive="text-blue-600">{{
+              "navbar.collections" | translate
+            }}</a>
           </li>
 
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/privacy-policy" routerLinkActive="text-blue-600"
-              >Privacy Policies</a
-            >
+            <a routerLink="/privacy-policy" routerLinkActive="text-blue-600">{{
+              "navbar.privacyPolicy" | translate
+            }}</a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/contact-us" routerLinkActive="text-blue-600"
-              >Contact Us</a
-            >
+            <a routerLink="/contact-us" routerLinkActive="text-blue-600">{{
+              "navbar.contactUs" | translate
+            }}</a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/refund-policy" routerLinkActive="text-blue-600"
-              >Refund Policies</a
-            >
+            <a routerLink="/refund-policy" routerLinkActive="text-blue-600">{{
+              "navbar.refundPolicy" | translate
+            }}</a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a
               routerLink="/terms-and-conditions"
               routerLinkActive="text-blue-600"
-              >Terms & Conditions</a
+              >{{ "navbar.termsAndConditions" | translate }}</a
             >
           </li>
         </ul>

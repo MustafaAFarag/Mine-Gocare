@@ -22,6 +22,7 @@ import { CartService } from '../../services/cart.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
@@ -35,6 +36,7 @@ import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
     InputTextModule,
     AuthModalComponent,
     CartSidebarComponent,
+    TranslateModule,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',

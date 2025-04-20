@@ -1,5 +1,17 @@
 {
+  "navbar-banner": {
+    "hello": "Hello",
+    "welcome": "Welcome to Our Store",
+    "callUs": "Call Us",
+    "title": "Berryat",
+    "phone": "+966 550070890"
+  },
   "navbar": {
-    "hello": "Hello"
+    "home": "Home",
+    "collections": "Collections",
+    "privacyPolicy": "Privacy Policy",
+    "contactUs": "Contact Us",
+    "refundPolicy": "Refund Policy",
+    "termsAndConditions": "Terms & Conditions"
   }
 }
