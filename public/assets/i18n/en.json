@@ -14,6 +14,10 @@
     "refundPolicy": "Refund Policy",
     "termsAndConditions": "Terms & Conditions"
   },
+  "breadcrumb": {
+    "home": "Home",
+    "product": "Product"
+  },
   "categories": {
     "shopByCategory": "SHOP BY CATEGORY"
   },

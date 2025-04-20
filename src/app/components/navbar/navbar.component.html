@@ -74,15 +74,16 @@
           </li>
 
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/privacy-policy" routerLinkActive="text-blue-600">{{
-              "navbar.privacyPolicy" | translate
-            }}</a>
-          </li>
-          <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/contact-us" routerLinkActive="text-blue-600">{{
               "navbar.contactUs" | translate
             }}</a>
           </li>
+          <li class="flex items-center gap-1 hover:text-hover-color">
+            <a routerLink="/privacy-policy" routerLinkActive="text-blue-600">{{
+              "navbar.privacyPolicy" | translate
+            }}</a>
+          </li>
+
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a routerLink="/refund-policy" routerLinkActive="text-blue-600">{{
               "navbar.refundPolicy" | translate
@@ -164,19 +165,20 @@
 
       <!-- Policy links (replaced dropdown) -->
       <a
-        routerLink="/privacy-policy"
-        (click)="closeMobileMenu()"
-        class="py-4 text-left"
-      >
-        {{ "navbar.privacyPolicy" | translate }}
-      </a>
-      <a
         routerLink="/contact-us"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
       >
         {{ "navbar.contactUs" | translate }}
       </a>
+      <a
+        routerLink="/privacy-policy"
+        (click)="closeMobileMenu()"
+        class="py-4 text-left"
+      >
+        {{ "navbar.privacyPolicy" | translate }}
+      </a>
+
       <a
         routerLink="/refund-policy"
         (click)="closeMobileMenu()"

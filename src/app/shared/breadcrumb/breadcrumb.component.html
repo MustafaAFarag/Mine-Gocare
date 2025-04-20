@@ -6,13 +6,13 @@
     class="mx-auto text-xs font-semibold uppercase text-gray-500 lg:text-base"
   >
     @if (this.router.url.includes("/product-details")) {
-      <span>Home</span>
+      <span>{{ "breadcrumb.home" | translate }}</span>
       <span> / </span>
-      <span>Product</span>
+      <span>{{ "breadcrumb.product" | translate }}</span>
       <span> / </span>
       <span>{{ name }}</span>
     } @else {
-      <span>Home</span>
+      <span>{{ "breadcrumb.home" | translate }}</span>
       <span> / </span>
       <span>{{ soloRoute }}</span>
     }

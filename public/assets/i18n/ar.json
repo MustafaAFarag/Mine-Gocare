@@ -14,6 +14,10 @@
     "refundPolicy": "سياسة الاسترجاع",
     "termsAndConditions": "الشروط والاحكام"
   },
+  "breadcrumb": {
+    "home": "الرئيسية",
+    "product": "المنتج"
+  },
   "categories": {
     "shopByCategory": "تسوق حسب الفئة"
   },
