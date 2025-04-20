@@ -18,6 +18,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup-form',
@@ -34,6 +35,7 @@ import { Router } from '@angular/router';
     RadioButtonModule,
     CheckboxModule,
     MessageModule,
+    TranslateModule,
   ],
   providers: [MessageService, AuthService],
 })

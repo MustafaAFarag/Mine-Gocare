@@ -283,5 +283,64 @@
 
     "noAccount": "Don't have an account?",
     "registerNow": "Register Now"
+  },
+
+  "signup": {
+    "title": "Sign Up",
+    "subtitle": "Join our platform in seconds and explore what’s waiting for you. It’s easy, fast, and free!",
+    "fields": {
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "John",
+        "errors": {
+          "required": "First name is required"
+        }
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "Doe",
+        "errors": {
+          "required": "Last name is required"
+        }
+      },
+      "identifier": {
+        "label": "Email or Phone",
+        "placeholder": "Email or Phone",
+        "errors": {
+          "required": "Email or Phone is required",
+          "invalid": "Please enter a valid email or phone number"
+        }
+      },
+      "gender": {
+        "label": "Gender",
+        "options": {
+          "women": "Women",
+          "men": "Men"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Password",
+        "errors": {
+          "required": "Password is required",
+          "minlength": "Password must be at least 6 characters"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Confirm Password",
+        "errors": {
+          "required": "Please confirm your password",
+          "mismatch": "Passwords do not match"
+        }
+      }
+    },
+    "button": {
+      "submit": "Sign up",
+      "submitting": "Signing up..."
+    },
+    "or": "OR",
+    "haveAccount": "Already have an account?",
+    "loginNow": "Login Here"
   }
 }
