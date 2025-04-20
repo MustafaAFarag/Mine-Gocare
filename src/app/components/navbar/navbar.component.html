@@ -152,14 +152,14 @@
       </a>
 
       <!-- Links on the left side -->
-      <a routerLink="/" (click)="closeMobileMenu()" class="py-4 text-left"
-        >Home</a
-      >
+      <a routerLink="/" (click)="closeMobileMenu()" class="py-4 text-left">{{
+        "navbar.home" | translate
+      }}</a>
       <a
         routerLink="/collections"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
-        >Collection</a
+        >{{ "navbar.collections" | translate }}</a
       >
 
       <!-- Policy links (replaced dropdown) -->
@@ -168,35 +168,28 @@
         (click)="closeMobileMenu()"
         class="py-4 text-left"
       >
-        Privacy Policies
+        {{ "navbar.privacyPolicy" | translate }}
       </a>
       <a
         routerLink="/contact-us"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
       >
-        Contact Us
+        {{ "navbar.contactUs" | translate }}
       </a>
       <a
         routerLink="/refund-policy"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
       >
-        Refund Policies
+        {{ "navbar.refundPolicy" | translate }}
       </a>
       <a
         routerLink="/terms-and-conditions"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
       >
-        Terms and Conditions
-      </a>
-      <a
-        routerLink="/about-us"
-        (click)="closeMobileMenu()"
-        class="py-4 text-left"
-      >
-        About Us
+        {{ "navbar.termsAndConditions" | translate }}
       </a>
     </div>
   </div>

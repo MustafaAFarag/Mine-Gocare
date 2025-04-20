@@ -168,7 +168,6 @@
       }
     }
   },
-
   "contactUs": {
     "header": "Contact Us",
     "description": "Choose your preferred method to get in touch with our team.",
@@ -183,5 +182,11 @@
       "description": "Connect with us on Facebook Messenger.",
       "button": "Chat on Messenger"
     }
+  },
+  "refundPolicy": {
+    "title": "Refund Policy",
+    "intro": "At <span class='font-semibold'>Berryat</span>, we prioritize user satisfaction. If you face any issues with your bookings, please don't hesitate to contact us for assistance.",
+    "conditional": "In certain situations, if Berryat has already billed you, we may provide <span class='font-semibold'>full or partial refunds</span>.",
+    "commitment": "Regardless of the situation, we are committed to doing our best to ensure your satisfaction in every event."
   }
 }

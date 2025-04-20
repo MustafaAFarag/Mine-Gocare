@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface RefundRequest {
   id: number;
@@ -12,7 +13,7 @@ interface RefundRequest {
 @Component({
   selector: 'app-refund',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './refund.component.html',
   styleUrls: ['./refund.component.css'],
 })

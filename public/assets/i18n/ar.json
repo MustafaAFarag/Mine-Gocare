@@ -181,5 +181,11 @@
       "description": "تواصل معنا عبر فيسبوك ماسنجر.",
       "button": "الدردشة عبر ماسنجر"
     }
+  },
+  "refundPolicy": {
+    "title": "سياسة الاسترداد",
+    "intro": "في <span class='font-semibold text-hover-color'>بريّات</span>، نُعطي الأولوية لرضا المستخدم. إذا واجهت أي مشكلات مع الحجوزات الخاصة بك، فلا تتردد في الاتصال بنا للحصول على المساعدة.",
+    "conditional": "في بعض الحالات، إذا قامت <span class='font-semibold text-hover-color'>بريّات</span> بفوترة لك بالفعل، فقد نقدم <span class='font-semibold text-hover-color'>استردادًا كاملاً أو جزئيًا</span>.",
+    "commitment": "بغض النظر عن الحالة، نحن ملتزمون ببذل قصارى جهدنا لضمان رضاك في كل مناسبة."
   }
 }

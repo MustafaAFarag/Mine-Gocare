@@ -1,19 +1,11 @@
 <div class="mx-auto max-w-3xl px-4 py-8 text-gray-800">
-  <h1 class="mb-6 text-3xl font-bold text-gray-900">Refund Policy</h1>
+  <h1 class="mb-6 text-3xl font-bold text-gray-900">
+    {{ "refundPolicy.title" | translate }}
+  </h1>
 
-  <p class="mb-4">
-    At <span class="font-semibold">Berryat</span>, we prioritize user
-    satisfaction. If you face any issues with your bookings, please don't
-    hesitate to contact us for assistance.
-  </p>
+  <p class="mb-4" [innerHTML]="'refundPolicy.intro' | translate"></p>
 
-  <p class="mb-4">
-    In certain situations, if Berryat has already billed you, we may provide
-    <span class="font-semibold">full or partial refunds</span>.
-  </p>
+  <p class="mb-4" [innerHTML]="'refundPolicy.conditional' | translate"></p>
 
-  <p>
-    Regardless of the situation, we are committed to doing our best to ensure
-    your satisfaction in every event.
-  </p>
+  <p [innerHTML]="'refundPolicy.commitment' | translate"></p>
 </div>
