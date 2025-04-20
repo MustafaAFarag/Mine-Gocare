@@ -9,6 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model/Auth';
 import { ApiEndPoint } from '../constants/api.constant';
 import { environment } from '../../enviroments/enviroment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,10 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     const savedUser = this.getLocalStorageItem('user');
     if (savedUser) {
       this.userSubject.next(JSON.parse(savedUser));
@@ -65,7 +69,16 @@ export class AuthService {
             expireInSeconds,
             ...safeUserData
           } = res.result;
-          this.setLocalStorageItem('user', JSON.stringify(safeUserData));
+
+          // Add email or phone info to the user data that gets stored
+          const userData = safeUserData as any;
+          if (isEmail) {
+            userData.emailAddress = emailOrPhone;
+          } else {
+            userData.mobileNumber = formattedPhone;
+          }
+
+          this.setLocalStorageItem('user', JSON.stringify(userData));
         } else {
           throw new Error('Login failed');
         }
@@ -119,7 +132,28 @@ export class AuthService {
 
     return this.http.post<any>(this.signupUrl, body, { headers }).pipe(
       tap((res) => {
-        if (!res.success) {
+        if (res.success) {
+          // Create user object with the signup data
+          const userData = {
+            firstName: signupData.firstName,
+            lastName: signupData.lastName,
+            gender: signupData.gender,
+          };
+
+          // Add either email or mobile based on what was used
+          if (signupData.emailAddress) {
+            Object.assign(userData, { emailAddress: signupData.emailAddress });
+          } else if (signupData.mobileNumber) {
+            Object.assign(userData, {
+              mobileNumber: signupData.mobileNumber,
+              countryCode: signupData.countryCode,
+            });
+          }
+
+          // Save to localStorage and update subject
+          this.setLocalStorageItem('user', JSON.stringify(userData));
+          this.userSubject.next(userData);
+        } else {
           throw new Error('Signup failed');
         }
       }),
@@ -140,6 +174,7 @@ export class AuthService {
     this.userSubject.next(null);
     this.removeLocalStorageItem('accessToken');
     this.removeLocalStorageItem('user');
+    this.router.navigate(['/']);
   }
 
   get currentUser() {
