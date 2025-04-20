@@ -342,8 +342,7 @@
     "haveAccount": "هل لديك حساب بالفعل؟",
     "loginNow": "تسجيل الدخول"
   },
-
-  "cart": {
+  "cart-sidebar": {
     "title": "سلة التسوق",
     "empty": "سلة التسوق فارغة حالياً",
     "freeShippingMessage": "أنفق {{amount}} دولارًا إضافيًا للحصول على شحن مجاني!",
@@ -354,5 +353,34 @@
     "checkout": "الدفع",
     "quantity": "الكمية",
     "pricePerUnit": "{{quantity}} × ${{price}}"
+  },
+  "cart": {
+    "header": "السلة",
+    "noProducts": "سلتك فارغة حالياً",
+    "tableHeader": {
+      "image": "الصورة",
+      "productName": "اسم المنتج",
+      "price": "السعر",
+      "quantity": "الكمية",
+      "total": "الإجمالي",
+      "action": "الإجراء"
+    },
+    "mobileView": {
+      "save": "وفر: ",
+      "remove": "إزالة",
+      "quantity": "الكمية",
+      "itemTotal": "الإجمالي للمنتج"
+    },
+    "desktopView": {
+      "youSave": "أنت وفرت ",
+      "remove": "إزالة"
+    },
+    "cartSummary": {
+      "totalPrice": "السعر الإجمالي:"
+    },
+    "cartActions": {
+      "continueShopping": "مواصلة التسوق",
+      "checkout": "الدفع"
+    }
   }
 }

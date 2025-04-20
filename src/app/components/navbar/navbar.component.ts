@@ -181,4 +181,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.closeMobileMenu();
   }
+
+  // Scroll to top of the page
+  scrollToTop(): void {
+    if (this.isBrowser) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 }

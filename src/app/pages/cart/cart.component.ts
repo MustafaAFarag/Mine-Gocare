@@ -11,6 +11,7 @@ import { CartNoProductsComponent } from '../../components/cart-no-products/cart-
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cart',
@@ -20,6 +21,7 @@ import { LanguageService } from '../../services/language.service';
     BreadcrumbComponent,
     AuthModalComponent,
     CartNoProductsComponent,
+    TranslateModule,
   ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],

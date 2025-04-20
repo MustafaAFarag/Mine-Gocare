@@ -16,12 +16,14 @@
     <div
       class="hidden grid-cols-6 gap-4 border-b bg-gray-100 p-4 text-sm font-bold text-gray-900 md:grid lg:text-base xl:text-xl"
     >
-      <div class="pl-4">Image</div>
-      <div class="">Product Name</div>
-      <div class="text-center">Price</div>
-      <div class="text-center">Quantity</div>
-      <div class="text-center">Total</div>
-      <div class="text-center">Action</div>
+      <div class="pl-4">{{ "cart.tableHeader.image" | translate }}</div>
+      <div>{{ "cart.tableHeader.productName" | translate }}</div>
+      <div class="text-center">{{ "cart.tableHeader.price" | translate }}</div>
+      <div class="text-center">
+        {{ "cart.tableHeader.quantity" | translate }}
+      </div>
+      <div class="text-center">{{ "cart.tableHeader.total" | translate }}</div>
+      <div class="text-center">{{ "cart.tableHeader.action" | translate }}</div>
     </div>
 
     <!-- Cart Items -->
@@ -40,15 +42,17 @@
                 {{ getLocalizedText(item.name) }}
               </h3>
               <div class="mt-1">
-                <span class="font-bold text-gray-900"
-                  >${{ item.afterPrice.toFixed(2) }}</span
+                <span class="font-bold text-gray-900">
+                  {{ item.afterPrice.toFixed(2) }}</span
                 >
                 <span class="ml-2 text-sm text-special-gray line-through"
                   >${{ item.beforePrice.toFixed(2) }}</span
                 >
               </div>
               <div class="text-sm font-bold text-hover-color">
-                Save: ${{ getSavings(item).toFixed(2) }}
+                {{ "cart.mobileView.save" | translate }}: ${{
+                  getSavings(item).toFixed(2)
+                }}
               </div>
             </div>
           </div>
@@ -106,7 +110,9 @@
 
         <!-- Price -->
         <div class="col-span-1 text-center">
-          @if (item.afterPrice !== item.beforePrice) {
+          <ng-container
+            *ngIf="item.afterPrice !== item.beforePrice; else regularPrice"
+          >
             <span class="font-bold text-gray-900"
               >${{ item.afterPrice.toFixed(2) }}</span
             >
@@ -114,13 +120,16 @@
               >${{ item.beforePrice.toFixed(2) }}</span
             >
             <div class="text-base font-bold text-hover-color xl:text-lg">
-              You Save: ${{ getSavings(item).toFixed(2) }}
+              {{ "cart.desktopView.youSave" | translate }}: ${{
+                getSavings(item).toFixed(2)
+              }}
             </div>
-          } @else {
+          </ng-container>
+          <ng-template #regularPrice>
             <span class="font-bold text-gray-900"
               >${{ item.afterPrice.toFixed(2) }}</span
             >
-          }
+          </ng-template>
         </div>
 
         <!-- Quantity -->
@@ -170,7 +179,7 @@
     <div class="flex justify-end border-b p-4">
       <div class="text-right">
         <div class="flex items-center justify-end gap-8 font-medium">
-          <span>Total Price:</span>
+          <span>{{ "cart.cartSummary.totalPrice" | translate }}</span>
           <span class="text-xl font-bold text-hover-color"
             >${{ getCartTotal().toFixed(2) }}</span
           >
@@ -186,13 +195,13 @@
         class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
         (click)="continueShopping()"
       >
-        Continue Shopping
+        {{ "cart.cartActions.continueShopping" | translate }}
       </button>
       <button
         class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
         (click)="handleCheckout()"
       >
-        Check Out
+        {{ "cart.cartActions.checkout" | translate }}
       </button>
     </div>
   </div>

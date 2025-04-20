@@ -25,7 +25,7 @@ export class CartSidebarComponent {
   constructor(
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
-    private languageService: LanguageService,
+    public languageService: LanguageService,
   ) {
     // Subscribe to the cart sidebar state
     this.cartSidebarService.isOpen$.subscribe((isOpen) => {

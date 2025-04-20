@@ -343,8 +343,7 @@
     "haveAccount": "Already have an account?",
     "loginNow": "Login Here"
   },
-
-  "cart": {
+  "cart-sidebar": {
     "title": "My Cart",
     "empty": "Your cart is currently empty",
     "freeShippingMessage": "Spend ${{amount}} More And Enjoy Free Shipping!",
@@ -355,5 +354,34 @@
     "checkout": "Check Out",
     "quantity": "Quantity",
     "pricePerUnit": "{{quantity}} x ${{price}}"
+  },
+  "cart": {
+    "header": "Cart",
+    "noProducts": "Your cart is currently empty",
+    "tableHeader": {
+      "image": "Image",
+      "productName": "Product Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "action": "Action"
+    },
+    "mobileView": {
+      "save": "Save: ",
+      "remove": "Remove",
+      "quantity": "Quantity",
+      "itemTotal": "Item Total"
+    },
+    "desktopView": {
+      "youSave": "You Save",
+      "remove": "Remove"
+    },
+    "cartSummary": {
+      "totalPrice": "Total Price:"
+    },
+    "cartActions": {
+      "continueShopping": "Continue Shopping",
+      "checkout": "Check Out"
+    }
   }
 }

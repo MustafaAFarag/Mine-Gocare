@@ -15,7 +15,9 @@
   <!-- Header -->
   <div class="flex items-center justify-between border-b p-4">
     <h2 class="text-xl font-bold">
-      {{ "cart.title" | translate }} ({{ (cartItems$ | async)?.length || 0 }})
+      {{ "cart-sidebar.title" | translate }} ({{
+        (cartItems$ | async)?.length || 0
+      }})
     </h2>
     <button
       class="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -32,7 +34,7 @@
       *ngIf="getRemainingForFreeShipping(total) > 0"
     >
       {{
-        "cart.freeShippingMessage"
+        "cart-sidebar.freeShippingMessage"
           | translate: { amount: getRemainingForFreeShipping(total).toFixed(2) }
       }}
     </p>
@@ -40,7 +42,7 @@
       class="mb-2 text-base text-gray-600"
       *ngIf="getRemainingForFreeShipping(total) === 0"
     >
-      {{ "cart.freeShippingCongrats" | translate }}
+      {{ "cart-sidebar.freeShippingCongrats" | translate }}
     </p>
     <div class="h-2 rounded-full bg-gray-200">
       <div
@@ -48,7 +50,11 @@
         [style.width.%]="getProgressPercentage(total)"
       >
         <div
-          class="absolute right-0 top-2 flex h-6 w-6 -translate-y-4 items-center justify-center rounded-full bg-hover-color"
+          class="absolute top-2 flex h-6 w-6 -translate-y-4 items-center justify-center rounded-full bg-hover-color"
+          [ngClass]="{
+            'right-0': languageService.getCurrentLanguage() !== 'ar',
+            'left-0': languageService.getCurrentLanguage() === 'ar',
+          }"
         >
           <i class="ri-truck-line text-sm text-white"></i>
         </div>
@@ -62,7 +68,7 @@
       class="text-base font-medium text-hover-color hover:text-red-900"
       (click)="clearCart()"
     >
-      {{ "cart.clearCart" | translate }}
+      {{ "cart-sidebar.clearCart" | translate }}
     </button>
   </div>
 
@@ -89,7 +95,7 @@
               </h3>
               <p class="text-sm font-medium text-gray-500">
                 {{
-                  "cart.pricePerUnit"
+                  "cart-sidebar.pricePerUnit"
                     | translate
                       : {
                           quantity: item.quantity,
@@ -139,7 +145,7 @@
           <i class="ri-shopping-cart-line text-4xl text-gray-400"></i>
         </div>
         <p class="text-lg font-medium text-gray-600">
-          {{ "cart.empty" | translate }}
+          {{ "cart-sidebar.empty" | translate }}
         </p>
       </div>
     </ng-template>
@@ -148,7 +154,7 @@
   <!-- Footer -->
   <div class="border-t p-4" *ngIf="(cartItems$ | async)?.length">
     <div class="mb-4 flex items-center justify-between">
-      <span class="font-medium">{{ "cart.subtotal" | translate }}</span>
+      <span class="font-medium">{{ "cart-sidebar.subtotal" | translate }}</span>
       <span class="font-bold text-hover-color">
         ${{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
       </span>
@@ -160,14 +166,14 @@
         routerLink="/cart"
         (click)="closeCart()"
       >
-        {{ "cart.viewCart" | translate }}
+        {{ "cart-sidebar.viewCart" | translate }}
       </button>
       <button
         routerLink="/cart"
         (click)="closeCart()"
         class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
       >
-        {{ "cart.checkout" | translate }}
+        {{ "cart-sidebar.checkout" | translate }}
       </button>
     </div>
   </div>
