@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { UserService, UserProfile } from '../../../services/user.service';
+import { UserProfile } from '../../../model/Auth';
+import { AuthService } from '../../../services/auth.service';
 
 interface SidebarItem {
   name: string;
@@ -33,24 +34,14 @@ export class SidebarTabComponent implements OnInit {
       route: '/account/notifications',
       active: false,
     },
-    {
-      name: 'Bank Details',
-      icon: 'ri-bank-line',
-      route: '/account/bank-details',
-      active: false,
-    },
+
     {
       name: 'My Wallet',
       icon: 'ri-wallet-line',
       route: '/account/wallet',
       active: false,
     },
-    {
-      name: 'Earning Points',
-      icon: 'ri-coin-line',
-      route: '/account/points',
-      active: false,
-    },
+
     {
       name: 'My Orders',
       icon: 'ri-file-list-line',
@@ -74,7 +65,7 @@ export class SidebarTabComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -88,12 +79,30 @@ export class SidebarTabComponent implements OnInit {
         this.setActiveItem(event.url);
       });
 
-    // Get user data from service
-    this.userService.userData$.subscribe((userData) => {
-      if (userData) {
-        this.user = userData;
-      }
-    });
+    // Load user data from localStorage
+    this.loadUserFromLocalStorage();
+  }
+
+  loadUserFromLocalStorage(): void {
+    const savedUser = this.getLocalStorageItem('user');
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      this.user = {
+        userId: userData.userId,
+        fullName: userData.fullName,
+        thumbImageUrl: userData.thumbImageUrl,
+        profileImageUrl: userData.profileImageUrl,
+        gender: userData.gender,
+        emailAddress: userData.emailAddress,
+        mobileNumber: userData.mobileNumber,
+      };
+    }
+  }
+
+  private getLocalStorageItem(key: string): string | null {
+    return typeof window !== 'undefined' && window.localStorage
+      ? localStorage.getItem(key)
+      : null;
   }
 
   setActiveItem(url: string): void {
@@ -112,10 +121,13 @@ export class SidebarTabComponent implements OnInit {
   }
 
   getInitials(): string {
-    return this.user ? this.user.firstName.charAt(0) : '';
+    return this.user ? this.user.fullName.charAt(0) : '';
   }
 
   getFullName(): string {
-    return this.user ? `${this.user.firstName} ${this.user.lastName}` : '';
+    return this.user ? this.user.fullName : '';
+  }
+  logout(): void {
+    this.authService.logout();
   }
 }

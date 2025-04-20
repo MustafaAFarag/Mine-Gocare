@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService, UserProfile } from '../../../services/user.service';
+import { UserProfile } from '../../../model/Auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,19 +9,41 @@ import { UserService, UserProfile } from '../../../services/user.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  user!: UserProfile;
+  user: UserProfile = {
+    userId: 0,
+    fullName: '',
+    thumbImageUrl: '',
+    profileImageUrl: '',
+    gender: 0,
+    emailAddress: '',
+    mobileNumber: '',
+  };
 
-  constructor(private userService: UserService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.userService.userData$.subscribe((userData) => {
-      if (userData) {
-        this.user = userData;
-      }
-    });
+    this.loadUserFromLocalStorage();
   }
 
-  getFullName(): string {
-    return this.user ? `${this.user.firstName} ${this.user.lastName}` : '';
+  loadUserFromLocalStorage(): void {
+    const savedUser = this.getLocalStorageItem('user');
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      this.user = {
+        userId: userData.userId,
+        fullName: userData.fullName,
+        thumbImageUrl: userData.thumbImageUrl,
+        profileImageUrl: userData.profileImageUrl,
+        gender: userData.gender,
+        emailAddress: userData.emailAddress,
+        mobileNumber: userData.mobileNumber,
+      };
+    }
+  }
+
+  private getLocalStorageItem(key: string): string | null {
+    return typeof window !== 'undefined' && window.localStorage
+      ? localStorage.getItem(key)
+      : null;
   }
 }

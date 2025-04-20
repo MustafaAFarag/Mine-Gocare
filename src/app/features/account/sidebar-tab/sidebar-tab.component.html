@@ -10,7 +10,7 @@
       </div>
       <div>
         <h3 class="font-medium text-gray-800">{{ getFullName() }}</h3>
-        <p class="text-sm text-gray-500">{{ user.email }}</p>
+        <p class="text-sm text-gray-500">{{ user.emailAddress }}</p>
       </div>
     </div>
   </div>
@@ -36,6 +36,7 @@
   <div class="p-4">
     <button
       class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-red-800"
+      (click)="logout()"
     >
       <i class="ri-logout-box-line mr-2"></i> Logout
     </button>

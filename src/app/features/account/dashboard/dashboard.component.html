@@ -3,7 +3,7 @@
   <!-- Welcome Section -->
   <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
     <h2 class="mb-2 text-2xl font-bold text-gray-800">
-      Hello, {{ getFullName() }} !
+      Hello, {{ user.fullName }} !
     </h2>
     <p class="mb-4 text-gray-600">
       From your My Account Dashboard you have the ability to view a snapshot of
@@ -14,46 +14,39 @@
     <!-- Stats Cards -->
     <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
       <!-- Balance Card -->
-      <div class="border-l-4 border-orange-400 py-2 pl-4">
+      <div class="border-l-4 border-hover-color py-2 pl-4">
         <div class="flex items-center">
-          <div class="mr-4 text-orange-400">
+          <div class="mr-4 text-hover-color">
             <i class="ri-wallet-3-line text-3xl"></i>
           </div>
           <div>
-            <h3 class="text-xl font-bold text-orange-400">
-              ${{ user.balance }}
-            </h3>
+            <h3 class="text-xl font-bold text-hover-color">$123</h3>
             <p class="text-gray-500">Balance</p>
           </div>
         </div>
       </div>
 
-      <!-- Points Card -->
-      <div class="border-l-4 border-orange-400 py-2 pl-4">
-        <div class="flex items-center">
-          <div class="mr-4 text-orange-400">
-            <i class="ri-coins-line text-3xl"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold text-orange-400">
-              {{ user.totalPoints }}
-            </h3>
-            <p class="text-gray-500">Total Points</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Orders Card -->
-      <div class="border-l-4 border-orange-400 py-2 pl-4">
+      <div class="border-l-4 border-hover-color py-2 pl-4">
         <div class="flex items-center">
-          <div class="mr-4 text-orange-400">
+          <div class="mr-4 text-hover-color">
             <i class="ri-shopping-bag-line text-3xl"></i>
           </div>
           <div>
-            <h3 class="text-xl font-bold text-orange-400">
-              {{ user.totalOrders }}
-            </h3>
+            <h3 class="text-xl font-bold text-hover-color">63</h3>
             <p class="text-gray-500">Total Orders</p>
+          </div>
+        </div>
+      </div>
+      <!-- Points Card -->
+      <div class="border-l-4 border-hover-color py-2 pl-4">
+        <div class="flex items-center">
+          <div class="mr-4 text-hover-color">
+            <i class="ri-coins-line text-3xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-hover-color">345</h3>
+            <p class="text-gray-500">Total Points</p>
           </div>
         </div>
       </div>
@@ -64,9 +57,25 @@
   <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
     <h3 class="mb-4 text-xl font-bold text-gray-800">Account Information</h3>
     <ul class="ml-2 list-inside list-disc space-y-2 text-gray-600">
-      <li>Full Name: {{ getFullName() }}</li>
-      <li>Phone: {{ user.phone }}</li>
-      <li>Address: {{ user.address }}</li>
+      <li>Full Name: {{ user.fullName }}</li>
+      <li>
+        Phone: {{ user.mobileNumber || "Not provided" }}
+        <button
+          *ngIf="!user.mobileNumber"
+          class="ml-2 rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
+          Add New
+        </button>
+      </li>
+      <li>
+        Email: {{ user.emailAddress || "Not provided" }}
+        <button
+          *ngIf="!user.emailAddress"
+          class="ml-2 rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
+          Add New
+        </button>
+      </li>
     </ul>
   </div>
 
@@ -75,12 +84,14 @@
     <h3 class="mb-4 text-xl font-bold text-gray-800">Login Details</h3>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <div>
-        <p class="text-gray-600">Email: {{ user.email }}</p>
-        <a href="#" class="text-orange-400 hover:underline">Edit</a>
+        <p class="text-gray-600">
+          Email: {{ user.emailAddress || "Not provided" }}
+        </p>
+        <a href="#" class="text-hover-color hover:underline">Edit</a>
       </div>
       <div>
         <p class="text-gray-600">Password: ••••••</p>
-        <a href="#" class="text-orange-400 hover:underline">Edit</a>
+        <a href="#" class="text-hover-color hover:underline">Edit</a>
       </div>
     </div>
   </div>

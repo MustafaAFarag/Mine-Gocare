@@ -19,3 +19,13 @@ export interface LoginResponse {
   };
   success: boolean;
 }
+
+export interface UserProfile {
+  userId: number;
+  fullName: string;
+  thumbImageUrl: string;
+  profileImageUrl: string;
+  gender: number;
+  emailAddress: string;
+  mobileNumber: string;
+}
