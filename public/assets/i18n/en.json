@@ -15,6 +15,13 @@
     "termsAndConditions": "Terms & Conditions"
   },
   "categories": {
-    "shopByCategory": "Shop By Category"
+    "shopByCategory": "SHOP BY CATEGORY"
+  },
+  "everyday-casual": {
+    "everydayCasual": "EVERYDAY CASUAL"
+  },
+  "product-card": {
+    "off": "Off",
+    "limitedTimeOffer": "Limited Time Offer"
   }
 }

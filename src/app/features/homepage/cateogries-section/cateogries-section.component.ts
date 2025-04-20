@@ -1,11 +1,21 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Category } from '../../../model/Categories';
 import { environment } from '../../../../enviroments/enviroment';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { getFullImageUrl } from '../../../lib/utils';
+import { LanguageService } from '../../../services/language.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cateogries-section',
@@ -13,22 +23,36 @@ import { getFullImageUrl } from '../../../lib/utils';
   imports: [LoadingComponent, NgIf, NgFor, TranslateModule],
   templateUrl: './cateogries-section.component.html',
   styleUrl: './cateogries-section.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CateogriesSectionComponent {
+export class CateogriesSectionComponent implements OnInit, OnDestroy {
   @Input() categories: Category[] = [];
   @Input() isLoadingCategories!: boolean;
-  currentLang: string;
+  private langSubscription?: Subscription;
 
-  constructor(
-    private router: Router,
-    private translate: TranslateService,
-  ) {
-    this.currentLang =
-      this.translate.currentLang || this.translate.getDefaultLang();
+  private router = inject(Router);
+  private languageService = inject(LanguageService);
+  private cdr = inject(ChangeDetectorRef);
+
+  ngOnInit(): void {
+    // Subscribe to language changes
+    this.langSubscription = this.languageService.direction$.subscribe(() => {
+      // Force update the view when language changes
+      this.cdr.markForCheck();
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
   }
 
   getCategoryName(category: any): string {
-    return this.currentLang === 'ar' ? category.name.ar : category.name.en;
+    // Always get the current language from the service
+    const currentLang = this.languageService.getCurrentLanguage();
+    return currentLang === 'ar' ? category.name.ar : category.name.en;
   }
 
   getFullImageUrl = getFullImageUrl;

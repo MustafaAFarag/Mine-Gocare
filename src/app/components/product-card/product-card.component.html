@@ -1,5 +1,6 @@
 <div
   class="product-card flex h-full cursor-pointer flex-col border border-gray-200 bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
+  [attr.data-lang]="currentLang"
 >
   <!-- Image container with relative positioning -->
   <div class="relative h-64 w-full">
@@ -12,7 +13,7 @@
 
     <img
       [src]="getFullImageUrl(product.mainImageUrl)"
-      [alt]="product.name"
+      [alt]="getLocalizedText(product.name)"
       class="absolute inset-0 h-full w-full object-contain"
       (click)="navigateToProductDetails(product.productId, product.variantId)"
     />
@@ -24,7 +25,7 @@
 
       <i
         class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-        (click)="addToCart(product)"
+        (click)="addToCart(product); $event.stopPropagation()"
       ></i>
       <i
         class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
@@ -37,19 +38,27 @@
     class="flex flex-grow flex-col p-4"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
   >
-    <h3 class="line-clamp-1 text-lg font-medium">{{ product.name.en }}</h3>
-    <p class="text-sm text-special-gray">{{ product.brand.en }}</p>
+    <h3 class="line-clamp-1 text-lg font-medium">
+      {{ getLocalizedText(product.name) }}
+    </h3>
+    <p class="text-sm text-special-gray">
+      {{ getLocalizedText(product.brand) }}
+    </p>
     <div class="mb-4 mt-2 text-base font-bold text-black">
       <p *ngIf="product.priceBeforeDiscount === product.priceAfterDiscount">
-        {{ product.priceBeforeDiscount | currency: "USD" }}
+        {{ getLocalizedText(product.currency.name) }}
+        {{ product.priceBeforeDiscount }}
       </p>
       <p *ngIf="product.priceBeforeDiscount !== product.priceAfterDiscount">
-        {{ product.priceAfterDiscount | currency: "USD" }}
-        <span class="text-sm text-gray-400 line-through">{{
-          product.priceBeforeDiscount | currency: "USD"
-        }}</span>
+        {{ getLocalizedText(product.currency.name) }}
+        {{ product.priceAfterDiscount }}
+        <span class="text-sm text-gray-400 line-through">
+          {{ getLocalizedText(product.currency.name) }}
+          {{ product.priceBeforeDiscount }}</span
+        >
         <span class="text-hover-color">
-          {{ product.discountPercentage.toFixed(0) }}% off</span
+          {{ product.discountPercentage.toFixed(0) }}%
+          {{ "product-card.off" | translate }}</span
         >
       </p>
     </div>
@@ -62,29 +71,32 @@
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
-          off</span
+          >{{ "product-card.limitedTimeOffer" | translate }} :
+          {{ product.discountPercentage.toFixed(0) }}%
+          {{ "product-card.off" | translate }}</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
-          off</span
+          >{{ "product-card.limitedTimeOffer" | translate }} :
+          {{ product.discountPercentage.toFixed(0) }}%
+          {{ "product-card.off" | translate }}</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
-          off</span
+          >{{ "product-card.limitedTimeOffer" | translate }} :
+          {{ product.discountPercentage.toFixed(0) }}%
+          {{ "product-card.off" | translate }}</span
         >
       </div>
       <div class="limited-time-item flex items-center gap-2">
         <i class="ri-discount-percent-fill text-hover-color"></i>
         <span
-          >Limited Time Offer : {{ product.discountPercentage.toFixed(0) }}%
-          off</span
+          >{{ "product-card.limitedTimeOffer" | translate }} :
+          {{ product.discountPercentage.toFixed(0) }}% off</span
         >
       </div>
     </div>

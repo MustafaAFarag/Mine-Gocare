@@ -7,7 +7,9 @@
   *ngIf="!isLoadingProducts && products.length"
 >
   <div class="container mx-auto max-w-8xl px-4">
-    <h2 class="text-center text-4xl font-extrabold">EVERYDAY CASUAL</h2>
+    <h2 class="text-center text-4xl font-extrabold">
+      {{ "everyday-casual.everydayCasual" | translate }}
+    </h2>
     <div class="my-4 flex justify-center">
       <div class="h-1 w-24 bg-hover-color"></div>
     </div>
@@ -21,7 +23,7 @@
           'text-hover-color': category.id === selectedCategory?.id,
         }"
       >
-        {{ category.name.en }}
+        {{ getCategoryName(category) }}
       </button>
     </div>
 

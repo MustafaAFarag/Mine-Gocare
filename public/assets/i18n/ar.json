@@ -16,5 +16,12 @@
   },
   "categories": {
     "shopByCategory": "تسوق حسب الفئة"
+  },
+  "everyday-casual": {
+    "everydayCasual": "وجبات يومية بسيطة"
+  },
+  "product-card": {
+    "off": "خصم",
+    "limitedTimeOffer": "عرض لفترة محدودة"
   }
 }
