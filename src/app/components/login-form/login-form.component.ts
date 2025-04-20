@@ -9,13 +9,14 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
 })
 export class LoginFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();

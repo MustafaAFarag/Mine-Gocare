@@ -244,5 +244,44 @@
       "faq": "FAQ's",
       "contact": "Contact Us"
     }
+  },
+
+  "login": {
+    "title": "Sign In",
+    "subtitle": "Dive back into your world with a simple sign-in. Your next adventure awaits - let's get started!",
+
+    "fields": {
+      "identifier": {
+        "label": "Email or Phone",
+        "placeholder": "Email or Phone",
+        "errors": {
+          "required": "Email or Phone is required",
+          "invalid": "Please enter a valid email or phone number"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Password",
+        "errors": {
+          "required": "Password is required"
+        }
+      }
+    },
+
+    "forgotPassword": "Forgot Password?",
+
+    "button": {
+      "submit": "Login",
+      "submitting": "Logging in..."
+    },
+
+    "error": {
+      "invalidCredentials": "Invalid Email/Phone or Password"
+    },
+
+    "or": "OR",
+
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now"
   }
 }
