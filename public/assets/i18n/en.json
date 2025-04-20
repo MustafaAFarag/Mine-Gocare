@@ -211,5 +211,34 @@
 
     "undertakingsTitle": "Undertakings",
     "undertakingsBody": "Users agree not to misuse the platform or engage in any behavior that disrupts the services offered by <strong>Berryat</strong>. Users are encouraged to periodically review these terms for updates through the account settings or footer link on the website."
+  },
+
+  "footer": {
+    "companyDescription": "Discover the latest trends and enjoy seamless shopping with our exclusive collections.",
+    "address": "Riyadh / Al-Nakheel District / Al-Takhassusi Street Office No. 1/ ground floor",
+    "callUs": "Call Us: +966 550070890",
+    "emailUs": "Email: Info@berryat.sa",
+
+    "categories": "CATEGORIES",
+    "usefulLinks": "USEFUL LINKS",
+    "helpCenter": "HELP CENTER",
+    "followUs": "FOLLOW US",
+    "newsletterPrompt": "Never Miss Anything From Store By Signing Up To Our Newsletter.",
+    "newsletterPlaceholder": "Enter Email Address",
+    "subscribe": "SUBSCRIBE",
+
+    "links": {
+      "home": "Home",
+      "collections": "Collections",
+      "about": "About Us",
+      "blogs": "Blogs",
+      "offers": "Offers",
+      "search": "Search",
+      "account": "My Account",
+      "orders": "My Orders",
+      "wishlist": "Wishlist",
+      "faq": "FAQ's",
+      "contact": "Contact Us"
+    }
   }
 }

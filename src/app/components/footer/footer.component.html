@@ -1,6 +1,5 @@
 <div class="bg-[#212121] py-14 text-white">
   <div class="container mx-auto max-w-8xl px-4">
-    <!-- Main Footer Content with Grid instead of Flexbox -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
       <!-- Company Info -->
       <div class="p-4">
@@ -12,147 +11,130 @@
           />
         </div>
         <p class="mb-5 text-base leading-relaxed text-white">
-          Discover the latest trends and enjoy seamless shopping with our
-          exclusive collections.
+          {{ "footer.companyDescription" | translate }}
         </p>
         <div class="space-y-3 text-base">
           <div class="flex items-start">
             <i class="ri-map-pin-line mr-3 mt-1"></i>
-            <span
-              >Riyadh / Al-Nakheel District / Al-Takhassusi Street Office No. 1/
-              ground floor
-            </span>
+            <span>{{ "footer.address" | translate }}</span>
           </div>
           <div class="flex items-start">
             <i class="ri-phone-line mr-3 mt-1 -translate-y-1"></i>
-            <span>Call Us: +966 550070890</span>
+            <span>{{ "footer.callUs" | translate }}</span>
           </div>
           <div class="flex items-start">
             <i class="ri-mail-line mr-3 mt-1 -translate-y-1"></i>
-            <span>Email: Info&#64;berryat.sa</span>
+            <span>{{ "footer.emailUs" | translate }}</span>
           </div>
         </div>
       </div>
 
       <!-- Categories -->
       <div class="p-4">
-        <h3 class="mb-4 text-lg font-semibold">CATEGORIES</h3>
+        <h3 class="mb-4 text-lg font-semibold">
+          {{ "footer.categories" | translate }}
+        </h3>
         <ul class="space-y-5 text-lg">
           <li *ngFor="let category of categories">
             <a
               (click)="navigateToCategory(category)"
               class="cursor-pointer text-white transition-colors hover:text-[#ff4c3b]"
-              >{{ category.name.en }}</a
             >
+              {{ getCategoryName(category) }}
+            </a>
           </li>
         </ul>
       </div>
 
       <!-- Useful Links -->
       <div class="p-4">
-        <h3 class="mb-4 text-lg font-semibold">USEFUL LINKS</h3>
+        <h3 class="mb-4 text-lg font-semibold">
+          {{ "footer.usefulLinks" | translate }}
+        </h3>
         <ul class="space-y-2 text-lg">
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Home</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.home" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Collections</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.collections" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >About Us</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.about" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Blogs</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.blogs" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Offers</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.offers" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Search</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.search" | translate
+            }}</a>
           </li>
         </ul>
       </div>
 
       <!-- Help Center -->
       <div class="p-4">
-        <h3 class="mb-4 text-lg font-semibold">HELP CENTER</h3>
+        <h3 class="mb-4 text-lg font-semibold">
+          {{ "footer.helpCenter" | translate }}
+        </h3>
         <ul class="space-y-2 text-lg">
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >My Account</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.account" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >My Orders</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.orders" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Wishlist</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.wishlist" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >FAQ's</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.faq" | translate
+            }}</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="text-white transition-colors hover:text-[#ff4c3b]"
-              >Contact Us</a
-            >
+            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+              "footer.links.contact" | translate
+            }}</a>
           </li>
         </ul>
       </div>
 
       <!-- Follow Us & Newsletter -->
       <div class="p-4">
-        <h3 class="mb-4 text-lg font-semibold">FOLLOW US</h3>
+        <h3 class="mb-4 text-lg font-semibold">
+          {{ "footer.followUs" | translate }}
+        </h3>
         <p class="mb-4 text-lg text-white">
-          Never Miss Anything From Store By Signing Up To Our Newsletter.
+          {{ "footer.newsletterPrompt" | translate }}
         </p>
         <div class="mb-4 flex flex-col gap-4">
           <input
             type="email"
-            placeholder="Enter Email Address"
+            [placeholder]="'footer.newsletterPlaceholder' | translate"
             class="mr-2 flex-1 border-none p-2 text-lg outline-none"
           />
           <button class="bg-[#ff4c3b] px-3 py-2 text-sm font-bold text-white">
-            SUBSCRIBE
+            {{ "footer.subscribe" | translate }}
           </button>
         </div>
         <div class="flex gap-2">
@@ -168,15 +150,15 @@
             target="_blank"
             class="mr-2 flex h-8 w-8 items-center justify-center bg-[#323232]"
           >
-            <i class="ri-twitter-x-fill"></i
-          ></a>
+            <i class="ri-twitter-x-fill"></i>
+          </a>
           <a
             href="https://www.instagram.com/Berryat_"
             target="_blank"
             class="mr-2 flex h-8 w-8 items-center justify-center bg-[#323232]"
           >
-            <i class="ri-instagram-fill"></i
-          ></a>
+            <i class="ri-instagram-fill"></i>
+          </a>
           <a
             href="https://snapchat.com/t/dCAE0Wee"
             target="_blank"
@@ -195,6 +177,4 @@
       </div>
     </div>
   </div>
-
-  <!-- Copyright and Payment Methods -->
 </div>
