@@ -1,17 +1,33 @@
 <div *ngIf="productDetails">
   <div class="flex items-center">
     <img src="assets/images/trending.gif" class="inline h-8 w-8" />
-    <span>Selling fast! 5 people have this in their carts</span>
+    <span>{{ "product-info.trending" | translate }}</span>
   </div>
   <h2
     *ngIf="productDetails?.productName"
-    class="my-4 text-center text-2xl font-bold text-gray-900 md:text-left"
+    class="my-4 flex items-center justify-center text-2xl font-bold text-gray-900 md:justify-start md:text-left"
   >
-    {{ productDetails.productName.en }}
+    {{
+      languageService.getCurrentLanguage() === "ar"
+        ? productDetails.productName.ar
+        : productDetails.productName.en
+    }}
   </h2>
 
-  <p class="mb-2 text-lg font-medium">
-    {{ productDetails.brandName.en }} | {{ productDetails.category.name.en }}
+  <p
+    class="mb-2 flex items-center justify-center text-lg font-medium md:justify-start"
+  >
+    {{
+      languageService.getCurrentLanguage() === "ar"
+        ? productDetails.brandName.ar
+        : productDetails.brandName.en
+    }}
+    |
+    {{
+      languageService.getCurrentLanguage() === "ar"
+        ? productDetails.category.name.ar
+        : productDetails.category.name.en
+    }}
   </p>
 
   <div class="flex items-center justify-center md:justify-start">
@@ -25,32 +41,55 @@
     </ng-container>
     <span class="mx-2">|</span>
     <span class="text-sm font-semibold text-gray-600">
-      {{ productDetails.productVariants[0].rating }} Ratings
+      {{ productDetails.productVariants[0].rating }}
+      {{ "product-info.ratings" | translate }}
     </span>
   </div>
 
-  <div class="mt-4 text-center md:text-left">
-    <span class="font-semibold uppercase text-gray-600">Price:</span>
+  <div class="mt-4 flex items-center justify-center gap-2 md:justify-start">
+    <span class="font-semibold uppercase text-gray-600"
+      >{{ "product-info.price" | translate }}:
+    </span>
     <span class="text-xl font-semibold text-hover-color">
+      {{
+        languageService.getCurrentLanguage() === "ar"
+          ? productDetails.productVariants[0].currency.name.ar
+          : productDetails.productVariants[0].currency.name.en
+      }}
       {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
     </span>
   </div>
 
   <div
     class="mt-4 text-sm text-gray-700"
-    [innerHTML]="productDetails.description.en"
+    [innerHTML]="
+      languageService.getCurrentLanguage() === 'ar'
+        ? productDetails.description.ar
+        : productDetails.description.en
+    "
   ></div>
 
   <div *ngIf="productDetails.hasVariant" class="mt-6 flex items-center gap-4">
     <ng-container *ngFor="let variant of productDetails.productVariants">
-      <span>{{ variant.variantName.en }}</span>
+      <span>{{
+        languageService.getCurrentLanguage() === "ar"
+          ? variant.variantName.ar
+          : variant.variantName.en
+      }}</span>
     </ng-container>
   </div>
 
   <div class="mt-4">
     <p class="text-lg font-semibold text-gray-800">
-      Total Price:
-      <span class="text-hover-color">EGP{{ totalPrice.toFixed(2) }}</span>
+      {{ "product-info.totalPrice" | translate }}:
+      <span class="text-hover-color">
+        {{
+          languageService.getCurrentLanguage() === "ar"
+            ? productDetails.productVariants[0].currency.name.ar
+            : productDetails.productVariants[0].currency.name.en
+        }}
+        {{ totalPrice.toFixed(2) }}</span
+      >
     </p>
   </div>
 
@@ -58,11 +97,24 @@
     class="mt-5 inline-flex items-center justify-between rounded bg-gray-100 p-2"
   >
     <i
+      *ngIf="languageService.getCurrentLanguage() === 'ar'"
+      class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+      (click)="decreaseCounter()"
+    ></i>
+
+    <i
+      *ngIf="languageService.getCurrentLanguage() !== 'ar'"
       class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
       (click)="decreaseCounter()"
     ></i>
     <span class="mx-10 font-bold text-black">{{ counter }}</span>
     <i
+      *ngIf="languageService.getCurrentLanguage() === 'ar'"
+      class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+      (click)="increaseCounter()"
+    ></i>
+    <i
+      *ngIf="languageService.getCurrentLanguage() !== 'ar'"
       class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
       (click)="increaseCounter()"
     ></i>
@@ -74,12 +126,7 @@
       class="bg-hover-color px-4 py-4 font-semibold text-white hover:bg-pink-800 lg:px-6"
     >
       <i class="ri-shopping-cart-line mr-2 cursor-pointer text-xl"></i>
-      Add To Cart
-    </button>
-    <button
-      class="bg-hover-color px-6 py-4 font-semibold text-white hover:bg-pink-700"
-    >
-      Buy Now
+      {{ "product-info.addToCart" | translate }}
     </button>
   </div>
 
@@ -88,17 +135,12 @@
   >
     <div>
       <i class="ri-heart-fill mr-2 cursor-pointer text-lg"></i>
-      <span class="">Add To Wishlist</span>
-    </div>
-
-    <div>
-      <i class="ri-share-line mr-2 h-2 w-6 cursor-pointer text-lg"></i>
-      <span class="">Share</span>
+      <span class="">{{ "product-info.addToWishlist" | translate }}</span>
     </div>
   </div>
 
   <div>
-    <p>Please Hurry only 10 Left In Stock!</p>
+    <p>{{ "product-info.stockWarning" | translate }}</p>
     <div
       class="mt-2 h-2 rounded-md bg-gradient-to-tr from-green-400 to-green-700"
     ></div>
@@ -106,34 +148,44 @@
   </div>
 
   <div>
-    <h3 class="mb-5 text-2xl font-semibold">Product Info</h3>
+    <h3 class="mb-5 text-2xl font-semibold">
+      {{ "product-info.productInfoTitle" | translate }}
+    </h3>
     <ul class="grid grid-cols-2 gap-2 text-base text-[#646464]">
-      <li>SKU: EG0102MFF05</li>
-      <li>Unit: Piece</li>
-      <li>Quantity: 10 Items Left</li>
-      <li>Weight: 0.5Gms</li>
+      <li>{{ "product-info.sku" | translate }}: EG0102MFF05</li>
+      <li>
+        {{ "product-info.unit" | translate }}:
+        {{ "product-info.piece" | translate }}
+      </li>
+      <li>
+        {{ "product-info.quantity" | translate }}:
+        {{ "product-info.itemsLeft" | translate: { count: 10 } }}
+      </li>
+      <li>{{ "product-info.weight" | translate }}: 0.5Gms</li>
     </ul>
   </div>
 
   <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
   <div>
-    <h3 class="my-5 text-2xl font-semibold">Delivery Details</h3>
+    <h3 class="my-5 text-2xl font-semibold">
+      {{ "product-info.deliveryDetailsTitle" | translate }}
+    </h3>
     <div class="flex flex-col text-base text-[#646464]">
-      <div>
+      <div class="flex items-center">
         <i class="ri-truck-line mr-2"></i>
-        <span>3-5 Business days</span>
+        <span>{{ "product-info.deliveryTime" | translate }}</span>
       </div>
       <div>
         <i class="ri-arrow-left-right-line mr-2"></i>
-        <span>30-Day Return Policy</span>
+        <span>{{ "product-info.returnPolicy" | translate }}</span>
       </div>
     </div>
   </div>
 
   <fieldset class="mt-10 rounded-md border-2 border-dotted border-gray-400 p-4">
     <legend class="px-2 text-lg font-semibold text-gray-800">
-      Guaranteed Safe Checkout
+      {{ "product-info.guaranteedSafeCheckout" | translate }}
     </legend>
     <img
       src="assets/images/theme/data/payments.png"
@@ -143,7 +195,7 @@
   </fieldset>
   <fieldset class="mt-10 rounded-md border-2 border-dotted border-gray-400 p-4">
     <legend class="px-2 text-lg font-semibold text-gray-800">
-      Secure Checkout
+      {{ "product-info.secureCheckout" | translate }}
     </legend>
     <img
       src="assets/images/theme/data/payments.png"

@@ -4,11 +4,13 @@ import { ProductDetails } from '../../../model/ProductDetail';
 import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../model/Cart';
 import { CartSidebarService } from '../../../services/cart-sidebar.service';
+import { LanguageService } from '../../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './product-info.component.html',
   styleUrl: './product-info.component.css',
 })
@@ -46,16 +48,20 @@ export class ProductInfoComponent {
   constructor(
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
+    public languageService: LanguageService,
   ) {}
 
   addToCart(product: ProductDetails): void {
     // Log the incoming product details for debugging
     console.log('Product Details:', product);
 
+    const currentLang = this.languageService.getCurrentLanguage();
+
     // Create the CartItem object
     const item: CartItem = {
       productId: product.id,
-      name: product.productName.en,
+      name:
+        currentLang === 'ar' ? product.productName.ar : product.productName.en,
       afterPrice: product.productVariants[0].priceAfterDiscount,
       beforePrice: product.productVariants[0].priceBeforeDiscount,
       quantity: this.counter,

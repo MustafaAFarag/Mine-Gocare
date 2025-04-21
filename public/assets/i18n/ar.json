@@ -428,5 +428,29 @@
   },
   "Search": "بحث",
   "No categories found": "لا توجد فئات",
-  "No brands found": "لا توجد ماركات"
+  "No brands found": "لا توجد ماركات",
+
+  "product-info": {
+    "trending": "بيع سريع! ٥ أشخاص لديهم هذا في سلاتهم",
+    "ratings": "تقييمات",
+    "price": "السعر",
+    "totalPrice": "السعر الإجمالي",
+    "addToCart": "أضف إلى السلة",
+    "buyNow": "اشتر الآن",
+    "addToWishlist": "أضف إلى قائمة الرغبات",
+    "share": "مشاركة",
+    "stockWarning": "يرجى الإسراع فقط ١٠ قطع متبقية في المخزون!",
+    "productInfoTitle": "معلومات المنتج",
+    "sku": "رمز المنتج",
+    "unit": "الوحدة",
+    "piece": "قطعة",
+    "quantity": "الكمية",
+    "itemsLeft": "{{count}} قطع متبقية",
+    "weight": "الوزن",
+    "deliveryDetailsTitle": "تفاصيل التوصيل",
+    "deliveryTime": "٣-٥ أيام عمل",
+    "returnPolicy": "سياسة الإرجاع خلال ٣٠ يوم",
+    "guaranteedSafeCheckout": "الدفع الآمن المضمون",
+    "secureCheckout": "الدفع الآمن"
+  }
 }

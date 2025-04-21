@@ -429,5 +429,28 @@
   },
   "Search": "Search",
   "No categories found": "No categories found",
-  "No brands found": "No brands found"
+  "No brands found": "No brands found",
+  "product-info": {
+    "trending": "Selling fast! 5 people have this in their carts",
+    "ratings": "Ratings",
+    "price": "Price",
+    "totalPrice": "Total Price",
+    "addToCart": "Add To Cart",
+    "buyNow": "Buy Now",
+    "addToWishlist": "Add To Wishlist",
+    "share": "Share",
+    "stockWarning": "Please Hurry only 10 Left In Stock!",
+    "productInfoTitle": "Product Info",
+    "sku": "SKU",
+    "unit": "Unit",
+    "piece": "Piece",
+    "quantity": "Quantity",
+    "itemsLeft": "{{count}} Items Left",
+    "weight": "Weight",
+    "deliveryDetailsTitle": "Delivery Details",
+    "deliveryTime": "3-5 Business days",
+    "returnPolicy": "30-Day Return Policy",
+    "guaranteedSafeCheckout": "Guaranteed Safe Checkout",
+    "secureCheckout": "Secure Checkout"
+  }
 }

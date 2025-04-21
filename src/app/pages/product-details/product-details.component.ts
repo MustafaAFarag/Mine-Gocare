@@ -9,6 +9,7 @@ import { ProductImageGalleryComponent } from '../../features/product-details/pro
 import { ProductInfoComponent } from '../../features/product-details/product-info/product-info.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { ProductDetails } from '../../model/ProductDetail';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-product-details',
@@ -28,12 +29,15 @@ import { ProductDetails } from '../../model/ProductDetail';
 export class ProductDetailsComponent implements OnInit {
   productDetails!: ProductDetails;
   isLoading: boolean = true;
+  currentLanguage: string = 'en';
 
   constructor(
     public productService: ProductService,
     private route: ActivatedRoute,
+    private languageService: LanguageService,
   ) {
     this.productDetails = {} as ProductDetails;
+    this.currentLanguage = this.languageService.getCurrentLanguage();
   }
 
   ngOnInit(): void {
@@ -42,6 +46,11 @@ export class ProductDetailsComponent implements OnInit {
       const variantId = params['variantId'];
       console.log('Product ID:', productId);
       this.fetchProductDetailsAPI(productId, variantId);
+    });
+
+    // Subscribe to language changes
+    this.languageService.language$.subscribe((lang) => {
+      this.currentLanguage = lang;
     });
   }
 
@@ -53,5 +62,14 @@ export class ProductDetailsComponent implements OnInit {
         this.isLoading = false;
         console.log('PRODUCT DETAILS', this.productDetails);
       });
+  }
+
+  getLocalizedProductName(): string {
+    if (!this.productDetails || !this.productDetails.productName) {
+      return '';
+    }
+    return this.currentLanguage === 'ar'
+      ? this.productDetails.productName.ar
+      : this.productDetails.productName.en;
   }
 }
