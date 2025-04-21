@@ -6,6 +6,7 @@ export interface CartItem {
   afterPrice: number;
   beforePrice: number;
   quantity: number;
+  currency?: any;
 }
 
 export interface Cart {

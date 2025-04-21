@@ -113,8 +113,8 @@
           <ng-container
             *ngIf="item.afterPrice !== item.beforePrice; else regularPrice"
           >
-            <span class="font-bold text-gray-900"
-              >${{ item.afterPrice.toFixed(2) }}</span
+            <span class="font-bold text-gray-900">
+              {{ item.currency.en }} {{ item.afterPrice.toFixed(2) }}</span
             >
             <span class="ml-2 text-sm text-special-gray line-through"
               >${{ item.beforePrice.toFixed(2) }}</span
@@ -178,10 +178,10 @@
     <!-- Cart Summary -->
     <div class="flex justify-end border-b p-4">
       <div class="text-right">
-        <div class="flex items-center justify-end gap-8 font-medium">
+        <div class="flex items-center justify-end gap-2 font-medium">
           <span>{{ "cart.cartSummary.totalPrice" | translate }}</span>
-          <span class="text-xl font-bold text-hover-color"
-            >${{ getCartTotal().toFixed(2) }}</span
+          <span class="text-xl font-bold text-hover-color">
+            {{ getCartTotal().toFixed(2) }}</span
           >
         </div>
       </div>

@@ -99,6 +99,8 @@ export class CartComponent implements OnInit, OnDestroy {
     // Subscribe to cart changes
     this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
+      // Log cartItems here, after they are updated
+      console.log('Updated cartItems', this.cartItems);
     });
   }
 

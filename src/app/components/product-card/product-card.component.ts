@@ -80,6 +80,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
+    console.log('product', product);
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: product.variantId,
@@ -88,8 +89,9 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
+      currency: product.currency.name,
     };
-
+    console.log('cartItem', cartItem);
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }
