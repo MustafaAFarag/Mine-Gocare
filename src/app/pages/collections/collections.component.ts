@@ -13,32 +13,9 @@ import { CartService } from '../../services/cart.service';
 import { CartSidebarService } from '../../services/cart-sidebar.service';
 import { CartItem } from '../../model/Cart';
 import { Category as ApiCategory } from '../../model/Categories';
-
-interface Category {
-  name: string;
-  selected: boolean;
-  subcategories?: Category[];
-  isParent?: boolean;
-  id?: number;
-  level?: number;
-}
-
-interface Brand {
-  name: string;
-  id?: number;
-  selected?: boolean;
-  en?: string;
-  ar?: string;
-}
-
-interface Color {
-  name: string;
-}
-
-interface RatingOption {
-  value: number;
-  selected: boolean;
-}
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
+import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
 
 @Component({
   selector: 'app-collections',
@@ -49,6 +26,7 @@ interface RatingOption {
     FilterTabComponent,
     ProductCardComponent,
     LoadingComponent,
+    TranslateModule,
   ],
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css'],
@@ -102,6 +80,7 @@ export class CollectionsComponent implements OnInit {
     private location: Location,
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
+    public languageService: LanguageService,
   ) {
     this.checkScreenSize();
   }
@@ -117,6 +96,11 @@ export class CollectionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true; // Page loading when initializing
+
+    // Subscribe to language changes to update display names
+    this.languageService.direction$.subscribe(() => {
+      this.updateDisplayLanguage();
+    });
 
     // Fetch categories first, as we need them to map names to IDs
     this.categoriesLoading = true;
@@ -134,6 +118,39 @@ export class CollectionsComponent implements OnInit {
         this.categoriesLoading = false;
         this.isLoading = false;
       },
+    });
+  }
+
+  // Method to update displayed names based on current language
+  updateDisplayLanguage(): void {
+    const currentLang = this.languageService.getCurrentLanguage();
+
+    // Update category names
+    this.updateCategoryNames(this.categories, currentLang);
+
+    // Update brand names
+    this.brands.forEach((brand) => {
+      if (brand.en && brand.ar) {
+        brand.name = currentLang === 'ar' ? brand.ar : brand.en;
+      }
+    });
+  }
+
+  // Recursive helper to update category names at all levels
+  private updateCategoryNames(
+    categories: Category[],
+    currentLang: string,
+  ): void {
+    if (!categories) return;
+
+    categories.forEach((category) => {
+      // Update name based on current language
+      category.name = currentLang === 'ar' ? category.nameAr : category.nameEn;
+
+      // Update subcategories if any
+      if (category.subcategories && category.subcategories.length > 0) {
+        this.updateCategoryNames(category.subcategories, currentLang);
+      }
     });
   }
 
@@ -383,15 +400,19 @@ export class CollectionsComponent implements OnInit {
       // Only extract brands if we haven't already done it
       if (this.brands.length === 0) {
         const uniqueBrands = new Map();
+        const currentLang = this.languageService.getCurrentLanguage();
 
         this.products.forEach((product) => {
           // Using the English name as key to avoid duplicates
           const brandKey = product.brand.en;
           if (!uniqueBrands.has(brandKey)) {
             uniqueBrands.set(brandKey, {
-              name: product.brand.en,
+              name:
+                product.brand.ar && currentLang === 'ar'
+                  ? product.brand.ar
+                  : product.brand.en,
               en: product.brand.en,
-              ar: product.brand.ar,
+              ar: product.brand.ar || product.brand.en, // Fallback to English if Arabic not available
               id: uniqueBrands.size + 1, // Generate a simple numeric ID
               selected: this.selectedBrandNames.includes(product.brand.en), // Set selected state based on current filters
             });
@@ -400,10 +421,12 @@ export class CollectionsComponent implements OnInit {
 
         this.brands = Array.from(uniqueBrands.values());
       } else {
-        // Update existing brands selection status
+        // Update existing brands selection status and name based on current language
+        const currentLang = this.languageService.getCurrentLanguage();
         this.brands.forEach((brand) => {
           if (brand.en) {
             brand.selected = this.selectedBrandNames.includes(brand.en);
+            brand.name = brand.ar && currentLang === 'ar' ? brand.ar : brand.en;
           }
         });
       }
@@ -430,6 +453,14 @@ export class CollectionsComponent implements OnInit {
   }
 
   toggleCategory(category: Category): void {
+    // Ensure category has nameEn and nameAr properties
+    if (!category.nameEn && category.name) {
+      category.nameEn = category.name;
+    }
+    if (!category.nameAr && category.name) {
+      category.nameAr = category.name;
+    }
+
     category.selected = !category.selected;
 
     if (category.selected) {
@@ -754,7 +785,7 @@ export class CollectionsComponent implements OnInit {
       for (const id of ids) {
         const category = this.categories.find((cat) => cat.id === id);
         if (category) {
-          names.push(encodeURIComponent(category.name));
+          names.push(encodeURIComponent(category.nameEn)); // Use English name for URL params
         }
       }
     } else if (level === 1) {
@@ -766,7 +797,7 @@ export class CollectionsComponent implements OnInit {
               (sub) => sub.id === id,
             );
             if (subcategory) {
-              names.push(encodeURIComponent(subcategory.name));
+              names.push(encodeURIComponent(subcategory.nameEn)); // Use English name for URL params
               break;
             }
           }
@@ -783,7 +814,7 @@ export class CollectionsComponent implements OnInit {
                   (subSub) => subSub.id === id,
                 );
                 if (subSubcategory) {
-                  names.push(encodeURIComponent(subSubcategory.name));
+                  names.push(encodeURIComponent(subSubcategory.nameEn)); // Use English name for URL params
                   break;
                 }
               }
@@ -804,7 +835,7 @@ export class CollectionsComponent implements OnInit {
     if (level === 0) {
       // Top-level categories
       for (const name of decodedNames) {
-        const category = this.categories.find((cat) => cat.name === name);
+        const category = this.categories.find((cat) => cat.nameEn === name);
         if (category && category.id) {
           ids.push(category.id);
         }
@@ -815,7 +846,7 @@ export class CollectionsComponent implements OnInit {
         for (const category of this.categories) {
           if (category.subcategories) {
             const subcategory = category.subcategories.find(
-              (sub) => sub.name === name,
+              (sub) => sub.nameEn === name,
             );
             if (subcategory && subcategory.id) {
               ids.push(subcategory.id);
@@ -832,7 +863,7 @@ export class CollectionsComponent implements OnInit {
             for (const subcategory of category.subcategories) {
               if (subcategory.subcategories) {
                 const subSubcategory = subcategory.subcategories.find(
-                  (subSub) => subSub.name === name,
+                  (subSub) => subSub.nameEn === name,
                 );
                 if (subSubcategory && subSubcategory.id) {
                   ids.push(subSubcategory.id);
@@ -1037,21 +1068,29 @@ export class CollectionsComponent implements OnInit {
       return [];
     }
 
+    const currentLang = this.languageService.getCurrentLanguage();
+
     // Process all categories from the API response
     return apiCategories.map((category) => ({
-      name: category.name.en,
+      name: currentLang === 'ar' ? category.name.ar : category.name.en,
+      nameEn: category.name.en,
+      nameAr: category.name.ar,
       selected: false,
       id: category.id,
       isParent: category.hasSubCategories,
       level: 0, // Top level category
       subcategories: category.subCategories?.map((subCat) => ({
-        name: subCat.name.en,
+        name: currentLang === 'ar' ? subCat.name.ar : subCat.name.en,
+        nameEn: subCat.name.en,
+        nameAr: subCat.name.ar,
         selected: false,
         id: subCat.id,
         isParent: subCat.hasSubCategories,
         level: 1, // Middle level category
         subcategories: subCat.subCategories?.map((subSubCat) => ({
-          name: subSubCat.name.en,
+          name: currentLang === 'ar' ? subSubCat.name.ar : subSubCat.name.en,
+          nameEn: subSubCat.name.en,
+          nameAr: subSubCat.name.ar,
           selected: false,
           id: subSubCat.id,
           level: 2, // Bottom level category,

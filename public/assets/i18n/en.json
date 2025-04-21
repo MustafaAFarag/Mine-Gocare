@@ -203,7 +203,7 @@
     "servicesBody": "<strong>Berryat</strong> is an online platform that allows users to browse, order, and purchase berries and related products. Users can manage their orders, track shipments, and make secure payments directly through the site.",
 
     "warrantiesTitle": "Warranties",
-    "warrantiesBody": "<strong>Berryat</strong> acts as an intermediary between users and suppliers. While we aim to provide high-quality products, Berryat does not guarantee the freshness, appearance, or taste of items delivered. Product usage and satisfaction are at the customer’s own risk.",
+    "warrantiesBody": "<strong>Berryat</strong> acts as an intermediary between users and suppliers. While we aim to provide high-quality products, Berryat does not guarantee the freshness, appearance, or taste of items delivered. Product usage and satisfaction are at the customer's own risk.",
 
     "rightsTitle": "Rights and Intellectual Property",
     "rightsBody": "All content, branding, images, data, and software associated with <strong>Berryat</strong> are protected intellectual property. Berryat reserves the right to modify, suspend, or terminate access to any part of the website without prior notice or compensation.",
@@ -287,7 +287,7 @@
 
   "signup": {
     "title": "Sign Up",
-    "subtitle": "Join our platform in seconds and explore what’s waiting for you. It’s easy, fast, and free!",
+    "subtitle": "Join our platform in seconds and explore what's waiting for you. It's easy, fast, and free!",
     "fields": {
       "firstName": {
         "label": "First Name",
@@ -383,5 +383,50 @@
       "continueShopping": "Continue Shopping",
       "checkout": "Check Out"
     }
-  }
+  },
+  "collections": {
+    "loading": "Loading...",
+    "filters": {
+      "button": "Filters",
+      "clearAll": "Clear All Filters",
+      "noProducts": "No products found",
+      "adjustFilters": "Try adjusting your filters or clearing them to see more products",
+      "sortBy": "Sort By",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "viewMode": {
+        "grid2": "2 Columns Grid",
+        "grid3": "3 Columns Grid",
+        "grid4": "4 Columns Grid",
+        "list": "List View"
+      }
+    },
+    "productCard": {
+      "addToCart": "Add to Cart",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "onlyLeftInStock": "Only {{stockCount}} left in stock",
+      "price": "Price",
+      "discount": "{{discountPercentage}}% off",
+      "rating": "Rating",
+      "noRating": "No Rating"
+    },
+    "noProductsFound": {
+      "title": "No products found",
+      "message": "Try adjusting your filters or clearing them to see more products."
+    },
+    "filterSidebar": {
+      "categories": "Categories",
+      "brands": "Brands",
+      "ratings": "Ratings",
+      "price": "Price",
+      "priceRange": "Price Range"
+    },
+    "banner": {
+      "title": "Fashion Collection"
+    }
+  },
+  "Search": "Search",
+  "No categories found": "No categories found",
+  "No brands found": "No brands found"
 }

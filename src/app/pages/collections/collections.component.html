@@ -9,7 +9,7 @@
 
   <!-- Content when loaded -->
   <div *ngIf="!isLoading" class=" ">
-    <app-breadcrumb [soloRoute]="'Collections'"></app-breadcrumb>
+    <app-breadcrumb [soloRoute]="'Collections' | translate"></app-breadcrumb>
 
     <!-- Mobile Filter Sidebar -->
     <div
@@ -78,7 +78,7 @@
           <div class="relative">
             <img
               src="/assets/images/settings/insta2-berry.jpg"
-              alt="Fashion Collection"
+              alt="{{ 'collections.banner.title' | translate }}"
               class="h-64 w-full object-cover"
             />
             <div
@@ -93,7 +93,8 @@
             (click)="toggleFilterSidebar()"
             class="flex items-center rounded-md bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
           >
-            <i class="ri-filter-line mr-2"></i> Filters
+            <i class="ri-filter-line mr-2"></i>
+            {{ "collections.filters.button" | translate }}
             <span
               *ngIf="activeFilters.length > 0"
               class="ml-2 rounded-full bg-hover-color px-2 py-0.5 text-xs text-white"
@@ -111,18 +112,20 @@
                 (change)="applySortOrder($event)"
                 class="appearance-none rounded-md border bg-white py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-orange-300 lg:pr-10"
               >
-                <option value="" [selected]="!sortOrder">Sort By</option>
+                <option value="" [selected]="!sortOrder">
+                  {{ "collections.filters.sortBy" | translate }}
+                </option>
                 <option
                   value="price-asc"
                   [selected]="sortOrder === 'price-asc'"
                 >
-                  Price: Low to High
+                  {{ "collections.filters.priceLowToHigh" | translate }}
                 </option>
                 <option
                   value="price-desc"
                   [selected]="sortOrder === 'price-desc'"
                 >
-                  Price: High to Low
+                  {{ "collections.filters.priceHighToLow" | translate }}
                 </option>
               </select>
               <i
@@ -140,6 +143,7 @@
                 'bg-gray-200 text-gray-600': viewMode !== 'grid2',
               }"
               class="rounded p-2"
+              title="{{ 'collections.filters.viewMode.grid2' | translate }}"
             >
               <i class="ri-layout-2-line"></i>
             </button>
@@ -150,6 +154,7 @@
                 'bg-gray-200 text-gray-600': viewMode !== 'grid3',
               }"
               class="rounded p-2"
+              title="{{ 'collections.filters.viewMode.grid3' | translate }}"
             >
               <i class="ri-layout-3-line"></i>
             </button>
@@ -160,6 +165,7 @@
                 'bg-gray-200 text-gray-600': viewMode !== 'grid4',
               }"
               class="rounded p-2"
+              title="{{ 'collections.filters.viewMode.grid4' | translate }}"
             >
               <i class="ri-layout-4-line"></i>
             </button>
@@ -170,6 +176,7 @@
                 'bg-gray-200 text-gray-600': viewMode !== 'list',
               }"
               class="rounded p-2"
+              title="{{ 'collections.filters.viewMode.list' | translate }}"
             >
               <i class="ri-list-check"></i>
             </button>
@@ -191,16 +198,16 @@
         >
           <i class="ri-shopping-bag-line mb-4 text-5xl text-gray-400"></i>
           <h3 class="mb-2 text-xl font-medium text-gray-700">
-            No products found
+            {{ "collections.noProductsFound.title" | translate }}
           </h3>
           <p class="text-gray-500">
-            Try adjusting your filters or clearing them to see more products.
+            {{ "collections.noProductsFound.message" | translate }}
           </p>
           <button
             (click)="clearAllFilters()"
             class="mt-4 rounded-md bg-hover-color px-4 py-2 text-white hover:bg-opacity-90"
           >
-            Clear All Filters
+            {{ "collections.filters.clearAll" | translate }}
           </button>
         </div>
 
@@ -275,7 +282,7 @@
                     class="add-to-cart-btn absolute bottom-2 left-0 right-0 m-2 translate-y-full transform bg-hover-color p-2 text-center text-white opacity-0 transition-all"
                   >
                     <button (click)="addToCart(product)" class="w-full">
-                      Add to Cart
+                      {{ "collections.productCard.addToCart" | translate }}
                     </button>
                   </div>
                 </div>
@@ -284,7 +291,13 @@
               <!-- Product Details -->
               <div class="flex w-full flex-col justify-center p-4 sm:w-4/5">
                 <!-- Brand -->
-                <p class="mb-1 text-sm text-gray-500">{{ product.brand.en }}</p>
+                <p class="mb-1 text-sm text-gray-500">
+                  {{
+                    languageService.getCurrentLanguage() === "ar"
+                      ? product.brand.ar
+                      : product.brand.en
+                  }}
+                </p>
 
                 <!-- Product Name -->
                 <h3
@@ -296,27 +309,46 @@
                     )
                   "
                 >
-                  {{ product.name.en }}
+                  {{
+                    languageService.getCurrentLanguage() === "ar"
+                      ? product.name.ar
+                      : product.name.en
+                  }}
                 </h3>
 
                 <!-- Price -->
                 <div class="flex items-center gap-2">
                   <span class="font-semibold"
                     >{{ product.priceAfterDiscount }}
-                    {{ product.currency.name.en }}</span
+                    {{
+                      languageService.getCurrentLanguage() === "ar"
+                        ? product.currency.name.ar
+                        : product.currency.name.en
+                    }}</span
                   >
                   <span
                     *ngIf="product.discountPercentage > 0"
                     class="text-sm text-gray-500 line-through"
                   >
                     {{ product.priceBeforeDiscount }}
-                    {{ product.currency.name.en }}
+                    {{
+                      languageService.getCurrentLanguage() === "ar"
+                        ? product.currency.name.ar
+                        : product.currency.name.en
+                    }}
                   </span>
                   <span
                     *ngIf="product.discountPercentage > 0"
                     class="text-hover-color"
                   >
-                    {{ product.discountPercentage.toFixed(0) }}% off
+                    {{
+                      "collections.productCard.discount"
+                        | translate
+                          : {
+                              discountPercentage:
+                                product.discountPercentage.toFixed(0),
+                            }
+                    }}
                   </span>
                 </div>
 
@@ -335,7 +367,10 @@
                   *ngIf="product.lowQuantity"
                   class="mt-2 text-xs text-orange-500"
                 >
-                  Only {{ product.stockCount }} left in stock
+                  {{
+                    "collections.productCard.onlyLeftInStock"
+                      | translate: { stockCount: product.stockCount }
+                  }}
                 </div>
               </div>
             </div>

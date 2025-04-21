@@ -1,43 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Category {
-  name: string;
-  selected: boolean;
-  subcategories?: Category[];
-  isParent?: boolean;
-  id?: number;
-  level?: number;
-}
-
-interface Brand {
-  name: string;
-  id?: number;
-  selected?: boolean;
-  en?: string;
-  ar?: string;
-}
-
-interface RatingOption {
-  value: number;
-  selected: boolean;
-}
-
-interface PriceRange {
-  min: number;
-  max: number | null; // null represents "and above"
-  selected: boolean;
-}
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
+import {
+  Category,
+  Brand,
+  RatingOption,
+  PriceRange,
+} from '../../../model/shared-interfaces';
 
 @Component({
   selector: 'app-filter-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './filter-tab.component.html',
   styleUrl: './filter-tab.component.css',
 })
-export class FilterTabComponent {
+export class FilterTabComponent implements OnInit {
   @Input() categories: Category[] = [];
   @Input() brands: Brand[] = [];
   @Input() activeFilters: string[] = [];
@@ -68,7 +48,7 @@ export class FilterTabComponent {
     { min: 0, max: 50, selected: false },
     { min: 50, max: 100, selected: false },
     { min: 100, max: 300, selected: false },
-    { min: 300, max: null, selected: false }, // 300+ (and above)
+    { min: 300, max: null, selected: false },
   ];
 
   // Rating options
@@ -93,6 +73,15 @@ export class FilterTabComponent {
   @Output() filterRemoved = new EventEmitter<string>();
   @Output() allFiltersCleared = new EventEmitter<void>();
   @Output() closeFilterSidebar = new EventEmitter<void>();
+
+  constructor(public languageService: LanguageService) {}
+
+  ngOnInit(): void {
+    // Subscribe to language changes to update display
+    this.languageService.direction$.subscribe(() => {
+      // Trigger UI update when language changes
+    });
+  }
 
   toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
     this.filterToggled.emit(section);
@@ -178,6 +167,27 @@ export class FilterTabComponent {
     this.closeFilterSidebar.emit();
   }
 
+  // Filter brands based on search term
+  get filteredBrands(): Brand[] {
+    if (!this.brandSearchTerm.trim()) {
+      return this.brands;
+    }
+
+    const searchTerm = this.brandSearchTerm.toLowerCase();
+    const currentLang = this.languageService.getCurrentLanguage();
+
+    return this.brands.filter((brand) => {
+      // Search either in Arabic or English name based on current language
+      if (currentLang === 'ar' && brand.ar) {
+        return (
+          brand.ar.toLowerCase().includes(searchTerm) ||
+          (brand.en ? brand.en.toLowerCase().includes(searchTerm) : false)
+        );
+      }
+      return brand.en ? brand.en.toLowerCase().includes(searchTerm) : false;
+    });
+  }
+
   // Filter categories based on search term
   get filteredCategories(): Category[] {
     if (!this.categorySearchTerm.trim()) {
@@ -185,10 +195,14 @@ export class FilterTabComponent {
     }
 
     const searchTerm = this.categorySearchTerm.toLowerCase();
+    const currentLang = this.languageService.getCurrentLanguage();
+
     return this.categories
       .map((category) => {
-        // Check if main category matches
-        const categoryMatches = category.name
+        // Check if main category matches (in current language or English)
+        const categoryNameToSearch =
+          currentLang === 'ar' ? category.nameAr : category.nameEn;
+        const categoryMatches = categoryNameToSearch
           .toLowerCase()
           .includes(searchTerm);
 
@@ -200,7 +214,11 @@ export class FilterTabComponent {
         // If main category doesn't match, check subcategories
         if (category.subcategories && category.subcategories.length > 0) {
           const matchingSubcategories = category.subcategories
-            .filter((sub) => sub.name.toLowerCase().includes(searchTerm))
+            .filter((sub) => {
+              const subCategoryNameToSearch =
+                currentLang === 'ar' ? sub.nameAr : sub.nameEn;
+              return subCategoryNameToSearch.toLowerCase().includes(searchTerm);
+            })
             .map((sub) => ({ ...sub }));
 
           // If there are matching subcategories, return category with only those subcategories
@@ -215,9 +233,13 @@ export class FilterTabComponent {
           const subcategoriesWithMatchingSubs = category.subcategories
             .map((sub) => {
               if (sub.subcategories && sub.subcategories.length > 0) {
-                const matchingSubSubs = sub.subcategories.filter((subSub) =>
-                  subSub.name.toLowerCase().includes(searchTerm),
-                );
+                const matchingSubSubs = sub.subcategories.filter((subSub) => {
+                  const subSubCategoryNameToSearch =
+                    currentLang === 'ar' ? subSub.nameAr : subSub.nameEn;
+                  return subSubCategoryNameToSearch
+                    .toLowerCase()
+                    .includes(searchTerm);
+                });
 
                 if (matchingSubSubs.length > 0) {
                   return {
@@ -242,17 +264,5 @@ export class FilterTabComponent {
         return null;
       })
       .filter(Boolean) as Category[];
-  }
-
-  // Filter brands based on search term
-  get filteredBrands(): Brand[] {
-    if (!this.brandSearchTerm.trim()) {
-      return this.brands;
-    }
-
-    const searchTerm = this.brandSearchTerm.toLowerCase();
-    return this.brands.filter((brand) =>
-      brand.name.toLowerCase().includes(searchTerm),
-    );
   }
 }

@@ -382,5 +382,50 @@
       "continueShopping": "مواصلة التسوق",
       "checkout": "الدفع"
     }
-  }
+  },
+  "collections": {
+    "loading": "جارٍ التحميل...",
+    "filters": {
+      "button": "الفلاتر",
+      "clearAll": "مسح كل الفلاتر",
+      "noProducts": "لا توجد منتجات",
+      "adjustFilters": "حاول تعديل الفلاتر أو مسحها لمشاهدة المزيد من المنتجات",
+      "sortBy": "ترتيب حسب",
+      "priceLowToHigh": "السعر: من الأقل إلى الأعلى",
+      "priceHighToLow": "السعر: من الأعلى إلى الأقل",
+      "viewMode": {
+        "grid2": "شبكة من عمودين",
+        "grid3": "شبكة من ثلاثة أعمدة",
+        "grid4": "شبكة من أربعة أعمدة",
+        "list": "عرض القائمة"
+      }
+    },
+    "productCard": {
+      "addToCart": "أضف إلى السلة",
+      "inStock": "متوفر",
+      "outOfStock": "غير متوفر",
+      "onlyLeftInStock": "فقط {{stockCount}} متبقية في المخزون",
+      "price": "السعر",
+      "discount": "خصم {{discountPercentage}}٪",
+      "rating": "تقييم",
+      "noRating": "لا يوجد تقييم"
+    },
+    "noProductsFound": {
+      "title": "لا توجد منتجات",
+      "message": "حاول تعديل الفلاتر أو مسحها لمشاهدة المزيد من المنتجات."
+    },
+    "filterSidebar": {
+      "categories": "الفئات",
+      "brands": "الماركات",
+      "ratings": "التقييمات",
+      "price": "السعر",
+      "priceRange": "نطاق السعر"
+    },
+    "banner": {
+      "title": "مجموعة الأزياء"
+    }
+  },
+  "Search": "بحث",
+  "No categories found": "لا توجد فئات",
+  "No brands found": "لا توجد ماركات"
 }

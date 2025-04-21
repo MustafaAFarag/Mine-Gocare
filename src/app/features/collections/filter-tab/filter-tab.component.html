@@ -10,13 +10,15 @@
   <!-- Active Filters -->
   <div class="mb-6">
     <div class="mb-4 flex items-center justify-between">
-      <h3 class="font-medium text-gray-800">Filters</h3>
+      <h3 class="font-medium text-gray-800">
+        {{ "collections.filters.button" | translate }}
+      </h3>
       <button
         *ngIf="activeFilters.length > 0"
         (click)="clearAllFilters()"
         class="text-sm text-hover-color hover:text-hover-color"
       >
-        Clear All
+        {{ "collections.filters.clearAll" | translate }}
       </button>
     </div>
 
@@ -42,7 +44,9 @@
       class="mb-4 flex cursor-pointer items-center justify-between"
       (click)="toggleFilter('categories')"
     >
-      <h3 class="font-medium text-gray-800">Categories</h3>
+      <h3 class="font-medium text-gray-800">
+        {{ "collections.filterSidebar.categories" | translate }}
+      </h3>
       <i
         [class]="showCategories ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
       ></i>
@@ -52,7 +56,7 @@
       <div class="relative mb-4">
         <input
           type="text"
-          placeholder="Search"
+          placeholder="{{ 'Search' | translate }}"
           [(ngModel)]="categorySearchTerm"
           class="w-full rounded-md border bg-white px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-hover-color"
         />
@@ -81,7 +85,7 @@
         *ngIf="!categoriesLoading && filteredCategories.length === 0"
         class="py-4 text-center text-gray-500"
       >
-        No categories found
+        {{ "No categories found" | translate }}
       </div>
 
       <div
@@ -121,7 +125,11 @@
               category.subcategories &&
               category.subcategories.length > 0
             "
-            class="ml-6 mt-2 space-y-2"
+            [ngClass]="{
+              'mr-6': languageService.getCurrentLanguage() === 'ar',
+              'ml-6': languageService.getCurrentLanguage() !== 'ar',
+            }"
+            class="mt-2 space-y-2"
           >
             <div
               *ngFor="let subcategory of category.subcategories"
@@ -158,7 +166,11 @@
                   subcategory.subcategories &&
                   subcategory.subcategories.length > 0
                 "
-                class="ml-6 mt-2 space-y-2"
+                [ngClass]="{
+                  'mr-6': languageService.getCurrentLanguage() === 'ar',
+                  'ml-6': languageService.getCurrentLanguage() !== 'ar',
+                }"
+                class="mt-2 space-y-2"
               >
                 <div
                   *ngFor="let subSubcategory of subcategory.subcategories"
@@ -201,7 +213,9 @@
       class="mb-4 flex cursor-pointer items-center justify-between"
       (click)="toggleFilter('brands')"
     >
-      <h3 class="font-medium text-gray-800">Brand</h3>
+      <h3 class="font-medium text-gray-800">
+        {{ "collections.filterSidebar.brands" | translate }}
+      </h3>
       <i
         [class]="showBrands ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
       ></i>
@@ -211,7 +225,7 @@
       <div class="relative mb-4">
         <input
           type="text"
-          placeholder="Search"
+          placeholder="{{ 'Search' | translate }}"
           [(ngModel)]="brandSearchTerm"
           class="w-full rounded-md border bg-white px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-offset-hover-color"
         />
@@ -237,7 +251,7 @@
         *ngIf="!brandsLoading && filteredBrands.length === 0"
         class="py-4 text-center text-gray-500"
       >
-        No brands found
+        {{ "No brands found" | translate }}
       </div>
 
       <div
@@ -263,7 +277,11 @@
             ></i>
           </div>
           <span [ngClass]="{ 'text-hover-color': brand.selected }">
-            {{ brand.name }}
+            {{
+              languageService.getCurrentLanguage() === "ar" && brand.ar
+                ? brand.ar
+                : brand.en
+            }}
           </span>
         </div>
       </div>
@@ -276,7 +294,9 @@
       class="mb-4 flex cursor-pointer items-center justify-between"
       (click)="toggleFilter('ratings')"
     >
-      <h3 class="font-medium text-gray-800">Rating</h3>
+      <h3 class="font-medium text-gray-800">
+        {{ "collections.filterSidebar.ratings" | translate }}
+      </h3>
       <i
         [class]="showRatings ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
       ></i>
@@ -308,7 +328,10 @@
               class="ri-star-fill text-yellow-400"
             ></i>
           </ng-container>
-          <span class="ml-1">{{ rating.value }} rating</span>
+          <span class="ml-1"
+            >{{ rating.value }}
+            {{ "collections.productCard.rating" | translate }}</span
+          >
         </div>
       </div>
     </div>
@@ -320,7 +343,9 @@
       class="mb-4 flex cursor-pointer items-center justify-between"
       (click)="toggleFilter('price')"
     >
-      <h3 class="font-medium text-gray-800">Price</h3>
+      <h3 class="font-medium text-gray-800">
+        {{ "collections.filterSidebar.price" | translate }}
+      </h3>
       <i
         [class]="showPrice ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
       ></i>
