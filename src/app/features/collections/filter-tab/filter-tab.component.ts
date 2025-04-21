@@ -108,9 +108,33 @@ export class FilterTabComponent implements OnInit, OnDestroy {
           );
           this.currentLanguage = newLanguage;
 
+          // Store current expanded states
+          const expandedStates = {
+            categories: this.showCategories,
+            brands: this.showBrands,
+            ratings: this.showRatings,
+            price: this.showPrice,
+          };
+
           // Force template refresh by creating new array references
+          // but don't mutate the actual data
           this.categories = [...this.categories];
-          this.brands = [...this.brands];
+
+          // Don't modify the brands array directly, as it may be reducing to a single brand
+          // Just let the parent component rebuild active filters instead
+
+          // Delay emitting an event to refresh the parent component's active filters
+          // without causing filter sections to collapse
+          setTimeout(() => {
+            // Notify parent to rebuild active filters without toggling section visibility
+            this.filterRemoved.emit('');
+
+            // Restore expanded states
+            this.showCategories = expandedStates.categories;
+            this.showBrands = expandedStates.brands;
+            this.showRatings = expandedStates.ratings;
+            this.showPrice = expandedStates.price;
+          }, 0);
         }
       });
   }

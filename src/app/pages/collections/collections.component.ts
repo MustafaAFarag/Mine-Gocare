@@ -162,16 +162,28 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Update brand names
     this.updateBrandNames();
+
+    // Make a copy of the brands array to preserve selected state
+    // and prevent the array from being reduced
+    this.brands = [...this.brands];
+
+    // Rebuild active filters in the current language
+    this.rebuildActiveFilters();
   }
 
   // New method to explicitly update brand names
   private updateBrandNames(): void {
     const currentLang = this.languageService.getCurrentLanguage();
-    this.brands.forEach((brand) => {
+    const updatedBrands = [...this.brands]; // Create a copy to avoid reference issues
+
+    updatedBrands.forEach((brand) => {
       if (brand.en && brand.ar) {
         brand.name = currentLang === 'ar' ? brand.ar : brand.en;
       }
     });
+
+    // Reassign the array to trigger change detection
+    this.brands = updatedBrands;
   }
 
   // Recursive helper to update category names at all levels
@@ -290,22 +302,26 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   // Helper to rebuild active filters array based on selected items
   private rebuildActiveFilters(): void {
     this.activeFilters = [];
+    const currentLang = this.languageService.getCurrentLanguage();
 
     // Add category names to active filters
     for (const category of this.categories) {
       if (category.selected) {
+        // Use the localized name based on current language
         this.activeFilters.push(category.name);
       }
 
       if (category.subcategories) {
         for (const subcategory of category.subcategories) {
           if (subcategory.selected) {
+            // Use the localized name based on current language
             this.activeFilters.push(subcategory.name);
           }
 
           if (subcategory.subcategories) {
             for (const subSubcategory of subcategory.subcategories) {
               if (subSubcategory.selected) {
+                // Use the localized name based on current language
                 this.activeFilters.push(subSubcategory.name);
               }
             }
@@ -316,7 +332,15 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Add brand names to active filters
     for (const brandName of this.selectedBrandNames) {
-      if (!this.activeFilters.includes(brandName)) {
+      // Find the brand object to get its localized name
+      const brand = this.brands.find((b) => b.en === brandName);
+      if (brand && brand.en) {
+        const localizedBrandName =
+          currentLang === 'ar' && brand.ar ? brand.ar : brand.en;
+        if (!this.activeFilters.includes(localizedBrandName)) {
+          this.activeFilters.push(localizedBrandName);
+        }
+      } else if (!this.activeFilters.includes(brandName)) {
         this.activeFilters.push(brandName);
       }
     }
@@ -582,7 +606,15 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   removeFilter(filter: string): void {
+    // If filter is empty string, this is a signal to rebuild active filters only
+    // (used when changing language)
+    if (filter === '') {
+      this.rebuildActiveFilters();
+      return;
+    }
+
     this.activeFilters = this.activeFilters.filter((f) => f !== filter);
+    const currentLang = this.languageService.getCurrentLanguage();
 
     // Find and update the category or subcategory selection
     for (const category of this.categories) {
@@ -634,15 +666,15 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Check brands
+    // Check brands - need to match by localized name
     for (const brand of this.brands) {
-      if (brand.name === filter) {
+      const localizedBrandName =
+        currentLang === 'ar' && brand.ar ? brand.ar : brand.en;
+      if (localizedBrandName === filter && brand.en) {
         brand.selected = false;
-        if (brand.en) {
-          this.selectedBrandNames = this.selectedBrandNames.filter(
-            (name) => name !== brand.en,
-          );
-        }
+        this.selectedBrandNames = this.selectedBrandNames.filter(
+          (name) => name !== brand.en,
+        );
         this.updateUrlParams();
         this.fetchProductsAPI();
         return;
