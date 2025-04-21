@@ -43,10 +43,12 @@
               </h3>
               <div class="mt-1">
                 <span class="font-bold text-gray-900">
+                  {{ getLocalizedText(item.currency) }}
                   {{ item.afterPrice.toFixed(2) }}</span
                 >
                 <span class="ml-2 text-sm text-special-gray line-through"
-                  >${{ item.beforePrice.toFixed(2) }}</span
+                  >{{ getLocalizedText(item.currency) }}
+                  {{ item.beforePrice.toFixed(2) }}</span
                 >
               </div>
               <div class="text-sm font-bold text-hover-color">
@@ -85,7 +87,8 @@
             </button>
           </div>
           <div class="font-bold text-hover-color">
-            ${{ getItemTotal(item).toFixed(2) }}
+            {{ getLocalizedText(item.currency) }}
+            {{ getItemTotal(item).toFixed(2) }}
           </div>
         </div>
       </div>
@@ -114,20 +117,23 @@
             *ngIf="item.afterPrice !== item.beforePrice; else regularPrice"
           >
             <span class="font-bold text-gray-900">
-              {{ item.currency.en }} {{ item.afterPrice.toFixed(2) }}</span
+              {{ getLocalizedText(item.currency) }}
+              {{ item.afterPrice.toFixed(2) }}</span
             >
             <span class="ml-2 text-sm text-special-gray line-through"
-              >${{ item.beforePrice.toFixed(2) }}</span
+              >{{ getLocalizedText(item.currency) }}
+              {{ item.beforePrice.toFixed(2) }}</span
             >
             <div class="text-base font-bold text-hover-color xl:text-lg">
-              {{ "cart.desktopView.youSave" | translate }}: ${{
-                getSavings(item).toFixed(2)
-              }}
+              {{ "cart.desktopView.youSave" | translate }}:
+              {{ getLocalizedText(item.currency) }}
+              {{ getSavings(item).toFixed(2) }}
             </div>
           </ng-container>
           <ng-template #regularPrice>
             <span class="font-bold text-gray-900"
-              >${{ item.afterPrice.toFixed(2) }}</span
+              >{{ getLocalizedText(item.currency) }}
+              {{ item.afterPrice.toFixed(2) }}</span
             >
           </ng-template>
         </div>
@@ -159,7 +165,8 @@
         <!-- Total -->
         <div class="col-span-1 text-center">
           <div class="text-lg font-bold text-hover-color">
-            ${{ getItemTotal(item).toFixed(2) }}
+            {{ getLocalizedText(item.currency) }}
+            {{ getItemTotal(item).toFixed(2) }}
           </div>
         </div>
 
@@ -181,7 +188,7 @@
         <div class="flex items-center justify-end gap-2 font-medium">
           <span>{{ "cart.cartSummary.totalPrice" | translate }}</span>
           <span class="text-xl font-bold text-hover-color">
-            {{ getCartTotal().toFixed(2) }}</span
+            {{ getLocalizedCurrency() }} {{ getCartTotal().toFixed(2) }}</span
           >
         </div>
       </div>
