@@ -75,7 +75,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   @ViewChild(FilterTabComponent) filterTabComponent!: FilterTabComponent;
 
   // Add sortOrder as a class property
-  sortOrder: string = '';
+  sortOrder: string = 'price-asc';
 
   // Pagination properties
   currentPage: number = 1;
@@ -444,6 +444,10 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         }
 
         this.extractBrandsFromProducts();
+
+        // Apply the current sort order to the products
+        this.applySortingToProducts();
+
         this.applyPagination();
         this.isLoading = false;
         this.productsLoading = false;
@@ -1112,17 +1116,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
-    if (this.sortOrder === 'price-asc') {
-      // Sort products by price ascending (low to high)
-      this.filteredProducts = [...this.filteredProducts].sort(
-        (a, b) => a.priceAfterDiscount - b.priceAfterDiscount,
-      );
-    } else if (this.sortOrder === 'price-desc') {
-      // Sort products by price descending (high to low)
-      this.filteredProducts = [...this.filteredProducts].sort(
-        (a, b) => b.priceAfterDiscount - a.priceAfterDiscount,
-      );
-    }
+    // Apply sorting to the products
+    this.applySortingToProducts();
     this.applyPagination();
   }
 
@@ -1250,5 +1245,20 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     }
 
     return pages;
+  }
+
+  // Helper method to apply the current sort order to products
+  private applySortingToProducts(): void {
+    if (this.sortOrder === 'price-asc') {
+      // Sort products by price ascending (low to high)
+      this.filteredProducts = [...this.filteredProducts].sort(
+        (a, b) => a.priceAfterDiscount - b.priceAfterDiscount,
+      );
+    } else if (this.sortOrder === 'price-desc') {
+      // Sort products by price descending (high to low)
+      this.filteredProducts = [...this.filteredProducts].sort(
+        (a, b) => b.priceAfterDiscount - a.priceAfterDiscount,
+      );
+    }
   }
 }
