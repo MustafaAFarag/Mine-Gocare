@@ -452,5 +452,19 @@
     "returnPolicy": "سياسة الإرجاع خلال ٣٠ يوم",
     "guaranteedSafeCheckout": "الدفع الآمن المضمون",
     "secureCheckout": "الدفع الآمن"
+  },
+  "account": {
+    "header": "الحساب",
+    "sidebar": {
+      "dashboard": "لوحة التحكم",
+      "notifications": "الإشعارات",
+      "wallet": "محفظتي",
+      "orders": "طلباتي",
+      "points": "نقاط الكسب",
+      "bankDetails": "التفاصيل المصرفية",
+      "refundHistory": "سجل الاسترداد",
+      "savedAddress": "العناوين المحفوظة",
+      "logout": "تسجيل الخروج"
+    }
   }
 }

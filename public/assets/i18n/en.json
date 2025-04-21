@@ -452,5 +452,19 @@
     "returnPolicy": "30-Day Return Policy",
     "guaranteedSafeCheckout": "Guaranteed Safe Checkout",
     "secureCheckout": "Secure Checkout"
+  },
+  "account": {
+    "header": "Account",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "notifications": "Notifications",
+      "wallet": "My Wallet",
+      "orders": "My Orders",
+      "points": "Earning Points",
+      "bankDetails": "Bank Details",
+      "refundHistory": "Refund History",
+      "savedAddress": "Saved Address",
+      "logout": "Logout"
+    }
   }
 }

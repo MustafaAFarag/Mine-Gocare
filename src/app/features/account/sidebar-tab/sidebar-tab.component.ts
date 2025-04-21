@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { UserProfile } from '../../../model/Auth';
 import { AuthService } from '../../../services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/language.service';
+import { Subscription } from 'rxjs';
 
 interface SidebarItem {
   name: string;
+  nameKey: string;
   icon: string;
   route: string;
   active: boolean;
@@ -14,60 +18,68 @@ interface SidebarItem {
 
 @Component({
   selector: 'app-sidebar-tab',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './sidebar-tab.component.html',
   styleUrl: './sidebar-tab.component.css',
 })
-export class SidebarTabComponent implements OnInit {
+export class SidebarTabComponent implements OnInit, OnDestroy {
   user!: UserProfile;
+  private langSubscription!: Subscription;
+  currentLang: string = 'en';
 
   sidebarItems: SidebarItem[] = [
     {
       name: 'Dashboard',
+      nameKey: 'account.sidebar.dashboard',
       icon: 'ri-dashboard-line',
       route: '/account/dashboard',
       active: false,
     },
     {
       name: 'Notifications',
+      nameKey: 'account.sidebar.notifications',
       icon: 'ri-notification-line',
       route: '/account/notifications',
       active: false,
     },
-
     {
       name: 'My Wallet',
+      nameKey: 'account.sidebar.wallet',
       icon: 'ri-wallet-line',
       route: '/account/wallet',
       active: false,
     },
-
     {
       name: 'My Orders',
+      nameKey: 'account.sidebar.orders',
       icon: 'ri-file-list-line',
       route: '/account/orders',
       active: false,
     },
     {
       name: 'Earning Points',
+      nameKey: 'account.sidebar.points',
       icon: 'ri-coin-line',
       route: '/account/points',
       active: false,
     },
     {
       name: 'Bank Details',
+      nameKey: 'account.sidebar.bankDetails',
       icon: 'ri-bank-line',
       route: '/account/bank-details',
       active: false,
     },
     {
       name: 'Refund History',
+      nameKey: 'account.sidebar.refundHistory',
       icon: 'ri-refund-line',
       route: '/account/refund',
       active: false,
     },
     {
       name: 'Saved Address',
+      nameKey: 'account.sidebar.savedAddress',
       icon: 'ri-map-pin-line',
       route: '/account/address',
       active: false,
@@ -77,6 +89,8 @@ export class SidebarTabComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    public languageService: LanguageService,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +106,20 @@ export class SidebarTabComponent implements OnInit {
 
     // Load user data from localStorage
     this.loadUserFromLocalStorage();
+
+    // Get current language
+    this.currentLang = this.languageService.getCurrentLanguage();
+
+    // Subscribe to language changes
+    this.langSubscription = this.languageService.language$.subscribe((lang) => {
+      this.currentLang = lang;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
   }
 
   loadUserFromLocalStorage(): void {
@@ -138,6 +166,7 @@ export class SidebarTabComponent implements OnInit {
   getFullName(): string {
     return this.user ? this.user.fullName : '';
   }
+
   logout(): void {
     this.authService.logout();
   }
