@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -16,6 +22,7 @@ import { Category as ApiCategory } from '../../model/Categories';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-collections',
@@ -31,7 +38,10 @@ import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css'],
 })
-export class CollectionsComponent implements OnInit {
+export class CollectionsComponent implements OnInit, OnDestroy {
+  // Add a subject for cleanup
+  private destroy$ = new Subject<void>();
+
   // Filter states
   showCategories: boolean = true;
   showBrands: boolean = true;
@@ -97,10 +107,26 @@ export class CollectionsComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true; // Page loading when initializing
 
-    // Subscribe to language changes to update display names
-    this.languageService.direction$.subscribe(() => {
-      this.updateDisplayLanguage();
-    });
+    // Subscribe to language changes specifically (not just direction)
+    this.languageService.language$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((language) => {
+        console.log(
+          'Language changed to',
+          language,
+          '- updating display language',
+        );
+        this.updateDisplayLanguage();
+
+        // Force a refresh of the categories and brands based on new language
+        if (this.categories.length > 0) {
+          this.updateCategoryNames(this.categories, language);
+        }
+
+        if (this.brands.length > 0) {
+          this.updateBrandNames();
+        }
+      });
 
     // Fetch categories first, as we need them to map names to IDs
     this.categoriesLoading = true;
@@ -121,6 +147,12 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
+  // Add method to clean up subscriptions
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   // Method to update displayed names based on current language
   updateDisplayLanguage(): void {
     const currentLang = this.languageService.getCurrentLanguage();
@@ -129,6 +161,12 @@ export class CollectionsComponent implements OnInit {
     this.updateCategoryNames(this.categories, currentLang);
 
     // Update brand names
+    this.updateBrandNames();
+  }
+
+  // New method to explicitly update brand names
+  private updateBrandNames(): void {
+    const currentLang = this.languageService.getCurrentLanguage();
     this.brands.forEach((brand) => {
       if (brand.en && brand.ar) {
         brand.name = currentLang === 'ar' ? brand.ar : brand.en;
@@ -421,14 +459,8 @@ export class CollectionsComponent implements OnInit {
 
         this.brands = Array.from(uniqueBrands.values());
       } else {
-        // Update existing brands selection status and name based on current language
-        const currentLang = this.languageService.getCurrentLanguage();
-        this.brands.forEach((brand) => {
-          if (brand.en) {
-            brand.selected = this.selectedBrandNames.includes(brand.en);
-            brand.name = brand.ar && currentLang === 'ar' ? brand.ar : brand.en;
-          }
-        });
+        // Update brand names based on current language
+        this.updateBrandNames();
       }
     }
   }

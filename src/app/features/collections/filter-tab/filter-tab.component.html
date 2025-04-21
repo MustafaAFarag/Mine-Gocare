@@ -93,7 +93,10 @@
         *ngIf="!categoriesLoading && filteredCategories.length > 0"
       >
         <!-- Parent categories and subcategories -->
-        <div *ngFor="let category of filteredCategories" class="category-item">
+        <div
+          *ngFor="let category of filteredCategories; trackBy: trackByCategory"
+          class="category-item"
+        >
           <div
             class="flex cursor-pointer items-center"
             (click)="toggleCategory(category)"
@@ -259,7 +262,7 @@
         *ngIf="!brandsLoading && filteredBrands.length > 0"
       >
         <div
-          *ngFor="let brand of filteredBrands"
+          *ngFor="let brand of filteredBrands; trackBy: trackByBrand"
           class="flex cursor-pointer items-center"
           (click)="toggleBrand(brand)"
         >

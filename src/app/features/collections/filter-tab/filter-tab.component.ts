@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -9,6 +16,7 @@ import {
   RatingOption,
   PriceRange,
 } from '../../../model/shared-interfaces';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-filter-tab',
@@ -17,7 +25,13 @@ import {
   templateUrl: './filter-tab.component.html',
   styleUrl: './filter-tab.component.css',
 })
-export class FilterTabComponent implements OnInit {
+export class FilterTabComponent implements OnInit, OnDestroy {
+  // Add destroy subject for cleanup
+  private destroy$ = new Subject<void>();
+
+  // Track current language to detect changes
+  private currentLanguage: string = '';
+
   @Input() categories: Category[] = [];
   @Input() brands: Brand[] = [];
   @Input() activeFilters: string[] = [];
@@ -77,10 +91,33 @@ export class FilterTabComponent implements OnInit {
   constructor(public languageService: LanguageService) {}
 
   ngOnInit(): void {
-    // Subscribe to language changes to update display
-    this.languageService.direction$.subscribe(() => {
-      // Trigger UI update when language changes
-    });
+    // Store initial language
+    this.currentLanguage = this.languageService.getCurrentLanguage();
+
+    // Subscribe to language changes directly
+    this.languageService.language$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((newLanguage) => {
+        // Only force update if language actually changed
+        if (this.currentLanguage !== newLanguage) {
+          console.log(
+            'Language changed in filter-tab from',
+            this.currentLanguage,
+            'to',
+            newLanguage,
+          );
+          this.currentLanguage = newLanguage;
+
+          // Force template refresh by creating new array references
+          this.categories = [...this.categories];
+          this.brands = [...this.brands];
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
@@ -264,5 +301,14 @@ export class FilterTabComponent implements OnInit {
         return null;
       })
       .filter(Boolean) as Category[];
+  }
+
+  // Tracking functions for ngFor performance
+  trackByCategory(index: number, category: Category): number | string {
+    return category.id || index;
+  }
+
+  trackByBrand(index: number, brand: Brand): number | string {
+    return brand.id || brand.name || index;
   }
 }
