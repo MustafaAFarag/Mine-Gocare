@@ -385,6 +385,7 @@
     }
   },
   "collections": {
+    "header": "Collections",
     "loading": "Loading...",
     "filters": {
       "button": "Filters",

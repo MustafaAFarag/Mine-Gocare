@@ -384,6 +384,7 @@
     }
   },
   "collections": {
+    "header": "المجموعات",
     "loading": "جارٍ التحميل...",
     "filters": {
       "button": "الفلاتر",

@@ -9,7 +9,9 @@
 
   <!-- Content when loaded -->
   <div *ngIf="!isLoading" class=" ">
-    <app-breadcrumb [soloRoute]="'Collections' | translate"></app-breadcrumb>
+    <app-breadcrumb
+      [soloRoute]="'collections.header' | translate"
+    ></app-breadcrumb>
 
     <!-- Mobile Filter Sidebar -->
     <div
