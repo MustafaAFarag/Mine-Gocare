@@ -5,4 +5,8 @@ export const ApiEndPoint = {
   getProductDetails: 'api/services/ClientApp/Product/GetProductDetails',
   SignInManually: 'api/services/AdminApp/SignIn/SignInManually',
   SignUpManually: 'api/services/ClientApp/SignUp/SignUpManually',
+  GetClientAddresses: 'api/services/ClientApp/Address/GetClientAddresses',
+  CreateAddress: 'api/services/ClientApp/Address/CreateAddress',
+  DeleteAddress: 'api/services/ClientApp/Address/DeleteAddress',
+  UpdateAddress: 'api/services/ClientApp/Address/UpdateAddress',
 };
