@@ -84,6 +84,11 @@ export const routes: Routes = [
         ],
       },
       {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full',
+      },
+      {
         path: 'contact-us',
         loadComponent: () =>
           import('./pages/contact-us/contact-us.component').then(

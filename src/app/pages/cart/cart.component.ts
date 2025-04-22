@@ -75,7 +75,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   // Navigate to product details
   continueShopping(): void {
-    this.router.navigate(['/product-details/1/2']);
+    this.router.navigate(['/collections']);
   }
 
   // Handle checkout
@@ -83,6 +83,7 @@ export class CartComponent implements OnInit, OnDestroy {
     if (this.authService.isAuthenticated) {
       // TODO: Implement checkout logic for authenticated users
       console.log('Proceeding to checkout...');
+      this.router.navigate(['/checkout']);
     } else {
       // Show auth modal instead of redirecting
       this.showAuthModal = true;
