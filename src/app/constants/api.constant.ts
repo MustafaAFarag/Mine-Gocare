@@ -9,4 +9,7 @@ export const ApiEndPoint = {
   CreateAddress: 'api/services/ClientApp/Address/CreateAddress',
   DeleteAddress: 'api/services/ClientApp/Address/DeleteAddress',
   UpdateAddress: 'api/services/ClientApp/Address/UpdateAddress',
+  GetWallet: 'api/services/AdminApp/ClientWalletService/GetClientWalletData',
+  GetWalletTransactionList:
+    'api/services/AdminApp/ClientWalletService/GetWalletTransactionList',
 };

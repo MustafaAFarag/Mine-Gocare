@@ -18,7 +18,9 @@
             <i class="ri-wallet-3-line text-3xl"></i>
           </div>
           <div>
-            <h3 class="text-xl font-bold text-hover-color">$123</h3>
+            <h3 class="text-xl font-bold text-hover-color">
+              $ {{ walletAmount.toFixed(2) }}
+            </h3>
             <p class="text-gray-500">
               {{ "dashboard-account.balance" | translate }}
             </p>

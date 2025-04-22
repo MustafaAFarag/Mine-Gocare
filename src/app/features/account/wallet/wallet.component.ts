@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { WalletService } from '../../../services/wallet.service';
 
 interface Transaction {
   id: number;
@@ -17,7 +18,52 @@ interface Transaction {
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.css'],
 })
-export class WalletComponent {
+export class WalletComponent implements OnInit {
+  token: string | null;
+  clientId: number;
+
+  constructor(private walletService: WalletService) {
+    this.token = localStorage.getItem('accessToken');
+
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.clientId = user.userId;
+    } else {
+      console.error('User not found in localStorage');
+      this.clientId = 0;
+    }
+  }
+
+  ngOnInit(): void {
+    this.fetchClientWalletAPI();
+    this.fetchClientWalletTransactionAPI();
+  }
+
+  fetchClientWalletAPI() {
+    if (this.token && this.clientId) {
+      this.walletService
+        .getWallet(this.token, this.clientId, 224)
+        .subscribe((res) => {
+          console.log('WALLET', res.result);
+        });
+    } else {
+      console.error('Missing token or clientId');
+    }
+  }
+
+  fetchClientWalletTransactionAPI() {
+    if (this.token) {
+      this.walletService
+        .getWalletTransactionList(this.token)
+        .subscribe((res) => {
+          console.log('Wallet Transaction History:', res.result);
+        });
+    } else {
+      console.error('Missing token or clientId');
+    }
+  }
+
   walletBalance: number = 8.46;
 
   transactions: Transaction[] = [
