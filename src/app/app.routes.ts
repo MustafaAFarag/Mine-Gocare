@@ -13,6 +13,7 @@ import { BankDetailsComponent } from './features/account/bank-details/bank-detai
 import { WalletComponent } from './features/account/wallet/wallet.component';
 import { PointsComponent } from './features/account/points/points.component';
 import { RefundComponent } from './features/account/refund/refund.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
       {
         path: 'collections',
         component: CollectionsComponent,
+      },
+      {
+        path: 'checkout',
+        component: CheckoutComponent,
       },
       {
         path: 'account',

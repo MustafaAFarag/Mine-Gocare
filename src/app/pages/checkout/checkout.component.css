@@ -1,0 +1,77 @@
+/* Checkout component responsive styles */
+
+/* Base container styling */
+:host {
+  display: block;
+  color: #333;
+  font-family: "Roboto", "Segoe UI", sans-serif;
+}
+
+/* Base text sizing for better readability on mobile */
+@media (max-width: 640px) {
+  :host ::ng-deep h2 {
+    font-size: 1.125rem;
+  }
+
+  :host ::ng-deep p {
+    font-size: 0.875rem;
+  }
+}
+
+/* Medium devices and up - improve spacing */
+@media (min-width: 768px) {
+  :host ::ng-deep .rounded-lg {
+    border-radius: 0.5rem;
+  }
+
+  :host ::ng-deep .shadow-sm {
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* Add some animation for better UX */
+:host ::ng-deep button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Improve focus states for accessibility */
+:host ::ng-deep button:focus,
+:host ::ng-deep input:focus {
+  outline: 2px solid rgba(249, 115, 22, 0.4);
+  outline-offset: 2px;
+}
+
+/* Sticky order summary on larger screens */
+@media (min-width: 1024px) {
+  :host ::ng-deep .lg\:col-span-1 > * {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+/* Mobile fixed button styles */
+.fixed {
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fixed button {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: transform 0.1s ease-in-out;
+}
+
+.fixed button:active {
+  transform: scale(0.98);
+}
+
+/* Add smooth animation when total is updated */
+.text-hover-color {
+  transition: color 0.3s ease;
+}
+
+/* Ensure all clickable elements have a proper hover state */
+:host ::ng-deep .cursor-pointer:hover {
+  background-color: rgba(249, 115, 22, 0.05);
+}

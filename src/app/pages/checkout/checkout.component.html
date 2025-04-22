@@ -1,0 +1,118 @@
+<div class="container mx-auto max-w-8xl px-4 py-6 md:py-8 lg:py-10">
+  <h1 class="mb-6 text-2xl font-bold text-gray-800 md:text-3xl">
+    {{ "checkout.title" | translate }}
+  </h1>
+
+  <!-- Empty Cart Message -->
+  <div
+    *ngIf="cartItems.length === 0"
+    class="rounded-lg bg-white p-8 text-center shadow-sm"
+  >
+    <div class="mb-4 flex justify-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="h-16 w-16 text-gray-300"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+        />
+      </svg>
+    </div>
+    <h2 class="mb-2 text-xl font-semibold text-gray-800">
+      {{ "checkout.emptyCart.title" | translate }}
+    </h2>
+    <p class="mb-6 text-gray-600">
+      {{ "checkout.emptyCart.message" | translate }}
+    </p>
+    <a
+      href="/shop"
+      class="inline-block rounded-lg bg-hover-color px-6 py-3 font-medium text-white transition-colors hover:bg-orange-600"
+    >
+      {{ "checkout.emptyCart.continueShopping" | translate }}
+    </a>
+  </div>
+
+  <div
+    *ngIf="cartItems.length > 0"
+    class="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3 lg:gap-8"
+  >
+    <!-- Left Column (Addresses) -->
+    <div class="space-y-4 md:space-y-6 lg:col-span-2">
+      <!-- Shipping Address Component -->
+      <app-shipping-address
+        [shippingAddresses]="shippingAddresses"
+        (addressSelected)="selectShippingAddress($event)"
+        (addNewAddress)="addNewShippingAddress()"
+      ></app-shipping-address>
+
+      <!-- Delivery Options Component -->
+      <app-delivery-options
+        [deliveryOption]="deliveryOption"
+        [timeSlots]="timeSlots"
+        [selectedTimeSlot]="selectedTimeSlot"
+        (deliveryOptionSelected)="selectDeliveryOption($event)"
+        (timeSlotSelected)="selectTimeSlot($event)"
+      ></app-delivery-options>
+
+      <!-- Payment Options Component -->
+      <app-payment-options
+        [paymentMethod]="paymentMethod"
+        (paymentMethodSelected)="selectPaymentMethod($event)"
+      ></app-payment-options>
+    </div>
+
+    <!-- Right Column (Order Summary) -->
+    <div class="space-y-4 md:space-y-6 lg:col-span-1">
+      <!-- Order Summary Component -->
+      <app-order-summary [cartItems]="cartItems"></app-order-summary>
+
+      <!-- Billing Summary Component -->
+      <app-billing-summary
+        [promoCodes]="promoCodes"
+        [subTotal]="subTotal"
+        [shipping]="shipping"
+        [tax]="tax"
+        [points]="points"
+        [walletBalance]="walletBalance"
+        [total]="total"
+        [usePoints]="usePoints"
+        [useWallet]="useWallet"
+        (couponApplied)="applyCoupon($event)"
+        (promoCodeCopied)="copyPromoCode($event)"
+        (togglePointsEvent)="toggleUsePoints()"
+        (toggleWalletEvent)="toggleUseWallet()"
+        (placeOrderEvent)="placeOrder()"
+      ></app-billing-summary>
+    </div>
+  </div>
+
+  <!-- Mobile Fixed Bottom Button (only visible on small screens when cart has items) -->
+  <div
+    *ngIf="cartItems.length > 0"
+    class="fixed bottom-0 left-0 right-0 z-10 bg-white p-4 shadow-lg md:hidden"
+  >
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-600">{{ "checkout.total" | translate }}:</p>
+        <p class="text-lg font-bold text-hover-color">
+          ${{ total.toFixed(2) }}
+        </p>
+      </div>
+      <button
+        (click)="placeOrder()"
+        class="rounded-lg bg-hover-color px-5 py-3 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300"
+      >
+        {{ "checkout.placeOrder" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Add padding to prevent content from being hidden behind the fixed button on mobile -->
+  <div *ngIf="cartItems.length > 0" class="h-24 md:hidden"></div>
+</div>

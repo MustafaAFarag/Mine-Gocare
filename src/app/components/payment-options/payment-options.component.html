@@ -1,0 +1,130 @@
+<div class="rounded-lg bg-white shadow-sm">
+  <div class="border-b p-4">
+    <h2 class="text-lg font-bold text-gray-800">
+      {{ "checkout.paymentMethods" | translate }}
+    </h2>
+  </div>
+
+  <div class="p-4">
+    <!-- Payment Methods Side by Side -->
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Cash on Delivery -->
+      <div
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'cod'"
+        (click)="selectPaymentMethod('cod')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="paymentMethod === 'cod'"
+              [class.bg-hover-color]="paymentMethod === 'cod'"
+            >
+              <div
+                *ngIf="paymentMethod === 'cod'"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.cashOnDelivery" | translate }}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- PayPal -->
+      <div
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'paypal'"
+        (click)="selectPaymentMethod('paypal')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="paymentMethod === 'paypal'"
+              [class.bg-hover-color]="paymentMethod === 'paypal'"
+            >
+              <div
+                *ngIf="paymentMethod === 'paypal'"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.paypal" | translate }}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe -->
+      <div
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'stripe'"
+        (click)="selectPaymentMethod('stripe')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="paymentMethod === 'stripe'"
+              [class.bg-hover-color]="paymentMethod === 'stripe'"
+            >
+              <div
+                *ngIf="paymentMethod === 'stripe'"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.creditCard" | translate }}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- PayTabs -->
+      <div
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'paytabs'"
+        (click)="selectPaymentMethod('paytabs')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="paymentMethod === 'paytabs'"
+              [class.bg-hover-color]="paymentMethod === 'paytabs'"
+            >
+              <div
+                *ngIf="paymentMethod === 'paytabs'"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">PayTabs</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

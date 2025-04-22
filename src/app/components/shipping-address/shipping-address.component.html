@@ -1,0 +1,54 @@
+<div class="rounded-lg bg-white shadow-sm">
+  <div class="flex items-center justify-between border-b p-4">
+    <h2 class="text-lg font-bold text-gray-800">
+      {{ "checkout.shippingAddress" | translate }}
+    </h2>
+    <button
+      (click)="addNewShippingAddress()"
+      class="flex items-center gap-1 text-sm text-hover-color hover:text-orange-600"
+    >
+      <span>+</span> {{ "checkout.addNewAddress" | translate }}
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
+    <!-- Address Cards -->
+    <div
+      *ngFor="let address of shippingAddresses"
+      class="cursor-pointer overflow-hidden rounded-lg border"
+      [class.border-hover-color]="address.isSelected"
+      (click)="selectShippingAddress(address.id)"
+    >
+      <div class="flex items-start gap-3 p-4">
+        <!-- Radio Button -->
+        <div class="mt-1">
+          <div
+            class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+            [class.border-hover-color]="address.isSelected"
+            [class.bg-hover-color]="address.isSelected"
+          >
+            <div
+              *ngIf="address.isSelected"
+              class="h-2 w-2 rounded-full bg-white"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Address Content -->
+        <div class="flex-1">
+          <h3 class="mb-1 font-medium text-gray-800">
+            {{ address.label }}
+          </h3>
+          <div class="space-y-1 text-sm text-gray-600">
+            <p>
+              {{ "checkout.address" | translate }}: {{ address.street }},
+              {{ address.city }}, {{ address.state }}, {{ address.country }}
+            </p>
+            <p>{{ "checkout.pinCode" | translate }}: {{ address.zipCode }}</p>
+            <p>{{ "checkout.phone" | translate }}: {{ address.phone }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
