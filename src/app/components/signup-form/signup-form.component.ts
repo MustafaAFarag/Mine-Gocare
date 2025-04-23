@@ -46,6 +46,19 @@ export class SignupFormComponent implements OnInit {
   showPassword = false;
   selectedGender: number = 1; // Default to 'Men'
 
+  // Added for phone input with flag
+  isPhone: boolean = false;
+
+  // Egypt flag SVG placeholder
+  egyptFlagSvg: string = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 800 400">
+      <rect width="800" height="133" fill="#CE1126"/>
+      <rect width="800" height="133" y="133" fill="#FFFFFF"/>
+      <rect width="800" height="133" y="266" fill="#000000"/>
+      <path d="M400 110 l20 62h-66l53-38-20 62 53-38-20 62 53-38-20 62 53-38-20 62 53-38z" fill="#FFCC00"/>
+    </svg>
+  `;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -65,6 +78,12 @@ export class SignupFormComponent implements OnInit {
       },
       { validator: this.passwordMatchValidator },
     );
+
+    // Add listener to identifier field to detect if it's a phone number
+    this.signupForm.get('identifier')?.valueChanges.subscribe((value) => {
+      // Check if the input is numeric to determine if it's a phone number
+      this.isPhone = value && /^\d+$/.test(value);
+    });
   }
 
   emailOrPhoneValidator(control: AbstractControl): ValidationErrors | null {
@@ -73,7 +92,7 @@ export class SignupFormComponent implements OnInit {
     if (!value) return { required: true };
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePatternWithZero = /^0\d{10}$/; // starts with 0, 11 digits
+    const phonePatternWithZero = /^0\d{9}$/; // starts with 0, 10 digits
     const phonePatternWithoutZero = /^[1-9]\d{9}$/; // doesn't start with 0, 10 digits
 
     const isEmail = emailPattern.test(value);
@@ -95,6 +114,20 @@ export class SignupFormComponent implements OnInit {
       return { passwordMismatch: true };
     }
     return null;
+  }
+
+  // Method to limit phone input to 10 digits
+  onIdentifierInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    // Only process if it's a numeric input (phone)
+    if (/^\d*$/.test(value)) {
+      // Limit to 10 digits
+      if (value.length > 10) {
+        this.signupForm.get('identifier')?.setValue(value.slice(0, 10));
+      }
+    }
   }
 
   onSignupSubmit() {
