@@ -1,64 +1,78 @@
 <div class="rounded-lg bg-white p-6 shadow-sm">
-  <!-- Wallet Balance -->
-  <div class="mb-8 flex items-center">
-    <div class="mr-4 rounded-md bg-red-100 p-3">
-      <i class="ri-wallet-3-line text-2xl text-hover-color"></i>
-    </div>
-    <div>
-      <h3 class="font-medium text-gray-500">Wallet Balance</h3>
-      <p class="text-xl font-bold text-gray-800">
-        ${{ walletBalance.toFixed(2) }}
-      </p>
-    </div>
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="flex justify-center py-8">
+    <app-loading></app-loading>
   </div>
 
-  <!-- Transaction History Table -->
-  <div class="overflow-x-auto">
-    <table class="w-full">
-      <!-- Table Header -->
-      <thead>
-        <tr class="border-b">
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Amount</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Remark</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
-        </tr>
-      </thead>
+  <div *ngIf="!isLoading">
+    <!-- Wallet Balance -->
+    <div class="mb-8 flex items-center">
+      <div class="mr-4 rounded-md bg-red-100 p-3">
+        <i class="ri-wallet-3-line text-2xl text-hover-color"></i>
+      </div>
+      <div>
+        <h3 class="font-medium text-gray-500">Wallet Balance</h3>
+        <p class="text-xl font-bold text-gray-800">
+          ${{ walletBalance.toFixed(2) }}
+        </p>
+      </div>
+    </div>
 
-      <!-- Table Body -->
-      <tbody>
-        <tr
-          *ngFor="let transaction of transactions"
-          class="border-b hover:bg-gray-50"
-        >
-          <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
-          <td class="px-4 py-4 text-gray-700">
-            ${{ transaction.amount.toFixed(2) }}
-          </td>
-          <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
-          <td class="px-4 py-4">
-            <span
-              class="rounded-md px-3 py-1 text-sm font-medium"
-              [ngClass]="{
-                'bg-red-100 text-red-600': transaction.status === 'debit',
-                'bg-green-100 text-green-600': transaction.status === 'credit',
-              }"
-            >
-              {{ transaction.status === "debit" ? "Debit" : "Credit" }}
-            </span>
-          </td>
-        </tr>
+    <!-- Transaction History Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <!-- Table Header -->
+        <thead>
+          <tr class="border-b">
+            <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
+            <th class="px-4 py-4 text-left font-medium text-gray-700">
+              Amount
+            </th>
+            <th class="px-4 py-4 text-left font-medium text-gray-700">
+              Remark
+            </th>
+            <th class="px-4 py-4 text-left font-medium text-gray-700">
+              Status
+            </th>
+          </tr>
+        </thead>
 
-        <!-- Empty State (shown when no transactions) -->
-        <tr *ngIf="transactions.length === 0">
-          <td colspan="4" class="py-8 text-center text-gray-500">
-            <div class="flex flex-col items-center">
-              <i class="ri-wallet-3-line mb-2 text-4xl text-gray-400"></i>
-              <p>No transactions found in your wallet.</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- Table Body -->
+        <tbody>
+          <tr
+            *ngFor="let transaction of transactions"
+            class="border-b hover:bg-gray-50"
+          >
+            <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
+            <td class="px-4 py-4 text-gray-700">
+              ${{ transaction.amount.toFixed(2) }}
+            </td>
+            <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
+            <td class="px-4 py-4">
+              <span
+                class="rounded-md px-3 py-1 text-sm font-medium"
+                [ngClass]="{
+                  'bg-red-100 text-red-600': transaction.status === 'debit',
+                  'bg-green-100 text-green-600':
+                    transaction.status === 'credit',
+                }"
+              >
+                {{ transaction.status === "debit" ? "Debit" : "Credit" }}
+              </span>
+            </td>
+          </tr>
+
+          <!-- Empty State (shown when no transactions) -->
+          <tr *ngIf="transactions.length === 0">
+            <td colspan="4" class="py-8 text-center text-gray-500">
+              <div class="flex flex-col items-center">
+                <i class="ri-wallet-3-line mb-2 text-4xl text-gray-400"></i>
+                <p>No transactions found in your wallet.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

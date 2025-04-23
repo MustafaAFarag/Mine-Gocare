@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WalletService } from '../../../services/wallet.service';
+import { Wallet } from '../../../model/Wallet';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 interface Transaction {
   id: number;
@@ -14,13 +16,16 @@ interface Transaction {
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingComponent],
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.css'],
 })
 export class WalletComponent implements OnInit {
   token: string | null;
   clientId: number;
+  walletBalance: number = 0;
+  transactions: Transaction[] = [];
+  isLoading: boolean = true;
 
   constructor(private walletService: WalletService) {
     this.token = localStorage.getItem('accessToken');
@@ -42,31 +47,58 @@ export class WalletComponent implements OnInit {
 
   fetchClientWalletAPI() {
     if (this.token && this.clientId) {
-      this.walletService
-        .getWallet(this.token, this.clientId, 224)
-        .subscribe((res) => {
+      this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+        next: (res) => {
           console.log('WALLET', res.result);
-        });
+          if (res.result) {
+            this.walletBalance = res.result.walletAmount || 0;
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching wallet:', err);
+          this.isLoading = false;
+        },
+      });
     } else {
       console.error('Missing token or clientId');
+      this.isLoading = false;
     }
   }
 
   fetchClientWalletTransactionAPI() {
     if (this.token) {
-      this.walletService
-        .getWalletTransactionList(this.token)
-        .subscribe((res) => {
+      this.walletService.getWalletTransactionList(this.token).subscribe({
+        next: (res) => {
           console.log('Wallet Transaction History:', res.result);
-        });
+          this.isLoading = false;
+
+          if (res.result && Array.isArray(res.result.items)) {
+            // Transform API data to match our Transaction interface
+            this.transactions = res.result.items.map((item: any) => {
+              return {
+                id: item.id || 0,
+                date: new Date(item.transactionDate).toLocaleString(),
+                amount: item.amount || 0,
+                remark: item.remark || '',
+                status: item.transactionType === 1 ? 'credit' : 'debit',
+                orderId: item.orderId,
+              };
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching transactions:', err);
+          this.isLoading = false;
+        },
+      });
     } else {
-      console.error('Missing token or clientId');
+      console.error('Missing token');
+      this.isLoading = false;
     }
   }
 
-  walletBalance: number = 8.46;
-
-  transactions: Transaction[] = [
+  // Fallback data in case API doesn't work during development
+  private fallbackTransactions: Transaction[] = [
     {
       id: 1,
       date: '06 Jul 2024 12:45:PM',
