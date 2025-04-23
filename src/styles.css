@@ -88,3 +88,8 @@ body.rtl .right-4 {
   right: auto;
   left: 1rem;
 }
+
+html,
+body {
+  height: 100%;
+}

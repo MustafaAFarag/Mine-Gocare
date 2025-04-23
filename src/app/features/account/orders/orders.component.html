@@ -1,4 +1,4 @@
-<div class="rounded-lg bg-white p-6 shadow-sm">
+<div *ngIf="!showOrderDetails" class="rounded-lg bg-white p-6 shadow-sm">
   <h2 class="mb-6 text-xl font-bold text-gray-800">My Orders</h2>
 
   <!-- Orders Table -->
@@ -12,9 +12,7 @@
           </th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">Amount</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">
-            Payment Status
-          </th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">
             Payment Method
           </th>
@@ -28,23 +26,24 @@
           <td class="px-4 py-4 font-medium text-gray-700">
             {{ order.orderNumber }}
           </td>
-          <td class="px-4 py-4 text-gray-700">{{ order.date }}</td>
           <td class="px-4 py-4 text-gray-700">
-            ${{ order.amount.toFixed(2) }}
+            {{ order.creationDate | date: "dd MMM yyyy hh:mm a" }}
+          </td>
+          <td class="px-4 py-4 text-gray-700">
+            {{ order.totalPayment }} {{ order.currency.name.en }}
           </td>
           <td class="px-4 py-4 text-center">
             <span
               class="rounded-md px-3 py-1 text-sm font-medium"
               [ngClass]="{
-                'bg-yellow-100 text-yellow-600':
-                  order.paymentStatus === 'pending',
-                'bg-green-100 text-green-600':
-                  order.paymentStatus === 'completed',
-                'bg-red-100 text-red-600': order.paymentStatus === 'failed',
-                'bg-blue-100 text-blue-600': order.paymentStatus === 'refunded',
+                'bg-yellow-100 text-yellow-600': order.status === 1,
+                'bg-green-100 text-green-600': order.status === 2,
+                'bg-blue-100 text-blue-600': order.status === 3,
+                'bg-red-100 text-red-600':
+                  order.status === 4 || order.isCanceled,
               }"
             >
-              {{ order.paymentStatus | titlecase }}
+              {{ order.status }} {{ order.isCanceled ? "(Canceled)" : "" }}
             </span>
           </td>
           <td class="py-4 pl-14 text-gray-700">
@@ -77,3 +76,9 @@
     </table>
   </div>
 </div>
+
+<app-order-details
+  *ngIf="showOrderDetails"
+  [orderId]="selectedOrderId"
+  (backClicked)="hideOrderDetails()"
+></app-order-details>

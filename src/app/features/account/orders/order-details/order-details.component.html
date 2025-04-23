@@ -1,0 +1,154 @@
+<div class="container mx-auto px-4 py-6">
+  <!-- Order Header -->
+  <div class="mb-6 flex items-center">
+    <a (click)="goBack()" class="mr-2 cursor-pointer text-gray-600">←</a>
+    <h1 class="text-xl font-bold">Order Number: {{ orderNumber }}</h1>
+  </div>
+
+  <!-- Order Status -->
+  <div class="mb-8 grid grid-cols-5 gap-2">
+    <div
+      *ngFor="let status of orderStatuses"
+      class="rounded-md p-4 text-center"
+      [ngClass]="
+        status.isActive
+          ? 'bg-orange-50 text-orange-600'
+          : 'bg-gray-50 text-gray-600'
+      "
+    >
+      <div class="font-medium">{{ status.name }}</div>
+      <div *ngIf="status.date" class="mt-1 text-xs">{{ status.date }}</div>
+    </div>
+  </div>
+
+  <!-- Order Items -->
+  <div class="mb-6 overflow-hidden rounded-lg bg-white shadow-sm">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b bg-gray-50">
+          <th class="px-4 py-3 text-left font-medium text-gray-700">Image</th>
+          <th class="px-4 py-3 text-left font-medium text-gray-700">Name</th>
+          <th class="px-4 py-3 text-left font-medium text-gray-700">Price</th>
+          <th class="px-4 py-3 text-left font-medium text-gray-700">
+            Quantity
+          </th>
+          <th class="px-4 py-3 text-left font-medium text-gray-700">
+            Sub Total
+          </th>
+          <th class="px-4 py-3 text-left font-medium text-gray-700">
+            Refund Status
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of orderItems" class="border-b">
+          <td class="px-4 py-4">
+            <img
+              [src]="item.image"
+              alt="{{ item.name }}"
+              class="h-20 w-16 object-cover"
+            />
+          </td>
+          <td class="px-4 py-4 text-gray-800">{{ item.name }}</td>
+          <td class="px-4 py-4 text-gray-800">${{ item.price.toFixed(2) }}</td>
+          <td class="px-4 py-4 text-gray-800">{{ item.quantity }}</td>
+          <td class="px-4 py-4 text-gray-800">
+            ${{ item.subtotal.toFixed(2) }}
+          </td>
+          <td class="px-4 py-4 text-gray-800">{{ item.refundStatus }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Consumer Details and Summary -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+    <!-- Consumer Details -->
+    <div class="md:col-span-2">
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-4 border-b pb-2 text-lg font-bold text-gray-800">
+          Consumer Details
+        </h2>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <!-- Billing Address -->
+          <div>
+            <h3 class="mb-2 font-medium text-gray-700">Billing Address:</h3>
+            <p class="text-gray-600">
+              {{ billingAddress.street }}<br />
+              {{ billingAddress.city }} {{ billingAddress.state }}
+              {{ billingAddress.country }} {{ billingAddress.zipCode }}<br />
+              Phone: {{ billingAddress.phone }}
+            </p>
+
+            <div class="mt-4">
+              <h3 class="mb-2 font-medium text-gray-700">Delivery Slot:</h3>
+              <p class="text-gray-600">{{ deliverySlot }}</p>
+            </div>
+          </div>
+
+          <!-- Shipping Address -->
+          <div>
+            <h3 class="mb-2 font-medium text-gray-700">Shipping Address:</h3>
+            <p class="text-gray-600">
+              {{ shippingAddress.street }}<br />
+              {{ shippingAddress.city }} {{ shippingAddress.state }}
+              {{ shippingAddress.country }} {{ shippingAddress.zipCode }}<br />
+              Phone: {{ shippingAddress.phone }}
+            </p>
+
+            <div class="mt-4 grid grid-cols-2 gap-4">
+              <div>
+                <h3 class="mb-2 font-medium text-gray-700">Payment Mode:</h3>
+                <p class="text-gray-600">{{ paymentMode }}</p>
+              </div>
+              <div>
+                <h3 class="mb-2 font-medium text-gray-700">Payment Status:</h3>
+                <p class="text-gray-600">{{ paymentStatus }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="md:col-span-1">
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-4 border-b pb-2 text-lg font-bold text-gray-800">
+          Summary
+        </h2>
+
+        <div class="space-y-3">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Sub Total</span>
+            <span class="font-medium text-gray-800"
+              >${{ orderSummary.subtotal.toFixed(2) }}</span
+            >
+          </div>
+
+          <div class="flex justify-between">
+            <span class="text-gray-600">Shipping</span>
+            <span class="font-medium text-gray-800"
+              >${{ orderSummary.shipping.toFixed(2) }}</span
+            >
+          </div>
+
+          <div class="flex justify-between">
+            <span class="text-gray-600">Tax</span>
+            <span class="font-medium text-gray-800"
+              >${{ orderSummary.tax.toFixed(2) }}</span
+            >
+          </div>
+
+          <div class="flex justify-between border-t pt-3">
+            <span class="font-bold text-gray-800">Total</span>
+            <span class="font-bold text-gray-800"
+              >${{ orderSummary.total.toFixed(2) }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
