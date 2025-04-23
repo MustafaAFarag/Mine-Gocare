@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { OrderDetails } from '../../../../model/Order';
+import { LoadingComponent } from '../../../../shared/loading/loading.component';
+import { getFullImageUrl } from '../../../../lib/utils';
 
 interface OrderItem {
   id: number;
@@ -19,12 +22,13 @@ interface OrderStatus {
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingComponent],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css',
 })
 export class OrderDetailsComponent implements OnInit {
   @Input() orderId: number | null = null;
+  @Input() orderDetails: OrderDetails | null = null;
   @Output() backClicked = new EventEmitter<void>();
 
   orderNumber: string = '#1020';
@@ -37,6 +41,8 @@ export class OrderDetailsComponent implements OnInit {
     { name: 'Out For Delivery', isActive: false },
     { name: 'Delivered', isActive: false },
   ];
+
+  getImageFullUrl = getFullImageUrl;
 
   orderItems: OrderItem[] = [
     {
@@ -80,12 +86,39 @@ export class OrderDetailsComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    console.log('Order details loaded for order ID:', this.orderId);
-    // Here you would typically load the order details based on orderId
-    // For now we'll use the mock data
+    console.log('Order details component loaded for order ID:', this.orderId);
+    console.log('Order details:', this.orderDetails);
   }
 
   goBack(): void {
     this.backClicked.emit();
+  }
+
+  // Helper methods to handle order status display
+  getOrderStatuses() {
+    const statuses = [
+      { id: 1, name: 'Pending', isActive: false },
+      { id: 2, name: 'Processing', isActive: false },
+      { id: 3, name: 'Shipped', isActive: false },
+      { id: 4, name: 'Delivered', isActive: false },
+      { id: 5, name: 'Cancelled', isActive: false },
+    ];
+
+    if (this.orderDetails) {
+      // Set active status based on orderDetails.orderStatus
+      statuses.forEach((status) => {
+        status.isActive = status.id === this.orderDetails?.orderStatus;
+      });
+    }
+
+    return statuses;
+  }
+
+  // Format amount with currency
+  formatAmount(amount: number): string {
+    if (this.orderDetails && this.orderDetails.orderPayment.currency) {
+      return `${amount} ${this.orderDetails.orderPayment.currency.name.en}`;
+    }
+    return `${amount}`;
   }
 }

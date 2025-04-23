@@ -80,5 +80,6 @@
 <app-order-details
   *ngIf="showOrderDetails"
   [orderId]="selectedOrderId"
+  [orderDetails]="orderDetails"
   (backClicked)="hideOrderDetails()"
 ></app-order-details>

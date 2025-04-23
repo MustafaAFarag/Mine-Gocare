@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { WalletService } from '../../../services/wallet.service';
 import { AuthService } from '../../../services/auth.service';
 import { Wallet } from '../../../model/Wallet';
+import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +15,7 @@ import { Wallet } from '../../../model/Wallet';
 })
 export class DashboardComponent implements OnInit {
   token: string | null;
+  ordersCount: number = 0;
   clientId: number;
   walletAmount: number = 0;
   user: UserProfile = {
@@ -29,6 +31,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private authService: AuthService,
+    private orderService: OrderService,
   ) {
     this.token = localStorage.getItem('accessToken');
 
@@ -46,6 +49,7 @@ export class DashboardComponent implements OnInit {
     this.loadUserFromLocalStorage();
     this.fetchClientProfile();
     this.fetchClientWalletAPI();
+    this.fetchClientOrders();
   }
 
   loadUserFromLocalStorage(): void {
@@ -79,6 +83,21 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching client profile:', error);
       },
     });
+  }
+
+  fetchClientOrders(): void {
+    if (this.token) {
+      this.orderService.getClientOrders(this.token).subscribe(
+        (response) => {
+          this.ordersCount = response.result.totalCount;
+        },
+        (error) => {
+          console.error('Error loading orders:', error);
+        },
+      );
+    } else {
+      console.error('No access token available');
+    }
   }
 
   fetchClientWalletAPI() {

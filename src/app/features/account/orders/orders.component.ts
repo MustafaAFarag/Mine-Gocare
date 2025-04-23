@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderService } from '../../../services/order.service';
-import { ClientOrders } from '../../../model/Order';
+import { ClientOrders, OrderDetails } from '../../../model/Order';
 
 @Component({
   selector: 'app-orders',
@@ -16,14 +16,15 @@ export class OrdersComponent implements OnInit {
   orders: ClientOrders[] = [];
   showOrderDetails = false;
   selectedOrderId: number | null = null;
+  orderDetails: OrderDetails | null = null;
 
   constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
-    this.loadOrders();
+    this.fetchClientOrders();
   }
 
-  loadOrders(): void {
+  fetchClientOrders(): void {
     if (this.token) {
       this.orderService.getClientOrders(this.token).subscribe(
         (response) => {
@@ -39,8 +40,25 @@ export class OrdersComponent implements OnInit {
     }
   }
 
+  fetchOrderDetails(orderId: number): void {
+    if (this.token) {
+      this.orderService.getClientOrderDetails(orderId, this.token).subscribe(
+        (response) => {
+          console.log('Order details loaded:', response.result);
+          this.orderDetails = response.result;
+        },
+        (error) => {
+          console.error('Error loading order details:', error);
+        },
+      );
+    } else {
+      console.error('No access token available');
+    }
+  }
+
   viewOrderDetails(orderId: number): void {
     this.selectedOrderId = orderId;
+    this.fetchOrderDetails(orderId);
     this.showOrderDetails = true;
     console.log('View order details for order ID:', orderId);
   }
@@ -48,5 +66,6 @@ export class OrdersComponent implements OnInit {
   hideOrderDetails(): void {
     this.showOrderDetails = false;
     this.selectedOrderId = null;
+    this.orderDetails = null;
   }
 }
