@@ -66,35 +66,68 @@
       {{ "dashboard-account.accountInfo" | translate }}
     </h3>
     <ul class="ml-2 list-inside list-disc space-y-2 text-gray-600">
-      <li>
-        {{ "dashboard-account.fullName" | translate }}: {{ user.fullName }}
-      </li>
-      <li>
-        {{ "dashboard-account.gender" | translate }}:
-        {{
-          user.gender === 1
-            ? ("dashboard-account.male" | translate)
-            : ("dashboard-account.female" | translate)
-        }}
-      </li>
-      <li>
-        {{ "dashboard-account.phone" | translate }}:
-        {{ user.mobileNumber || ("dashboard-account.notProvided" | translate) }}
-        <button
-          *ngIf="!user.mobileNumber"
-          class="ml-2 rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+      <li class="flex items-center justify-between">
+        <span
+          >{{ "dashboard-account.fullName" | translate }}:
+          {{ user.fullName }}</span
         >
-          {{ "dashboard-account.addNew" | translate }}
+        <button
+          (click)="updateFullName()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
+          {{ "dashboard-account.edit" | translate }}
         </button>
       </li>
-      <li>
-        {{ "dashboard-account.email" | translate }}:
-        {{ user.emailAddress || ("dashboard-account.notProvided" | translate) }}
+      <li class="flex items-center justify-between">
+        <span>
+          {{ "dashboard-account.gender" | translate }}:
+          {{
+            user.gender === 1
+              ? ("dashboard-account.male" | translate)
+              : ("dashboard-account.female" | translate)
+          }}
+        </span>
         <button
-          *ngIf="!user.emailAddress"
-          class="ml-2 rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+          (click)="updateGender()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
         >
-          {{ "dashboard-account.addNew" | translate }}
+          {{ "dashboard-account.edit" | translate }}
+        </button>
+      </li>
+      <li class="flex items-center justify-between">
+        <span>
+          {{ "dashboard-account.phone" | translate }}:
+          {{
+            user.mobileNumber || ("dashboard-account.notProvided" | translate)
+          }}
+        </span>
+        <button
+          (click)="updatePhone()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
+          {{
+            user.mobileNumber
+              ? ("dashboard-account.edit" | translate)
+              : ("dashboard-account.addNew" | translate)
+          }}
+        </button>
+      </li>
+      <li class="flex items-center justify-between">
+        <span>
+          {{ "dashboard-account.email" | translate }}:
+          {{
+            user.emailAddress || ("dashboard-account.notProvided" | translate)
+          }}
+        </span>
+        <button
+          (click)="updateEmail()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
+          {{
+            user.emailAddress
+              ? ("dashboard-account.edit" | translate)
+              : ("dashboard-account.addNew" | translate)
+          }}
         </button>
       </li>
     </ul>
@@ -106,24 +139,30 @@
       {{ "dashboard-account.loginDetails" | translate }}
     </h3>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div>
+      <div class="flex items-center justify-between">
         <p class="text-gray-600">
           {{ "dashboard-account.email" | translate }}:
           {{
             user.emailAddress || ("dashboard-account.notProvided" | translate)
           }}
         </p>
-        <a href="#" class="text-hover-color hover:underline">
+        <button
+          (click)="updateEmail()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
           {{ "dashboard-account.edit" | translate }}
-        </a>
+        </button>
       </div>
-      <div>
+      <div class="flex items-center justify-between">
         <p class="text-gray-600">
           {{ "dashboard-account.password" | translate }}: ••••••
         </p>
-        <a href="#" class="text-hover-color hover:underline">
+        <button
+          (click)="updatePassword()"
+          class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+        >
           {{ "dashboard-account.edit" | translate }}
-        </a>
+        </button>
       </div>
     </div>
   </div>

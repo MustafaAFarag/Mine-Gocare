@@ -17,6 +17,18 @@ import { Router } from '@angular/router';
 export class AuthService {
   private loginUrl = `${environment.apiUrl}/${ApiEndPoint.SignInManually}`;
   private signupUrl = `${environment.apiUrl}/${ApiEndPoint.SignUpManually}`;
+  private updateNameUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateName';
+  private getClientProfileUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/GetProfile';
+  private updatePhoneNumberUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateMobileNumber';
+  private updateEmailAddressUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateEmailAddress';
+  private updatePasswordUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/ChangePassword';
+  private updateGenderUrl =
+    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateGender';
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
@@ -175,6 +187,261 @@ export class AuthService {
     this.removeLocalStorageItem('accessToken');
     this.removeLocalStorageItem('user');
     this.router.navigate(['/']);
+  }
+
+  updateFullName(firstName: string, lastName: string): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const body = { firstName, lastName };
+
+    return this.http.put<any>(this.updateNameUrl, body, { headers }).pipe(
+      tap((res) => {
+        if (res.success) {
+          const updatedUser = {
+            ...this.currentUser,
+            firstName,
+            lastName,
+          };
+          this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+          this.userSubject.next(updatedUser);
+        } else {
+          throw new Error('Failed to update name.');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'An error occurred while updating the name.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else {
+          errorMessage =
+            error.error?.message || `Server returned code ${error.status}`;
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+    );
+  }
+
+  getClientProfile(): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    });
+
+    return this.http.get<any>(this.getClientProfileUrl, { headers }).pipe(
+      tap((res) => {
+        if (res.success && res.result) {
+          const updatedUser = {
+            ...this.currentUser,
+            ...res.result,
+          };
+          this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+          this.userSubject.next(updatedUser);
+        } else {
+          throw new Error('Failed to retrieve profile.');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'An error occurred while retrieving the profile.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else {
+          errorMessage =
+            error.error?.message || `Server returned code ${error.status}`;
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+    );
+  }
+
+  updatePhoneNumber(mobileNumber: number): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const body = {
+      countryCode: 'EG',
+      mobileNumber: mobileNumber,
+      isPhoneNumberConfirmed: true,
+    };
+
+    return this.http
+      .put<any>(this.updatePhoneNumberUrl, body, { headers })
+      .pipe(
+        tap((res) => {
+          if (res.success) {
+            const updatedUser = {
+              ...this.currentUser,
+              mobileNumber: mobileNumber,
+              countryCode: 'EG',
+            };
+            this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+            this.userSubject.next(updatedUser);
+          } else {
+            throw new Error('Failed to update phone number.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage =
+            'An error occurred while updating the phone number.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage =
+              error.error?.message || `Server returned code ${error.status}`;
+          }
+          return throwError(() => new Error(errorMessage));
+        }),
+      );
+  }
+
+  updateEmailAddress(emailAddress: string): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const body = {
+      emailAddress: emailAddress,
+      isEmailConfirmed: true,
+    };
+
+    return this.http
+      .put<any>(this.updateEmailAddressUrl, body, { headers })
+      .pipe(
+        tap((res) => {
+          if (res.success) {
+            const updatedUser = {
+              ...this.currentUser,
+              emailAddress: emailAddress,
+            };
+            this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+            this.userSubject.next(updatedUser);
+          } else {
+            throw new Error('Failed to update email address.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage =
+            'An error occurred while updating the email address.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage =
+              error.error?.message || `Server returned code ${error.status}`;
+          }
+          return throwError(() => new Error(errorMessage));
+        }),
+      );
+  }
+
+  changePassword(payload: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    return this.http
+      .post<any>(this.updatePasswordUrl, payload, { headers })
+      .pipe(
+        tap((res) => {
+          if (!res.success) {
+            throw new Error('Password change failed.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'An error occurred while changing the password.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage =
+              error.error?.message || `Server returned code ${error.status}`;
+          }
+          return throwError(() => new Error(errorMessage));
+        }),
+      );
+  }
+
+  updateGender(gender: number): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const body = { gender };
+
+    return this.http.put<any>(this.updateGenderUrl, body, { headers }).pipe(
+      tap((res) => {
+        if (res.success) {
+          const updatedUser = {
+            ...this.currentUser,
+            gender,
+          };
+          this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+          this.userSubject.next(updatedUser);
+        } else {
+          throw new Error('Failed to update gender.');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'An error occurred while updating gender.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else {
+          errorMessage =
+            error.error?.message || `Server returned code ${error.status}`;
+        }
+        return throwError(() => new Error(errorMessage));
+      }),
+    );
   }
 
   get currentUser() {
