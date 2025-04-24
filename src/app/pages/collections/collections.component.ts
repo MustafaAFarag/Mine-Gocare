@@ -1003,6 +1003,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   addToCart(product: Product): void {
     const cartItem: CartItem = {
       productId: product.productId,
+      variantId: product.variantId,
       name: product.name.en,
       image: product.mainImageUrl,
       afterPrice: product.priceAfterDiscount,

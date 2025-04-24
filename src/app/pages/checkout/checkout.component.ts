@@ -128,6 +128,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       // Transform cart items to match our CartItem interface
       this.cartItems = cart.items.map((item) => ({
         productId: item.productId,
+        variantId: item.variantId,
         name: item.name,
         afterPrice: item.afterPrice,
         beforePrice: item.beforePrice,
@@ -320,12 +321,31 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Debug logs
+    console.log('Cart Items:', this.cartItems);
+    this.cartItems.forEach((item, index) => {
+      console.log(`Item ${index + 1}:`, {
+        productId: item.productId,
+        variantId: item.variantId,
+        name: item.name,
+        quantity: item.quantity,
+        afterPrice: item.afterPrice,
+      });
+    });
+
     // Prepare order products data
-    const orderProducts = this.cartItems.map((item) => ({
-      productVariantId: item.productId,
-      quantity: item.quantity,
-      price: item.afterPrice,
-    }));
+    const orderProducts = this.cartItems.map((item) => {
+      if (!item.variantId) {
+        console.error(`Missing variantId for product ${item.productId}`);
+      }
+      return {
+        productVariantId: item.variantId || item.productId,
+        quantity: item.quantity,
+        price: item.afterPrice,
+      };
+    });
+
+    console.log('Order Products:', orderProducts);
 
     // Set loading state
     this.isPlacingOrder = true;

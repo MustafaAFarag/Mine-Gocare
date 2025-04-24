@@ -60,6 +60,7 @@ export class ProductInfoComponent {
     // Create the CartItem object
     const item: CartItem = {
       productId: product.id,
+      variantId: product.productVariants[0].id,
       name:
         currentLang === 'ar' ? product.productName.ar : product.productName.en,
       afterPrice: product.productVariants[0].priceAfterDiscount,

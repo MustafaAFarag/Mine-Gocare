@@ -72,6 +72,7 @@ export class CartService {
       const updatedItem = {
         ...existingItem,
         quantity: existingItem.quantity + item.quantity,
+        variantId: item.variantId || existingItem.variantId,
       };
       currentCart.items[existingIndex] = updatedItem;
     } else {
@@ -101,9 +102,11 @@ export class CartService {
     const index = currentCart.items.findIndex((i) => i.productId === productId);
 
     if (index > -1) {
+      const existingItem = currentCart.items[index];
       const updatedItem = {
-        ...currentCart.items[index],
+        ...existingItem,
         quantity,
+        variantId: existingItem.variantId,
       };
       currentCart.items[index] = updatedItem;
       currentCart.total = this.calculateTotal(currentCart.items);
