@@ -6,6 +6,8 @@ import { WalletService } from '../../../services/wallet.service';
 import { AuthService } from '../../../services/auth.service';
 import { Wallet } from '../../../model/Wallet';
 import { OrderService } from '../../../services/order.service';
+import { LanguageService } from '../../../services/language.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +16,8 @@ import { OrderService } from '../../../services/order.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
+  currentLang: 'en' | 'ar' = 'en';
+  private langSubscription: Subscription = new Subscription();
   token: string | null;
   ordersCount: number = 0;
   clientId: number;
@@ -32,6 +36,7 @@ export class DashboardComponent implements OnInit {
     private walletService: WalletService,
     private authService: AuthService,
     private orderService: OrderService,
+    private languageService: LanguageService,
   ) {
     this.token = localStorage.getItem('accessToken');
 
@@ -45,11 +50,20 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
     this.loadUserFromLocalStorage();
     this.fetchClientProfile();
     this.fetchClientWalletAPI();
     this.fetchClientOrders();
+    this.langSubscription = this.languageService.language$.subscribe((lang) => {
+      this.currentLang = lang as 'en' | 'ar';
+    });
   }
 
   loadUserFromLocalStorage(): void {
