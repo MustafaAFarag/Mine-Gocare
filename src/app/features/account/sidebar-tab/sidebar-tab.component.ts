@@ -26,6 +26,7 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   user!: UserProfile;
   private langSubscription!: Subscription;
   currentLang: string = 'en';
+  isLoading: boolean = true;
 
   sidebarItems: SidebarItem[] = [
     {
@@ -117,19 +118,25 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   }
 
   loadUserFromLocalStorage(): void {
+    this.isLoading = true;
     const savedUser = this.getLocalStorageItem('user');
     if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      this.user = {
-        userId: userData.userId,
-        fullName: userData.fullName,
-        thumbImageUrl: userData.thumbImageUrl,
-        profileImageUrl: userData.profileImageUrl,
-        gender: userData.gender,
-        emailAddress: userData.emailAddress,
-        mobileNumber: userData.mobileNumber,
-      };
+      try {
+        const userData = JSON.parse(savedUser);
+        this.user = {
+          userId: userData.userId,
+          fullName: userData.fullName,
+          thumbImageUrl: userData.thumbImageUrl,
+          profileImageUrl: userData.profileImageUrl,
+          gender: userData.gender,
+          emailAddress: userData.emailAddress,
+          mobileNumber: userData.mobileNumber,
+        };
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+      }
     }
+    this.isLoading = false;
   }
 
   private getLocalStorageItem(key: string): string | null {

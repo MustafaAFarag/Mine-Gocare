@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserProfile } from '../../../model/Auth';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,7 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Wallet } from '../../../model/Wallet';
 import { OrderService } from '../../../services/order.service';
 import { LanguageService } from '../../../services/language.service';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,13 +15,17 @@ import { Subscription } from 'rxjs';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   currentLang: 'en' | 'ar' = 'en';
   private langSubscription: Subscription = new Subscription();
   token: string | null;
   ordersCount: number = 0;
   clientId: number;
   wallet!: Wallet;
+  isLoading: boolean = true;
+  isLoadingProfile: boolean = true;
+  isLoadingWallet: boolean = true;
+  isLoadingOrders: boolean = true;
   user: UserProfile = {
     userId: 0,
     fullName: '',
@@ -57,72 +61,116 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loadUserFromLocalStorage();
-    this.fetchClientProfile();
-    this.fetchClientWalletAPI();
-    this.fetchClientOrders();
+
+    // Fetch all data in parallel
+    this.fetchAllData();
+
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang as 'en' | 'ar';
     });
   }
 
+  fetchAllData(): void {
+    this.isLoadingProfile = true;
+    this.isLoadingWallet = true;
+    this.isLoadingOrders = true;
+
+    // Create an array of observables
+    const observables = [];
+
+    // Add profile fetch
+    observables.push(
+      this.authService.getClientProfile().subscribe({
+        next: (response) => {
+          if (response.success && response.result) {
+            this.user = {
+              ...this.user,
+              ...response.result,
+            };
+          }
+          this.isLoadingProfile = false;
+          this.checkAllLoadingComplete();
+        },
+        error: (error) => {
+          console.error('Error fetching client profile:', error);
+          this.isLoadingProfile = false;
+          this.checkAllLoadingComplete();
+        },
+      }),
+    );
+
+    // Add wallet fetch if token and clientId are available
+    if (this.token && this.clientId) {
+      observables.push(
+        this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+          next: (res) => {
+            this.wallet = res.result;
+            this.isLoadingWallet = false;
+            this.checkAllLoadingComplete();
+          },
+          error: (error) => {
+            console.error('Error fetching wallet:', error);
+            this.isLoadingWallet = false;
+            this.checkAllLoadingComplete();
+          },
+        }),
+      );
+    } else {
+      this.isLoadingWallet = false;
+      this.checkAllLoadingComplete();
+    }
+
+    // Add orders fetch if token is available
+    if (this.token) {
+      observables.push(
+        this.orderService.getClientOrders(this.token).subscribe({
+          next: (response) => {
+            this.ordersCount = response.result.totalCount;
+            this.isLoadingOrders = false;
+            this.checkAllLoadingComplete();
+          },
+          error: (error) => {
+            console.error('Error loading orders:', error);
+            this.isLoadingOrders = false;
+            this.checkAllLoadingComplete();
+          },
+        }),
+      );
+    } else {
+      this.isLoadingOrders = false;
+      this.checkAllLoadingComplete();
+    }
+  }
+
+  checkAllLoadingComplete(): void {
+    if (
+      !this.isLoadingProfile &&
+      !this.isLoadingWallet &&
+      !this.isLoadingOrders
+    ) {
+      this.isLoading = false;
+    }
+  }
+
   loadUserFromLocalStorage(): void {
     const savedUser = this.getLocalStorageItem('user');
     if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      this.user = {
-        userId: userData.userId,
-        fullName: userData.fullName,
-        thumbImageUrl: userData.thumbImageUrl,
-        profileImageUrl: userData.profileImageUrl,
-        gender: userData.gender,
-        emailAddress: userData.emailAddress,
-        mobileNumber: userData.mobileNumber,
-      };
-    }
-  }
-
-  fetchClientProfile(): void {
-    this.authService.getClientProfile().subscribe({
-      next: (response) => {
-        if (response.success && response.result) {
-          // Update user data with latest from server
-          this.user = {
-            ...this.user,
-            ...response.result,
-          };
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching client profile:', error);
-      },
-    });
-  }
-
-  fetchClientOrders(): void {
-    if (this.token) {
-      this.orderService.getClientOrders(this.token).subscribe(
-        (response) => {
-          this.ordersCount = response.result.totalCount;
-        },
-        (error) => {
-          console.error('Error loading orders:', error);
-        },
-      );
-    } else {
-      console.error('No access token available');
-    }
-  }
-
-  fetchClientWalletAPI() {
-    if (this.token && this.clientId) {
-      this.walletService
-        .getWallet(this.token, this.clientId, 224)
-        .subscribe((res) => {
-          this.wallet = res.result;
-        });
-    } else {
-      console.error('Missing token or clientId');
+      try {
+        const userData = JSON.parse(savedUser);
+        this.user = {
+          userId: userData.userId,
+          fullName: userData.fullName,
+          thumbImageUrl: userData.thumbImageUrl,
+          profileImageUrl: userData.profileImageUrl,
+          gender: userData.gender,
+          emailAddress: userData.emailAddress,
+          mobileNumber: userData.mobileNumber,
+        };
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+      }
     }
   }
 
