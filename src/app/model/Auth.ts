@@ -29,3 +29,13 @@ export interface UserProfile {
   emailAddress: string;
   mobileNumber: string;
 }
+
+export interface UserProfileResponse {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  mobileNumber: string;
+  isRegisteredExternally: boolean;
+  profileImageURL: any;
+  gender: number;
+}

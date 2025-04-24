@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { UserProfile } from '../../../model/Auth';
+import { UserProfileResponse } from '../../../model/Auth';
 import { AuthService } from '../../../services/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 interface SidebarItem {
   name: string;
@@ -18,15 +19,19 @@ interface SidebarItem {
 
 @Component({
   selector: 'app-sidebar-tab',
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, FormsModule],
   templateUrl: './sidebar-tab.component.html',
   styleUrl: './sidebar-tab.component.css',
 })
 export class SidebarTabComponent implements OnInit, OnDestroy {
-  user!: UserProfile;
+  user!: UserProfileResponse;
   private langSubscription!: Subscription;
+  private userProfileSubscription!: Subscription;
   currentLang: string = 'en';
   isLoading: boolean = true;
+  isUpdatingEmail: boolean = false;
+  emailInput: string = '';
+  showEmailInput: boolean = false;
 
   sidebarItems: SidebarItem[] = [
     {
@@ -92,15 +97,24 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
     // Set initial active state based on current URL
     this.setActiveItem(this.router.url);
 
+    // Fetch user profile
+    this.fetchUserProfile();
+
+    // Subscribe to user profile changes
+    this.userProfileSubscription = this.authService.user$.subscribe(
+      (profile: UserProfileResponse | null) => {
+        if (profile) {
+          this.user = profile;
+        }
+      },
+    );
+
     // Subscribe to router events to update active state when route changes
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.setActiveItem(event.url);
       });
-
-    // Load user data from localStorage
-    this.loadUserFromLocalStorage();
 
     // Get current language
     this.currentLang = this.languageService.getCurrentLanguage();
@@ -115,34 +129,25 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
     }
-  }
-
-  loadUserFromLocalStorage(): void {
-    this.isLoading = true;
-    const savedUser = this.getLocalStorageItem('user');
-    if (savedUser) {
-      try {
-        const userData = JSON.parse(savedUser);
-        this.user = {
-          userId: userData.userId,
-          fullName: userData.fullName,
-          thumbImageUrl: userData.thumbImageUrl,
-          profileImageUrl: userData.profileImageUrl,
-          gender: userData.gender,
-          emailAddress: userData.emailAddress,
-          mobileNumber: userData.mobileNumber,
-        };
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
-      }
+    if (this.userProfileSubscription) {
+      this.userProfileSubscription.unsubscribe();
     }
-    this.isLoading = false;
   }
 
-  private getLocalStorageItem(key: string): string | null {
-    return typeof window !== 'undefined' && window.localStorage
-      ? localStorage.getItem(key)
-      : null;
+  fetchUserProfile(): void {
+    this.isLoading = true;
+    this.authService.getClientProfile().subscribe({
+      next: (res) => {
+        if (res.result) {
+          this.user = res.result;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching user profile:', error);
+        this.isLoading = false;
+      },
+    });
   }
 
   setActiveItem(url: string): void {
@@ -161,14 +166,46 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   }
 
   getInitials(): string {
-    return this.user ? this.user.fullName.charAt(0) : '';
+    return this.user ? this.user.firstName.charAt(0) : '';
   }
 
   getFullName(): string {
-    return this.user ? this.user.fullName : '';
+    return this.user ? `${this.user.firstName} ${this.user.lastName}` : '';
   }
 
   logout(): void {
     this.authService.logout();
+  }
+
+  hasEmailAddress(): boolean {
+    return this.user && !!this.user.emailAddress;
+  }
+
+  addEmail(): void {
+    this.showEmailInput = true;
+  }
+
+  updateEmail(): void {
+    if (!this.emailInput) return;
+
+    this.isUpdatingEmail = true;
+    this.authService.updateEmailAddress(this.emailInput).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.showEmailInput = false;
+          this.emailInput = '';
+        }
+        this.isUpdatingEmail = false;
+      },
+      error: (error) => {
+        console.error('Error updating email:', error);
+        this.isUpdatingEmail = false;
+      },
+    });
+  }
+
+  cancelEmailUpdate(): void {
+    this.showEmailInput = false;
+    this.emailInput = '';
   }
 }

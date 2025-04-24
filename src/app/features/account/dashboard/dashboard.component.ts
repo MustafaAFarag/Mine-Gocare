@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserProfile } from '../../../model/Auth';
+import { UserProfileResponse } from '../../../model/Auth';
 import { TranslateModule } from '@ngx-translate/core';
 import { WalletService } from '../../../services/wallet.service';
 import { AuthService } from '../../../services/auth.service';
@@ -19,6 +19,7 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 export class DashboardComponent implements OnInit, OnDestroy {
   currentLang: 'en' | 'ar' = 'en';
   private langSubscription: Subscription = new Subscription();
+  private userSubscription: Subscription = new Subscription();
   token: string | null;
   ordersCount: number = 0;
   clientId: number;
@@ -27,15 +28,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoadingProfile: boolean = true;
   isLoadingWallet: boolean = true;
   isLoadingOrders: boolean = true;
-  user: UserProfile = {
-    userId: 0,
-    fullName: '',
-    thumbImageUrl: '',
-    profileImageUrl: '',
-    gender: 0,
-    emailAddress: '',
-    mobileNumber: '',
-  };
+  user!: UserProfileResponse;
 
   constructor(
     private walletService: WalletService,
@@ -59,17 +52,47 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
     }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.loadUserFromLocalStorage();
-
+    this.fetchUserProfile();
     // Fetch all data in parallel
     this.fetchAllData();
 
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang as 'en' | 'ar';
+    });
+
+    // Subscribe to user changes
+    this.userSubscription = this.authService.user$.subscribe((userData) => {
+      if (userData) {
+        this.user = userData;
+        // Update clientId if it changed
+        if (userData.userId !== this.clientId) {
+          this.clientId = userData.userId;
+          // Refresh wallet data if clientId changed
+          this.fetchWalletData();
+        }
+      }
+    });
+  }
+
+  fetchUserProfile(): void {
+    this.authService.getClientProfile().subscribe({
+      next: (res) => {
+        if (res.result) {
+          console.log('USER PROFILE', res.result);
+          this.user = res.result;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching user profile:', error);
+        this.isLoading = false;
+      },
     });
   }
 
@@ -86,10 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.authService.getClientProfile().subscribe({
         next: (response) => {
           if (response.success && response.result) {
-            this.user = {
-              ...this.user,
-              ...response.result,
-            };
+            this.user = response.result;
           }
           this.isLoadingProfile = false;
           this.checkAllLoadingComplete();
@@ -155,41 +175,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadUserFromLocalStorage(): void {
-    const savedUser = this.getLocalStorageItem('user');
-    if (savedUser) {
-      try {
-        const userData = JSON.parse(savedUser);
-        this.user = {
-          userId: userData.userId,
-          fullName: userData.fullName,
-          thumbImageUrl: userData.thumbImageUrl,
-          profileImageUrl: userData.profileImageUrl,
-          gender: userData.gender,
-          emailAddress: userData.emailAddress,
-          mobileNumber: userData.mobileNumber,
-        };
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
-      }
-    }
-  }
-
   updateFullName(): void {
     // Prompt for first and last name
-    const fullName = this.user.fullName || '';
-    const nameParts = fullName.split(' ');
-    const firstName = prompt('Enter your first name:', nameParts[0] || '');
-    const lastName = prompt(
-      'Enter your last name:',
-      nameParts.slice(1).join(' ') || '',
+    const firstName = prompt(
+      'Enter your first name:',
+      this.user.firstName || '',
     );
+    const lastName = prompt('Enter your last name:', this.user.lastName || '');
 
     if (firstName && lastName) {
       this.authService.updateFullName(firstName, lastName).subscribe({
         next: (response) => {
           if (response.success) {
-            this.user.fullName = `${firstName} ${lastName}`;
+            this.user.firstName = firstName;
+            this.user.lastName = lastName;
             alert('Name updated successfully');
           }
         },
@@ -296,9 +295,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getLocalStorageItem(key: string): string | null {
-    return typeof window !== 'undefined' && window.localStorage
-      ? localStorage.getItem(key)
-      : null;
+  // Helper method to get full name from firstName and lastName
+  getFullName(): string {
+    return `${this.user.firstName || ''} ${this.user.lastName || ''}`.trim();
+  }
+
+  fetchWalletData(): void {
+    if (this.token && this.clientId) {
+      this.isLoadingWallet = true;
+      this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+        next: (res) => {
+          this.wallet = res.result;
+          this.isLoadingWallet = false;
+          this.checkAllLoadingComplete();
+        },
+        error: (error) => {
+          console.error('Error fetching wallet:', error);
+          this.isLoadingWallet = false;
+          this.checkAllLoadingComplete();
+        },
+      });
+    }
   }
 }

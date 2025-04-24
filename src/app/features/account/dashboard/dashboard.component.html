@@ -10,7 +10,7 @@
     <!-- Welcome Section -->
     <div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
       <h2 class="mb-2 text-2xl font-bold text-gray-800">
-        {{ "dashboard-account.hello" | translate: { name: user.fullName } }}
+        {{ "dashboard-account.hello" | translate: { name: getFullName() } }}
       </h2>
       <p class="mb-4 text-gray-600">
         {{ "dashboard-account.welcomeText" | translate }}
@@ -27,7 +27,9 @@
             <div>
               <h3 class="text-xl font-bold text-hover-color">
                 <ng-container *ngIf="!isLoadingWallet">
-                  {{ wallet.currency.name[currentLang] }}
+                  <span *ngIf="wallet.walletAmount > 0">{{
+                    wallet.currency.name[currentLang]
+                  }}</span>
                   {{ wallet.walletAmount.toFixed(2) }}
                 </ng-container>
                 <ng-container *ngIf="isLoadingWallet">
@@ -50,7 +52,7 @@
             <div>
               <h3 class="text-xl font-bold text-hover-color">
                 <ng-container *ngIf="!isLoadingOrders">
-                  {{ ordersCount }}
+                  {{ ordersCount !== undefined ? ordersCount : 0 }}
                 </ng-container>
                 <ng-container *ngIf="isLoadingOrders">
                   <div class="h-6 w-12 animate-pulse rounded bg-gray-200"></div>
@@ -73,8 +75,10 @@
       <ul class="ml-2 list-inside list-disc space-y-2 text-gray-600">
         <li class="flex items-center justify-between">
           <span
-            >{{ "dashboard-account.fullName" | translate }}:
-            {{ user.fullName }}</span
+            ><span class="font-medium text-hover-color"
+              >{{ "dashboard-account.fullName" | translate }}:</span
+            >
+            {{ getFullName() }}</span
           >
           <button
             (click)="updateFullName()"
@@ -85,7 +89,9 @@
         </li>
         <li class="flex items-center justify-between">
           <span>
-            {{ "dashboard-account.gender" | translate }}:
+            <span class="font-medium text-hover-color"
+              >{{ "dashboard-account.gender" | translate }}:</span
+            >
             {{
               user.gender === 1
                 ? ("dashboard-account.male" | translate)
@@ -101,7 +107,9 @@
         </li>
         <li class="flex items-center justify-between">
           <span>
-            {{ "dashboard-account.phone" | translate }}:
+            <span class="font-medium text-hover-color"
+              >{{ "dashboard-account.phone" | translate }}:</span
+            >
             {{
               user.mobileNumber || ("dashboard-account.notProvided" | translate)
             }}
@@ -119,10 +127,18 @@
         </li>
         <li class="flex items-center justify-between">
           <span>
-            {{ "dashboard-account.email" | translate }}:
-            {{
-              user.emailAddress || ("dashboard-account.notProvided" | translate)
-            }}
+            <span class="font-medium text-hover-color"
+              >{{ "dashboard-account.email" | translate }}:</span
+            >
+            <span
+              class="truncate text-sm text-gray-500"
+              [title]="user.emailAddress"
+            >
+              {{
+                user.emailAddress ||
+                  ("dashboard-account.notProvided" | translate)
+              }}
+            </span>
           </span>
           <button
             (click)="updateEmail()"
@@ -146,10 +162,18 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div class="flex items-center justify-between">
           <p class="text-gray-600">
-            {{ "dashboard-account.email" | translate }}:
-            {{
-              user.emailAddress || ("dashboard-account.notProvided" | translate)
-            }}
+            <span class="font-medium text-hover-color"
+              >{{ "dashboard-account.email" | translate }}:</span
+            >
+            <span
+              class="truncate text-sm text-gray-500"
+              [title]="user.emailAddress"
+            >
+              {{
+                user.emailAddress ||
+                  ("dashboard-account.notProvided" | translate)
+              }}
+            </span>
           </p>
           <button
             (click)="updateEmail()"

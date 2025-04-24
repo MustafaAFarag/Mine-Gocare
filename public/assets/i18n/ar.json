@@ -489,7 +489,9 @@
       "bankDetails": "تفاصيل البنك",
       "refundHistory": "سجل الاسترجاع",
       "savedAddress": "العناوين المحفوظة",
-      "logout": "تسجيل الخروج"
+      "logout": "تسجيل الخروج",
+      "addEmail": "إضافة بريد إلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني"
     },
     "refund": {
       "title": "الاسترجاع",

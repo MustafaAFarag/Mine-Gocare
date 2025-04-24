@@ -92,7 +92,7 @@ export class SignupFormComponent implements OnInit {
     if (!value) return { required: true };
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePatternWithZero = /^0\d{9}$/; // starts with 0, 10 digits
+    const phonePatternWithZero = /^0\d{10}$/; // starts with 0, followed by 10 digits (total 11)
     const phonePatternWithoutZero = /^[1-9]\d{9}$/; // doesn't start with 0, 10 digits
 
     const isEmail = emailPattern.test(value);
@@ -116,15 +116,19 @@ export class SignupFormComponent implements OnInit {
     return null;
   }
 
-  // Method to limit phone input to 10 digits
+  // Method to limit phone input to 10 or 11 digits based on format
   onIdentifierInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = input.value;
 
     // Only process if it's a numeric input (phone)
     if (/^\d*$/.test(value)) {
-      // Limit to 10 digits
-      if (value.length > 10) {
+      // If it starts with 0, limit to 11 digits
+      if (value.startsWith('0') && value.length > 11) {
+        this.signupForm.get('identifier')?.setValue(value.slice(0, 11));
+      }
+      // If it doesn't start with 0, limit to 10 digits
+      else if (!value.startsWith('0') && value.length > 10) {
         this.signupForm.get('identifier')?.setValue(value.slice(0, 10));
       }
     }
@@ -146,11 +150,18 @@ export class SignupFormComponent implements OnInit {
     // Determine if the identifier is email or phone
     const isEmail = formValue.identifier.includes('@');
 
+    // Process phone number if it's a phone
+    let processedIdentifier = formValue.identifier;
+    if (!isEmail && processedIdentifier.startsWith('0')) {
+      // Remove the leading 0 for phone numbers that start with 0
+      processedIdentifier = processedIdentifier.substring(1);
+    }
+
     const signupData = {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
       emailAddress: isEmail ? formValue.identifier : null,
-      mobileNumber: !isEmail ? formValue.identifier : null,
+      mobileNumber: !isEmail ? processedIdentifier : null,
       password: formValue.password,
       confirmPassword: formValue.confirmPassword,
       countryCode: 'EG', // You might want to make this dynamic

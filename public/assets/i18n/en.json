@@ -510,7 +510,9 @@
       "bankDetails": "Bank Details",
       "refundHistory": "Refund History",
       "savedAddress": "Saved Address",
-      "logout": "Logout"
+      "logout": "Logout",
+      "addEmail": "Add Email",
+      "emailPlaceholder": "Enter your email address"
     },
     "refund": {
       "title": "Refund",

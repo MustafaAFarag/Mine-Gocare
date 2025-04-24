@@ -9,13 +9,59 @@
     </div>
     <div *ngIf="!isLoading" class="flex items-center gap-2">
       <div
-        class="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 text-xl font-bold text-gray-700"
+        class="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 p-2 text-xl font-bold text-gray-700 xl:p-5"
       >
         {{ getInitials() }}
       </div>
-      <div>
+      <div class="min-w-0 flex-1">
         <h3 class="font-medium text-gray-800">{{ getFullName() }}</h3>
-        <p class="text-sm text-gray-500">{{ user.emailAddress }}</p>
+        <div *ngIf="hasEmailAddress(); else noEmail">
+          <p class="truncate text-sm text-gray-500" [title]="user.emailAddress">
+            {{ user.emailAddress }}
+          </p>
+        </div>
+        <ng-template #noEmail>
+          <div *ngIf="!showEmailInput">
+            <button
+              (click)="addEmail()"
+              class="mt-1 flex items-center gap-1 text-sm text-hover-color hover:text-red-800"
+            >
+              <i class="ri-add-line"></i>
+              {{ "account.sidebar.addEmail" | translate }}
+            </button>
+          </div>
+          <div *ngIf="showEmailInput" class="mt-2">
+            <div class="flex flex-col gap-2">
+              <input
+                type="email"
+                [(ngModel)]="emailInput"
+                [placeholder]="'account.sidebar.emailPlaceholder' | translate"
+                class="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm focus:border-hover-color focus:outline-none"
+              />
+              <div class="flex gap-2">
+                <button
+                  (click)="updateEmail()"
+                  [disabled]="isUpdatingEmail || !emailInput"
+                  class="flex-1 rounded bg-hover-color py-1 text-sm text-white transition hover:bg-red-800 disabled:opacity-50"
+                >
+                  <span *ngIf="!isUpdatingEmail">{{
+                    "common.save" | translate
+                  }}</span>
+                  <span *ngIf="isUpdatingEmail">{{
+                    "common.saving" | translate
+                  }}</span>
+                </button>
+                <button
+                  (click)="cancelEmailUpdate()"
+                  [disabled]="isUpdatingEmail"
+                  class="flex-1 rounded border border-gray-300 py-1 text-sm text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
+                >
+                  {{ "common.cancel" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
