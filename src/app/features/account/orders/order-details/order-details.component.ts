@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrderDetails } from '../../../../model/Order';
 import { LoadingComponent } from '../../../../shared/loading/loading.component';
 import { getFullImageUrl } from '../../../../lib/utils';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface OrderItem {
   id: number;
@@ -20,6 +20,7 @@ interface OrderStatus {
   isActive: boolean;
   date?: string;
 }
+
 @Component({
   selector: 'app-order-details',
   standalone: true,
@@ -31,6 +32,19 @@ export class OrderDetailsComponent implements OnInit {
   @Input() orderId: number | null = null;
   @Input() orderDetails: OrderDetails | null = null;
   @Output() backClicked = new EventEmitter<void>();
+
+  currentLang: string = 'en';
+
+  constructor(private translateService: TranslateService) {
+    // Get initial language
+    this.currentLang = this.translateService.currentLang || 'en';
+
+    // Subscribe to language changes
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang;
+      console.log('Language changed to:', this.currentLang);
+    });
+  }
 
   orderNumber: string = '#1020';
   orderDate: string = '06 Jul 2024';
@@ -87,12 +101,20 @@ export class OrderDetailsComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    // Set initial language
+    this.currentLang = this.translateService.currentLang || 'en';
+    console.log('Initial language:', this.currentLang);
     console.log('Order details component loaded for order ID:', this.orderId);
     console.log('Order details:', this.orderDetails);
   }
 
   goBack(): void {
     this.backClicked.emit();
+  }
+
+  // Helper method to get the correct language suffix
+  getLangSuffix(): string {
+    return this.currentLang === 'ar' ? '.ar' : '.en';
   }
 
   // Helper methods to handle order status display
@@ -118,7 +140,8 @@ export class OrderDetailsComponent implements OnInit {
   // Format amount with currency
   formatAmount(amount: number): string {
     if (this.orderDetails && this.orderDetails.orderPayment.currency) {
-      return `${amount} ${this.orderDetails.orderPayment.currency.name.en}`;
+      const lang = this.currentLang === 'ar' ? 'ar' : 'en';
+      return `${amount} ${this.orderDetails.orderPayment.currency.name[lang]}`;
     }
     return `${amount}`;
   }

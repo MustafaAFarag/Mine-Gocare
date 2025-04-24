@@ -545,7 +545,18 @@
       "noOrders": "لم تقم بإجراء أي طلبات بعد.",
       "startShopping": "ابدأ التسوق",
       "previousPage": "الصفحة السابقة",
-      "nextPage": "الصفحة التالية"
+      "nextPage": "الصفحة التالية",
+      "consumerDetails": "تفاصيل المستهلك",
+      "clientDetails": "تفاصيل العميل",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "deliveryNotes": "ملاحظات التوصيل",
+      "shippingAddress": "عنوان الشحن",
+      "summary": "الملخص",
+      "subTotal": "المجموع الفرعي",
+      "shipping": "الشحن",
+      "discount": "الخصم",
+      "total": "الإجمالي"
     },
     "bankDetails": {
       "title": "التفاصيل المصرفية",

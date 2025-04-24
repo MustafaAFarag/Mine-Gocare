@@ -545,7 +545,18 @@
       "noOrders": "You haven't placed any orders yet.",
       "startShopping": "Start Shopping",
       "previousPage": "Previous page",
-      "nextPage": "Next page"
+      "nextPage": "Next page",
+      "consumerDetails": "Consumer Details",
+      "clientDetails": "Client Details",
+      "email": "Email",
+      "phone": "Phone",
+      "deliveryNotes": "Delivery Notes",
+      "shippingAddress": "Shipping Address",
+      "summary": "Summary",
+      "subTotal": "Sub Total",
+      "shipping": "Shipping",
+      "discount": "Discount",
+      "total": "Total"
     },
     "bankDetails": {
       "title": "Bank Details",
