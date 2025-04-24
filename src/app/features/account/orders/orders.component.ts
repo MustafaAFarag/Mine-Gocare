@@ -92,4 +92,27 @@ export class OrdersComponent implements OnInit {
     this.selectedOrderId = null;
     this.orderDetails = null;
   }
+
+  cancelOrder(orderId: number): void {
+    if (this.token) {
+      // Show confirmation dialog
+      if (confirm('Are you sure you want to cancel this order?')) {
+        this.orderService
+          .cancelOrder(this.token, orderId, 'Order cancelled by user')
+          .subscribe(
+            (response) => {
+              console.log('Order cancelled successfully:', response);
+              // Refresh the orders list
+              this.fetchClientOrders();
+            },
+            (error) => {
+              console.error('Error cancelling order:', error);
+              alert('Failed to cancel order. Please try again.');
+            },
+          );
+      }
+    } else {
+      console.error('No access token available');
+    }
+  }
 }
