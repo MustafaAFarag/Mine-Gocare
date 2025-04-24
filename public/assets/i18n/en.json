@@ -71,6 +71,7 @@
     "usePoints": "Use Points",
     "useWallet": "Use Wallet",
     "placeOrder": "Place Order",
+    "processing": "Processing...",
     "billingSection": "Billing Summary",
     "copy": "COPY CODE",
     "usePointsQuestion": "Would you prefer to pay using points?",

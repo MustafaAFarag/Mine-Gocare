@@ -11,9 +11,11 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 
-// Import auth service
+// Import services
 import { AuthService } from '../../services/auth.service';
 import { AddressService } from '../../services/address.service';
+import { CartService } from '../../services/cart.service';
+import { OrderService } from '../../services/order.service';
 import { CreateAddress } from '../../model/Address';
 
 // Import sub-components
@@ -24,9 +26,9 @@ import { OrderSummaryComponent } from '../../components/order-summary/order-summ
 import { BillingSummaryComponent } from '../../components/billing-summary/billing-summary.component';
 import { AddressFormModalComponent } from '../../components/address-form-modal/address-form-modal.component';
 
-// Import cart service
-import { CartService } from '../../services/cart.service';
+// Import models
 import { CartItem } from '../../model/Cart';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -100,12 +102,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   tax: number = 0;
   total: number = 0;
 
+  // Loading state
+  isPlacingOrder: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private languageService: LanguageService,
     private authService: AuthService,
     private addressService: AddressService,
+    private orderService: OrderService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -136,8 +143,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       // If cart is empty, we might want to redirect to cart page
       if (this.cartItems.length === 0) {
         console.log('Cart is empty');
-        // Uncomment below to redirect when implementing:
-        // this.router.navigate(['/cart']);
+        // Redirect to cart page
+        this.router.navigate(['/cart']);
       }
     });
 
@@ -276,26 +283,86 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.total = this.subTotal + this.shipping + this.tax;
   }
 
+  getSelectedShippingAddressId(): number | null {
+    const selectedAddress = this.shippingAddresses.find(
+      (addr) => addr.isSelected,
+    );
+    return selectedAddress ? selectedAddress.id : null;
+  }
+
+  // Map payment method to API values
+  getPaymentMethodValue(): number {
+    return this.paymentMethod === 'cod' ? 0 : 1;
+  }
+
   placeOrder(): void {
-    console.log('Placing order...');
-    console.log('Delivery option:', this.deliveryOption);
-    if (this.deliveryOption === 'express' && this.selectedTimeSlot) {
-      // Find the selected time slot object
-      const selectedSlot = this.timeSlots.find(
-        (slot) => slot.id === this.selectedTimeSlot,
-      );
-      if (selectedSlot) {
-        console.log(
-          'Time slot:',
-          selectedSlot.time[this.currentLang as keyof typeof selectedSlot.time],
-        );
-      }
+    // Check if user is authenticated
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.error('User is not authenticated');
+      alert('Please log in to place an order');
+      // Redirect to login page
+      return;
     }
-    console.log('Payment method:', this.paymentMethod);
 
-    // Clear cart after order is placed
-    this.cartService.clearCart();
+    // Check if cart is empty
+    if (this.cartItems.length === 0) {
+      console.error('Cart is empty');
+      alert('Your cart is empty');
+      return;
+    }
 
-    // Order submission logic would go here
+    // Get selected address ID
+    const selectedAddressId = this.getSelectedShippingAddressId();
+    if (!selectedAddressId) {
+      console.error('No address selected');
+      alert('Please select a shipping address');
+      return;
+    }
+
+    // Prepare order products data
+    const orderProducts = this.cartItems.map((item) => ({
+      productVariantId: item.productId,
+      quantity: item.quantity,
+      price: item.afterPrice,
+    }));
+
+    // Set loading state
+    this.isPlacingOrder = true;
+
+    // Get payment method value (0 for COD, 1 for PayTabs)
+    const paymentMethodValue = this.getPaymentMethodValue();
+
+    // Call order service to place order
+    this.orderService
+      .placeOrder(token, selectedAddressId, orderProducts, paymentMethodValue)
+      .subscribe({
+        next: (response) => {
+          this.isPlacingOrder = false;
+          if (response.success) {
+            console.log('Order placed successfully:', response);
+
+            // Clear cart
+            this.cartService.clearCart();
+
+            // Show success message
+            alert('Order placed successfully!');
+
+            // Redirect to orders page
+            this.router.navigate(['/account/orders']);
+          } else {
+            console.error('Failed to place order:', response);
+            alert(
+              'Failed to place order: ' +
+                (response.error?.message || 'Unknown error'),
+            );
+          }
+        },
+        error: (error) => {
+          this.isPlacingOrder = false;
+          console.error('Error placing order:', error);
+          alert('Error placing order: ' + (error.message || 'Unknown error'));
+        },
+      });
   }
 }

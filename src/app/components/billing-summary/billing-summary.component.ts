@@ -23,6 +23,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   @Input() shipping: number = 0;
   @Input() tax: number = 0;
   @Input() total: number = 0;
+  @Input() isLoading: boolean = false;
 
   @Output() placeOrderEvent = new EventEmitter<void>();
 

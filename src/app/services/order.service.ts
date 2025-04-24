@@ -58,6 +58,7 @@ export class OrderService {
       quantity: number;
       price: number;
     }[],
+    paymentMethod: number = 0, // Default to COD (0)
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -68,11 +69,9 @@ export class OrderService {
 
     const body = {
       addressId: addressId,
-      paymentMethod: 1,
-      promoCodeDeduction: 0,
+      paymentMethod: paymentMethod,
       orderProducts: orderProducts,
       walletAmount: 0.0,
-      redeemedPointsAmount: 0.0,
     };
 
     return this.http.post(this.placeOrderUrl, body, { headers });
