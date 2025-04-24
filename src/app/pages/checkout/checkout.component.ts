@@ -90,7 +90,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   selectedTimeSlot: string | null = null;
 
   // Payment methods
-  paymentMethod: 'cod' | 'paypal' | 'stripe' | 'paytabs' = 'cod';
+  paymentMethod: 'cod' | 'paytabs' = 'cod';
 
   shippingAddresses: Address[] = [];
   billingAddresses: Address[] = [];
@@ -261,7 +261,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.selectedTimeSlot = slotId;
   }
 
-  selectPaymentMethod(method: 'cod' | 'paypal' | 'stripe' | 'paytabs'): void {
+  selectPaymentMethod(method: 'cod' | 'paytabs'): void {
     this.paymentMethod = method;
   }
 

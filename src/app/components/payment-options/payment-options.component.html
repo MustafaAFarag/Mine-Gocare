@@ -7,7 +7,7 @@
 
   <div class="p-4">
     <!-- Payment Methods Side by Side -->
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <!-- Cash on Delivery -->
       <div
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
@@ -38,67 +38,7 @@
         </div>
       </div>
 
-      <!-- PayPal -->
-      <div
-        class="cursor-pointer overflow-hidden rounded-lg border p-4"
-        [class.border-hover-color]="paymentMethod === 'paypal'"
-        (click)="selectPaymentMethod('paypal')"
-      >
-        <div class="flex items-center gap-3">
-          <!-- Radio Button -->
-          <div>
-            <div
-              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
-              [class.border-hover-color]="paymentMethod === 'paypal'"
-              [class.bg-hover-color]="paymentMethod === 'paypal'"
-            >
-              <div
-                *ngIf="paymentMethod === 'paypal'"
-                class="h-2 w-2 rounded-full bg-white"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1">
-            <h3 class="font-medium text-gray-800">
-              {{ "checkout.paypal" | translate }}
-            </h3>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stripe -->
-      <div
-        class="cursor-pointer overflow-hidden rounded-lg border p-4"
-        [class.border-hover-color]="paymentMethod === 'stripe'"
-        (click)="selectPaymentMethod('stripe')"
-      >
-        <div class="flex items-center gap-3">
-          <!-- Radio Button -->
-          <div>
-            <div
-              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
-              [class.border-hover-color]="paymentMethod === 'stripe'"
-              [class.bg-hover-color]="paymentMethod === 'stripe'"
-            >
-              <div
-                *ngIf="paymentMethod === 'stripe'"
-                class="h-2 w-2 rounded-full bg-white"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1">
-            <h3 class="font-medium text-gray-800">
-              {{ "checkout.creditCard" | translate }}
-            </h3>
-          </div>
-        </div>
-      </div>
-
-      <!-- PayTabs -->
+      <!-- PayTabs (Credit Card) -->
       <div
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="paymentMethod === 'paytabs'"
@@ -121,7 +61,9 @@
 
           <!-- Content -->
           <div class="flex-1">
-            <h3 class="font-medium text-gray-800">PayTabs</h3>
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.creditCardPayTabs" | translate }}
+            </h3>
           </div>
         </div>
       </div>

@@ -19,10 +19,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./payment-options.component.css'],
 })
 export class PaymentOptionsComponent implements OnInit, OnDestroy {
-  @Input() paymentMethod: 'cod' | 'paypal' | 'stripe' | 'paytabs' = 'cod';
-  @Output() paymentMethodSelected = new EventEmitter<
-    'cod' | 'paypal' | 'stripe' | 'paytabs'
-  >();
+  @Input() paymentMethod: 'cod' | 'paytabs' = 'cod';
+  @Output() paymentMethodSelected = new EventEmitter<'cod' | 'paytabs'>();
 
   currentLang: string = 'en';
   private langSubscription: Subscription = new Subscription();
@@ -42,7 +40,7 @@ export class PaymentOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectPaymentMethod(method: 'cod' | 'paypal' | 'stripe' | 'paytabs'): void {
+  selectPaymentMethod(method: 'cod' | 'paytabs'): void {
     this.paymentMethodSelected.emit(method);
   }
 }

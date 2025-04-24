@@ -11,6 +11,7 @@ import { getFullImageUrl } from '../../lib/utils';
 import { CartItem } from '../../model/Cart';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
+import { CartService } from '../../services/cart.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -28,7 +29,10 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
 
   getfullImageUrl = getFullImageUrl;
 
-  constructor(private languageService: LanguageService) {}
+  constructor(
+    private languageService: LanguageService,
+    private cartService: CartService,
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to language changes
@@ -40,6 +44,18 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
+    }
+  }
+
+  incrementQuantity(item: CartItem): void {
+    this.cartService.updateQuantity(item.productId, item.quantity + 1);
+  }
+
+  decrementQuantity(item: CartItem): void {
+    if (item.quantity > 1) {
+      this.cartService.updateQuantity(item.productId, item.quantity - 1);
+    } else {
+      this.cartService.removeFromCart(item.productId);
     }
   }
 }
