@@ -52,7 +52,23 @@
           </td>
           <td class="px-4 py-4 text-gray-800">{{ item.productName.en }}</td>
           <td class="px-4 py-4 text-gray-800">
-            {{ item.price }} {{ item.currency.name.en }}
+            <ng-container
+              *ngIf="item.priceBeforeDiscount === item.price; else discounted"
+            >
+              {{ item.currency.name.en }} {{ item.priceBeforeDiscount }}
+            </ng-container>
+            <ng-template #discounted class="flex flex-col items-center">
+              <div>
+                {{ item.currency.name.en }} {{ item.price }}
+                <span class="text-sm text-gray-400 line-through">
+                  {{ item.currency.name.en }} {{ item.priceBeforeDiscount }}
+                </span>
+              </div>
+              <span class="font-medium text-hover-color">
+                {{ item.currency.name.en }} {{ item.discountAmount.toFixed(0) }}
+                {{ "product-card.off" | translate }}
+              </span>
+            </ng-template>
           </td>
           <td class="px-4 py-4 text-gray-800">{{ item.count }}</td>
           <td class="px-4 py-4 text-gray-800">

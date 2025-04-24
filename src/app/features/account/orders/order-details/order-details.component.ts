@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrderDetails } from '../../../../model/Order';
 import { LoadingComponent } from '../../../../shared/loading/loading.component';
 import { getFullImageUrl } from '../../../../lib/utils';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface OrderItem {
   id: number;
@@ -22,7 +23,7 @@ interface OrderStatus {
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule, LoadingComponent],
+  imports: [CommonModule, LoadingComponent, TranslateModule],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css',
 })
