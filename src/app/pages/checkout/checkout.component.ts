@@ -99,7 +99,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   subTotal: number = 0;
 
   shipping: number = 0.0;
-  tax: number = 0;
+
   total: number = 0;
 
   // Loading state
@@ -135,9 +135,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         quantity: item.quantity,
         image: item.image,
       }));
-
-      // Calculate tax (5% of subtotal)
-      this.tax = this.subTotal * 0.05;
 
       this.updateTotal();
 
@@ -281,7 +278,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   updateTotal(): void {
-    this.total = this.subTotal + this.shipping + this.tax;
+    this.total = this.subTotal + this.shipping;
   }
 
   getSelectedShippingAddressId(): number | null {

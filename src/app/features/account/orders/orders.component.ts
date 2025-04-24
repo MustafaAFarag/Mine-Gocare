@@ -18,6 +18,12 @@ export class OrdersComponent implements OnInit {
   selectedOrderId: number | null = null;
   orderDetails: OrderDetails | null = null;
 
+  // Pagination properties
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
+  totalPages = 0;
+
   constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
@@ -29,7 +35,11 @@ export class OrdersComponent implements OnInit {
       this.orderService.getClientOrders(this.token).subscribe(
         (response) => {
           this.orders = response.result.items;
+          this.totalItems = response.result.totalCount;
+          this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
           console.log('Orders loaded:', this.orders);
+          console.log('Total items:', this.totalItems);
+          console.log('Total pages:', this.totalPages);
         },
         (error) => {
           console.error('Error loading orders:', error);
@@ -37,6 +47,20 @@ export class OrdersComponent implements OnInit {
       );
     } else {
       console.error('No access token available');
+    }
+  }
+
+  // Get current page items
+  get currentPageItems(): ClientOrders[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.orders.slice(startIndex, endIndex);
+  }
+
+  // Change page
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
     }
   }
 
