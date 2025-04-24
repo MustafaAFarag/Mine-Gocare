@@ -512,6 +512,17 @@
       "savedAddress": "Saved Address",
       "logout": "Logout"
     },
+    "refund": {
+      "title": "Refund",
+      "order": "Order",
+      "status": "Status",
+      "price": "Price",
+      "reason": "Reason",
+      "createdAt": "Created At",
+      "statusCanceled": "Canceled",
+      "noReasonProvided": "No reason provided",
+      "noRefundRequests": "No refund requests found."
+    },
     "orders": {
       "title": "My Orders",
       "orderNumber": "Order Number",

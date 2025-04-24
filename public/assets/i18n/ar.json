@@ -512,6 +512,17 @@
       "savedAddress": "العناوين المحفوظة",
       "logout": "تسجيل الخروج"
     },
+    "refund": {
+      "title": "الاسترداد",
+      "order": "الطلب",
+      "status": "الحالة",
+      "price": "السعر",
+      "reason": "السبب",
+      "createdAt": "تاريخ الإنشاء",
+      "statusCanceled": "ملغي",
+      "noReasonProvided": "لم يتم تقديم سبب",
+      "noRefundRequests": "لم يتم العثور على طلبات استرداد."
+    },
     "orders": {
       "title": "طلباتي",
       "orderNumber": "رقم الطلب",

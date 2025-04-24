@@ -1,5 +1,7 @@
 <div class="rounded-lg bg-white p-6 shadow-sm">
-  <h2 class="mb-6 text-xl font-bold text-gray-800">Refund</h2>
+  <h2 class="mb-6 text-xl font-bold text-gray-800">
+    {{ "account.refund.title" | translate }}
+  </h2>
 
   <!-- Refund History Table -->
   <div class="overflow-x-auto">
@@ -7,12 +9,20 @@
       <!-- Table Header -->
       <thead>
         <tr class="border-b">
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Order</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Price</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Reason</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">
-            Created At
+            {{ "account.refund.order" | translate }}
+          </th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">
+            {{ "account.refund.status" | translate }}
+          </th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">
+            {{ "account.refund.price" | translate }}
+          </th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">
+            {{ "account.refund.reason" | translate }}
+          </th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">
+            {{ "account.refund.createdAt" | translate }}
           </th>
         </tr>
       </thead>
@@ -27,14 +37,17 @@
             <span
               class="rounded-md bg-red-100 px-3 py-1 text-sm font-medium text-red-600"
             >
-              Canceled
+              {{ "account.refund.statusCanceled" | translate }}
             </span>
           </td>
           <td class="px-4 py-4 text-gray-700">
             {{ order.totalPayment }} {{ order.currency.name.en }}
           </td>
           <td class="px-4 py-4 text-gray-700">
-            {{ order.lastStatusHistory.reason || "No reason provided" }}
+            {{
+              order.lastStatusHistory.reason ||
+                ("account.refund.noReasonProvided" | translate)
+            }}
           </td>
           <td class="px-4 py-4 text-gray-700">
             {{ order.creationDate | date: "mediumDate" }}
@@ -46,7 +59,7 @@
           <td colspan="5" class="py-8 text-center text-gray-500">
             <div class="flex flex-col items-center">
               <i class="ri-refund-2-line mb-2 text-4xl text-gray-400"></i>
-              <p>No refund requests found.</p>
+              <p>{{ "account.refund.noRefundRequests" | translate }}</p>
             </div>
           </td>
         </tr>
