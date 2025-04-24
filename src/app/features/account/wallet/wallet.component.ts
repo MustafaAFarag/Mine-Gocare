@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WalletService } from '../../../services/wallet.service';
-import { Wallet } from '../../../model/Wallet';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Transaction {
   id: number;
@@ -16,7 +16,7 @@ interface Transaction {
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule, LoadingComponent],
+  imports: [CommonModule, LoadingComponent, TranslateModule],
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.css'],
 })

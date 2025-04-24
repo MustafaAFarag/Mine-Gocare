@@ -6,14 +6,16 @@
 
   <div *ngIf="!isLoading">
     <!-- Wallet Balance -->
-    <div class="mb-8 flex items-center">
-      <div class="mr-4 rounded-md bg-red-100 p-3">
+    <div class="mb-8 flex items-center gap-4">
+      <div class="rounded-md bg-red-100 p-3">
         <i class="ri-wallet-3-line text-2xl text-hover-color"></i>
       </div>
       <div>
-        <h3 class="font-medium text-gray-500">Wallet Balance</h3>
+        <h3 class="font-medium text-gray-500">
+          {{ "checkout.walletBalance" | translate }}
+        </h3>
         <p class="text-xl font-bold text-gray-800">
-          ${{ walletBalance.toFixed(2) }}
+          {{ "common.currency" | translate }} {{ walletBalance.toFixed(2) }}
         </p>
       </div>
     </div>
@@ -24,15 +26,17 @@
         <!-- Table Header -->
         <thead>
           <tr class="border-b">
-            <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              Amount
+              {{ "common.date" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              Remark
+              {{ "common.amount" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              Status
+              {{ "common.remark" | translate }}
+            </th>
+            <th class="px-4 py-4 text-left font-medium text-gray-700">
+              {{ "common.status" | translate }}
             </th>
           </tr>
         </thead>
@@ -45,7 +49,8 @@
           >
             <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
             <td class="px-4 py-4 text-gray-700">
-              ${{ transaction.amount.toFixed(2) }}
+              {{ "common.currency" | translate }}
+              {{ transaction.amount.toFixed(2) }}
             </td>
             <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
             <td class="px-4 py-4">
@@ -57,7 +62,11 @@
                     transaction.status === 'credit',
                 }"
               >
-                {{ transaction.status === "debit" ? "Debit" : "Credit" }}
+                {{
+                  transaction.status === "debit"
+                    ? ("common.debit" | translate)
+                    : ("common.credit" | translate)
+                }}
               </span>
             </td>
           </tr>
@@ -65,9 +74,9 @@
           <!-- Empty State (shown when no transactions) -->
           <tr *ngIf="transactions.length === 0">
             <td colspan="4" class="py-8 text-center text-gray-500">
-              <div class="flex flex-col items-center">
-                <i class="ri-wallet-3-line mb-2 text-4xl text-gray-400"></i>
-                <p>No transactions found in your wallet.</p>
+              <div class="flex flex-col items-center gap-2">
+                <i class="ri-wallet-3-line text-4xl text-gray-400"></i>
+                <p>{{ "wallet.noTransactions" | translate }}</p>
               </div>
             </td>
           </tr>
