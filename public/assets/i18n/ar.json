@@ -528,5 +528,34 @@
     "loginDetails": "تفاصيل تسجيل الدخول",
     "password": "كلمة المرور",
     "edit": "تعديل"
+  },
+  "address": {
+    "addNew": "إضافة عنوان جديد",
+    "fullName": "الاسم الكامل",
+    "phoneNumber": "رقم الهاتف",
+    "district": "المنطقة",
+    "city": "المدينة",
+    "country": "البلد",
+    "addressLine": "العنوان",
+    "type": "نوع العنوان",
+    "setAsDefault": "تعيين كعنوان افتراضي",
+    "selectDistrict": "اختر المنطقة",
+    "selectCity": "اختر المدينة",
+    "types": {
+      "home": "المنزل",
+      "work": "العمل",
+      "other": "أخرى"
+    },
+    "validation": {
+      "fullNameRequired": "الاسم الكامل مطلوب",
+      "phoneNumberRequired": "رقم الهاتف مطلوب",
+      "districtRequired": "المنطقة مطلوبة",
+      "cityRequired": "المدينة مطلوبة",
+      "addressRequired": "العنوان مطلوب"
+    }
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء"
   }
 }

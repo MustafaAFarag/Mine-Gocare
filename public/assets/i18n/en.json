@@ -528,5 +528,34 @@
     "loginDetails": "Login Details",
     "password": "Password",
     "edit": "Edit"
+  },
+  "address": {
+    "addNew": "Add New Address",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "district": "District",
+    "city": "City",
+    "country": "Country",
+    "addressLine": "Address",
+    "type": "Address Type",
+    "setAsDefault": "Set as default address",
+    "selectDistrict": "Select District",
+    "selectCity": "Select City",
+    "types": {
+      "home": "Home",
+      "work": "Work",
+      "other": "Other"
+    },
+    "validation": {
+      "fullNameRequired": "Full name is required",
+      "phoneNumberRequired": "Phone number is required",
+      "districtRequired": "District is required",
+      "cityRequired": "City is required",
+      "addressRequired": "Address is required"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

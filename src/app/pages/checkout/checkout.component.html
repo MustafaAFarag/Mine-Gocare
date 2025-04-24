@@ -92,6 +92,13 @@
     </div>
   </div>
 
+  <!-- Address Form Modal -->
+  <app-address-form-modal
+    [isOpen]="showAddressFormModal"
+    (close)="onCloseAddressModal()"
+    (saveAddress)="onSaveAddress($event)"
+  ></app-address-form-modal>
+
   <!-- Mobile Fixed Bottom Button (only visible on small screens when cart has items) -->
   <div
     *ngIf="cartItems.length > 0"

@@ -1,12 +1,11 @@
 export interface Address {
   id: number;
-  type: 'new-home' | 'old-home' | 'office';
+  type: string | number; // Allow for both string and number types
   label: string;
   street: string;
   city: string;
   state: string;
   country: string;
-  zipCode: string;
   phone: string;
   isSelected?: boolean;
 }

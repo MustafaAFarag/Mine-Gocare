@@ -11,12 +11,18 @@ import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 
+// Import auth service
+import { AuthService } from '../../services/auth.service';
+import { AddressService } from '../../services/address.service';
+import { CreateAddress } from '../../model/Address';
+
 // Import sub-components
 import { ShippingAddressComponent } from '../../components/shipping-address/shipping-address.component';
 import { DeliveryOptionsComponent } from '../../components/delivery-options/delivery-options.component';
 import { PaymentOptionsComponent } from '../../components/payment-options/payment-options.component';
 import { OrderSummaryComponent } from '../../components/order-summary/order-summary.component';
 import { BillingSummaryComponent } from '../../components/billing-summary/billing-summary.component';
+import { AddressFormModalComponent } from '../../components/address-form-modal/address-form-modal.component';
 
 // Import cart service
 import { CartService } from '../../services/cart.service';
@@ -34,6 +40,7 @@ import { CartItem } from '../../model/Cart';
     PaymentOptionsComponent,
     OrderSummaryComponent,
     BillingSummaryComponent,
+    AddressFormModalComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
@@ -44,6 +51,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   currentLang: string = 'en';
 
   couponForm: FormGroup;
+
+  // Address Form Modal
+  showAddressFormModal = false;
 
   // Delivery options
   deliveryOption: 'standard' | 'express' = 'standard';
@@ -82,83 +92,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // Payment methods
   paymentMethod: 'cod' | 'paypal' | 'stripe' | 'paytabs' = 'cod';
 
-  shippingAddresses: Address[] = [
-    {
-      id: 1,
-      type: 'new-home',
-      label: 'New Home',
-      street: '26, Starts Hollow Colony',
-      city: 'Denver',
-      state: 'Colorado',
-      country: 'United States',
-      zipCode: '80014',
-      phone: '+1 5551855359',
-      isSelected: true,
-    },
-    {
-      id: 2,
-      type: 'old-home',
-      label: 'Old Home',
-      street: '538, Claire New Street',
-      city: 'San Jose',
-      state: 'Colorado',
-      country: 'United States',
-      zipCode: '94088',
-      phone: '+1 5551855359',
-      isSelected: false,
-    },
-    {
-      id: 3,
-      type: 'office',
-      label: 'Office',
-      street: '218, Row New Street',
-      city: 'San Jose',
-      state: 'California',
-      country: 'United States',
-      zipCode: '94088',
-      phone: '+1 5518655359',
-      isSelected: false,
-    },
-  ];
-
-  billingAddresses: Address[] = [
-    {
-      id: 1,
-      type: 'new-home',
-      label: 'New Home',
-      street: '26, Starts Hollow Colony',
-      city: 'Denver',
-      state: 'Colorado',
-      country: 'United States',
-      zipCode: '80014',
-      phone: '+1 5551855359',
-      isSelected: true,
-    },
-    {
-      id: 2,
-      type: 'old-home',
-      label: 'Old Home',
-      street: '538, Claire New Street',
-      city: 'San Jose',
-      state: 'Colorado',
-      country: 'United States',
-      zipCode: '94088',
-      phone: '+1 5551855359',
-      isSelected: false,
-    },
-    {
-      id: 3,
-      type: 'office',
-      label: 'Office',
-      street: '218, Row New Street',
-      city: 'San Jose',
-      state: 'California',
-      country: 'United States',
-      zipCode: '94088',
-      phone: '+1 5518655359',
-      isSelected: false,
-    },
-  ];
+  shippingAddresses: Address[] = [];
+  billingAddresses: Address[] = [];
 
   cartItems: CartItem[] = [];
   subTotal: number = 0;
@@ -187,6 +122,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cartService: CartService,
     private languageService: LanguageService,
+    private authService: AuthService,
+    private addressService: AddressService,
   ) {
     this.couponForm = this.fb.group({
       couponCode: ['', Validators.required],
@@ -225,6 +162,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         // this.router.navigate(['/cart']);
       }
     });
+
+    // Fetch client addresses
+    this.fetchClientAddresses();
   }
 
   ngOnDestroy(): void {
@@ -234,6 +174,63 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
+    }
+  }
+
+  fetchClientAddresses(): void {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      this.addressService.getClientAddresses(token).subscribe({
+        next: (response) => {
+          if (response.success && response.result) {
+            // Transform API addresses to match our Address model format
+            this.transformAddresses(response.result);
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching addresses:', error);
+        },
+      });
+    }
+  }
+
+  transformAddresses(apiAddresses: any[]): void {
+    // Clear existing addresses
+    this.shippingAddresses = [];
+    this.billingAddresses = [];
+
+    if (apiAddresses && apiAddresses.length > 0) {
+      // Convert API addresses to our Address format and set the first one as selected
+      const transformedAddresses = apiAddresses.map((addr, index) => {
+        return {
+          id: addr.id,
+          type: addr.type,
+          label: this.getAddressTypeLabel(addr.type),
+          street: addr.address,
+          city: addr.city?.name?.[this.currentLang] || '',
+          state: addr.district?.name?.[this.currentLang] || '',
+          country: addr.country?.name?.[this.currentLang] || '',
+          zipCode: '',
+          phone: addr.phoneNumber,
+          isSelected: index === 0,
+        } as Address;
+      });
+
+      this.shippingAddresses = [...transformedAddresses];
+      this.billingAddresses = [...transformedAddresses];
+    }
+  }
+
+  getAddressTypeLabel(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Home';
+      case 2:
+        return 'Work';
+      case 3:
+        return 'Other';
+      default:
+        return 'Address';
     }
   }
 
@@ -269,13 +266,32 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   addNewShippingAddress(): void {
-    console.log('Add new shipping address');
-    // This would typically open a modal or navigate to an add address form
+    this.showAddressFormModal = true;
   }
 
   addNewBillingAddress(): void {
-    console.log('Add new billing address');
-    // This would typically open a modal or navigate to an add address form
+    this.showAddressFormModal = true;
+  }
+
+  onCloseAddressModal(): void {
+    this.showAddressFormModal = false;
+  }
+
+  onSaveAddress(addressData: CreateAddress): void {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      this.addressService.createAddress(token, addressData).subscribe({
+        next: (response) => {
+          if (response.success) {
+            // Refresh addresses
+            this.fetchClientAddresses();
+          }
+        },
+        error: (error) => {
+          console.error('Error creating address:', error);
+        },
+      });
+    }
   }
 
   copyPromoCode(code: string): void {

@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../enviroments/enviroment';
 import { ApiEndPoint } from '../constants/api.constant';
+import { CreateAddress, UpdateAddress } from '../model/Address';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class AddressService {
     return this.http.get(this.getAddressUrl, { headers });
   }
 
-  createAddress(token: string, body: any): Observable<any> {
+  createAddress(token: string, body: CreateAddress): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ export class AddressService {
     return this.http.delete(url, { headers });
   }
 
-  updateAddress(token: string, body: any): Observable<any> {
+  updateAddress(token: string, body: UpdateAddress): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

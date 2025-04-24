@@ -14,21 +14,6 @@ export interface Address {
   isPhoneVerified: boolean;
 }
 
-export interface CreateAddress {
-  countryId: number;
-  districtId: number;
-  cityId: number;
-  latitude: string;
-  longitude: string;
-  address: string;
-  mapAddress: string;
-  phoneNumber: string;
-  isDefault: boolean;
-  type: number;
-  fullName: string;
-  isPhoneVerified: boolean;
-}
-
 interface Country {
   id: number;
   name: Name;
@@ -57,4 +42,35 @@ interface City {
 interface Name3 {
   en: string;
   ar: string;
+}
+
+export interface CreateAddress {
+  countryId: number;
+  districtId: number;
+  cityId: number;
+  latitude: string;
+  longitude: string;
+  address: string;
+  mapAddress: string;
+  phoneNumber: string;
+  isDefault: boolean;
+  type: number;
+  fullName: string;
+  isPhoneVerified: boolean;
+}
+
+export interface UpdateAddress {
+  id: number;
+  countryId: number;
+  districtId: number;
+  cityId: number;
+  latitude: string;
+  longitude: string;
+  address: string;
+  mapAddress: string;
+  phoneNumber: string;
+  isDefault: boolean;
+  type: number;
+  fullName: string;
+  isPhoneVerified: boolean;
 }
