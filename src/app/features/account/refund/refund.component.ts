@@ -1,14 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-
-interface RefundRequest {
-  id: number;
-  orderNumber: string;
-  status: 'pending' | 'approved' | 'rejected' | 'processing';
-  reason: string;
-  createdAt: string;
-}
+import { OrderService } from '../../../services/order.service';
+import { ClientOrders } from '../../../model/Order';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-refund',
@@ -17,20 +12,39 @@ interface RefundRequest {
   templateUrl: './refund.component.html',
   styleUrls: ['./refund.component.css'],
 })
-export class RefundComponent {
+export class RefundComponent implements OnInit {
+  token = localStorage.getItem('accessToken');
+  orders: ClientOrders[] = [];
+
   currentPage: number = 1;
   totalPages: number = 1;
 
-  refundRequests: RefundRequest[] = [
-    {
-      id: 1,
-      orderNumber: '#1000',
-      status: 'rejected',
-      reason: 'Item was damaged, also fabric was not good as expected',
-      createdAt: '21 Jun 2024',
-    },
-    // You can add more refund requests here if needed
-  ];
+  constructor(
+    private orderService: OrderService,
+    private router: Router,
+  ) {}
+
+  ngOnInit() {
+    this.fetchClientOrders();
+  }
+
+  fetchClientOrders(): void {
+    if (this.token) {
+      this.orderService.getClientOrders(this.token).subscribe(
+        (response) => {
+          this.orders = response.result.items.filter(
+            (order: ClientOrders) => order.isCanceled === true,
+          );
+          console.log('Canceled Orders:', this.orders);
+        },
+        (error) => {
+          console.error('Error loading orders:', error);
+        },
+      );
+    } else {
+      console.error('No access token available');
+    }
+  }
 
   previousPage(): void {
     if (this.currentPage > 1) {
@@ -49,16 +63,10 @@ export class RefundComponent {
   }
 
   getStatusClass(status: string): string {
-    switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-600';
-      case 'rejected':
-        return 'bg-red-100 text-red-600';
-      case 'processing':
-        return 'bg-blue-100 text-blue-600';
-      case 'pending':
-      default:
-        return 'bg-yellow-100 text-yellow-600';
-    }
+    return 'bg-red-100 text-red-600';
+  }
+
+  getStatusText(status: number): string {
+    return 'Canceled';
   }
 }

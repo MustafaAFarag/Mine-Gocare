@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
   token: string | null;
   ordersCount: number = 0;
   clientId: number;
-  walletAmount: number = 0;
+  wallet!: Wallet;
   user: UserProfile = {
     userId: 0,
     fullName: '',
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
       this.walletService
         .getWallet(this.token, this.clientId, 224)
         .subscribe((res) => {
-          this.walletAmount = res.result.walletAmount;
+          this.wallet = res.result;
         });
     } else {
       console.error('Missing token or clientId');

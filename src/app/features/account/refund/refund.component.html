@@ -9,6 +9,7 @@
         <tr class="border-b">
           <th class="px-4 py-4 text-left font-medium text-gray-700">Order</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
+          <th class="px-4 py-4 text-left font-medium text-gray-700">Price</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">Reason</th>
           <th class="px-4 py-4 text-left font-medium text-gray-700">
             Created At
@@ -18,28 +19,31 @@
 
       <!-- Table Body -->
       <tbody>
-        <tr
-          *ngFor="let request of refundRequests"
-          class="border-b hover:bg-gray-50"
-        >
+        <tr *ngFor="let order of orders" class="border-b hover:bg-gray-50">
           <td class="px-4 py-4 font-medium text-gray-700">
-            {{ request.orderNumber }}
+            {{ order.orderNumber }}
           </td>
           <td class="px-4 py-4">
             <span
-              class="rounded-md px-3 py-1 text-sm font-medium"
-              [ngClass]="getStatusClass(request.status)"
+              class="rounded-md bg-red-100 px-3 py-1 text-sm font-medium text-red-600"
             >
-              {{ request.status | titlecase }}
+              Canceled
             </span>
           </td>
-          <td class="px-4 py-4 text-gray-700">{{ request.reason }}</td>
-          <td class="px-4 py-4 text-gray-700">{{ request.createdAt }}</td>
+          <td class="px-4 py-4 text-gray-700">
+            {{ order.totalPayment }} {{ order.currency.name.en }}
+          </td>
+          <td class="px-4 py-4 text-gray-700">
+            {{ order.lastStatusHistory.reason || "No reason provided" }}
+          </td>
+          <td class="px-4 py-4 text-gray-700">
+            {{ order.creationDate | date: "mediumDate" }}
+          </td>
         </tr>
 
         <!-- Empty State (shown when no refund requests) -->
-        <tr *ngIf="refundRequests.length === 0">
-          <td colspan="4" class="py-8 text-center text-gray-500">
+        <tr *ngIf="orders.length === 0">
+          <td colspan="5" class="py-8 text-center text-gray-500">
             <div class="flex flex-col items-center">
               <i class="ri-refund-2-line mb-2 text-4xl text-gray-400"></i>
               <p>No refund requests found.</p>
@@ -52,7 +56,7 @@
 
   <!-- Pagination -->
   <div
-    *ngIf="refundRequests.length > 0"
+    *ngIf="orders.length > 0"
     class="mt-4 flex items-center justify-center p-4"
   >
     <button
@@ -68,7 +72,7 @@
       *ngFor="let page of [1]"
       (click)="goToPage(page)"
       class="mx-1 flex h-9 min-w-[36px] items-center justify-center rounded-md"
-      [class.bg-orange-400]="currentPage === page"
+      [class.bg-hover-color]="currentPage === page"
       [class.text-white]="currentPage === page"
       [class.hover:bg-gray-100]="currentPage !== page"
       [class.text-gray-700]="currentPage !== page"
