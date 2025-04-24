@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderService } from '../../../services/order.service';
 import { ClientOrders, OrderDetails } from '../../../model/Order';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, OrderDetailsComponent],
+  imports: [CommonModule, OrderDetailsComponent, TranslateModule],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
@@ -17,6 +20,7 @@ export class OrdersComponent implements OnInit {
   showOrderDetails = false;
   selectedOrderId: number | null = null;
   orderDetails: OrderDetails | null = null;
+  currentLang: Language = 'en';
 
   // Pagination properties
   currentPage = 1;
@@ -24,7 +28,15 @@ export class OrdersComponent implements OnInit {
   totalItems = 0;
   totalPages = 0;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private translateService: TranslateService,
+  ) {
+    this.currentLang = this.translateService.currentLang as Language;
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang as Language;
+    });
+  }
 
   ngOnInit(): void {
     this.fetchClientOrders();
