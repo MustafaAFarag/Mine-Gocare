@@ -1,54 +1,13 @@
 <div class="rounded-lg bg-white shadow-sm">
-  <div class="flex items-center justify-between border-b p-4">
+  <div class="border-b p-4">
     <h2 class="text-lg font-bold text-gray-800">
       {{ "checkout.billingSection" | translate }}
     </h2>
-    <a href="#" class="flex items-center gap-1 text-sm text-gray-600">
-      <i class="ri-eye-line"></i> View All
-    </a>
   </div>
 
   <div class="p-4">
-    <!-- Promo Codes -->
-    <div class="mb-4">
-      <p class="mb-2 text-gray-700">{{ "checkout.promoCode" | translate }}</p>
-      <div class="grid grid-cols-2 gap-2">
-        <div *ngFor="let promo of promoCodes" class="flex flex-col">
-          <span class="text-xs text-gray-500">{{ promo.description }}</span>
-          <div class="flex items-center justify-between rounded bg-gray-50 p-2">
-            <span class="text-sm text-gray-700">{{ promo.code }}</span>
-            <button
-              (click)="copyPromoCode(promo.code)"
-              class="text-xs text-hover-color hover:text-orange-600"
-            >
-              {{ "checkout.copy" | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Coupon Input -->
-    <div class="mb-6">
-      <form [formGroup]="couponForm" (ngSubmit)="applyCoupon()" class="flex">
-        <input
-          type="text"
-          formControlName="couponCode"
-          [placeholder]="'checkout.enterCoupon' | translate"
-          class="flex-1 rounded-l border bg-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
-        />
-        <button
-          type="submit"
-          class="rounded-r border border-l-0 bg-white px-4 py-2 text-hover-color hover:bg-gray-50"
-          [disabled]="!couponForm.valid"
-        >
-          {{ "checkout.apply" | translate }}
-        </button>
-      </form>
-    </div>
-
     <!-- Order Breakdown -->
-    <div class="space-y-3 border-t pt-4">
+    <div class="space-y-3 pt-1">
       <div class="flex justify-between">
         <span class="text-gray-600">{{
           "checkout.itemTotal" | translate
@@ -64,62 +23,6 @@
       <div class="flex justify-between">
         <span class="text-gray-600">{{ "checkout.tax" | translate }}</span>
         <span class="text-hover-color">${{ tax.toFixed(2) }}</span>
-      </div>
-
-      <!-- Points Option -->
-      <div class="flex items-center justify-between">
-        <div>
-          <span class="text-gray-600">{{
-            "checkout.pointsAvailable" | translate
-          }}</span>
-          <p class="text-xs text-gray-500">
-            {{ "checkout.usePointsQuestion" | translate }}
-          </p>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-hover-color">${{ points.toFixed(2) }}</span>
-          <div
-            class="relative h-5 w-10 cursor-pointer rounded-full bg-gray-200"
-            [class.bg-orange-400]="usePoints"
-            (click)="toggleUsePoints()"
-          >
-            <div
-              class="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all duration-300"
-              [class.start-0.5]="!usePoints"
-              [class.end-0.5]="!usePoints"
-              [class.start-5]="usePoints"
-              [class.end-5]="usePoints"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wallet Option -->
-      <div class="flex items-center justify-between">
-        <div>
-          <span class="text-gray-600">{{
-            "checkout.walletBalance" | translate
-          }}</span>
-          <p class="text-xs text-gray-500">
-            {{ "checkout.useWalletQuestion" | translate }}
-          </p>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-hover-color">${{ walletBalance.toFixed(2) }}</span>
-          <div
-            class="relative h-5 w-10 cursor-pointer rounded-full bg-gray-200"
-            [class.bg-orange-400]="useWallet"
-            (click)="toggleUseWallet()"
-          >
-            <div
-              class="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all duration-300"
-              [class.start-0.5]="!useWallet"
-              [class.end-0.5]="!useWallet"
-              [class.start-5]="useWallet"
-              [class.end-5]="useWallet"
-            ></div>
-          </div>
-        </div>
       </div>
     </div>
 

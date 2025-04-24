@@ -74,19 +74,10 @@
 
       <!-- Billing Summary Component -->
       <app-billing-summary
-        [promoCodes]="promoCodes"
         [subTotal]="subTotal"
         [shipping]="shipping"
         [tax]="tax"
-        [points]="points"
-        [walletBalance]="walletBalance"
         [total]="total"
-        [usePoints]="usePoints"
-        [useWallet]="useWallet"
-        (couponApplied)="applyCoupon($event)"
-        (promoCodeCopied)="copyPromoCode($event)"
-        (togglePointsEvent)="toggleUsePoints()"
-        (toggleWalletEvent)="toggleUseWallet()"
         (placeOrderEvent)="placeOrder()"
       ></app-billing-summary>
     </div>

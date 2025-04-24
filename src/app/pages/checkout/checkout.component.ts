@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Address, PromoCode } from './models/checkout.models';
+import { Address } from './models/checkout.models';
 import { Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
@@ -49,8 +49,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private cartSubscription: Subscription = new Subscription();
   private langSubscription: Subscription = new Subscription();
   currentLang: string = 'en';
-
-  couponForm: FormGroup;
 
   // Address Form Modal
   showAddressFormModal = false;
@@ -98,25 +96,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   subTotal: number = 0;
 
-  promoCodes: PromoCode[] = [
-    {
-      code: '#HOLIDAY40',
-      description: 'Holiday Savings',
-    },
-    {
-      code: '#FREESHIP50',
-      description: 'Free Shipping',
-    },
-  ];
-
   shipping: number = 0.0;
   tax: number = 0;
-  points: number = 65.66;
-  walletBalance: number = 8.47;
   total: number = 0;
-
-  usePoints: boolean = false;
-  useWallet: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -124,11 +106,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private authService: AuthService,
     private addressService: AddressService,
-  ) {
-    this.couponForm = this.fb.group({
-      couponCode: ['', Validators.required],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to language changes
@@ -294,46 +272,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  copyPromoCode(code: string): void {
-    navigator.clipboard
-      .writeText(code)
-      .then(() => {
-        console.log('Code copied to clipboard:', code);
-        // You could show a toast notification here
-      })
-      .catch((err) => {
-        console.error('Failed to copy code:', err);
-      });
-  }
-
-  applyCoupon(couponCode: string): void {
-    console.log('Applying coupon:', couponCode);
-    // Logic to apply the coupon would go here
-  }
-
-  toggleUsePoints(): void {
-    this.usePoints = !this.usePoints;
-    this.updateTotal();
-  }
-
-  toggleUseWallet(): void {
-    this.useWallet = !this.useWallet;
-    this.updateTotal();
-  }
-
   updateTotal(): void {
-    let calculatedTotal = this.subTotal + this.shipping + this.tax;
-
-    if (this.usePoints) {
-      calculatedTotal -= this.points;
-    }
-
-    if (this.useWallet) {
-      calculatedTotal -= this.walletBalance;
-    }
-
-    // Ensure total doesn't go below zero
-    this.total = Math.max(0, calculatedTotal);
+    this.total = this.subTotal + this.shipping + this.tax;
   }
 
   placeOrder(): void {
