@@ -1,22 +1,22 @@
-<div class="rounded-lg bg-white p-6 shadow-sm">
+<div class="rounded-lg bg-white p-4 shadow-sm lg:p-6">
   <!-- Address Book Header -->
-  <div class="flex items-center justify-between gap-6 p-6">
-    <h2 class="text-xl font-bold text-gray-800">
+  <div class="flex items-center justify-between gap-4 p-4 lg:gap-6 lg:p-6">
+    <h2 class="text-lg font-bold text-gray-800 lg:text-xl">
       {{ "address.title" | translate }}
     </h2>
     <button
       *ngIf="!showAddressForm"
       (click)="addNewAddress()"
-      class="flex items-center gap-2 rounded bg-hover-color px-4 py-2 text-white transition hover:bg-red-700"
+      class="flex items-center gap-1.5 rounded bg-hover-color px-3 py-1.5 text-sm text-white transition hover:bg-red-700 lg:gap-2 lg:px-4 lg:py-2 lg:text-base"
     >
       <i class="ri-add-line"></i> {{ "address.addNew" | translate }}
     </button>
   </div>
 
   <!-- Address Form -->
-  <div *ngIf="showAddressForm" class="rounded-lg border p-5">
-    <div class="flex items-center justify-between gap-4">
-      <h3 class="text-lg font-semibold">
+  <div *ngIf="showAddressForm" class="rounded-lg border p-4 lg:p-6">
+    <div class="flex items-center justify-between gap-3 lg:gap-4">
+      <h3 class="text-base font-semibold lg:text-lg">
         {{
           editingAddressId
             ? ("address.updateAddress" | translate)
@@ -24,21 +24,22 @@
         }}
       </h3>
       <button (click)="cancelForm()" class="text-gray-500 hover:text-gray-700">
-        <i class="ri-close-line text-xl"></i>
+        <i class="ri-close-line text-lg lg:text-xl"></i>
       </button>
     </div>
 
     <form [formGroup]="addressForm" (ngSubmit)="submitForm()">
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-4">
         <!-- Full Name -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.fullName" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.fullName" | translate }}</label
+          >
           <input
             type="text"
             formControlName="fullName"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('fullName')?.invalid &&
@@ -50,7 +51,7 @@
               addressForm.get('fullName')?.invalid &&
               addressForm.get('fullName')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.fullNameRequired" | translate }}
           </div>
@@ -58,13 +59,14 @@
 
         <!-- Phone Number -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.phoneNumber" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.phoneNumber" | translate }}</label
+          >
           <input
             type="text"
             formControlName="phoneNumber"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('phoneNumber')?.invalid &&
@@ -76,7 +78,7 @@
               addressForm.get('phoneNumber')?.invalid &&
               addressForm.get('phoneNumber')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.phoneNumberRequired" | translate }}
           </div>
@@ -84,12 +86,13 @@
 
         <!-- Country -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.country" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.country" | translate }}</label
+          >
           <select
             formControlName="countryId"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('countryId')?.invalid &&
@@ -106,7 +109,7 @@
               addressForm.get('countryId')?.invalid &&
               addressForm.get('countryId')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.countryRequired" | translate }}
           </div>
@@ -114,12 +117,13 @@
 
         <!-- City -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.city" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.city" | translate }}</label
+          >
           <select
             formControlName="cityId"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('cityId')?.invalid &&
@@ -136,7 +140,7 @@
               addressForm.get('cityId')?.invalid &&
               addressForm.get('cityId')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.cityRequired" | translate }}
           </div>
@@ -144,12 +148,13 @@
 
         <!-- District -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.district" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.district" | translate }}</label
+          >
           <select
             formControlName="districtId"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('districtId')?.invalid &&
@@ -166,7 +171,7 @@
               addressForm.get('districtId')?.invalid &&
               addressForm.get('districtId')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.districtRequired" | translate }}
           </div>
@@ -174,12 +179,13 @@
 
         <!-- Type -->
         <div class="form-group">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.type" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.type" | translate }}</label
+          >
           <select
             formControlName="type"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
           >
             <option [value]="0">{{ "address.types.home" | translate }}</option>
             <option [value]="1">{{ "address.types.work" | translate }}</option>
@@ -192,13 +198,14 @@
 
         <!-- Address -->
         <div class="form-group md:col-span-2">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.addressLine" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.addressLine" | translate }}</label
+          >
           <textarea
             formControlName="address"
-            rows="3"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            rows="2"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
                 addressForm.get('address')?.invalid &&
@@ -210,7 +217,7 @@
               addressForm.get('address')?.invalid &&
               addressForm.get('address')?.touched
             "
-            class="mt-1 text-xs text-red-500"
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
             {{ "address.validation.addressRequired" | translate }}
           </div>
@@ -218,26 +225,27 @@
 
         <!-- Map Address -->
         <div class="form-group md:col-span-2">
-          <label class="mb-1 block text-sm font-medium text-gray-700">{{
-            "address.mapAddress" | translate
-          }}</label>
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+            >{{ "address.mapAddress" | translate }}</label
+          >
           <input
             type="text"
             formControlName="mapAddress"
-            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
           />
         </div>
 
         <!-- Default Address Checkbox -->
         <div class="form-group md:col-span-2">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 lg:gap-2">
             <input
               type="checkbox"
               id="isDefault"
               formControlName="isDefault"
-              class="h-4 w-4 text-hover-color focus:ring-hover-color"
+              class="h-3.5 w-3.5 text-hover-color focus:ring-hover-color lg:h-4 lg:w-4"
             />
-            <label for="isDefault" class="text-sm text-gray-700">
+            <label for="isDefault" class="text-xs text-gray-700 lg:text-sm">
               {{ "address.setAsDefault" | translate }}
             </label>
           </div>
@@ -245,18 +253,18 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="mt-6 flex justify-end gap-3">
+      <div class="mt-4 flex justify-end gap-2 lg:mt-6 lg:gap-3">
         <button
           type="button"
           (click)="cancelForm()"
-          class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
         >
           {{ "common.cancel" | translate }}
         </button>
         <button
           type="submit"
           [disabled]="submitting"
-          class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-70"
+          class="rounded-md bg-hover-color px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-70 lg:px-4 lg:py-2 lg:text-sm"
         >
           <span *ngIf="submitting">{{ "common.saving" | translate }}</span>
           <span *ngIf="!submitting">{{
@@ -270,24 +278,29 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="loading" class="py-8 text-center text-gray-500">
+  <div
+    *ngIf="loading"
+    class="py-6 text-center text-sm text-gray-500 lg:py-8 lg:text-base"
+  >
     <p>{{ "common.loading" | translate }}</p>
   </div>
 
   <!-- Address Cards -->
   <div
     *ngIf="!loading && !showAddressForm"
-    class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
   >
     <div
       *ngFor="let address of addresses"
       class="flex h-full flex-col overflow-hidden rounded-lg border"
     >
       <!-- Address Type Label -->
-      <div class="flex items-center justify-between border-b p-4">
-        <h3 class="font-medium text-gray-800">{{ address.fullName }}</h3>
+      <div class="flex items-center justify-between border-b p-3 lg:p-4">
+        <h3 class="text-sm font-medium text-gray-800 lg:text-base">
+          {{ address.fullName }}
+        </h3>
         <span
-          class="rounded-md px-3 py-1 text-sm font-medium"
+          class="rounded-md px-2 py-0.5 text-xs font-medium lg:px-3 lg:py-1 lg:text-sm"
           [ngClass]="getTypeClass(address.type)"
         >
           {{ getTypeLabel(address.type) }}
@@ -295,15 +308,17 @@
       </div>
 
       <!-- Address Details -->
-      <div class="flex-grow p-4">
-        <div class="flex flex-col gap-2">
-          <p class="text-gray-700">
+      <div class="flex-grow p-3 lg:p-4">
+        <div class="flex flex-col gap-1.5 lg:gap-2">
+          <p class="text-sm text-gray-700 lg:text-base">
             {{ address.address }}<br />
             {{ getLocalizedName(address.city) }},
             {{ getLocalizedName(address.district) }}<br />
             {{ getLocalizedName(address.country) }}
           </p>
-          <p class="flex items-center gap-2 text-gray-700">
+          <p
+            class="flex items-center gap-1.5 text-sm text-gray-700 lg:gap-2 lg:text-base"
+          >
             <span class="text-gray-500"
               >{{ "address.phoneNumber" | translate }}:</span
             >
@@ -311,7 +326,7 @@
           </p>
           <p
             *ngIf="address.isDefault"
-            class="flex items-center gap-1 text-sm text-green-600"
+            class="flex items-center gap-1 text-xs text-green-600 lg:text-sm"
           >
             <i class="ri-check-line"></i>
             {{ "address.defaultAddress" | translate }}
@@ -323,14 +338,14 @@
       <div class="mt-auto flex border-t">
         <button
           (click)="editAddress(address.id)"
-          class="flex-1 border-r py-3 text-gray-700 transition hover:bg-gray-50"
+          class="flex-1 border-r py-2 text-xs text-gray-700 transition hover:bg-gray-50 lg:py-3 lg:text-sm"
           [disabled]="deletingAddressId === address.id"
         >
           {{ "common.edit" | translate }}
         </button>
         <button
           (click)="removeAddress(address.id)"
-          class="flex-1 py-3 text-gray-700 transition hover:bg-gray-50"
+          class="flex-1 py-2 text-xs text-gray-700 transition hover:bg-gray-50 lg:py-3 lg:text-sm"
           [disabled]="deletingAddressId === address.id"
         >
           <span *ngIf="deletingAddressId !== address.id">{{
@@ -338,10 +353,10 @@
           }}</span>
           <span
             *ngIf="deletingAddressId === address.id"
-            class="flex items-center justify-center gap-2"
+            class="flex items-center justify-center gap-1.5 lg:gap-2"
           >
             <svg
-              class="h-4 w-4 animate-spin"
+              class="h-3.5 w-3.5 animate-spin lg:h-4 lg:w-4"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -369,14 +384,14 @@
     <!-- Empty State (shown when no addresses) -->
     <div
       *ngIf="!loading && addresses.length === 0 && !showAddressForm"
-      class="col-span-full py-8 text-center text-gray-500"
+      class="col-span-full py-6 text-center text-sm text-gray-500 lg:py-8 lg:text-base"
     >
-      <div class="flex flex-col items-center gap-4">
-        <i class="ri-map-pin-line text-4xl text-gray-400"></i>
+      <div class="flex flex-col items-center gap-3 lg:gap-4">
+        <i class="ri-map-pin-line text-3xl text-gray-400 lg:text-4xl"></i>
         <p>{{ "address.noAddresses" | translate }}</p>
         <button
           (click)="addNewAddress()"
-          class="rounded bg-hover-color px-4 py-2 text-white transition hover:bg-red-700"
+          class="rounded bg-hover-color px-3 py-1.5 text-sm text-white transition hover:bg-red-700 lg:px-4 lg:py-2 lg:text-base"
         >
           {{ "address.addFirstAddress" | translate }}
         </button>
