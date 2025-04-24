@@ -596,20 +596,29 @@
     "edit": "Edit"
   },
   "address": {
-    "addNew": "Add New Address",
+    "title": "Address Book",
+    "addNew": "Add New",
+    "updateAddress": "Update Address",
     "fullName": "Full Name",
     "phoneNumber": "Phone Number",
     "district": "District",
     "city": "City",
     "country": "Country",
-    "addressLine": "Address",
+    "addressLine": "Street Address",
+    "mapAddress": "Map Address (Optional)",
     "type": "Address Type",
     "setAsDefault": "Set as default address",
     "selectDistrict": "Select District",
     "selectCity": "Select City",
+    "selectCountry": "Select Country",
+    "defaultAddress": "Default address",
+    "noAddresses": "No addresses saved yet.",
+    "addFirstAddress": "Add Your First Address",
+    "confirmDelete": "Are you sure you want to remove this address?",
     "types": {
       "home": "Home",
       "work": "Work",
+      "office": "Office",
       "other": "Other"
     },
     "validation": {
@@ -617,12 +626,19 @@
       "phoneNumberRequired": "Phone number is required",
       "districtRequired": "District is required",
       "cityRequired": "City is required",
+      "countryRequired": "Country is required",
       "addressRequired": "Address is required"
     }
   },
   "common": {
     "save": "Save",
+    "update": "Update",
     "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Remove",
+    "saving": "Saving...",
+    "removing": "Removing...",
+    "loading": "Loading addresses...",
     "date": "Date",
     "amount": "Amount",
     "remark": "Remark",

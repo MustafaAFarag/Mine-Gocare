@@ -9,11 +9,12 @@ import {
 } from '@angular/forms';
 import { AddressService } from '../../../services/address.service';
 import { Address, CreateAddress } from '../../../model/Address';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css'],
 })
@@ -26,12 +27,20 @@ export class AddressComponent implements OnInit {
   addressForm: FormGroup;
   submitting = false;
   deletingAddressId: number | null = null;
+  currentLang: string = 'en';
 
   constructor(
     private addressService: AddressService,
     private fb: FormBuilder,
+    private translateService: TranslateService,
   ) {
     this.addressForm = this.createAddressForm();
+    this.currentLang = this.translateService.currentLang || 'en';
+
+    // Subscribe to language changes
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang;
+    });
   }
 
   ngOnInit(): void {
@@ -72,13 +81,13 @@ export class AddressComponent implements OnInit {
   getTypeLabel(type: number): string {
     switch (type) {
       case 0:
-        return 'Home';
+        return this.translateService.instant('address.types.home');
       case 1:
-        return 'Work';
+        return this.translateService.instant('address.types.work');
       case 2:
-        return 'Office';
+        return this.translateService.instant('address.types.office');
       default:
-        return 'Other';
+        return this.translateService.instant('address.types.other');
     }
   }
 
@@ -93,6 +102,12 @@ export class AddressComponent implements OnInit {
       default:
         return 'bg-gray-200 text-gray-700';
     }
+  }
+
+  // Helper method to get localized name based on current language
+  getLocalizedName(item: any): string {
+    if (!item || !item.name) return '';
+    return item.name[this.currentLang] || item.name.en || '';
   }
 
   editAddress(id: number): void {
@@ -191,7 +206,7 @@ export class AddressComponent implements OnInit {
   }
 
   removeAddress(id: number): void {
-    if (confirm('Are you sure you want to remove this address?')) {
+    if (confirm(this.translateService.instant('address.confirmDelete'))) {
       this.deletingAddressId = id;
       this.addressService.deleteAddress(this.token as string, id).subscribe({
         next: (response) => {

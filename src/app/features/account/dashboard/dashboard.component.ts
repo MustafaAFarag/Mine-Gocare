@@ -8,10 +8,11 @@ import { Wallet } from '../../../model/Wallet';
 import { OrderService } from '../../../services/order.service';
 import { LanguageService } from '../../../services/language.service';
 import { Subscription, forkJoin } from 'rxjs';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, LoadingComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
