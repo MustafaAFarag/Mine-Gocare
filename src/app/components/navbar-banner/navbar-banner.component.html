@@ -18,26 +18,47 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <button
-        (click)="translateLanguage('en')"
-        class="rounded px-2 py-1 transition-colors duration-200"
-        [ngClass]="{
-          'bg-hover-color text-white': getCurrentLanguage() === 'en',
-          'hover:text-hover-color': getCurrentLanguage() !== 'en',
-        }"
-      >
-        English
-      </button>
-      <button
-        (click)="translateLanguage('ar')"
-        class="rounded px-2 py-1 transition-colors duration-200"
-        [ngClass]="{
-          'bg-hover-color text-white': getCurrentLanguage() === 'ar',
-          'hover:text-hover-color': getCurrentLanguage() !== 'ar',
-        }"
-      >
-        العربية
-      </button>
+      <div class="language-dropdown relative">
+        <button
+          (click)="toggleLanguageDropdown()"
+          class="z-50 flex items-center gap-2 rounded px-3 py-1.5 transition-colors duration-200 hover:bg-hover-color"
+        >
+          <img
+            [src]="
+              getCurrentLanguage() === 'en'
+                ? 'assets/images/united-states-icon.svg'
+                : 'assets/images/egypt-flag-icon.svg'
+            "
+            class="h-5 w-5"
+          />
+          <span>{{
+            getCurrentLanguage() === "en" ? "English" : "العربية"
+          }}</span>
+          <i class="ri-arrow-down-s-line"></i>
+        </button>
+
+        <div
+          *ngIf="isLanguageDropdownOpen"
+          class="absolute right-0 z-50 mt-1 w-40 rounded-md bg-white shadow-lg"
+        >
+          <div class="py-1">
+            <button
+              (click)="translateLanguage('en')"
+              class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <img src="assets/images/united-states-icon.svg" class="h-5 w-5" />
+              <span>English</span>
+            </button>
+            <button
+              (click)="translateLanguage('ar')"
+              class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <img src="assets/images/egypt-flag-icon.svg" class="h-5 w-5" />
+              <span>العربية</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
