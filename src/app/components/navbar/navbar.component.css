@@ -42,3 +42,74 @@
   .p-toast-icon-close {
   color: #000;
 }
+
+/* Mobile menu animations */
+.mobile-menu {
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Initial transform based on text direction */
+:host-context([dir="ltr"]) .mobile-menu {
+  transform: translateX(-100%);
+}
+
+:host-context([dir="rtl"]) .mobile-menu {
+  transform: translateX(100%);
+}
+
+/* LTR animations */
+:host-context([dir="ltr"]) .slide-in {
+  animation: slideInLTR 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:host-context([dir="ltr"]) .slide-out {
+  animation: slideOutLTR 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* RTL animations */
+:host-context([dir="rtl"]) .slide-in {
+  animation: slideInRTL 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+:host-context([dir="rtl"]) .slide-out {
+  animation: slideOutRTL 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* LTR keyframes */
+@keyframes slideInLTR {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLTR {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* RTL keyframes */
+@keyframes slideInRTL {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRTL {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

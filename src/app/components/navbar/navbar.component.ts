@@ -166,10 +166,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // Close mobile menu
   closeMobileMenu(): void {
     if (this.isMobileMenuOpen()) {
-      this.isMobileMenuOpen.set(false);
+      // First trigger the slide-out animation
+      const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement;
+      if (mobileMenu) {
+        mobileMenu.classList.add('slide-out');
 
-      if (this.isBrowser) {
-        document.body.classList.remove('menu-open');
+        // Wait for animation to complete before hiding the menu
+        setTimeout(() => {
+          this.isMobileMenuOpen.set(false);
+          if (this.isBrowser) {
+            document.body.classList.remove('menu-open');
+          }
+        }, 300); // Match the animation duration
+      } else {
+        // Fallback if element not found
+        this.isMobileMenuOpen.set(false);
+        if (this.isBrowser) {
+          document.body.classList.remove('menu-open');
+        }
       }
     }
   }
