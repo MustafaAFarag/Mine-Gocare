@@ -10,7 +10,11 @@
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       @for (post of instaPosts; track post.id) {
-        <div class="insta-image-container group relative overflow-hidden">
+        <a
+          class="insta-image-container group relative overflow-hidden"
+          href="https://www.instagram.com/Berryat_"
+          target="_blank"
+        >
           <img
             [src]="post.image"
             alt="Instagram post"
@@ -32,7 +36,7 @@
               }"
             ></i>
           </div>
-        </div>
+        </a>
       }
     </div>
   </div>

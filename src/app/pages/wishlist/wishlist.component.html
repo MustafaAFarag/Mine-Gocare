@@ -1,0 +1,96 @@
+<app-breadcrumb [soloRoute]="'Wishlist'"></app-breadcrumb>
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Wishlist Table -->
+  <div class="overflow-hidden rounded-lg bg-white shadow-sm">
+    <!-- Table Header -->
+    <div class="grid grid-cols-5 gap-4 border-b bg-gray-50 p-4">
+      <div class="font-medium text-gray-700">Image</div>
+      <div class="font-medium text-gray-700">Product Name</div>
+      <div class="font-medium text-gray-700">Price</div>
+      <div class="font-medium text-gray-700">Availability</div>
+      <div class="font-medium text-gray-700">Action</div>
+    </div>
+
+    <!-- Table Body -->
+    <div
+      *ngFor="let item of wishlistItems"
+      class="grid grid-cols-5 items-center gap-4 border-b p-4"
+    >
+      <!-- Product Image -->
+      <div>
+        <img
+          [src]="item.image"
+          [alt]="item.name"
+          class="h-24 w-20 object-cover"
+        />
+      </div>
+
+      <!-- Product Name -->
+      <div class="text-gray-800">{{ item.name }}</div>
+
+      <!-- Price -->
+      <div>
+        <span class="font-medium text-orange-500"
+          >${{ item.price.toFixed(2) }}</span
+        >
+        <span class="ml-2 text-gray-500 line-through"
+          >${{ item.originalPrice.toFixed(2) }}</span
+        >
+      </div>
+
+      <!-- Availability -->
+      <div>
+        <span
+          class="rounded-full px-3 py-1 text-sm"
+          [ngClass]="{
+            'bg-green-100 text-green-800': item.availability === 'In Stock',
+            'bg-red-100 text-red-800': item.availability === 'Out of Stock',
+            'bg-blue-100 text-blue-800': item.availability === 'Coming Soon',
+          }"
+        >
+          {{ item.availability }}
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4">
+        <button
+          (click)="removeFromWishlist(item.id)"
+          class="text-gray-400 transition hover:text-red-500"
+          aria-label="Remove from wishlist"
+        >
+          ×
+        </button>
+        <button
+          (click)="addToCart(item.id)"
+          class="text-gray-400 transition hover:text-gray-700"
+          aria-label="Add to cart"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="wishlistItems.length === 0" class="p-8 text-center">
+      <p class="mb-4 text-gray-500">Your wishlist is empty</p>
+      <a href="/products" class="text-orange-500 hover:text-orange-600"
+        >Continue Shopping</a
+      >
+    </div>
+  </div>
+</div>

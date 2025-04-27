@@ -15,6 +15,7 @@ import { PointsComponent } from './features/account/points/points.component';
 import { RefundComponent } from './features/account/refund/refund.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
+import { WishlistComponent } from './pages/wishlist/wishlist.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'checkout',
         component: CheckoutComponent,
+      },
+      {
+        path: 'wishlist',
+        component: WishlistComponent,
       },
       {
         path: 'account',
