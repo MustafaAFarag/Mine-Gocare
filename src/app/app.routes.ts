@@ -14,6 +14,7 @@ import { WalletComponent } from './features/account/wallet/wallet.component';
 import { PointsComponent } from './features/account/points/points.component';
 import { RefundComponent } from './features/account/refund/refund.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 
 export const routes: Routes = [
   {
@@ -84,16 +85,8 @@ export const routes: Routes = [
         ],
       },
       {
-        path: '**',
-        redirectTo: '',
-        pathMatch: 'full',
-      },
-      {
         path: 'contact-us',
-        loadComponent: () =>
-          import('./pages/contact-us/contact-us.component').then(
-            (m) => m.ContactUsComponent,
-          ),
+        component: ContactUsComponent,
       },
       {
         path: 'privacy-policy',
@@ -115,6 +108,11 @@ export const routes: Routes = [
           import(
             './pages/terms-and-conditions/terms-and-conditions.component'
           ).then((m) => m.TermsAndConditionsComponent),
+      },
+      {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full',
       },
     ],
   },
