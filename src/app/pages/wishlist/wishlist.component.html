@@ -1,78 +1,204 @@
-<app-breadcrumb [soloRoute]="'Wishlist'"></app-breadcrumb>
+<app-breadcrumb [soloRoute]="'wishlist.header' | translate"></app-breadcrumb>
 
 <div class="container mx-auto px-4 py-8">
-  <!-- Wishlist Table -->
-  <div class="overflow-hidden rounded-lg bg-white shadow-sm">
-    <!-- Table Header -->
-    <div class="grid grid-cols-5 gap-4 border-b bg-gray-50 p-4">
-      <div class="font-medium text-gray-700">Image</div>
-      <div class="font-medium text-gray-700">Product Name</div>
-      <div class="font-medium text-gray-700">Price</div>
-      <div class="font-medium text-gray-700">Discount</div>
-      <div class="font-medium text-gray-700">Action</div>
-    </div>
-
-    <!-- Table Body -->
-    <div
-      *ngFor="let item of wishlistItems"
-      class="grid grid-cols-5 items-center gap-4 border-b p-4"
+  <!-- Empty State -->
+  <div
+    *ngIf="wishlistItems.length === 0"
+    class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white p-8 text-center shadow-sm"
+  >
+    <p class="mb-4 text-gray-500">{{ "wishlist.emptyState" | translate }}</p>
+    <a
+      href="/collections"
+      class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
     >
-      <!-- Product Image -->
-      <div>
-        <img
-          [src]="getFullImageUrl(item.mainImageUrl)"
-          [alt]="item.name.en"
-          class="h-24 w-20 object-cover"
-        />
+      {{ "wishlist.actions.continueShopping" | translate }}
+    </a>
+  </div>
+
+  <!-- Wishlist Content -->
+  <div
+    *ngIf="wishlistItems.length > 0"
+    class="mx-auto max-w-8xl overflow-hidden rounded-lg bg-white shadow-sm"
+  >
+    <!-- Wishlist Table Header - Hidden on mobile -->
+    <div
+      class="hidden grid-cols-5 gap-4 border-b bg-gray-100 p-4 text-sm font-bold text-gray-900 md:grid lg:text-base xl:text-xl"
+    >
+      <div class="pl-4">{{ "wishlist.tableHeader.image" | translate }}</div>
+      <div>{{ "wishlist.tableHeader.productName" | translate }}</div>
+      <div class="text-center">
+        {{ "wishlist.tableHeader.price" | translate }}
       </div>
-
-      <!-- Product Name -->
-      <div class="text-gray-800">{{ item.name.en }}</div>
-
-      <!-- Price -->
-      <div>
-        <span class="font-medium text-orange-500"
-          >{{ item.currency.name.en }}
-          {{ item.priceAfterDiscount.toFixed(2) }}</span
-        >
-        <span class="ml-2 text-gray-500 line-through"
-          >{{ item.currency.name.en }}
-          {{ item.priceBeforeDiscount.toFixed(2) }}</span
-        >
+      <div class="text-center">
+        {{ "wishlist.tableHeader.discount" | translate }}
       </div>
-
-      <!-- Discount -->
-      <div>
-        <span class="font-medium text-green-600">
-          {{ item.discountPercentage.toFixed(0) }}% OFF
-        </span>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex items-center space-x-4">
-        <button
-          (click)="removeFromWishlist(item.productId, item.variantId)"
-          class="text-gray-400 transition hover:text-red-500"
-          aria-label="Remove from wishlist"
-        >
-          <i class="ri-delete-bin-line text-xl"></i>
-        </button>
-        <button
-          (click)="addToCart(item)"
-          class="text-gray-400 transition hover:text-gray-700"
-          aria-label="Add to cart"
-        >
-          <i class="ri-shopping-cart-line text-xl"></i>
-        </button>
+      <div class="text-center">
+        {{ "wishlist.tableHeader.action" | translate }}
       </div>
     </div>
 
-    <!-- Empty State -->
-    <div *ngIf="wishlistItems.length === 0" class="p-8 text-center">
-      <p class="mb-4 text-gray-500">Your wishlist is empty</p>
-      <a href="/products" class="text-orange-500 hover:text-orange-600"
-        >Continue Shopping</a
+    <!-- Wishlist Items -->
+    <div *ngFor="let item of wishlistItems" class="border-b p-4">
+      <!-- Mobile View -->
+      <div class="md:hidden">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <img
+              [src]="getFullImageUrl(item.mainImageUrl)"
+              [alt]="getLocalizedText(item.name)"
+              class="h-16 w-16 object-cover"
+            />
+            <div>
+              <h3 class="font-medium text-gray-800">
+                {{ getLocalizedText(item.name) }}
+              </h3>
+              <div class="mt-1">
+                <ng-container
+                  *ngIf="
+                    item.priceBeforeDiscount !== item.priceAfterDiscount;
+                    else regularPriceMobile
+                  "
+                >
+                  <span class="font-bold text-gray-900">
+                    {{ getLocalizedText(item.currency.name) }}
+                    {{ item.priceAfterDiscount.toFixed(2) }}</span
+                  >
+                  <span class="text-sm text-special-gray line-through"
+                    >{{ getLocalizedText(item.currency.name) }}
+                    {{ item.priceBeforeDiscount.toFixed(2) }}</span
+                  >
+                </ng-container>
+                <ng-template #regularPriceMobile>
+                  <span class="font-bold text-gray-900">
+                    {{ getLocalizedText(item.currency.name) }}
+                    {{ item.priceAfterDiscount.toFixed(2) }}</span
+                  >
+                </ng-template>
+              </div>
+              <div
+                class="text-sm font-bold text-hover-color"
+                *ngIf="item.priceBeforeDiscount !== item.priceAfterDiscount"
+              >
+                {{ "wishlist.mobileView.save" | translate }}:
+                {{ getLocalizedText(item.currency.name) }}
+                {{
+                  (item.priceBeforeDiscount - item.priceAfterDiscount).toFixed(
+                    2
+                  )
+                }}
+              </div>
+            </div>
+          </div>
+          <button
+            class="text-hover-color hover:text-red-500"
+            (click)="removeFromWishlist(item.productId, item.variantId)"
+          >
+            <i class="ri-close-line text-2xl"></i>
+          </button>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <div class="text-base font-bold text-hover-color xl:text-lg">
+            {{ "wishlist.mobileView.discount" | translate }}:
+            {{ item.discountPercentage.toFixed(0) }}%
+          </div>
+          <button
+            class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-4 py-2 text-white transition"
+            (click)="addToCart(item)"
+          >
+            {{ "wishlist.mobileView.addToCart" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Desktop View -->
+      <div class="hidden grid-cols-5 items-center gap-4 md:grid">
+        <!-- Product Image -->
+        <div class="col-span-1">
+          <img
+            [src]="getFullImageUrl(item.mainImageUrl)"
+            [alt]="getLocalizedText(item.name)"
+            class="h-20 w-20 object-cover"
+          />
+        </div>
+
+        <!-- Product Name -->
+        <div class="col-span-1">
+          <h3 class="font-medium text-gray-800">
+            {{ getLocalizedText(item.name) }}
+          </h3>
+        </div>
+
+        <!-- Price -->
+        <div class="col-span-1 text-center">
+          <ng-container
+            *ngIf="
+              item.priceBeforeDiscount !== item.priceAfterDiscount;
+              else regularPrice
+            "
+          >
+            <span class="font-bold text-gray-900">
+              {{ getLocalizedText(item.currency.name) }}
+              {{ item.priceAfterDiscount.toFixed(2) }}</span
+            >
+            <span class="text-sm text-special-gray line-through"
+              >{{ getLocalizedText(item.currency.name) }}
+              {{ item.priceBeforeDiscount.toFixed(2) }}</span
+            >
+            <div class="text-base font-bold text-hover-color xl:text-lg">
+              {{ "wishlist.desktopView.youSave" | translate }}:
+              {{ getLocalizedText(item.currency.name) }}
+              {{
+                (item.priceBeforeDiscount - item.priceAfterDiscount).toFixed(2)
+              }}
+            </div>
+          </ng-container>
+          <ng-template #regularPrice>
+            <span class="font-bold text-gray-900"
+              >{{ getLocalizedText(item.currency.name) }}
+              {{ item.priceAfterDiscount.toFixed(2) }}</span
+            >
+          </ng-template>
+        </div>
+
+        <!-- Discount -->
+        <div class="col-span-1 text-center">
+          <div class="text-base font-bold text-hover-color xl:text-lg">
+            {{ item.discountPercentage.toFixed(0) }}% OFF
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-span-1 flex items-center justify-center gap-4">
+          <button
+            class="bg-gray-200 px-1 text-hover-color hover:text-red-500"
+            (click)="removeFromWishlist(item.productId, item.variantId)"
+          >
+            <i class="ri-close-line text-2xl"></i>
+          </button>
+          <button
+            class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-4 py-2 text-white transition"
+            (click)="addToCart(item)"
+          >
+            {{ "wishlist.desktopView.addToCart" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wishlist Actions -->
+    <div class="flex flex-col gap-4 p-4 sm:flex-row sm:justify-between">
+      <button
+        class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
+        (click)="continueShopping()"
       >
+        {{ "wishlist.actions.continueShopping" | translate }}
+      </button>
+      <button
+        class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
+        (click)="clearWishlist()"
+      >
+        {{ "wishlist.actions.clearWishlist" | translate }}
+      </button>
     </div>
   </div>
 </div>

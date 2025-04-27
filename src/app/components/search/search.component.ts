@@ -19,6 +19,7 @@ import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../model/Cart';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { WishlistService } from '../../services/wishlist.service';
 
 type Language = 'en' | 'ar';
 
@@ -45,16 +46,20 @@ export class SearchComponent implements OnInit, OnDestroy {
   filteredProducts: Product[] = [];
   isLoading: boolean = false;
   private productSubscription: Subscription | null = null;
+  private wishlistSubscription: Subscription | null = null;
+  wishlistItems: Product[] = [];
 
   constructor(
     private productService: ProductService,
     public translateService: TranslateService,
     private cartService: CartService,
+    private wishlistService: WishlistService,
     private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadWishlistItems();
     // Prevent body scrolling when search is open
     document.body.style.overflow = 'hidden';
   }
@@ -68,6 +73,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.productSubscription) {
       this.productSubscription.unsubscribe();
+    }
+    if (this.wishlistSubscription) {
+      this.wishlistSubscription.unsubscribe();
     }
     // Restore body scrolling when search is closed
     document.body.style.overflow = '';
@@ -90,6 +98,21 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
       });
+  }
+
+  loadWishlistItems(): void {
+    this.wishlistSubscription = this.wishlistService.wishlistItems$.subscribe(
+      (items) => {
+        this.wishlistItems = items;
+      },
+    );
+  }
+
+  isInWishlist(product: Product): boolean {
+    return this.wishlistService.isInWishlist(
+      product.productId,
+      product.variantId,
+    );
   }
 
   onSearch(): void {
@@ -138,9 +161,50 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToWishlist(product: Product): void {
-    // This will be implemented later
-    console.log('Add to wishlist:', product);
+  toggleWishlist(product: Product): void {
+    if (!product) {
+      console.error('Product is undefined');
+      return;
+    }
+
+    const isInWishlist = this.isInWishlist(product);
+
+    if (isInWishlist) {
+      // Remove from wishlist
+      this.wishlistService.removeFromWishlist(
+        product.productId,
+        product.variantId,
+      );
+
+      // Show success toast notification with localized message
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant(
+          'search.removedFromWishlistSummary',
+        ),
+        detail: this.translateService.instant('search.removedFromWishlist', {
+          productName: product.name[this.getCurrentLang()],
+        }),
+        life: 2000,
+      });
+    } else {
+      // Add to wishlist
+      const added = this.wishlistService.addToWishlist(product);
+
+      if (added) {
+        // Show success toast notification with localized message
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translateService.instant(
+            'search.addedToWishlistSummary',
+          ),
+          detail: this.translateService.instant('search.addedToWishlist', {
+            productName: product.name[this.getCurrentLang()],
+          }),
+          life: 2000,
+        });
+      }
+    }
   }
 
   closeSearchPanel(): void {

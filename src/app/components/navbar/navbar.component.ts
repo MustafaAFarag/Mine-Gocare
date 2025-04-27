@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
+import { WishlistService } from '../../services/wishlist.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
@@ -54,8 +55,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   visible: boolean = false;
   userSubscription!: Subscription;
   cartSubscription!: Subscription;
+  wishlistSubscription!: Subscription;
   currentUser!: User;
   cartCount = 0;
+  wishlistCount = 0;
   isPagesDropdownOpen: boolean = false;
   isSearchOpen: boolean = false;
 
@@ -79,6 +82,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private cartService: CartService,
+    private wishlistService: WishlistService,
     private router: Router,
     private messageService: MessageService,
   ) {
@@ -100,6 +104,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.cartCount = items.reduce((total, item) => total + item.quantity, 0);
     });
 
+    this.wishlistSubscription = this.wishlistService.wishlistItems$.subscribe(
+      (items) => {
+        this.wishlistCount = items.length;
+      },
+    );
+
     if (this.isBrowser) {
       window.addEventListener('resize', this.handleResize);
     }
@@ -112,6 +122,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
+    }
+    if (this.wishlistSubscription) {
+      this.wishlistSubscription.unsubscribe();
     }
 
     if (this.isBrowser) {

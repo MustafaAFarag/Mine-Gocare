@@ -33,27 +33,7 @@
         />
       </a>
 
-      <!-- Mobile icons (only visible below xl) -->
-      <div class="flex items-center gap-2 text-xl lg:hidden">
-        <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
-        <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        <i class="ri-heart-line cursor-pointer" routerLink="/wishlist"></i>
-        <div class="relative cursor-pointer" (click)="toggleCart()">
-          <i class="ri-shopping-cart-line"></i>
-          <span
-            *ngIf="cartCount > 0"
-            class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
-          >
-            {{ cartCount }}
-          </span>
-        </div>
-        @if (currentUser) {
-          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
-          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
-        } @else {
-          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
-        }
-      </div>
+      <!-- Mobile icons removed since we have bottom mobile navigation -->
     </div>
 
     <!-- Desktop Navigation (visible only on xl and up) -->
@@ -106,7 +86,15 @@
       <div class="flex items-center gap-4 text-xl xl:text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        <i class="ri-heart-line cursor-pointer" routerLink="/wishlist"></i>
+        <div class="relative cursor-pointer" routerLink="/wishlist">
+          <i class="ri-heart-line"></i>
+          <span
+            *ngIf="wishlistCount > 0"
+            class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
+          >
+            {{ wishlistCount }}
+          </span>
+        </div>
         <div class="relative cursor-pointer" (click)="toggleCart()">
           <i class="ri-shopping-cart-line"></i>
           <span

@@ -10,11 +10,14 @@ import { CartSidebarService } from '../../services/cart-sidebar.service';
 import { CartItem } from '../../model/Cart';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-wishlist',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, ToastModule],
+  imports: [CommonModule, BreadcrumbComponent, ToastModule, TranslateModule],
   providers: [MessageService],
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.css'],
@@ -22,6 +25,8 @@ import { ToastModule } from 'primeng/toast';
 export class WishlistComponent implements OnInit, OnDestroy {
   wishlistItems: Product[] = [];
   private wishlistSubscription?: Subscription;
+  private langSubscription?: Subscription;
+  currentLang: string = 'en';
   getFullImageUrl = getFullImageUrl;
 
   constructor(
@@ -29,6 +34,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
     private messageService: MessageService,
+    private router: Router,
+    private languageService: LanguageService,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -37,20 +45,40 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.wishlistItems = items;
       },
     );
+
+    // Get current language
+    this.currentLang = this.languageService.getCurrentLanguage();
+
+    // Subscribe to language changes
+    this.langSubscription = this.languageService.language$.subscribe((lang) => {
+      this.currentLang = lang;
+    });
   }
 
   ngOnDestroy(): void {
     if (this.wishlistSubscription) {
       this.wishlistSubscription.unsubscribe();
     }
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
+  }
+
+  getLocalizedText(textObj: any): string {
+    if (!textObj) return '';
+    return this.currentLang === 'ar' && textObj?.ar ? textObj.ar : textObj.en;
   }
 
   removeFromWishlist(productId: number, variantId: number): void {
     this.wishlistService.removeFromWishlist(productId, variantId);
     this.messageService.add({
       severity: 'info',
-      summary: 'Removed from Wishlist',
-      detail: 'Product has been removed from your wishlist',
+      summary: this.translateService.instant(
+        'wishlist.toast.removedFromWishlist.summary',
+      ),
+      detail: this.translateService.instant(
+        'wishlist.toast.removedFromWishlist.detail',
+      ),
       life: 2000,
       styleClass: 'black-text-toast',
     });
@@ -73,10 +101,39 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
     this.messageService.add({
       severity: 'success',
-      summary: 'Added to Cart',
-      detail: 'Product has been added to your cart',
+      summary: this.translateService.instant(
+        'wishlist.toast.addedToCart.summary',
+      ),
+      detail: this.translateService.instant(
+        'wishlist.toast.addedToCart.detail',
+      ),
       life: 2000,
       styleClass: 'black-text-toast',
     });
+  }
+
+  continueShopping(): void {
+    this.router.navigate(['/collections']);
+  }
+
+  clearWishlist(): void {
+    if (this.wishlistItems.length > 0) {
+      // Remove all items from wishlist
+      this.wishlistItems.forEach((item) => {
+        this.wishlistService.removeFromWishlist(item.productId, item.variantId);
+      });
+
+      this.messageService.add({
+        severity: 'info',
+        summary: this.translateService.instant(
+          'wishlist.toast.wishlistCleared.summary',
+        ),
+        detail: this.translateService.instant(
+          'wishlist.toast.wishlistCleared.detail',
+        ),
+        life: 2000,
+        styleClass: 'black-text-toast',
+      });
+    }
   }
 }

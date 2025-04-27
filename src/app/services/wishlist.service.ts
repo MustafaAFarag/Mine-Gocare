@@ -14,7 +14,13 @@ export class WishlistService {
     this.loadWishlistFromStorage();
   }
 
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
   private loadWishlistFromStorage(): void {
+    if (!this.isBrowser()) return;
+
     const storedWishlist = localStorage.getItem(this.WISHLIST_KEY);
     if (storedWishlist) {
       try {
@@ -28,6 +34,7 @@ export class WishlistService {
   }
 
   private saveWishlistToStorage(wishlistItems: Product[]): void {
+    if (!this.isBrowser()) return;
     localStorage.setItem(this.WISHLIST_KEY, JSON.stringify(wishlistItems));
   }
 

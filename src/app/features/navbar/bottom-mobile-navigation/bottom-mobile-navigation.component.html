@@ -13,9 +13,8 @@
     </a>
 
     <a
-      routerLink="/search"
-      class="flex flex-col items-center text-center"
-      routerLinkActive="text-hover-color"
+      class="flex cursor-pointer flex-col items-center text-center"
+      (click)="toggleSearch()"
     >
       <i class="ri-search-line"></i>
       <span class="mt-1 text-sm">Search</span>
@@ -43,7 +42,15 @@
       class="flex flex-col items-center text-center"
       routerLinkActive="text-hover-color"
     >
-      <i class="ri-heart-line"></i>
+      <div class="relative">
+        <i class="ri-heart-line"></i>
+        <span
+          *ngIf="wishlistCount > 0"
+          class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
+        >
+          {{ wishlistCount }}
+        </span>
+      </div>
       <span class="mt-1 text-sm">Wishlist</span>
     </a>
 
@@ -57,3 +64,8 @@
     </a>
   </div>
 </div>
+
+<!-- Search Panel -->
+@if (isSearchOpen) {
+  <app-search (closeSearch)="closeSearch()"></app-search>
+}

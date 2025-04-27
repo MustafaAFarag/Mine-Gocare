@@ -19,7 +19,13 @@
     "placeholder": "ابحث عن المنتجات...",
     "noResults": "لم يتم العثور على منتجات",
     "addedToCart": "تمت إضافة {{productName}} إلى سلة التسوق",
-    "addedToCartSummary": "تمت الإضافة إلى السلة"
+    "addedToCartSummary": "تمت الإضافة إلى السلة",
+    "addedToWishlist": "تمت إضافة {{productName}} إلى قائمة الرغبات",
+    "addedToWishlistSummary": "تمت الإضافة إلى قائمة الرغبات",
+    "alreadyInWishlist": "{{productName}} موجود بالفعل في قائمة الرغبات",
+    "alreadyInWishlistSummary": "موجود بالفعل في قائمة الرغبات",
+    "removedFromWishlist": "تمت إزالة {{productName}} من قائمة الرغبات",
+    "removedFromWishlistSummary": "تمت الإزالة من قائمة الرغبات"
   },
   "breadcrumb": {
     "home": "الرئيسية",
@@ -49,6 +55,8 @@
     "addNewAddress": "إضافة عنوان جديد",
     "address": "العنوان",
     "pinCode": "الرمز البريدي",
+    "header": "Wishlist",
+
     "phone": "الهاتف",
     "deliveryOptions": "خيارات التوصيل",
     "standard": "توصيل عادي",
@@ -639,5 +647,43 @@
   },
   "wallet": {
     "noTransactions": "لم يتم العثور على معاملات في محفظتك."
+  },
+  "wishlist": {
+    "header": "قائمة الرغبات",
+    "tableHeader": {
+      "image": "الصورة",
+      "productName": "اسم المنتج",
+      "price": "السعر",
+      "discount": "الخصم",
+      "action": "الإجراء"
+    },
+    "mobileView": {
+      "save": "وفرت",
+      "discount": "الخصم",
+      "addToCart": "أضف إلى السلة"
+    },
+    "desktopView": {
+      "youSave": "وفرت",
+      "addToCart": "أضف إلى السلة"
+    },
+    "actions": {
+      "continueShopping": "متابعة التسوق",
+      "clearWishlist": "مسح قائمة الرغبات"
+    },
+    "emptyState": "قائمة الرغبات فارغة",
+    "toast": {
+      "removedFromWishlist": {
+        "summary": "تمت الإزالة من قائمة الرغبات",
+        "detail": "تمت إزالة المنتج من قائمة الرغبات الخاصة بك"
+      },
+      "addedToCart": {
+        "summary": "تمت الإضافة إلى السلة",
+        "detail": "تمت إضافة المنتج إلى سلة التسوق الخاصة بك"
+      },
+      "wishlistCleared": {
+        "summary": "تم مسح قائمة الرغبات",
+        "detail": "تم مسح قائمة الرغبات الخاصة بك"
+      }
+    }
   }
 }

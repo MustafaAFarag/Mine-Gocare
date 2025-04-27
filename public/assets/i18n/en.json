@@ -19,7 +19,13 @@
     "placeholder": "Search for products...",
     "noResults": "No products found",
     "addedToCart": "{{productName}} has been added to your cart",
-    "addedToCartSummary": "Added to Cart"
+    "addedToCartSummary": "Added to Cart",
+    "addedToWishlist": "{{productName}} has been added to your wishlist",
+    "addedToWishlistSummary": "Added to Wishlist",
+    "alreadyInWishlist": "{{productName}} is already in your wishlist",
+    "alreadyInWishlistSummary": "Already in Wishlist",
+    "removedFromWishlist": "{{productName}} has been removed from your wishlist",
+    "removedFromWishlistSummary": "Removed from Wishlist"
   },
   "breadcrumb": {
     "home": "Home",
@@ -422,7 +428,7 @@
       "action": "Action"
     },
     "mobileView": {
-      "save": "Save: ",
+      "save": "Save ",
       "remove": "Remove",
       "quantity": "Quantity",
       "itemTotal": "Item Total"
@@ -660,5 +666,43 @@
   },
   "wallet": {
     "noTransactions": "No transactions found in your wallet."
+  },
+  "wishlist": {
+    "header": "Wishlist",
+    "tableHeader": {
+      "image": "Image",
+      "productName": "Product Name",
+      "price": "Price",
+      "discount": "Discount",
+      "action": "Action"
+    },
+    "mobileView": {
+      "save": "You Save",
+      "discount": "Discount",
+      "addToCart": "Add to Cart"
+    },
+    "desktopView": {
+      "youSave": "You Save",
+      "addToCart": "Add to Cart"
+    },
+    "actions": {
+      "continueShopping": "Continue Shopping",
+      "clearWishlist": "Clear Wishlist"
+    },
+    "emptyState": "Your wishlist is empty",
+    "toast": {
+      "removedFromWishlist": {
+        "summary": "Removed from Wishlist",
+        "detail": "Product has been removed from your wishlist"
+      },
+      "addedToCart": {
+        "summary": "Added to Cart",
+        "detail": "Product has been added to your cart"
+      },
+      "wishlistCleared": {
+        "summary": "Wishlist Cleared",
+        "detail": "Your wishlist has been cleared"
+      }
+    }
   }
 }

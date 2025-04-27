@@ -93,3 +93,17 @@ html,
 body {
   height: 100%;
 }
+
+/* Add this to your global styles */
+.black-text-toast .p-toast-message-content {
+  color: black !important;
+}
+
+.black-text-toast .p-toast-summary {
+  color: black !important;
+  font-weight: bold !important;
+}
+
+.black-text-toast .p-toast-detail {
+  color: black !important;
+}

@@ -88,11 +88,21 @@
             </a>
             <div class="flex gap-2">
               <button
-                (click)="addToWishlist(product)"
+                (click)="toggleWishlist(product)"
                 class="flex items-center justify-center rounded-md border border-gray-300 p-2 text-gray-600 hover:bg-gray-100"
-                title="Add to Wishlist"
+                [title]="
+                  isInWishlist(product)
+                    ? 'Remove from Wishlist'
+                    : 'Add to Wishlist'
+                "
               >
-                <i class="ri-heart-line"></i>
+                <i
+                  [class]="
+                    isInWishlist(product)
+                      ? 'ri-heart-fill text-red-500'
+                      : 'ri-heart-line'
+                  "
+                ></i>
               </button>
               <button
                 (click)="addToCart(product)"
