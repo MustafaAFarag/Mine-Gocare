@@ -42,19 +42,34 @@
                 {{ getLocalizedText(item.name) }}
               </h3>
               <div class="mt-1">
-                <span class="font-bold text-gray-900">
-                  {{ getLocalizedText(item.currency) }}
-                  {{ item.afterPrice.toFixed(2) }}</span
+                <ng-container
+                  *ngIf="
+                    item.afterPrice !== item.beforePrice;
+                    else regularPriceMobile
+                  "
                 >
-                <span class="ml-2 text-sm text-special-gray line-through"
-                  >{{ getLocalizedText(item.currency) }}
-                  {{ item.beforePrice.toFixed(2) }}</span
-                >
+                  <span class="font-bold text-gray-900">
+                    {{ getLocalizedText(item.currency) }}
+                    {{ item.afterPrice.toFixed(2) }}</span
+                  >
+                  <span class="ml-2 text-sm text-special-gray line-through"
+                    >{{ getLocalizedText(item.currency) }}
+                    {{ item.beforePrice.toFixed(2) }}</span
+                  >
+                </ng-container>
+                <ng-template #regularPriceMobile>
+                  <span class="font-bold text-gray-900">
+                    {{ getLocalizedText(item.currency) }}
+                    {{ item.afterPrice.toFixed(2) }}</span
+                  >
+                </ng-template>
               </div>
-              <div class="text-sm font-bold text-hover-color">
-                {{ "cart.mobileView.save" | translate }}: ${{
-                  getSavings(item).toFixed(2)
-                }}
+              <div
+                class="text-sm font-bold text-hover-color"
+                *ngIf="item.afterPrice !== item.beforePrice"
+              >
+                {{ "cart.mobileView.save" | translate }}:
+                {{ getSavings(item).toFixed(2) }}
               </div>
             </div>
           </div>
