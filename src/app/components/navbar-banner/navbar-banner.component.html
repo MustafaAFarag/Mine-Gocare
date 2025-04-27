@@ -17,11 +17,11 @@
         >
       </div>
     </div>
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 pr-4 lg:pr-6">
       <div class="language-dropdown relative">
         <button
           (click)="toggleLanguageDropdown()"
-          class="z-50 flex items-center gap-2 rounded px-3 py-1.5 transition-colors duration-200 hover:bg-hover-color"
+          class="z-50 flex items-center gap-2 rounded px-3 py-1.5 text-sm transition-colors duration-200 hover:bg-hover-color lg:text-base"
         >
           <img
             [src]="
@@ -29,31 +29,37 @@
                 ? 'assets/images/united-states-icon.svg'
                 : 'assets/images/egypt-flag-icon.svg'
             "
-            class="h-5 w-5"
+            class="h-4 w-4 lg:h-5 lg:w-5"
           />
-          <span>{{
+          <span class="hidden sm:inline">{{
             getCurrentLanguage() === "en" ? "English" : "العربية"
           }}</span>
-          <i class="ri-arrow-down-s-line"></i>
+          <i class="ri-arrow-down-s-line text-sm lg:text-base"></i>
         </button>
 
         <div
           *ngIf="isLanguageDropdownOpen"
-          class="absolute right-0 z-50 mt-1 w-40 rounded-md bg-white shadow-lg"
+          class="absolute right-0 z-50 mt-1 w-36 rounded-md bg-white shadow-lg sm:w-40"
         >
           <div class="py-1">
             <button
               (click)="translateLanguage('en')"
-              class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
-              <img src="assets/images/united-states-icon.svg" class="h-5 w-5" />
+              <img
+                src="assets/images/united-states-icon.svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+              />
               <span>English</span>
             </button>
             <button
               (click)="translateLanguage('ar')"
-              class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
-              <img src="assets/images/egypt-flag-icon.svg" class="h-5 w-5" />
+              <img
+                src="assets/images/egypt-flag-icon.svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+              />
               <span>العربية</span>
             </button>
           </div>
