@@ -20,6 +20,8 @@ import { CartItem } from '../../model/Cart';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
+type Language = 'en' | 'ar';
+
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -58,6 +60,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   getFullImageUrl = getFullImageUrl;
+
+  getCurrentLang(): Language {
+    return this.translateService.currentLang as Language;
+  }
 
   ngOnDestroy(): void {
     if (this.productSubscription) {
@@ -121,11 +127,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.cartService.addToCart(cartItem);
 
-    // Show success toast notification
+    // Show success toast notification with localized message
     this.messageService.add({
       severity: 'success',
-      summary: 'Added to Cart',
-      detail: `${product.name.en} has been added to your cart`,
+      summary: this.translateService.instant('search.addedToCartSummary'),
+      detail: this.translateService.instant('search.addedToCart', {
+        productName: product.name[this.getCurrentLang()],
+      }),
       life: 2000,
     });
   }

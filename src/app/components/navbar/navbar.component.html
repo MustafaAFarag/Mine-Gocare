@@ -37,9 +37,7 @@
       <div class="flex items-center gap-2 text-xl lg:hidden">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        @if (currentUser) {
-          <i class="ri-heart-line cursor-pointer"></i>
-        }
+        <i class="ri-heart-line cursor-pointer" routerLink="/wishlist"></i>
         <div class="relative cursor-pointer" (click)="toggleCart()">
           <i class="ri-shopping-cart-line"></i>
           <span
@@ -108,9 +106,7 @@
       <div class="flex items-center gap-4 text-xl xl:text-2xl">
         <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        @if (currentUser) {
-          <i class="ri-heart-line cursor-pointer"></i>
-        }
+        <i class="ri-heart-line cursor-pointer" routerLink="/wishlist"></i>
         <div class="relative cursor-pointer" (click)="toggleCart()">
           <i class="ri-shopping-cart-line"></i>
           <span

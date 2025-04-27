@@ -57,23 +57,27 @@
             >
               <img
                 [src]="getFullImageUrl(product.mainImageUrl)"
-                [alt]="product.name.en"
+                [alt]="product.name[getCurrentLang()]"
                 class="h-16 w-16 rounded-md object-cover"
               />
               <div class="flex flex-col gap-1">
-                <h3 class="font-medium">{{ product.name.en }}</h3>
-                <p class="text-sm text-gray-500">{{ product.brand.en }}</p>
+                <h3 class="font-medium">
+                  {{ product.name[getCurrentLang()] }}
+                </h3>
+                <p class="text-sm text-gray-500">
+                  {{ product.brand[getCurrentLang()] }}
+                </p>
                 <div class="flex items-center gap-2">
                   <p class="font-medium text-hover-color">
                     {{ product.priceAfterDiscount }}
-                    {{ product.currency.name.en }}
+                    {{ product.currency.name[getCurrentLang()] }}
                   </p>
                   @if (
                     product.priceAfterDiscount !== product.priceBeforeDiscount
                   ) {
                     <p class="text-sm text-gray-500 line-through">
                       {{ product.priceBeforeDiscount }}
-                      {{ product.currency.name.en }}
+                      {{ product.currency.name[getCurrentLang()] }}
                     </p>
                     <p class="text-sm font-medium text-hover-color">
                       {{ product.discountPercentage.toFixed(2) }}% off

@@ -17,7 +17,9 @@
   "search": {
     "title": "Search Products",
     "placeholder": "Search for products...",
-    "noResults": "No products found"
+    "noResults": "No products found",
+    "addedToCart": "{{productName}} has been added to your cart",
+    "addedToCartSummary": "Added to Cart"
   },
   "breadcrumb": {
     "home": "Home",

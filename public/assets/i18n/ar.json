@@ -17,7 +17,9 @@
   "search": {
     "title": "البحث عن المنتجات",
     "placeholder": "ابحث عن المنتجات...",
-    "noResults": "لم يتم العثور على منتجات"
+    "noResults": "لم يتم العثور على منتجات",
+    "addedToCart": "تمت إضافة {{productName}} إلى سلة التسوق",
+    "addedToCartSummary": "تمت الإضافة إلى السلة"
   },
   "breadcrumb": {
     "home": "الرئيسية",
