@@ -20,7 +20,9 @@
 
     <div class="icon-wrapper absolute right-2 top-2 z-10">
       <i
-        class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+        [class]="isInWishlist ? 'ri-heart-fill text-red-500' : 'ri-heart-line'"
+        class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+        (click)="toggleWishlist($event)"
       ></i>
 
       <i
@@ -99,6 +101,8 @@
     </div>
   </div>
 </div>
+
+<p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
 <style>
   /* Default styles for mobile and tablet */

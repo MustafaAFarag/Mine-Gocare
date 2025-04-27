@@ -17,23 +17,30 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { WishlistService } from '../../services/wishlist.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, ToastModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MessageService],
 })
 export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
   private langSubscription?: Subscription;
   private translateSubscription?: Subscription;
   currentLang: string = 'en';
+  isInWishlist: boolean = false;
 
   private languageService = inject(LanguageService);
   private cdr = inject(ChangeDetectorRef);
   private translateService = inject(TranslateService);
+  private wishlistService = inject(WishlistService);
+  private messageService = inject(MessageService);
 
   getFullImageUrl = getFullImageUrl;
 
@@ -45,6 +52,10 @@ export class ProductCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentLang = this.languageService.getCurrentLanguage();
+    this.isInWishlist = this.wishlistService.isInWishlist(
+      this.product.productId,
+      this.product.variantId,
+    );
 
     // Subscribe to direction changes
     this.langSubscription = this.languageService.direction$.subscribe(() => {
@@ -94,5 +105,37 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     console.log('cartItem', cartItem);
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
+  }
+
+  toggleWishlist(event: Event): void {
+    event.stopPropagation();
+
+    if (this.isInWishlist) {
+      this.wishlistService.removeFromWishlist(
+        this.product.productId,
+        this.product.variantId,
+      );
+      this.isInWishlist = false;
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Removed from Wishlist',
+        detail: `${this.getLocalizedText(this.product.name)} has been removed from your wishlist`,
+        life: 2000,
+        styleClass: 'black-text-toast',
+      });
+    } else {
+      const added = this.wishlistService.addToWishlist(this.product);
+      if (added) {
+        this.isInWishlist = true;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added to Wishlist',
+          detail: `${this.getLocalizedText(this.product.name)} has been added to your wishlist`,
+          life: 2000,
+          styleClass: 'black-text-toast',
+        });
+      }
+    }
+    this.cdr.markForCheck();
   }
 }
