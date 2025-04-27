@@ -5,15 +5,16 @@
 
 :host ::ng-deep .black-text-toast .p-toast {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  top: 1.5rem;
+  left: 2rem;
+  right: auto;
   z-index: 1000;
 }
 
 :host ::ng-deep .black-text-toast .p-toast-message {
   color: #000;
   margin: 0.5rem;
-  width: calc(100% - 1rem);
+  width: calc(100% - 2rem);
   max-width: 300px;
 }
 
@@ -64,8 +65,9 @@
 
 @media (min-width: 768px) {
   :host ::ng-deep .black-text-toast .p-toast {
-    top: 1.5rem;
-    left: 1.5rem;
+    top: 2rem;
+    left: 2.5rem;
+    right: auto;
   }
 
   :host ::ng-deep .black-text-toast .p-toast-message {
@@ -106,6 +108,30 @@
     .p-toast-message.p-toast-message-success
     .p-toast-icon-close {
     font-size: 1.25rem;
+  }
+}
+
+/* RTL Support */
+:host-context([dir="rtl"]) ::ng-deep .black-text-toast .p-toast {
+  left: auto;
+  right: 2rem;
+  transform: translateX(10rem);
+}
+
+:host-context([dir="rtl"]) ::ng-deep .black-text-toast .p-toast-message {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  :host-context([dir="rtl"]) ::ng-deep .black-text-toast .p-toast {
+    left: auto;
+    right: 2.5rem;
+  }
+
+  :host-context([dir="rtl"]) ::ng-deep .black-text-toast .p-toast-message {
+    margin-right: 0.75rem;
+    margin-left: 0;
   }
 }
 
