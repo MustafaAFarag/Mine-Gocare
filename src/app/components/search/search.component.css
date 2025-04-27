@@ -56,32 +56,70 @@
 
 .search-container {
   position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 600px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 100%;
   z-index: 50;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  box-shadow: none;
   animation: fadeIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+@media (min-width: 768px) {
+  .search-container {
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    bottom: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -20px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
   }
 }
 
 .search-results {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f5f9;
-  max-height: 60vh;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .search-results {
+    max-height: 60vh;
+  }
 }
 
 .search-results::-webkit-scrollbar {
@@ -95,4 +133,44 @@
 .search-results::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 3px;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  .search-container {
+    padding: 1rem !important;
+  }
+
+  .search-container h2 {
+    font-size: 1.25rem;
+  }
+
+  .search-results .grid {
+    gap: 1rem;
+  }
+
+  .search-results .grid > div {
+    padding: 0.75rem;
+  }
+
+  .search-results img {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .search-results h3 {
+    font-size: 0.875rem;
+  }
+
+  .search-results p {
+    font-size: 0.75rem;
+  }
+
+  .search-results button {
+    padding: 0.5rem;
+  }
+
+  .search-results button i {
+    font-size: 1.25rem;
+  }
 }

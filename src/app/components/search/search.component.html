@@ -2,24 +2,24 @@
 <div class="search-container bg-white p-4 shadow-md">
   <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
-  <div class="flex items-center justify-between gap-4">
+  <div class="mb-4 flex items-center justify-between gap-4">
     <h2 class="text-xl font-semibold">{{ "search.title" | translate }}</h2>
     <button
       (click)="closeSearchPanel()"
-      class="text-gray-500 hover:text-gray-700"
+      class="p-2 text-gray-500 hover:text-gray-700"
     >
       <i class="ri-close-line text-2xl"></i>
     </button>
   </div>
 
-  <div class="relative my-4 flex flex-col gap-4">
+  <div class="relative mb-4">
     <div class="relative">
       <input
         type="text"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearch()"
         placeholder="{{ 'search.placeholder' | translate }}"
-        class="w-full rounded-md border border-gray-300 bg-white p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full rounded-md border border-gray-300 bg-white p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
         autofocus
       />
       <i
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div class="search-results overflow-y-auto">
+  <div class="search-results">
     @if (isLoading) {
       <div class="flex items-center justify-center py-8">
         <app-loading></app-loading>
@@ -44,7 +44,7 @@
       <div class="grid grid-cols-1 gap-4">
         @for (product of filteredProducts; track product.productId) {
           <div
-            class="flex items-center justify-between gap-4 rounded-md p-3 transition-colors hover:bg-gray-50"
+            class="flex flex-col items-start justify-between gap-4 rounded-md p-3 transition-colors hover:bg-gray-50 sm:flex-row sm:items-center"
           >
             <a
               [routerLink]="[
@@ -53,21 +53,21 @@
                 product.variantId,
               ]"
               (click)="closeSearchPanel()"
-              class="flex items-center gap-4"
+              class="flex w-full items-center gap-4 sm:w-auto"
             >
               <img
                 [src]="getFullImageUrl(product.mainImageUrl)"
                 [alt]="product.name[getCurrentLang()]"
                 class="h-16 w-16 rounded-md object-cover"
               />
-              <div class="flex flex-col gap-1">
-                <h3 class="font-medium">
+              <div class="flex min-w-0 flex-1 flex-col gap-1">
+                <h3 class="truncate font-medium">
                   {{ product.name[getCurrentLang()] }}
                 </h3>
-                <p class="text-sm text-gray-500">
+                <p class="truncate text-sm text-gray-500">
                   {{ product.brand[getCurrentLang()] }}
                 </p>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                   <p class="font-medium text-hover-color">
                     {{ product.priceAfterDiscount }}
                     {{ product.currency.name[getCurrentLang()] }}
@@ -86,10 +86,10 @@
                 </div>
               </div>
             </a>
-            <div class="flex gap-2">
+            <div class="flex w-full justify-end gap-2 sm:w-auto">
               <button
                 (click)="toggleWishlist(product)"
-                class="flex items-center justify-center rounded-md border border-gray-300 p-2 text-gray-600 hover:bg-gray-100"
+                class="flex flex-1 items-center justify-center rounded-md border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 sm:flex-none"
                 [title]="
                   isInWishlist(product)
                     ? 'Remove from Wishlist'
@@ -106,7 +106,7 @@
               </button>
               <button
                 (click)="addToCart(product)"
-                class="flex items-center justify-center rounded-md bg-hover-color p-2 text-white hover:bg-opacity-90"
+                class="flex flex-1 items-center justify-center rounded-md bg-hover-color p-2 text-white hover:bg-opacity-90 sm:flex-none"
                 title="Add to Cart"
               >
                 <i class="ri-shopping-cart-line"></i>
