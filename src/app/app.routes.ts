@@ -86,7 +86,10 @@ export const routes: Routes = [
       },
       {
         path: 'contact-us',
-        component: ContactUsComponent,
+        loadComponent: () =>
+          import('./pages/contact-us/contact-us.component').then(
+            (m) => m.ContactUsComponent,
+          ),
       },
       {
         path: 'privacy-policy',

@@ -112,7 +112,7 @@
             <div class="relative">
               <select
                 (change)="applySortOrder($event)"
-                class="appearance-none rounded-md border bg-white py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-orange-300 lg:pr-10"
+                class="appearance-none rounded-md border bg-white py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-red-300 lg:pr-10"
               >
                 <option
                   value="price-asc"
@@ -138,7 +138,7 @@
             <button
               (click)="setViewMode('grid2')"
               [ngClass]="{
-                'bg-orange-500 text-white': viewMode === 'grid2',
+                'bg-hover-color text-white': viewMode === 'grid2',
                 'bg-gray-200 text-gray-600': viewMode !== 'grid2',
               }"
               class="rounded p-2"
@@ -149,7 +149,7 @@
             <button
               (click)="setViewMode('grid3')"
               [ngClass]="{
-                'bg-orange-500 text-white': viewMode === 'grid3',
+                'bg-hover-color text-white': viewMode === 'grid3',
                 'bg-gray-200 text-gray-600': viewMode !== 'grid3',
               }"
               class="rounded p-2"
@@ -160,7 +160,7 @@
             <button
               (click)="setViewMode('grid4')"
               [ngClass]="{
-                'bg-orange-500 text-white': viewMode === 'grid4',
+                'bg-hover-color text-white': viewMode === 'grid4',
                 'bg-gray-200 text-gray-600': viewMode !== 'grid4',
               }"
               class="rounded p-2"
@@ -171,7 +171,7 @@
             <button
               (click)="setViewMode('list')"
               [ngClass]="{
-                'bg-orange-500 text-white': viewMode === 'list',
+                'bg-hover-color text-white': viewMode === 'list',
                 'bg-gray-200 text-gray-600': viewMode !== 'list',
               }"
               class="rounded p-2"
@@ -364,7 +364,7 @@
                 <!-- Stock Status -->
                 <div
                   *ngIf="product.lowQuantity"
-                  class="mt-2 text-xs text-orange-500"
+                  class="mt-2 text-xs text-hover-color"
                 >
                   {{
                     "collections.productCard.onlyLeftInStock"
@@ -384,7 +384,7 @@
                 (click)="changePage(currentPage - 1)"
                 [ngClass]="{
                   'cursor-not-allowed text-gray-400': currentPage === 1,
-                  'hover:bg-orange-500 hover:text-white': currentPage !== 1,
+                  'hover:bg-hover-color hover:text-white': currentPage !== 1,
                 }"
                 class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
               >
@@ -406,7 +406,7 @@
                   *ngIf="!page.ellipsis"
                   (click)="changePage(page)"
                   [ngClass]="{
-                    'bg-orange-500 text-white': currentPage === page,
+                    'bg-hover-color text-white': currentPage === page,
                     'hover:bg-gray-100': currentPage !== page,
                   }"
                   class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
@@ -422,7 +422,7 @@
                 [ngClass]="{
                   'cursor-not-allowed text-gray-400':
                     currentPage === totalPages,
-                  'hover:bg-orange-500 hover:text-white':
+                  'hover:bg-hover-color hover:text-white':
                     currentPage !== totalPages,
                 }"
                 class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
