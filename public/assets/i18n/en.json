@@ -14,6 +14,11 @@
     "refundPolicy": "Refund Policy",
     "termsAndConditions": "Terms & Conditions"
   },
+  "search": {
+    "title": "Search Products",
+    "placeholder": "Search for products...",
+    "noResults": "No products found"
+  },
   "breadcrumb": {
     "home": "Home",
     "product": "Product"

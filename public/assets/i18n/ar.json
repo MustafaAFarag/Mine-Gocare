@@ -14,6 +14,11 @@
     "refundPolicy": "سياسة الاسترجاع",
     "termsAndConditions": "الشروط والأحكام"
   },
+  "search": {
+    "title": "البحث عن المنتجات",
+    "placeholder": "ابحث عن المنتجات...",
+    "noResults": "لم يتم العثور على منتجات"
+  },
   "breadcrumb": {
     "home": "الرئيسية",
     "product": "المنتج"

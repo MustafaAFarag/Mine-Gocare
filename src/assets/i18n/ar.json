@@ -1,0 +1,15 @@
+{
+  "navbar": {
+    "home": "الرئيسية",
+    "collections": "المجموعات",
+    "contactUs": "اتصل بنا",
+    "privacyPolicy": "سياسة الخصوصية",
+    "refundPolicy": "سياسة الاسترداد",
+    "termsAndConditions": "الشروط والأحكام"
+  },
+  "search": {
+    "title": "البحث عن المنتجات",
+    "placeholder": "ابحث عن المنتجات...",
+    "noResults": "لم يتم العثور على منتجات"
+  }
+}

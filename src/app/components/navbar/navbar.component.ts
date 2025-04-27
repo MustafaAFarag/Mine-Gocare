@@ -23,6 +23,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-navbar',
@@ -37,6 +38,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AuthModalComponent,
     CartSidebarComponent,
     TranslateModule,
+    SearchComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
@@ -51,6 +53,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser!: User;
   cartCount = 0;
   isPagesDropdownOpen: boolean = false;
+  isSearchOpen: boolean = false;
 
   showDialog() {
     this.visible = !this.visible;
@@ -187,5 +190,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.isBrowser) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  // Toggle search panel
+  toggleSearch(): void {
+    this.isSearchOpen = !this.isSearchOpen;
+  }
+
+  // Close search panel
+  closeSearch(): void {
+    this.isSearchOpen = false;
   }
 }
