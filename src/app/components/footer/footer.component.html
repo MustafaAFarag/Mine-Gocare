@@ -58,29 +58,39 @@
             }}</a>
           </li>
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.collections" | translate
-            }}</a>
+            <a
+              routerLink="/collections"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.collections" | translate }}</a
+            >
           </li>
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.about" | translate
-            }}</a>
+            <a
+              routerLink="/contact-us"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.contactUs" | translate }}</a
+            >
           </li>
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.blogs" | translate
-            }}</a>
+            <a
+              routerLink="/privacy-policy"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.privacyPolicy" | translate }}</a
+            >
           </li>
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.offers" | translate
-            }}</a>
+            <a
+              routerLink="/refund-policy"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.refundPolicy" | translate }}</a
+            >
           </li>
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.search" | translate
-            }}</a>
+            <a
+              routerLink="/terms-and-conditions"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.termsAndConditions" | translate }}</a
+            >
           </li>
         </ul>
       </div>
@@ -131,47 +141,49 @@
           <input
             type="email"
             [placeholder]="'footer.newsletterPlaceholder' | translate"
-            class="mr-2 flex-1 border-none p-2 text-lg outline-none"
+            class="flex-1 border-none p-2 text-lg outline-none"
           />
           <button class="bg-[#ff4c3b] px-3 py-2 text-sm font-bold text-white">
             {{ "footer.subscribe" | translate }}
           </button>
         </div>
-        <div class="flex gap-2">
+
+        <!-- Fixed icons layout -->
+        <div class="flex gap-3">
           <a
             href="https://www.facebook.com/profile.php?id=61575296578807"
             target="_blank"
-            class="mr-2 flex h-8 w-8 items-center justify-center bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
           >
-            <i class="ri-facebook-fill"></i>
+            <i class="ri-facebook-fill text-xl text-white"></i>
           </a>
           <a
             href="https://x.com/Berryat_"
             target="_blank"
-            class="mr-2 flex h-8 w-8 items-center justify-center bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
           >
-            <i class="ri-twitter-x-fill"></i>
+            <i class="ri-twitter-x-fill text-xl text-white"></i>
           </a>
           <a
             href="https://www.instagram.com/Berryat_"
             target="_blank"
-            class="mr-2 flex h-8 w-8 items-center justify-center bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
           >
-            <i class="ri-instagram-fill"></i>
+            <i class="ri-instagram-fill text-xl text-white"></i>
           </a>
           <a
             href="https://snapchat.com/t/dCAE0Wee"
             target="_blank"
-            class="flex h-8 w-8 items-center justify-center bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
           >
-            <i class="ri-snapchat-fill"></i>
+            <i class="ri-snapchat-fill text-xl text-white"></i>
           </a>
           <a
-            href="Https://tiktok.com/@berryatt"
+            href="https://tiktok.com/@berryatt"
             target="_blank"
-            class="flex h-8 w-8 items-center justify-center bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
           >
-            <i class="ri-tiktok-fill"></i>
+            <i class="ri-tiktok-fill text-xl text-white"></i>
           </a>
         </div>
       </div>

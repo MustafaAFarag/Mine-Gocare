@@ -84,7 +84,7 @@
         "title": "Information Collected",
         "points": [
           "First name, last name, address, area and city, phone and contact numbers, email address, GPS location (mobile site), and ID.",
-          "Past Go Care reservations, favorite beauty centers and salons, customer service inquiries, and certain social networking preferences."
+          "Past Berryat reservations, favorite beauty centers and salons, customer service inquiries, and certain social networking preferences."
         ]
       },
       "analytics": {
@@ -139,7 +139,7 @@
       "paymentInformation": {
         "title": "Payment Information",
         "points": [
-          "Go Care does not store or collect debit/credit card information.",
+          "Berryat does not store or collect debit/credit card information.",
           "Payment methods include cash, credit card, or payment checks."
         ]
       },
@@ -280,10 +280,10 @@
     "links": {
       "home": "Home",
       "collections": "Collections",
-      "about": "About Us",
-      "blogs": "Blogs",
-      "offers": "Offers",
-      "search": "Search",
+      "privacyPolicy": "Privacy Policy",
+      "termsAndConditions": "Terms & Conditions",
+      "refundPolicy": "Refund Policy",
+      "contactUs": "Contact Us",
       "account": "My Account",
       "orders": "My Orders",
       "wishlist": "Wishlist",

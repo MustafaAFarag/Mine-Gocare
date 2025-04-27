@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Category } from '../../model/Categories';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,7 @@ import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })
