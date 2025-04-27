@@ -1,12 +1,12 @@
 import { Component, inject, HostListener } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
-import { NgIf } from '@angular/common';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-navbar-banner',
   standalone: true,
-  imports: [TranslateModule, NgIf],
+  imports: [TranslateModule, NgIf, NgClass],
   templateUrl: './navbar-banner.component.html',
   styleUrl: './navbar-banner.component.css',
 })

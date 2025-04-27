@@ -39,7 +39,11 @@
 
         <div
           *ngIf="isLanguageDropdownOpen"
-          class="absolute right-0 z-50 mt-1 w-36 rounded-md bg-white shadow-lg sm:w-40"
+          class="absolute z-50 mt-1 w-36 rounded-md bg-white shadow-lg sm:w-40"
+          [ngClass]="{
+            'right-0': getCurrentLanguage() === 'en',
+            'left-2': getCurrentLanguage() === 'ar',
+          }"
         >
           <div class="py-1">
             <button
