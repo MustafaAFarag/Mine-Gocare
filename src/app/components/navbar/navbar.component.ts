@@ -46,13 +46,6 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
-  styles: [
-    `
-      :host ::ng-deep .black-text-toast .p-toast-message-content {
-        color: black;
-      }
-    `,
-  ],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @ViewChild(CartSidebarComponent) cartSidebar!: CartSidebarComponent;
@@ -201,7 +194,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       severity: 'success',
       summary: 'Logged Out',
       detail: 'You have been successfully logged out',
-      life: 3000,
+      life: 2000,
       styleClass: 'black-text-toast',
     });
   }
