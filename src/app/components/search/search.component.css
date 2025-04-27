@@ -1,3 +1,49 @@
+/* Custom toast styles */
+:host ::ng-deep .black-text-toast .p-toast-message {
+  color: #000;
+}
+
+:host ::ng-deep .black-text-toast .p-toast-message.p-toast-message-success {
+  background-color: #d1fae5;
+  border-color: #a7f3d0;
+}
+
+:host
+  ::ng-deep
+  .black-text-toast
+  .p-toast-message.p-toast-message-success
+  .p-toast-message-content {
+  color: #000;
+}
+
+:host
+  ::ng-deep
+  .black-text-toast
+  .p-toast-message.p-toast-message-success
+  .p-toast-message-content
+  .p-toast-summary {
+  color: #000;
+  font-weight: 600;
+}
+
+:host
+  ::ng-deep
+  .black-text-toast
+  .p-toast-message.p-toast-message-success
+  .p-toast-message-content
+  .p-toast-detail {
+  color: #000;
+}
+
+:host
+  ::ng-deep
+  .black-text-toast
+  .p-toast-message.p-toast-message-success
+  .p-toast-icon-close {
+  color: #000;
+}
+
+/* Existing styles */
 .search-overlay {
   position: fixed;
   top: 0;

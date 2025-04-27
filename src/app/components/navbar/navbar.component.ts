@@ -24,6 +24,8 @@ import { User } from '../../model/User';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SearchComponent } from '../search/search.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',
@@ -39,9 +41,18 @@ import { SearchComponent } from '../search/search.component';
     CartSidebarComponent,
     TranslateModule,
     SearchComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
+  styles: [
+    `
+      :host ::ng-deep .black-text-toast .p-toast-message-content {
+        color: black;
+      }
+    `,
+  ],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @ViewChild(CartSidebarComponent) cartSidebar!: CartSidebarComponent;
@@ -76,6 +87,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private cartService: CartService,
     private router: Router,
+    private messageService: MessageService,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -183,6 +195,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.closeMobileMenu();
+
+    // Show success toast notification with black text
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Logged Out',
+      detail: 'You have been successfully logged out',
+      life: 3000,
+      styleClass: 'black-text-toast',
+    });
   }
 
   // Scroll to top of the page

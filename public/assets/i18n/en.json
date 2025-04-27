@@ -409,6 +409,8 @@
   "cart": {
     "header": "Cart",
     "noProducts": "Your cart is currently empty",
+    "ADDED_TO_CART": "Added to Cart",
+    "PRODUCT_ADDED_MESSAGE": "{{productName}} has been added to your cart",
     "tableHeader": {
       "image": "Image",
       "productName": "Product Name",

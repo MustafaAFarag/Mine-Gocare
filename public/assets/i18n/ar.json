@@ -388,6 +388,8 @@
   "cart": {
     "header": "سلة التسوق",
     "noProducts": "سلة التسوق فارغة حالياً",
+    "ADDED_TO_CART": "تمت الإضافة إلى السلة",
+    "PRODUCT_ADDED_MESSAGE": "تمت إضافة {{productName}} إلى سلة التسوق",
     "tableHeader": {
       "image": "الصورة",
       "productName": "اسم المنتج",

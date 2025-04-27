@@ -17,6 +17,8 @@ import { getFullImageUrl } from '../../lib/utils';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../model/Cart';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search',
@@ -27,7 +29,9 @@ import { CartItem } from '../../model/Cart';
     RouterLink,
     TranslateModule,
     LoadingComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
 })
@@ -44,6 +48,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     public translateService: TranslateService,
     private cartService: CartService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -115,6 +120,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     };
 
     this.cartService.addToCart(cartItem);
+
+    // Show success toast notification
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Added to Cart',
+      detail: `${product.name.en} has been added to your cart`,
+      life: 2000,
+    });
   }
 
   addToWishlist(product: Product): void {
