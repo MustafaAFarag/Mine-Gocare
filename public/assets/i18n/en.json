@@ -310,7 +310,8 @@
   "login": {
     "title": "Sign In",
     "subtitle": "Dive back into your world with a simple sign-in. Your next adventure awaits - let's get started!",
-
+    "loginToastSummary": "Success",
+    "loginToast": "Login successful!",
     "fields": {
       "identifier": {
         "label": "Email or Phone",
@@ -349,6 +350,8 @@
   "signup": {
     "title": "Sign Up",
     "subtitle": "Join our platform in seconds and explore what's waiting for you. It's easy, fast, and free!",
+    "signupToastSummary": "Success",
+    "signupToast": "Account created successfully!",
     "fields": {
       "firstName": {
         "label": "First Name",

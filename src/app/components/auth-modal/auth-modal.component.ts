@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SignupFormComponent } from '../signup-form/signup-form.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-auth-modal',
@@ -25,7 +26,10 @@ export class AuthModalComponent {
   @Output() visibleChange = new EventEmitter<boolean>();
   isLoginMode: boolean = true;
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private translateService: TranslateService,
+  ) {}
 
   // Toggle between login and signup forms
   toggleMode() {
@@ -39,8 +43,8 @@ export class AuthModalComponent {
   handleLoginSuccess() {
     this.messageService.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Login successful!',
+      summary: this.translateService.instant('login.loginToastSummary'),
+      detail: this.translateService.instant('login.loginToast'),
       life: 3000,
       styleClass: 'top-left',
     });
@@ -50,8 +54,8 @@ export class AuthModalComponent {
   handleSignupSuccess() {
     this.messageService.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Account created successfully!',
+      summary: this.translateService.instant('signup.signupToastSummary'),
+      detail: this.translateService.instant('signup.signupToast'),
       life: 2000,
       styleClass: 'black-text-toast',
     });
