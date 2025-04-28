@@ -11,7 +11,7 @@ export const ApiEndPoint = {
   UpdateAddress: 'api/services/ClientApp/Address/UpdateAddress',
   GetWallet: 'api/services/AdminApp/ClientWalletService/GetClientWalletData',
   GetWalletTransactionList:
-    'api/services/AdminApp/ClientWalletService/GetWalletTransactionList',
+    'api/services/ClientApp/ClientWalletService/GetWalletTransactionList',
   updateClientName: 'api/services/ClientApp/Client/UpdateName',
   getClientProfile: 'api/services/ClientApp/Client/GetProfile',
   updateClientPhone: 'api/services/ClientApp/Client/UpdateMobileNumber',

@@ -29,7 +29,7 @@ export class WalletService {
   getWalletTransactionList(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      CountryId: 224,
     });
 
     const body = {
@@ -37,12 +37,6 @@ export class WalletService {
         pageNumber: 1,
         pageSize: 10,
       },
-      searchText: 'string',
-      countryId: 224,
-      clientId: 49224,
-      startDate: '2025-04-22T13:47:43.261Z',
-      endDate: '2025-04-22T13:47:43.261Z',
-      transactionType: [1],
     };
 
     return this.http.post(this.getTransactionListUrl, body, { headers });

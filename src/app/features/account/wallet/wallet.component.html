@@ -27,16 +27,16 @@
         <thead>
           <tr class="border-b">
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.date" | translate }}
+              {{ "common.orderNumber" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
               {{ "common.amount" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.remark" | translate }}
+              {{ "common.description" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.status" | translate }}
+              {{ "common.date" | translate }}
             </th>
           </tr>
         </thead>
@@ -47,31 +47,33 @@
             *ngFor="let transaction of transactions"
             class="border-b hover:bg-gray-50"
           >
-            <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
             <td class="px-4 py-4 text-gray-700">
-              {{ "common.currency" | translate }}
-              {{ transaction.amount.toFixed(2) }}
+              <span *ngIf="transaction.orderSerialNumber">{{
+                transaction.orderSerialNumber
+              }}</span>
+              <span *ngIf="!transaction.orderSerialNumber">-</span>
             </td>
-            <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
             <td class="px-4 py-4">
               <span
                 class="rounded-md px-3 py-1 text-sm font-medium"
                 [ngClass]="{
-                  'bg-red-100 text-red-600': transaction.status === 'debit',
-                  'bg-green-100 text-green-600':
-                    transaction.status === 'credit',
+                  'bg-red-100 text-red-600': transaction.operation === 2,
+                  'bg-green-100 text-green-600': transaction.operation === 1,
                 }"
               >
-                {{
-                  transaction.status === "debit"
-                    ? ("common.debit" | translate)
-                    : ("common.credit" | translate)
-                }}
+                {{ transaction.currency.name[currentLang] }}
+                {{ transaction.amount.toFixed(2) }}
               </span>
+            </td>
+            <td class="px-4 py-4 text-gray-700">
+              {{ transaction.title[currentLang] }}
+            </td>
+            <td class="px-4 py-4 text-gray-700">
+              {{ transaction.transactionDate | date: "medium" }}
             </td>
           </tr>
 
-          <!-- Empty State (shown when no transactions) -->
+          <!-- Empty State -->
           <tr *ngIf="transactions.length === 0">
             <td colspan="4" class="py-8 text-center text-gray-500">
               <div class="flex flex-col items-center gap-2">

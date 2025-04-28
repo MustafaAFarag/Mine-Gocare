@@ -662,7 +662,9 @@
     "status": "Status",
     "debit": "Debit",
     "credit": "Credit",
-    "currency": "EGP"
+    "currency": "EGP",
+    "orderNumber": "Order Number",
+    "description": "Description"
   },
   "wallet": {
     "noTransactions": "No transactions found in your wallet."

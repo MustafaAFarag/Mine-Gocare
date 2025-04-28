@@ -633,17 +633,19 @@
     "update": "تحديث",
     "cancel": "إلغاء",
     "edit": "تعديل",
-    "remove": "إزالة",
-    "saving": "جاري الحفظ...",
-    "removing": "جاري الإزالة...",
-    "loading": "جاري تحميل العناوين...",
+    "remove": "حذف",
+    "saving": "جارٍ الحفظ...",
+    "removing": "جارٍ الحذف...",
+    "loading": "جارٍ تحميل العناوين...",
     "date": "التاريخ",
     "amount": "المبلغ",
     "remark": "ملاحظة",
     "status": "الحالة",
     "debit": "مدين",
     "credit": "دائن",
-    "currency": "جنيه مصري"
+    "currency": "جنيه مصري",
+    "orderNumber": "رقم الطلب",
+    "description": "الوصف"
   },
   "wallet": {
     "noTransactions": "لم يتم العثور على معاملات في محفظتك."
