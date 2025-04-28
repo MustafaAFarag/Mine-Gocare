@@ -12,7 +12,9 @@
     "privacyPolicy": "Privacy Policy",
     "contactUs": "Contact Us",
     "refundPolicy": "Refund Policy",
-    "termsAndConditions": "Terms & Conditions"
+    "termsAndConditions": "Terms & Conditions",
+    "logoutToastSummary": "Logged Out",
+    "logoutToast": "You have been successfully logged out"
   },
   "search": {
     "title": "Search Products",

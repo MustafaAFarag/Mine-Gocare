@@ -12,7 +12,9 @@
     "privacyPolicy": "سياسة الخصوصية",
     "contactUs": "اتصل بنا",
     "refundPolicy": "سياسة الاسترجاع",
-    "termsAndConditions": "الشروط والأحكام"
+    "termsAndConditions": "الشروط والأحكام",
+    "logoutToastSummary": "تم تسجيل الخروج",
+    "logoutToast": "تم تسجيل خروجك بنجاح"
   },
   "search": {
     "title": "البحث عن المنتجات",

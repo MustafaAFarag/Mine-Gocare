@@ -10,7 +10,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NavbarBannerComponent } from '../navbar-banner/navbar-banner.component';
 import { isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
@@ -23,7 +23,7 @@ import { WishlistService } from '../../services/wishlist.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../model/User';
 import { CartSidebarComponent } from '../cart-sidebar/cart-sidebar.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SearchComponent } from '../search/search.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -83,7 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private router: Router,
+    private translateService: TranslateService,
     private messageService: MessageService,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -219,8 +219,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Show success toast notification with black text
     this.messageService.add({
       severity: 'success',
-      summary: 'Logged Out',
-      detail: 'You have been successfully logged out',
+      summary: this.translateService.instant('navbar.logoutToastSummary'),
+      detail: this.translateService.instant('navbar.logoutToast'),
       life: 2000,
       styleClass: 'black-text-toast',
     });
