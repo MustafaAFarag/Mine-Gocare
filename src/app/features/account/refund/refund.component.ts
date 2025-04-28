@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OrderService } from '../../../services/order.service';
 import { ClientOrders } from '../../../model/Order';
 import { Router } from '@angular/router';
+
+type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-refund',
@@ -15,14 +17,21 @@ import { Router } from '@angular/router';
 export class RefundComponent implements OnInit {
   token = localStorage.getItem('accessToken');
   orders: ClientOrders[] = [];
+  currentLang: Language = 'en';
 
   currentPage: number = 1;
   totalPages: number = 1;
 
   constructor(
     private orderService: OrderService,
-    private router: Router,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.currentLang = this.translateService.currentLang as Language;
+
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang as Language;
+    });
+  }
 
   ngOnInit() {
     this.fetchClientOrders();

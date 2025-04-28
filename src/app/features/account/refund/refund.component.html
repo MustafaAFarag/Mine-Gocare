@@ -41,7 +41,7 @@
             </span>
           </td>
           <td class="px-4 py-4 text-gray-700">
-            {{ order.totalPayment }} {{ order.currency.name.en }}
+            {{ order.totalPayment }} {{ order.currency.name[currentLang] }}
           </td>
           <td class="px-4 py-4 text-gray-700">
             {{
@@ -50,7 +50,7 @@
             }}
           </td>
           <td class="px-4 py-4 text-gray-700">
-            {{ order.creationDate | date: "mediumDate" }}
+            {{ order.lastStatusHistory.date | date: "medium" }}
           </td>
         </tr>
 
