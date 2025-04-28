@@ -135,7 +135,7 @@
   }
 }
 
-/* Existing styles */
+/* Search Modal Styles */
 .search-overlay {
   position: fixed;
   top: 0;
@@ -154,32 +154,20 @@
   bottom: 0;
   width: 100%;
   max-width: 100%;
+  height: 100vh;
   z-index: 50;
   border-radius: 0;
   box-shadow: none;
-  animation: fadeIn 0.3s ease-out;
+  animation: mobileSlideIn 0.3s ease-out;
   display: flex;
   flex-direction: column;
   background-color: white;
 }
 
-@media (min-width: 768px) {
-  .search-container {
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 600px;
-    bottom: auto;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  }
-}
-
-@keyframes fadeIn {
+@keyframes mobileSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -188,7 +176,21 @@
 }
 
 @media (min-width: 768px) {
-  @keyframes fadeIn {
+  .search-container {
+    top: 80px;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width: 90%;
+    max-width: 600px;
+    height: auto;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: desktopFadeIn 0.3s ease-out;
+  }
+
+  @keyframes desktopFadeIn {
     from {
       opacity: 0;
       transform: translate(-50%, -20px);
@@ -197,6 +199,20 @@
       opacity: 1;
       transform: translate(-50%, 0);
     }
+  }
+}
+
+/* RTL Support */
+:host-context([dir="rtl"]) .search-container {
+  animation: mobileSlideIn 0.3s ease-out;
+}
+
+@media (min-width: 768px) {
+  :host-context([dir="rtl"]) .search-container {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    animation: desktopFadeIn 0.3s ease-out;
   }
 }
 
