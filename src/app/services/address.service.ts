@@ -14,6 +14,9 @@ export class AddressService {
   private createAddressUrl = `${environment.apiUrl}/${ApiEndPoint.CreateAddress}`;
   private deleteAddressBaseUrl = `${environment.apiUrl}/${ApiEndPoint.DeleteAddress}`;
   private updateAddressUrl = `${environment.apiUrl}/${ApiEndPoint.UpdateAddress}`;
+  private getAllCities = `${environment.apiUrl}/${ApiEndPoint.getAllCities}`;
+  private getAllDistricts = `${environment.apiUrl}/${ApiEndPoint.getAllDistricts}`;
+  private getAllCountries = `${environment.apiUrl}/${ApiEndPoint.getAllCountries}`;
 
   constructor(private http: HttpClient) {}
 
@@ -46,5 +49,18 @@ export class AddressService {
       'Content-Type': 'application/json',
     });
     return this.http.put(this.updateAddressUrl, body, { headers });
+  }
+
+  GetCities(countryId: number): Observable<any> {
+    return this.http.get(`${this.getAllCities}?countryId=${countryId}`);
+  }
+
+  getDistricts(cityId: number): Observable<any> {
+    return this.http.get(`${this.getAllDistricts}?cityId=${cityId}
+`);
+  }
+
+  getCountries(): Observable<any> {
+    return this.http.get(`${this.getAllCountries}`);
   }
 }

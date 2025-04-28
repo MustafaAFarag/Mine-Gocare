@@ -102,7 +102,9 @@
             <option [ngValue]="null" disabled>
               {{ "address.selectCountry" | translate }}
             </option>
-            <option>1</option>
+            @for (country of countries; track $index) {
+              <option value="{{ country.id }}">{{ country.name.en }}</option>
+            }
           </select>
           <div
             *ngIf="
@@ -133,7 +135,9 @@
             <option [ngValue]="null" disabled>
               {{ "address.selectCity" | translate }}
             </option>
-            <option>1</option>
+            @for (city of cities; track $index) {
+              <option value="{{ city.id }}">{{ city.name.en }}</option>
+            }
           </select>
           <div
             *ngIf="
@@ -164,7 +168,9 @@
             <option [ngValue]="null" disabled>
               {{ "address.selectDistrict" | translate }}
             </option>
-            <option>1</option>
+            @for (district of districts; track $index) {
+              <option value="{{ district.id }}">{{ district.name.en }}</option>
+            }
           </select>
           <div
             *ngIf="

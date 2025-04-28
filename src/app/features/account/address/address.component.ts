@@ -8,7 +8,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { AddressService } from '../../../services/address.service';
-import { Address, CreateAddress } from '../../../model/Address';
+import {
+  Address,
+  City,
+  Country,
+  CreateAddress,
+  District,
+} from '../../../model/Address';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -28,6 +34,9 @@ export class AddressComponent implements OnInit {
   submitting = false;
   deletingAddressId: number | null = null;
   currentLang: string = 'en';
+  cities!: City[];
+  districts!: District[];
+  countries!: Country[];
 
   constructor(
     private addressService: AddressService,
@@ -45,13 +54,39 @@ export class AddressComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchClientAddressesAPI();
+    this.fetchAllCountriesAPI();
+
+    // Add listeners for country and city changes
+    this.addressForm.get('countryId')?.valueChanges.subscribe((countryId) => {
+      if (countryId) {
+        this.fetchAllCitiesAPI(countryId);
+        this.addressForm.get('cityId')?.enable();
+        // Reset city and district when country changes
+        this.addressForm.patchValue({
+          cityId: null,
+          districtId: null,
+        });
+        this.districts = [];
+      }
+    });
+
+    this.addressForm.get('cityId')?.valueChanges.subscribe((cityId) => {
+      if (cityId) {
+        this.fetchAllDistrictsAPI(cityId);
+        this.addressForm.get('districtId')?.enable();
+        // Reset district when city changes
+        this.addressForm.patchValue({
+          districtId: null,
+        });
+      }
+    });
   }
 
   createAddressForm(): FormGroup {
     return this.fb.group({
       countryId: [null, Validators.required],
-      districtId: [null, Validators.required],
-      cityId: [null, Validators.required],
+      cityId: [{ value: null, disabled: true }, Validators.required],
+      districtId: [{ value: null, disabled: true }, Validators.required],
       latitude: [''],
       longitude: [''],
       address: ['', Validators.required],
@@ -61,6 +96,47 @@ export class AddressComponent implements OnInit {
       type: [0, Validators.required],
       fullName: ['', Validators.required],
       isPhoneVerified: [false],
+    });
+  }
+
+  fetchAllCitiesAPI(countryId: number) {
+    this.addressForm.get('cityId')?.disable();
+    this.cities = [];
+
+    this.addressService.GetCities(countryId).subscribe({
+      next: (response) => {
+        this.cities = response.result;
+        this.addressForm.get('cityId')?.enable();
+      },
+      error: (error) => {
+        console.error('Error fetching cities:', error);
+        this.addressForm.get('cityId')?.disable();
+      },
+    });
+  }
+
+  fetchAllDistrictsAPI(cityId: number) {
+    this.addressForm.get('districtId')?.disable();
+    this.districts = [];
+
+    this.addressService.getDistricts(cityId).subscribe({
+      next: (response) => {
+        this.districts = response.result;
+        this.addressForm.get('districtId')?.enable();
+      },
+      error: (error) => {
+        console.error('Error fetching districts:', error);
+        this.addressForm.get('districtId')?.disable();
+      },
+    });
+  }
+
+  fetchAllCountriesAPI() {
+    this.addressService.getCountries().subscribe({
+      next: (response) => {
+        this.countries = response.result;
+        console.log('countries', this.countries);
+      },
     });
   }
 
@@ -114,15 +190,22 @@ export class AddressComponent implements OnInit {
     this.editingAddressId = id;
     this.showAddressForm = true;
 
-    // Find the address to edit
     const addressToEdit = this.addresses.find((a) => a.id === id);
 
     if (addressToEdit) {
+      // Enable the controls before setting values
+      this.addressForm.get('cityId')?.enable();
+      this.addressForm.get('districtId')?.enable();
+
+      // Fetch cities and districts for the existing address
+      this.fetchAllCitiesAPI(addressToEdit.country.id);
+      this.fetchAllDistrictsAPI(addressToEdit.city.id);
+
       // Populate the form with existing values
       this.addressForm.patchValue({
         countryId: addressToEdit.country.id,
-        districtId: addressToEdit.district.id,
         cityId: addressToEdit.city.id,
+        districtId: addressToEdit.district.id,
         address: addressToEdit.address,
         mapAddress: addressToEdit.mapAddress,
         phoneNumber: addressToEdit.phoneNumber,

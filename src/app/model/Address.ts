@@ -1,8 +1,20 @@
+// Common types
+export interface Name {
+  en: string;
+  ar: string;
+}
+
+export interface Position {
+  latitude: number;
+  longitude: number;
+}
+
+// Address-related models
 export interface Address {
   id: number;
-  country: Country;
-  district: District;
-  city: City;
+  country: CountrySummary;
+  district: DistrictSummary;
+  city: CitySummary;
   latitude: string;
   longitude: string;
   address: string;
@@ -14,34 +26,19 @@ export interface Address {
   isPhoneVerified: boolean;
 }
 
-interface Country {
+interface CountrySummary {
   id: number;
   name: Name;
 }
 
-interface Name {
-  en: string;
-  ar: string;
-}
-
-interface District {
+interface DistrictSummary {
   id: number;
-  name: Name2;
+  name: Name;
 }
 
-interface Name2 {
-  en: string;
-  ar: string;
-}
-
-interface City {
+interface CitySummary {
   id: number;
-  name: Name3;
-}
-
-interface Name3 {
-  en: string;
-  ar: string;
+  name: Name;
 }
 
 export interface CreateAddress {
@@ -59,18 +56,39 @@ export interface CreateAddress {
   isPhoneVerified: boolean;
 }
 
-export interface UpdateAddress {
+export interface UpdateAddress extends CreateAddress {
   id: number;
-  countryId: number;
-  districtId: number;
-  cityId: number;
-  latitude: string;
-  longitude: string;
-  address: string;
-  mapAddress: string;
-  phoneNumber: string;
-  isDefault: boolean;
-  type: number;
-  fullName: string;
-  isPhoneVerified: boolean;
+}
+
+// City-related models
+export interface City {
+  id: number;
+  name: Name;
+  position: Position;
+}
+
+// Country full model
+export interface Country {
+  id: number;
+  name: Name;
+  isActive: boolean;
+  phoneCode: string;
+  position: Position;
+  isActivePhoneCode: boolean;
+  flagUrl: string;
+  countryCode: string;
+  capitalCity: CapitalCity;
+}
+
+export interface CapitalCity {
+  id: number;
+  name: Name;
+  position: Position;
+}
+
+// District full model
+export interface District {
+  id: number;
+  name: Name;
+  position: Position;
 }
