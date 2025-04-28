@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -16,6 +16,9 @@ import {
   District,
 } from '../../../model/Address';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+
+type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-address',
@@ -33,7 +36,7 @@ export class AddressComponent implements OnInit {
   addressForm: FormGroup;
   submitting = false;
   deletingAddressId: number | null = null;
-  currentLang: string = 'en';
+  currentLang: Language = 'en';
   cities!: City[];
   districts!: District[];
   countries!: Country[];
@@ -44,11 +47,10 @@ export class AddressComponent implements OnInit {
     private translateService: TranslateService,
   ) {
     this.addressForm = this.createAddressForm();
-    this.currentLang = this.translateService.currentLang || 'en';
 
-    // Subscribe to language changes
+    this.currentLang = this.translateService.currentLang as Language;
     this.translateService.onLangChange.subscribe((event) => {
-      this.currentLang = event.lang;
+      this.currentLang = event.lang as Language;
     });
   }
 

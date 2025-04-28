@@ -103,7 +103,9 @@
               {{ "address.selectCountry" | translate }}
             </option>
             @for (country of countries; track $index) {
-              <option value="{{ country.id }}">{{ country.name.en }}</option>
+              <option value="{{ country.id }}">
+                {{ country.name[currentLang] }}
+              </option>
             }
           </select>
           <div
@@ -136,7 +138,9 @@
               {{ "address.selectCity" | translate }}
             </option>
             @for (city of cities; track $index) {
-              <option value="{{ city.id }}">{{ city.name.en }}</option>
+              <option value="{{ city.id }}">
+                {{ city.name[currentLang] }}
+              </option>
             }
           </select>
           <div
@@ -169,7 +173,9 @@
               {{ "address.selectDistrict" | translate }}
             </option>
             @for (district of districts; track $index) {
-              <option value="{{ district.id }}">{{ district.name.en }}</option>
+              <option value="{{ district.id }}">
+                {{ district.name[currentLang] }}
+              </option>
             }
           </select>
           <div

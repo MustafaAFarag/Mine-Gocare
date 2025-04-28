@@ -13,11 +13,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CreateAddress, City, Country, District } from '../../model/Address';
 import { AddressService } from '../../services/address.service';
 import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
+
+type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-address-form-modal',
@@ -26,7 +28,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './address-form-modal.component.html',
   styleUrls: ['./address-form-modal.component.css'],
 })
-export class AddressFormModalComponent implements OnInit, OnDestroy {
+export class AddressFormModalComponent implements OnInit {
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
   @Output() saveAddress = new EventEmitter<CreateAddress>();
@@ -35,15 +37,19 @@ export class AddressFormModalComponent implements OnInit, OnDestroy {
   cities: City[] = [];
   districts: District[] = [];
   countries: Country[] = [];
-  currentLang: string = 'en';
-  private langSubscription: Subscription = new Subscription();
+  currentLang: Language = 'en';
 
   constructor(
     private fb: FormBuilder,
     private addressService: AddressService,
-    private languageService: LanguageService,
+    private translateService: TranslateService,
   ) {
     this.addressForm = this.createAddressForm();
+
+    this.currentLang = this.translateService.currentLang as Language;
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang as Language;
+    });
   }
 
   ngOnInit(): void {
@@ -51,15 +57,6 @@ export class AddressFormModalComponent implements OnInit, OnDestroy {
     this.setupFormListeners();
 
     // Subscribe to language changes
-    this.langSubscription = this.languageService.language$.subscribe((lang) => {
-      this.currentLang = lang;
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.langSubscription) {
-      this.langSubscription.unsubscribe();
-    }
   }
 
   createAddressForm(): FormGroup {

@@ -98,7 +98,7 @@
             </option>
             @for (country of countries; track $index) {
               <option [value]="country.id">
-                {{ country.name.en }}
+                {{ country.name[currentLang] }}
               </option>
             }
           </select>
@@ -134,7 +134,7 @@
             </option>
             @for (city of cities; track $index) {
               <option [value]="city.id">
-                {{ city.name.en }}
+                {{ city.name[currentLang] }}
               </option>
             }
           </select>
@@ -170,7 +170,7 @@
             </option>
             @for (district of districts; track $index) {
               <option [value]="district.id">
-                {{ district.name.en }}
+                {{ district.name[currentLang] }}
               </option>
             }
           </select>
