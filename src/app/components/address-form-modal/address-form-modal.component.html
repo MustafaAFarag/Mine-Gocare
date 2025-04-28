@@ -3,240 +3,281 @@
   *ngIf="isOpen"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
 >
-  <!-- Modal container -->
   <div class="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
-    <h2 class="mb-4 text-xl font-semibold text-gray-800">
-      {{ "address.addNew" | translate }}
-    </h2>
-
-    <!-- Close button -->
-    <button
-      (click)="onClose()"
-      class="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
-      aria-label="Close"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+    <!-- Modal Header -->
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-gray-800">
+        {{ "address.addNew" | translate }}
+      </h2>
+      <button
+        (click)="onClose()"
+        class="text-gray-400 hover:text-gray-600"
+        aria-label="Close"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    </button>
+        <i class="ri-close-line text-lg lg:text-xl"></i>
+      </button>
+    </div>
 
     <!-- Address Form -->
     <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-4">
         <!-- Full Name -->
-        <div class="col-span-2">
-          <div class="flex flex-col gap-1">
-            <label for="fullName" class="text-sm font-medium text-gray-700">
-              {{ "address.fullName" | translate }} *
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              formControlName="fullName"
-              class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
-              [ngClass]="{
-                'border-red-500':
-                  addressForm.get('fullName')?.invalid &&
-                  addressForm.get('fullName')?.touched,
-              }"
-            />
-            <div
-              *ngIf="
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.fullName" | translate }}
+          </label>
+          <input
+            type="text"
+            formControlName="fullName"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
                 addressForm.get('fullName')?.invalid &&
-                addressForm.get('fullName')?.touched
-              "
-              class="text-xs text-red-500"
-            >
-              {{ "address.validation.fullNameRequired" | translate }}
-            </div>
+                addressForm.get('fullName')?.touched,
+            }"
+          />
+          <div
+            *ngIf="
+              addressForm.get('fullName')?.invalid &&
+              addressForm.get('fullName')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.fullNameRequired" | translate }}
           </div>
         </div>
 
         <!-- Phone Number -->
-        <div class="col-span-2">
-          <div class="flex flex-col gap-1">
-            <label for="phoneNumber" class="text-sm font-medium text-gray-700">
-              {{ "address.phoneNumber" | translate }} *
-            </label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              formControlName="phoneNumber"
-              class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
-              [ngClass]="{
-                'border-red-500':
-                  addressForm.get('phoneNumber')?.invalid &&
-                  addressForm.get('phoneNumber')?.touched,
-              }"
-            />
-            <div
-              *ngIf="
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.phoneNumber" | translate }}
+          </label>
+          <input
+            type="text"
+            formControlName="phoneNumber"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
                 addressForm.get('phoneNumber')?.invalid &&
-                addressForm.get('phoneNumber')?.touched
-              "
-              class="text-xs text-red-500"
-            >
-              {{ "address.validation.phoneNumberRequired" | translate }}
-            </div>
+                addressForm.get('phoneNumber')?.touched,
+            }"
+          />
+          <div
+            *ngIf="
+              addressForm.get('phoneNumber')?.invalid &&
+              addressForm.get('phoneNumber')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.phoneNumberRequired" | translate }}
           </div>
         </div>
 
-        <!-- District -->
-        <div>
-          <div class="flex flex-col gap-1">
-            <label for="districtId" class="text-sm font-medium text-gray-700">
-              {{ "address.district" | translate }} *
-            </label>
-            <select
-              id="districtId"
-              formControlName="districtId"
-              class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
-              [ngClass]="{
-                'border-red-500':
-                  addressForm.get('districtId')?.invalid &&
-                  addressForm.get('districtId')?.touched,
-              }"
-            >
-              <option value="">
-                {{ "address.selectDistrict" | translate }}
+        <!-- Country -->
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.country" | translate }}
+          </label>
+          <select
+            formControlName="countryId"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
+                addressForm.get('countryId')?.invalid &&
+                addressForm.get('countryId')?.touched,
+            }"
+          >
+            <option [ngValue]="null" disabled>
+              {{ "address.selectCountry" | translate }}
+            </option>
+            @for (country of countries; track $index) {
+              <option [value]="country.id">
+                {{ country.name.en }}
               </option>
-              <option value="1">1</option>
-            </select>
-            <div
-              *ngIf="
-                addressForm.get('districtId')?.invalid &&
-                addressForm.get('districtId')?.touched
-              "
-              class="text-xs text-red-500"
-            >
-              {{ "address.validation.districtRequired" | translate }}
-            </div>
+            }
+          </select>
+          <div
+            *ngIf="
+              addressForm.get('countryId')?.invalid &&
+              addressForm.get('countryId')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.countryRequired" | translate }}
           </div>
         </div>
 
         <!-- City -->
-        <div>
-          <div class="flex flex-col gap-1">
-            <label for="cityId" class="text-sm font-medium text-gray-700">
-              {{ "address.city" | translate }} *
-            </label>
-            <select
-              id="cityId"
-              formControlName="cityId"
-              class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
-              [ngClass]="{
-                'border-red-500':
-                  addressForm.get('cityId')?.invalid &&
-                  addressForm.get('cityId')?.touched,
-              }"
-            >
-              <option value="">{{ "address.selectCity" | translate }}</option>
-              <option value="1">1</option>
-            </select>
-            <div
-              *ngIf="
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.city" | translate }}
+          </label>
+          <select
+            formControlName="cityId"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
                 addressForm.get('cityId')?.invalid &&
-                addressForm.get('cityId')?.touched
-              "
-              class="text-xs text-red-500"
-            >
-              {{ "address.validation.cityRequired" | translate }}
-            </div>
+                addressForm.get('cityId')?.touched,
+            }"
+          >
+            <option [ngValue]="null" disabled>
+              {{ "address.selectCity" | translate }}
+            </option>
+            @for (city of cities; track $index) {
+              <option [value]="city.id">
+                {{ city.name.en }}
+              </option>
+            }
+          </select>
+          <div
+            *ngIf="
+              addressForm.get('cityId')?.invalid &&
+              addressForm.get('cityId')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.cityRequired" | translate }}
           </div>
+        </div>
+
+        <!-- District -->
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.district" | translate }}
+          </label>
+          <select
+            formControlName="districtId"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
+                addressForm.get('districtId')?.invalid &&
+                addressForm.get('districtId')?.touched,
+            }"
+          >
+            <option [ngValue]="null" disabled>
+              {{ "address.selectDistrict" | translate }}
+            </option>
+            @for (district of districts; track $index) {
+              <option [value]="district.id">
+                {{ district.name.en }}
+              </option>
+            }
+          </select>
+          <div
+            *ngIf="
+              addressForm.get('districtId')?.invalid &&
+              addressForm.get('districtId')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.districtRequired" | translate }}
+          </div>
+        </div>
+
+        <!-- Type -->
+        <div class="form-group">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.type" | translate }}
+          </label>
+          <select
+            formControlName="type"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+          >
+            <option [value]="0">{{ "address.types.home" | translate }}</option>
+            <option [value]="1">{{ "address.types.work" | translate }}</option>
+            <option [value]="2">
+              {{ "address.types.office" | translate }}
+            </option>
+            <option [value]="3">{{ "address.types.other" | translate }}</option>
+          </select>
         </div>
 
         <!-- Address -->
-        <div class="col-span-2">
-          <div class="flex flex-col gap-1">
-            <label for="address" class="text-sm font-medium text-gray-700">
-              {{ "address.addressLine" | translate }} *
-            </label>
-            <textarea
-              id="address"
-              formControlName="address"
-              rows="3"
-              class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
-              [ngClass]="{
-                'border-red-500':
-                  addressForm.get('address')?.invalid &&
-                  addressForm.get('address')?.touched,
-              }"
-            ></textarea>
-            <div
-              *ngIf="
-                addressForm.get('address')?.invalid &&
-                addressForm.get('address')?.touched
-              "
-              class="text-xs text-red-500"
-            >
-              {{ "address.validation.addressRequired" | translate }}
-            </div>
-          </div>
-        </div>
-
-        <!-- Address Type -->
-        <div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium text-gray-700">
-              {{ "address.type" | translate }}
-            </label>
-            <div class="flex gap-4">
-              <div
-                *ngFor="let type of addressTypes"
-                class="flex items-center gap-2"
-              >
-                <input
-                  type="radio"
-                  [id]="'type-' + type.id"
-                  [value]="type.id"
-                  formControlName="type"
-                  class="h-4 w-4 border-gray-300 text-hover-color focus:ring-hover-color"
-                />
-                <label [for]="'type-' + type.id" class="text-sm text-gray-700">
-                  {{ getAddressTypeLabel(type) | translate }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Default Address -->
-        <div class="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="isDefault"
-            formControlName="isDefault"
-            class="h-4 w-4 rounded border-gray-300 text-hover-color focus:ring-hover-color"
-          />
-          <label for="isDefault" class="text-sm text-gray-700">
-            {{ "address.setAsDefault" | translate }}
+        <div class="form-group md:col-span-2">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.addressLine" | translate }}
           </label>
+          <textarea
+            formControlName="address"
+            rows="2"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+            [ngClass]="{
+              'border-red-500':
+                addressForm.get('address')?.invalid &&
+                addressForm.get('address')?.touched,
+            }"
+          ></textarea>
+          <div
+            *ngIf="
+              addressForm.get('address')?.invalid &&
+              addressForm.get('address')?.touched
+            "
+            class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
+          >
+            {{ "address.validation.addressRequired" | translate }}
+          </div>
+        </div>
+
+        <!-- Map Address -->
+        <div class="form-group md:col-span-2">
+          <label
+            class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
+          >
+            {{ "address.mapAddress" | translate }}
+          </label>
+          <input
+            type="text"
+            formControlName="mapAddress"
+            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+          />
+        </div>
+
+        <!-- Default Address Checkbox -->
+        <div class="form-group md:col-span-2">
+          <div class="flex items-center gap-1.5 lg:gap-2">
+            <input
+              type="checkbox"
+              id="modalIsDefault"
+              formControlName="isDefault"
+              class="h-3.5 w-3.5 text-hover-color focus:ring-hover-color lg:h-4 lg:w-4"
+            />
+            <label
+              for="modalIsDefault"
+              class="text-xs text-gray-700 lg:text-sm"
+            >
+              {{ "address.setAsDefault" | translate }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- Submit Button -->
-      <div class="mt-6 flex justify-end gap-3">
+      <!-- Submit Buttons -->
+      <div class="mt-4 flex justify-end gap-2 lg:mt-6 lg:gap-3">
         <button
           type="button"
           (click)="onClose()"
-          class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
         >
           {{ "common.cancel" | translate }}
         </button>
         <button
           type="submit"
-          class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-color focus:outline-none focus:ring-2 focus:ring-hover-color focus:ring-offset-2"
+          class="rounded-md bg-hover-color px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-70 lg:px-4 lg:py-2 lg:text-sm"
         >
           {{ "common.save" | translate }}
         </button>

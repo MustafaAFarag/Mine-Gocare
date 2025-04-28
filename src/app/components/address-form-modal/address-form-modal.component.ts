@@ -13,8 +13,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CreateAddress } from '../../model/Address';
+import { TranslateModule } from '@ngx-translate/core';
+import { CreateAddress, City, Country, District } from '../../model/Address';
+import { AddressService } from '../../services/address.service';
 import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
 
@@ -31,36 +32,24 @@ export class AddressFormModalComponent implements OnInit, OnDestroy {
   @Output() saveAddress = new EventEmitter<CreateAddress>();
 
   addressForm: FormGroup;
-  addressTypes = [
-    { id: 1, labelKey: 'Home' },
-    { id: 2, labelKey: 'Work' },
-    { id: 3, labelKey: 'Other' },
-  ];
-
-  private langSubscription: Subscription = new Subscription();
+  cities: City[] = [];
+  districts: District[] = [];
+  countries: Country[] = [];
   currentLang: string = 'en';
+  private langSubscription: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
+    private addressService: AddressService,
     private languageService: LanguageService,
   ) {
-    this.addressForm = this.fb.group({
-      fullName: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      countryId: [224, Validators.required], // Default to some value, can be changed
-      districtId: [null, Validators.required],
-      cityId: [null, Validators.required],
-      address: ['', Validators.required],
-      mapAddress: [''],
-      latitude: ['0'],
-      longitude: ['0'],
-      type: [1, Validators.required], // Default to Home
-      isDefault: [false],
-      isPhoneVerified: [true], // Assuming phone verification happens elsewhere
-    });
+    this.addressForm = this.createAddressForm();
   }
 
   ngOnInit(): void {
+    this.fetchAllCountriesAPI();
+    this.setupFormListeners();
+
     // Subscribe to language changes
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang;
@@ -73,32 +62,113 @@ export class AddressFormModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  createAddressForm(): FormGroup {
+    return this.fb.group({
+      countryId: [null, Validators.required],
+      cityId: [{ value: null, disabled: true }, Validators.required],
+      districtId: [{ value: null, disabled: true }, Validators.required],
+      latitude: [''],
+      longitude: [''],
+      address: ['', Validators.required],
+      mapAddress: [''],
+      phoneNumber: ['', Validators.required],
+      isDefault: [false],
+      type: [0],
+      fullName: ['', Validators.required],
+      isPhoneVerified: [false],
+    });
+  }
+
+  setupFormListeners(): void {
+    // Add listeners for country and city changes
+    this.addressForm.get('countryId')?.valueChanges.subscribe((countryId) => {
+      if (countryId) {
+        this.fetchAllCitiesAPI(countryId);
+        this.addressForm.get('cityId')?.enable();
+        // Reset city and district when country changes
+        this.addressForm.patchValue({
+          cityId: null,
+          districtId: null,
+        });
+        this.districts = [];
+      }
+    });
+
+    this.addressForm.get('cityId')?.valueChanges.subscribe((cityId) => {
+      if (cityId) {
+        this.fetchAllDistrictsAPI(cityId);
+        this.addressForm.get('districtId')?.enable();
+        // Reset district when city changes
+        this.addressForm.patchValue({
+          districtId: null,
+        });
+      }
+    });
+  }
+
+  fetchAllCountriesAPI(): void {
+    this.addressService.getCountries().subscribe({
+      next: (response) => {
+        this.countries = response.result;
+      },
+      error: (error) => {
+        console.error('Error fetching countries:', error);
+      },
+    });
+  }
+
+  fetchAllCitiesAPI(countryId: number): void {
+    this.addressForm.get('cityId')?.disable();
+    this.cities = [];
+
+    this.addressService.GetCities(countryId).subscribe({
+      next: (response) => {
+        this.cities = response.result;
+        this.addressForm.get('cityId')?.enable();
+      },
+      error: (error) => {
+        console.error('Error fetching cities:', error);
+        this.addressForm.get('cityId')?.disable();
+      },
+    });
+  }
+
+  fetchAllDistrictsAPI(cityId: number): void {
+    this.addressForm.get('districtId')?.disable();
+    this.districts = [];
+
+    this.addressService.getDistricts(cityId).subscribe({
+      next: (response) => {
+        this.districts = response.result;
+        this.addressForm.get('districtId')?.enable();
+      },
+      error: (error) => {
+        console.error('Error fetching districts:', error);
+        this.addressForm.get('districtId')?.disable();
+      },
+    });
+  }
+
   onClose(): void {
     this.close.emit();
     this.addressForm.reset({
-      countryId: 224,
-      type: 1,
+      type: 0,
       isDefault: false,
-      isPhoneVerified: true,
-      latitude: '0',
-      longitude: '0',
+      isPhoneVerified: false,
     });
   }
 
   onSubmit(): void {
-    if (this.addressForm.valid) {
-      this.saveAddress.emit(this.addressForm.value as CreateAddress);
-      this.onClose();
-    } else {
+    if (this.addressForm.invalid) {
       // Mark all fields as touched to show validation errors
       Object.keys(this.addressForm.controls).forEach((key) => {
         const control = this.addressForm.get(key);
         control?.markAsTouched();
       });
+      return;
     }
-  }
 
-  getAddressTypeLabel(type: { id: number; labelKey: string }): string {
-    return `address.types.${type.labelKey.toLowerCase()}`;
+    this.saveAddress.emit(this.addressForm.value as CreateAddress);
+    this.onClose();
   }
 }
