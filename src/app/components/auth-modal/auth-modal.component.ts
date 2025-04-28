@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-auth-modal',
+  standalone: true,
   imports: [
     DialogModule,
     LoginFormComponent,
@@ -40,8 +41,21 @@ export class AuthModalComponent {
       severity: 'success',
       summary: 'Success',
       detail: 'Login successful!',
+      life: 3000,
+      styleClass: 'top-left',
     });
     this.closeDialog();
+  }
+
+  handleSignupSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Account created successfully!',
+      life: 2000,
+      styleClass: 'black-text-toast',
+    });
+    this.toggleMode(); // Using the toggle method directly
   }
 
   handleLoginError(error: string) {
@@ -49,6 +63,8 @@ export class AuthModalComponent {
       severity: 'error',
       summary: 'Error',
       detail: error,
+      life: 2000,
+      styleClass: 'black-text-toast',
     });
   }
 }

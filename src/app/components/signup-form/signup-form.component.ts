@@ -41,6 +41,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class SignupFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
+  @Output() signupSuccess = new EventEmitter<void>();
   signupForm!: FormGroup;
   loading = false;
   showPassword = false;
@@ -164,21 +165,21 @@ export class SignupFormComponent implements OnInit {
       mobileNumber: !isEmail ? processedIdentifier : null,
       password: formValue.password,
       confirmPassword: formValue.confirmPassword,
-      countryCode: 'EG', // You might want to make this dynamic
+      countryCode: 'EG',
       gender: formValue.gender,
     };
 
-    console.log('Signup Data:', signupData);
-
     this.authService.signup(signupData).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Account created successfully!',
-        });
         this.loading = false;
-        this.toggle.emit(true);
+        // First emit the success event to trigger the toast
+        this.signupSuccess.emit();
+        // Then reset the form
+        this.signupForm.reset();
+        // Finally emit the toggle event to switch to login mode
+        setTimeout(() => {
+          this.toggle.emit();
+        }, 0);
       },
       error: (error) => {
         this.messageService.add({
@@ -196,7 +197,7 @@ export class SignupFormComponent implements OnInit {
   }
 
   toggleMode() {
-    this.toggle.emit(true);
+    this.toggle.emit(); // Changed to emit without parameter
   }
 
   // Getters for form controls
