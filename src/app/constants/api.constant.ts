@@ -12,4 +12,10 @@ export const ApiEndPoint = {
   GetWallet: 'api/services/AdminApp/ClientWalletService/GetClientWalletData',
   GetWalletTransactionList:
     'api/services/AdminApp/ClientWalletService/GetWalletTransactionList',
+  updateClientName: 'api/services/ClientApp/Client/UpdateName',
+  getClientProfile: 'api/services/ClientApp/Client/GetProfile',
+  updateClientPhone: 'api/services/ClientApp/Client/UpdateMobileNumber',
+  updateClientEmail: 'api/services/ClientApp/Client/UpdateEmailAddress',
+  updateClientPassword: 'api/services/ClientApp/Client/ChangePassword',
+  updateClientGender: 'api/services/ClientApp/Client/UpdateGender',
 };

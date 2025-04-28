@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { LoginRequest, LoginResponse } from '../model/Auth';
+import { LoginResponse } from '../model/Auth';
 import { ApiEndPoint } from '../constants/api.constant';
 import { environment } from '../../enviroments/enviroment';
 import { Router } from '@angular/router';
@@ -17,18 +17,12 @@ import { Router } from '@angular/router';
 export class AuthService {
   private loginUrl = `${environment.apiUrl}/${ApiEndPoint.SignInManually}`;
   private signupUrl = `${environment.apiUrl}/${ApiEndPoint.SignUpManually}`;
-  private updateNameUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateName';
-  private getClientProfileUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/GetProfile';
-  private updatePhoneNumberUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateMobileNumber';
-  private updateEmailAddressUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateEmailAddress';
-  private updatePasswordUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/ChangePassword';
-  private updateGenderUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/Client/UpdateGender';
+  private updateNameUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientName}`;
+  private getClientProfileUrl = `${environment.apiUrl}/${ApiEndPoint.getClientProfile}`;
+  private updatePhoneNumberUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientPhone}`;
+  private updateEmailAddressUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientEmail}`;
+  private updatePasswordUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientPassword}`;
+  private updateGenderUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientGender}`;
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
