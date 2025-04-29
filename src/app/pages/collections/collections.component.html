@@ -251,6 +251,16 @@
               <!-- Product Image -->
               <div class="relative w-full sm:w-2/5">
                 <div class="relative pt-[100%]">
+                  <!-- Rating Badge -->
+                  <div
+                    class="absolute bottom-2 left-2 z-10 bg-gray-100 px-2 py-1 shadow"
+                  >
+                    <span class="flex items-center font-medium">
+                      <i class="ri-star-fill mr-1 text-sm text-yellow-400"></i>
+                      {{ product.rating.toFixed(1) }}
+                    </span>
+                  </div>
+
                   <img
                     [src]="getFullImageUrl(product.mainImageUrl)"
                     [alt]="product.name.en"
@@ -264,25 +274,23 @@
                   />
                   <div class="icon-wrapper absolute right-2 top-2 z-10">
                     <i
-                      class="ri-heart-line relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      [class]="
+                        isInWishlist(product)
+                          ? 'ri-heart-fill text-red-500'
+                          : 'ri-heart-line'
+                      "
+                      class="relative z-20 cursor-pointer rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      (click)="toggleWishlist(product, $event)"
                     ></i>
 
                     <i
-                      class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-                      (click)="addToCart(product)"
+                      class="ri-shopping-cart-line extra-icon-1 absolute left-0 cursor-pointer rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      (click)="addToCartWithToast(product, $event)"
                     ></i>
                     <i
-                      class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      class="ri-search-line extra-icon-2 absolute left-0 cursor-pointer rounded-full bg-white p-1 text-xl text-hover-color shadow"
+                      (click)="openQuickView(product, $event)"
                     ></i>
-                  </div>
-
-                  <!-- Add to cart button that appears on hover -->
-                  <div
-                    class="add-to-cart-btn absolute bottom-2 left-0 right-0 m-2 translate-y-full transform bg-hover-color p-2 text-center text-white opacity-0 transition-all"
-                  >
-                    <button (click)="addToCart(product)" class="w-full">
-                      {{ "collections.productCard.addToCart" | translate }}
-                    </button>
                   </div>
                 </div>
               </div>
@@ -317,14 +325,14 @@
 
                 <!-- Price -->
                 <div class="flex items-center gap-2">
-                  <span class="font-semibold"
-                    >{{ product.priceAfterDiscount }}
+                  <span class="font-semibold">
+                    {{ product.priceAfterDiscount }}
                     {{
                       languageService.getCurrentLanguage() === "ar"
                         ? product.currency.name.ar
                         : product.currency.name.en
-                    }}</span
-                  >
+                    }}
+                  </span>
                   <span
                     *ngIf="product.discountPercentage > 0"
                     class="text-sm text-gray-500 line-through"
@@ -349,16 +357,6 @@
                             }
                     }}
                   </span>
-                </div>
-
-                <!-- Rating -->
-                <div *ngIf="product.rating > 0" class="mt-2 flex items-center">
-                  <div class="flex">
-                    <i class="ri-star-fill text-yellow-400"></i>
-                    <span class="ml-1 text-sm text-gray-500">{{
-                      product.rating
-                    }}</span>
-                  </div>
                 </div>
 
                 <!-- Stock Status -->
@@ -436,6 +434,17 @@
     </div>
   </div>
 </div>
+
+<!-- Add Quick View Modal for List View -->
+<app-quick-product-view-modal
+  *ngIf="activeQuickViewProduct"
+  [isOpen]="isQuickViewOpen"
+  [productId]="activeQuickViewProduct.productId"
+  [variantId]="activeQuickViewProduct.variantId"
+  (closeModal)="closeQuickView()"
+></app-quick-product-view-modal>
+
+<p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
 <style>
   /* Default styles for mobile and tablet */

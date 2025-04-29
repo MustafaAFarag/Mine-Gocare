@@ -19,10 +19,15 @@ import { CartService } from '../../services/cart.service';
 import { CartSidebarService } from '../../services/cart-sidebar.service';
 import { CartItem } from '../../model/Cart';
 import { Category as ApiCategory } from '../../model/Categories';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
+import { WishlistService } from '../../services/wishlist.service';
+import { MessageService } from 'primeng/api';
+
 import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
 import { Subject, takeUntil } from 'rxjs';
+import { QuickProductViewModalComponent } from '../../components/quick-product-view-modal/quick-product-view-modal.component';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-collections',
@@ -33,8 +38,13 @@ import { Subject, takeUntil } from 'rxjs';
     FilterTabComponent,
     ProductCardComponent,
     LoadingComponent,
+    ToastModule,
     TranslateModule,
+
+    QuickProductViewModalComponent,
   ],
+  providers: [MessageService],
+
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css'],
 })
@@ -83,6 +93,10 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   paginatedProducts: Product[] = [];
   totalPages: number = 1;
 
+  // Properties for quick view
+  isQuickViewOpen = false;
+  activeQuickViewProduct: Product | null = null;
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -91,6 +105,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private cartSidebarService: CartSidebarService,
     public languageService: LanguageService,
+    private wishlistService: WishlistService,
+    private messageService: MessageService,
+    private translateService: TranslateService,
   ) {
     this.checkScreenSize();
   }
@@ -1013,6 +1030,95 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
+  }
+
+  // Add to cart with toast notification
+  addToCartWithToast(product: Product, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const cartItem: CartItem = {
+      productId: product.productId,
+      variantId: product.variantId,
+      name: product.name,
+      image: product.mainImageUrl,
+      afterPrice: product.priceAfterDiscount,
+      beforePrice: product.priceBeforeDiscount,
+      quantity: 1,
+      currency: product.currency.name,
+    };
+
+    this.cartService.addToCart(cartItem);
+    this.cartSidebarService.openCart();
+  }
+
+  // Toggle wishlist with toast notification
+  toggleWishlist(product: Product, event: Event): void {
+    event.stopPropagation();
+
+    if (this.isInWishlist(product)) {
+      this.wishlistService.removeFromWishlist(
+        product.productId,
+        product.variantId,
+      );
+      this.messageService.add({
+        severity: 'info',
+        summary: this.translateService.instant(
+          'wishlist.toast.removedFromWishlist.summary',
+        ),
+        detail: this.translateService.instant(
+          'wishlist.toast.removedFromWishlist.detail',
+          {
+            name:
+              this.languageService.getCurrentLanguage() === 'ar'
+                ? product.name.ar
+                : product.name.en,
+          },
+        ),
+        life: 2000,
+      });
+    } else {
+      const added = this.wishlistService.addToWishlist(product);
+      if (added) {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translateService.instant(
+            'wishlist.toast.addedToWishlist.summary',
+          ),
+          detail: this.translateService.instant(
+            'wishlist.toast.addedToWishlist.detail',
+            {
+              name:
+                this.languageService.getCurrentLanguage() === 'ar'
+                  ? product.name.ar
+                  : product.name.en,
+            },
+          ),
+          life: 2000,
+        });
+      }
+    }
+  }
+
+  // Check if product is in wishlist
+  isInWishlist(product: Product): boolean {
+    return this.wishlistService.isInWishlist(
+      product.productId,
+      product.variantId,
+    );
+  }
+
+  // Quick view handlers
+  openQuickView(product: Product, event: Event): void {
+    event.stopPropagation();
+    this.activeQuickViewProduct = product;
+    this.isQuickViewOpen = true;
+  }
+
+  closeQuickView(): void {
+    this.isQuickViewOpen = false;
+    this.activeQuickViewProduct = null;
   }
 
   // New methods for rating and price filters
