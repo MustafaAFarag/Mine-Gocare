@@ -486,6 +486,7 @@
     "addToCart": "إضافة إلى السلة",
     "buyNow": "شراء الآن",
     "addToWishlist": "إضافة إلى المفضلة",
+    "removeFromWishlist": "إزالة من المفضلة",
     "share": "مشاركة",
     "stockWarning": "يرجى الإسراع، بقي 10 فقط في المخزون!",
     "productInfoTitle": "معلومات المنتج",
@@ -683,6 +684,10 @@
       "removedFromWishlist": {
         "summary": "تمت الإزالة من قائمة الرغبات",
         "detail": "تمت إزالة المنتج من قائمة الرغبات الخاصة بك"
+      },
+      "addedToWishlist": {
+        "summary": "تمت الإضافة إلى المفضلة",
+        "detail": "تمت إضافة المنتج إلى قائمتك المفضلة"
       },
       "addedToCart": {
         "summary": "تمت الإضافة إلى السلة",
