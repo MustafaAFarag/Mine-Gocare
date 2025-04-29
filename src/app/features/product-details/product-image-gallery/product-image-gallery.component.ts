@@ -19,9 +19,7 @@ import { ProductDetails } from '../../../model/ProductDetail';
   templateUrl: './product-image-gallery.component.html',
   styleUrl: './product-image-gallery.component.css',
 })
-export class ProductImageGalleryComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   @Input() productDetails!: ProductDetails;
   private boundScrollHandler: any;
 
@@ -31,7 +29,7 @@ export class ProductImageGalleryComponent
   isProcessing = false;
   isSticky = false;
   stopStickyAt: number = 0;
-  galleryInitialized = false; // Added flag to track gallery initialization
+  galleryInitialized = false;
 
   responsiveOptions: any[] = [
     { breakpoint: '1024px', numVisible: 5 },
@@ -40,10 +38,6 @@ export class ProductImageGalleryComponent
   ];
 
   private debounceTimeout: any;
-
-  ngOnInit() {
-    // Perform any initialization logic here, avoiding async operations
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (

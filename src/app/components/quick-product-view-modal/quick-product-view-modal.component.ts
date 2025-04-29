@@ -13,6 +13,8 @@ import { ProductService } from '../../services/product.service';
 import { ProductDetails } from '../../model/ProductDetail';
 import { getFullImageUrl } from '../../lib/utils';
 import { QuickProductInfoComponent } from '../quick-product-info/quick-product-info.component';
+import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
+import { QuickProductImageComponent } from '../quick-product-image/quick-product-image.component';
 
 interface ProductImage {
   id: number;
@@ -22,7 +24,12 @@ interface ProductImage {
 
 @Component({
   selector: 'app-quick-product-view-modal',
-  imports: [CommonModule, FormsModule, QuickProductInfoComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    QuickProductInfoComponent,
+    QuickProductImageComponent,
+  ],
   templateUrl: './quick-product-view-modal.component.html',
   styleUrl: './quick-product-view-modal.component.css',
 })
