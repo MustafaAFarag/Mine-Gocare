@@ -51,6 +51,16 @@ export class QuickProductViewModalComponent implements OnInit, OnChanges {
     }
   }
 
+  onClose() {
+    this.closeModal.emit();
+  }
+
+  onBackdropClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this.closeModal.emit();
+    }
+  }
+
   fetchProductDetails() {
     if (!this.productId || !this.variantId) return;
     this.productService
