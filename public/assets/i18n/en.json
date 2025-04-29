@@ -504,6 +504,7 @@
     "addToCart": "Add To Cart",
     "buyNow": "Buy Now",
     "addToWishlist": "Add To Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
     "share": "Share",
     "stockWarning": "Please Hurry only 10 Left In Stock!",
     "productInfoTitle": "Product Info",
@@ -701,6 +702,10 @@
       "removedFromWishlist": {
         "summary": "Removed from Wishlist",
         "detail": "Product has been removed from your wishlist"
+      },
+      "addedToWishlist": {
+        "summary": "Added to Wishlist",
+        "detail": "Product has been Added to your wishlist"
       },
       "addedToCart": {
         "summary": "Added to Cart",
