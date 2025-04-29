@@ -1,12 +1,13 @@
 <div class="space-y-4">
   <h2 class="text-2xl font-bold text-gray-800">
-    {{ productDetails.productName.en }}
+    {{ productDetails.productName[currentLang] }}
   </h2>
 
   <p
     class="mb-2 flex items-center justify-center text-lg font-medium md:justify-start"
   >
-    {{ productDetails.brandName.en }} | {{ productDetails.category.name.en }}
+    {{ productDetails.brandName[currentLang] }} |
+    {{ productDetails.category.name[currentLang] }}
   </p>
 
   <div class="flex items-center justify-center md:justify-start">
@@ -30,19 +31,19 @@
       >{{ "product-info.price" | translate }}:
     </span>
     <span class="text-xl font-semibold text-hover-color">
-      {{ productDetails.productVariants[0].currency.name.en }}
+      {{ productDetails.productVariants[0].currency.name[currentLang] }}
       {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
     </span>
   </div>
 
   <div
     class="mt-4 text-sm text-gray-700"
-    [innerHTML]="productDetails.description.en"
+    [innerHTML]="productDetails.description[currentLang]"
   ></div>
 
   <div *ngIf="productDetails.hasVariant" class="mt-6 flex items-center gap-4">
     <ng-container *ngFor="let variant of productDetails.productVariants">
-      <span>{{ variant.variantName.en }}</span>
+      <span>{{ variant.variantName[currentLang] }}</span>
     </ng-container>
   </div>
 
@@ -67,7 +68,7 @@
         >{{ "product-info.totalPrice" | translate }}:</span
       >
       <span class="text-lg font-semibold text-hover-color">
-        {{ productDetails.productVariants[0].currency.name.en }}
+        {{ productDetails.productVariants[0].currency.name[currentLang] }}
         {{ totalPrice.toFixed(2) }}
       </span>
     </div>

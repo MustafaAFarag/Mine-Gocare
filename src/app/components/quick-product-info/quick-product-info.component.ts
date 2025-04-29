@@ -10,6 +10,8 @@ import { CartItem } from '../../model/Cart';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
+type Language = 'ar' | 'en';
+
 @Component({
   selector: 'app-quick-product-info',
   imports: [CommonModule, TranslateModule, ToastModule],
@@ -20,6 +22,7 @@ import { MessageService } from 'primeng/api';
 export class QuickProductInfoComponent {
   @Input() productDetails!: ProductDetails;
   quantity: number = 1;
+  currentLang: Language = 'en';
 
   constructor(
     private cartService: CartService,
@@ -27,7 +30,12 @@ export class QuickProductInfoComponent {
     private wishlistService: WishlistService,
     private translateService: TranslateService,
     private messageService: MessageService,
-  ) {}
+  ) {
+    this.currentLang = this.translateService.currentLang as Language;
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang as Language;
+    });
+  }
 
   decreaseQuantity(): void {
     if (this.quantity > 1) {
