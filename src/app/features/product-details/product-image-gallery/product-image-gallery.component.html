@@ -25,11 +25,13 @@
     </ng-template>
 
     <ng-template pTemplate="thumbnail" let-item>
-      <img
-        [src]="item.thumbnailImageSrc"
-        class="block h-auto w-full"
-        [alt]="item.alt"
-      />
+      <div class="thumbnail-wrapper">
+        <img
+          [src]="item.thumbnailImageSrc"
+          class="block h-auto w-full rounded-lg border-2 border-transparent transition-all hover:border-red-500"
+          [alt]="item.alt"
+        />
+      </div>
     </ng-template>
   </p-galleria>
 </div>
@@ -47,6 +49,7 @@
 </div>
 
 <style>
+  /* Navigation buttons styling */
   :host ::ng-deep .p-galleria-prev-button,
   :host ::ng-deep .p-galleria-next-button {
     background-color: gray;
@@ -57,26 +60,71 @@
     background-color: darkgray !important;
   }
 
+  /* Thumbnails container styling - controls the overall thumbnails area */
+  :host ::ng-deep .p-galleria-thumbnails {
+    background: white !important;
+    padding: 0.5rem 0; /* Controls vertical spacing of thumbnail strip */
+    gap: 0.5rem; /* Controls spacing between thumbnails */
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Thumbnail container background */
+  :host ::ng-deep .p-galleria-thumbnail-container {
+    background: white !important;
+    padding: 0.25rem; /* Controls padding around all thumbnails */
+  }
+
   :host ::ng-deep .p-galleria-thumbnails-content {
-    background: darkgray;
+    background: white !important;
+    padding: 0.25rem;
+  }
+
+  /* Individual thumbnail item styling */
+  :host ::ng-deep .p-galleria-thumbnail-item {
+    background: rgb(229 231 235) !important; /* gray-200 */
+    border-radius: 0.5rem;
+    margin: 0 0.25rem; /* Controls horizontal spacing between thumbnails */
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
+
+  /* Selected thumbnail state */
+  :host ::ng-deep .p-galleria-thumbnail-item.p-galleria-thumbnail-item-current {
+    opacity: 1;
+  }
+
+  /* Hover state for thumbnails */
+  :host ::ng-deep .p-galleria-thumbnail-item:hover {
+    opacity: 1;
+  }
+
+  /* Individual thumbnail wrapper - controls padding inside each thumbnail box */
+  :host ::ng-deep .thumbnail-wrapper {
+    padding: 0.25rem;
+  }
+
+  /* Add max-width control to the main image container */
+  :host ::ng-deep .p-galleria-item {
+    max-width: 440px;
+    margin: 0 auto;
   }
 
   @media (min-width: 1024px) {
     .sticky-active {
       position: sticky;
-      top: 1rem;
+      top: 8rem; /* Increased from 1rem to 2rem to give more space at the top */
       z-index: 10;
-      transition:
-        top 0.3s ease-in-out,
-        z-index 0s 0.3s;
+      transition: all 0.3s ease-in-out;
     }
   }
 
   :host ::ng-deep .sticky .p-galleria {
     position: sticky;
-    top: 0;
+    top: 8rem; /* Match the top spacing */
     z-index: 100;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
   }
 </style>

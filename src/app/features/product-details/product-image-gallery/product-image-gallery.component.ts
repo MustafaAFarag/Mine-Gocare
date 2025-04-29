@@ -92,9 +92,11 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
       const galleryTop =
         galleryElement.getBoundingClientRect().top + window.scrollY;
       const galleryHeight = galleryElement.clientHeight;
-      const bufferZone = 30;
+      // Increased buffer zone to make it stick earlier
+      const bufferZone = 250; // Changed from 30 to 150px
 
-      if (scrollPosition > galleryTop + bufferZone) {
+      if (scrollPosition > galleryTop - bufferZone) {
+        // Changed from + to - to trigger earlier
         this.isSticky = true;
       } else if (scrollPosition < galleryTop - bufferZone) {
         this.isSticky = false;
@@ -103,8 +105,6 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
       if (scrollPosition > galleryTop + galleryHeight - bufferZone) {
         this.isSticky = false;
       }
-
-      console.log('Scroll:', scrollPosition, 'isSticky:', this.isSticky);
     }
   }
 
