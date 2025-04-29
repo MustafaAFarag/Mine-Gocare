@@ -1,0 +1,58 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+>
+  <!-- Modal content -->
+  <div
+    class="relative max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg bg-white shadow-xl"
+  >
+    <!-- Close Button (static) -->
+    <button
+      class="absolute right-4 top-4 rounded bg-orange-400 p-2 text-white"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+    <div class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+      <!-- Product Images Section -->
+      <div class="space-y-4">
+        <div class="relative overflow-hidden rounded-lg bg-gray-100">
+          <img
+            src="/assets/images/sample.jpg"
+            alt="Product Image"
+            class="h-80 w-full object-cover"
+          />
+          <button
+            class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white bg-opacity-70 p-2"
+            aria-label="Previous image"
+          >
+            ‹
+          </button>
+          <button
+            class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white bg-opacity-70 p-2"
+            aria-label="Next image"
+          >
+            ›
+          </button>
+        </div>
+
+        <div class="flex space-x-2 overflow-x-auto">
+          <div
+            class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 border-orange-400"
+          >
+            <img
+              src="/assets/images/sample-thumb.jpg"
+              alt="Thumbnail"
+              class="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      <app-quick-product-info
+        [productDetails]="productDetails"
+      ></app-quick-product-info>
+    </div>
+  </div>
+</div>

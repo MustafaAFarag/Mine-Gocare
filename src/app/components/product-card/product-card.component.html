@@ -18,7 +18,7 @@
       (click)="navigateToProductDetails(product.productId, product.variantId)"
     />
 
-    <div class="icon-wrapper absolute right-2 top-2 z-10">
+    <div class="icon-wrapper absolute right-4 top-2 z-10">
       <i
         [class]="isInWishlist ? 'ri-heart-fill text-red-500' : 'ri-heart-line'"
         class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
@@ -28,6 +28,10 @@
       <i
         class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="addToCart(product); $event.stopPropagation()"
+      ></i>
+      <i
+        (click)="openQuickView(); $event.stopPropagation()"
+        class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
       ></i>
     </div>
   </div>
@@ -101,7 +105,12 @@
     </div>
   </div>
 </div>
-
+<app-quick-product-view-modal
+  [isOpen]="isQuickViewOpen"
+  [productId]="product.productId"
+  [variantId]="product.variantId"
+  (closeModal)="closeQuickView()"
+></app-quick-product-view-modal>
 <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
 <style>

@@ -1,0 +1,98 @@
+<div class="space-y-4">
+  <h2 class="text-2xl font-bold text-gray-800">
+    {{ productDetails.productName.en }}
+  </h2>
+
+  <p
+    class="mb-2 flex items-center justify-center text-lg font-medium md:justify-start"
+  >
+    {{ productDetails.brandName.en }} | {{ productDetails.category.name.en }}
+  </p>
+
+  <div class="flex items-center justify-center md:justify-start">
+    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+      <i
+        [ngClass]="{
+          'ri-star-fill text-yellow-400': i < 3,
+          'ri-star-line text-gray-400': i >= 3,
+        }"
+      ></i>
+    </ng-container>
+    <span class="mx-2">|</span>
+    <span class="text-sm font-semibold text-gray-600">
+      {{ productDetails.productVariants[0].rating }}
+      {{ "product-info.ratings" | translate }}
+    </span>
+  </div>
+
+  <div class="mt-4 flex items-center justify-center gap-2 md:justify-start">
+    <span class="font-semibold uppercase text-gray-600"
+      >{{ "product-info.price" | translate }}:
+    </span>
+    <span class="text-xl font-semibold text-hover-color">
+      {{ productDetails.productVariants[0].currency.name.en }}
+      {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
+    </span>
+  </div>
+
+  <div
+    class="mt-4 text-sm text-gray-700"
+    [innerHTML]="productDetails.description.en"
+  ></div>
+
+  <div *ngIf="productDetails.hasVariant" class="mt-6 flex items-center gap-4">
+    <ng-container *ngFor="let variant of productDetails.productVariants">
+      <span>{{ variant.variantName.en }}</span>
+    </ng-container>
+  </div>
+
+  <div
+    class="mt-5 inline-flex items-center justify-between rounded bg-gray-100 p-2"
+  >
+    <i
+      class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+    ></i>
+
+    <span class="mx-10 font-bold text-black">1</span>
+    <i
+      class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+    ></i>
+  </div>
+
+  <div class="mt-6 flex items-center gap-5">
+    <!-- Add to Cart Button -->
+    <button
+      class="bg-hover-color px-4 py-4 font-semibold text-white hover:bg-pink-800 lg:px-6"
+    >
+      <i class="ri-shopping-cart-line mr-2 text-xl"></i>
+      {{ "product-info.addToCart" | translate }}
+    </button>
+
+    <!-- Add to Wishlist -->
+    <div
+      class="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#646464] lg:text-base"
+    >
+      <i class="ri-heart-fill text-lg"></i>
+      <span>{{ "product-info.addToWishlist" | translate }}</span>
+    </div>
+  </div>
+
+  <div class="border-t border-gray-200 pt-4">
+    <h3 class="text-2xl font-semibold">
+      {{ "product-info.deliveryDetailsTitle" | translate }}
+    </h3>
+    <div class="mt-2 flex flex-wrap gap-6 text-base text-[#646464]">
+      <!-- Delivery Time -->
+      <div class="flex items-center">
+        <i class="ri-truck-line mr-2 text-lg"></i>
+        <span>{{ "product-info.deliveryTime" | translate }}</span>
+      </div>
+
+      <!-- Return Policy -->
+      <div class="flex items-center">
+        <i class="ri-arrow-left-right-line mr-2 text-lg"></i>
+        <span>{{ "product-info.returnPolicy" | translate }}</span>
+      </div>
+    </div>
+  </div>
+</div>

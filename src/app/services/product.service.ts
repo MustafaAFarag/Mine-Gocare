@@ -55,7 +55,7 @@ export class ProductService {
 
   // Product Details API
 
-  getProductDetails(productId: string, variantId: string) {
+  getProductDetails(productId: number, variantId: number): Observable<any> {
     return this.http.get(
       `${environment.apiUrl}/${ApiEndPoint.getProductDetails}?productId=${productId}&ProductVariantId=${variantId}`,
     );

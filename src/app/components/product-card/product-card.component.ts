@@ -20,10 +20,16 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WishlistService } from '../../services/wishlist.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { QuickProductViewModalComponent } from '../quick-product-view-modal/quick-product-view-modal.component';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, TranslateModule, ToastModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ToastModule,
+    QuickProductViewModalComponent,
+  ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +41,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   private translateSubscription?: Subscription;
   currentLang: string = 'en';
   isInWishlist: boolean = false;
+  isQuickViewOpen = false;
 
   private languageService = inject(LanguageService);
   private cdr = inject(ChangeDetectorRef);
@@ -88,6 +95,14 @@ export class ProductCardComponent implements OnInit, OnDestroy {
 
   navigateToProductDetails(productId: number, variantId: number): void {
     this.router.navigate([`/product-details/${productId}/${variantId}`]);
+  }
+
+  openQuickView(): void {
+    this.isQuickViewOpen = true;
+  }
+
+  closeQuickView(): void {
+    this.isQuickViewOpen = false;
   }
 
   addToCart(product: Product): void {

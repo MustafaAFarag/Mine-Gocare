@@ -44,7 +44,6 @@ export class ProductDetailsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const productId = params['productId'];
       const variantId = params['variantId'];
-      console.log('Product ID:', productId);
       this.fetchProductDetailsAPI(productId, variantId);
     });
 
@@ -54,7 +53,7 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
-  fetchProductDetailsAPI(productId: string, variantId: string) {
+  fetchProductDetailsAPI(productId: number, variantId: number) {
     this.productService
       .getProductDetails(productId, variantId)
       .subscribe((response: any) => {
