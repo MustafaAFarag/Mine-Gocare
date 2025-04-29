@@ -39,6 +39,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
   private langSubscription?: Subscription;
   private translateSubscription?: Subscription;
+  private wishlistSubscription?: Subscription;
   currentLang: string = 'en';
   isInWishlist: boolean = false;
   isQuickViewOpen = false;
@@ -64,6 +65,17 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       this.product.variantId,
     );
 
+    // Subscribe to wishlist changes
+    this.wishlistSubscription = this.wishlistService.wishlistItems$.subscribe(
+      () => {
+        this.isInWishlist = this.wishlistService.isInWishlist(
+          this.product.productId,
+          this.product.variantId,
+        );
+        this.cdr.markForCheck();
+      },
+    );
+
     // Subscribe to direction changes
     this.langSubscription = this.languageService.direction$.subscribe(() => {
       this.currentLang = this.languageService.getCurrentLanguage();
@@ -85,6 +97,9 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     }
     if (this.translateSubscription) {
       this.translateSubscription.unsubscribe();
+    }
+    if (this.wishlistSubscription) {
+      this.wishlistSubscription.unsubscribe();
     }
   }
 
@@ -130,22 +145,34 @@ export class ProductCardComponent implements OnInit, OnDestroy {
         this.product.productId,
         this.product.variantId,
       );
-      this.isInWishlist = false;
       this.messageService.add({
         severity: 'info',
-        summary: 'Removed from Wishlist',
-        detail: `${this.getLocalizedText(this.product.name)} has been removed from your wishlist`,
+        summary: this.translateService.instant(
+          'wishlist.toast.removedFromWishlist.summary',
+        ),
+        detail: this.translateService.instant(
+          'wishlist.toast.removedFromWishlist.detail',
+          {
+            name: this.getLocalizedText(this.product.name),
+          },
+        ),
         life: 2000,
         styleClass: 'black-text-toast',
       });
     } else {
       const added = this.wishlistService.addToWishlist(this.product);
       if (added) {
-        this.isInWishlist = true;
         this.messageService.add({
           severity: 'success',
-          summary: 'Added to Wishlist',
-          detail: `${this.getLocalizedText(this.product.name)} has been added to your wishlist`,
+          summary: this.translateService.instant(
+            'wishlist.toast.addedToWishlist.summary',
+          ),
+          detail: this.translateService.instant(
+            'wishlist.toast.addedToWishlist.detail',
+            {
+              name: this.getLocalizedText(this.product.name),
+            },
+          ),
           life: 2000,
           styleClass: 'black-text-toast',
         });
