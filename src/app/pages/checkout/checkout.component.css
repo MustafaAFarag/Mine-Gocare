@@ -39,7 +39,7 @@
 /* Improve focus states for accessibility */
 :host ::ng-deep button:focus,
 :host ::ng-deep input:focus {
-  outline: 2px solid rgba(249, 115, 22, 0.4);
+  outline: 2px solid #a01a40;
   outline-offset: 2px;
 }
 
