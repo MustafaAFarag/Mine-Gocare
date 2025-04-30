@@ -74,7 +74,7 @@ export class OrderService {
       addressId: orderRequest.addressId,
       paymentMethod: orderRequest.paymentMethod,
       orderProducts: orderRequest.orderProducts,
-      promoCodeId: 10, // Static promo code ID as requested
+      promoCodeId: orderRequest.promoCodeId || null,
       walletAmount: 0.0,
     };
 

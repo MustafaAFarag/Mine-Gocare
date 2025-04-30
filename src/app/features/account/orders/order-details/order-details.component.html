@@ -273,10 +273,39 @@
             </span>
           </div>
 
-          <div class="flex justify-between">
-            <span class="text-gray-600">{{
-              "account.orders.discount" | translate
-            }}</span>
+          <!-- Promo Code Section -->
+          <div
+            *ngIf="orderDetails.orderPayment.promoCodeDeduction > 0"
+            class="flex justify-between text-green-600"
+          >
+            <span>{{ "account.orders.promoDiscount" | translate }}</span>
+            <span
+              >-{{ orderDetails.orderPayment.promoCodeDeduction }}
+              {{
+                orderDetails.orderPayment.currency.name[
+                  currentLang === "ar" ? "ar" : "en"
+                ]
+              }}
+            </span>
+          </div>
+
+          <!-- Wallet Points Gained -->
+          <div
+            *ngIf="orderDetails.gainedPoints"
+            class="rounded-md bg-blue-50 p-2 text-sm text-blue-700"
+          >
+            <p>
+              {{ "account.orders.pointsGained" | translate }}:
+              {{ orderDetails.gainedPoints }}
+            </p>
+          </div>
+
+          <!-- Order Discount -->
+          <div
+            *ngIf="orderDetails.orderPayment.totalDiscount > 0"
+            class="flex justify-between text-gray-600"
+          >
+            <span>{{ "account.orders.discount" | translate }}</span>
             <span class="font-medium text-gray-800">
               {{ orderDetails.orderPayment.totalDiscount }}
               {{
@@ -285,6 +314,41 @@
                 ]
               }}
             </span>
+          </div>
+
+          <!-- Wallet Amount Used -->
+          <div
+            *ngIf="orderDetails.orderPayment.walletAmount > 0"
+            class="flex justify-between text-blue-600"
+          >
+            <span>{{ "account.orders.walletUsed" | translate }}</span>
+            <span
+              >-{{ orderDetails.orderPayment.walletAmount }}
+              {{
+                orderDetails.orderPayment.currency.name[
+                  currentLang === "ar" ? "ar" : "en"
+                ]
+              }}
+            </span>
+          </div>
+
+          <!-- Redeemed Points -->
+          <div
+            *ngIf="orderDetails.orderPayment.redeemedPointsAmount > 0"
+            class="flex justify-between text-purple-600"
+          >
+            <span>{{ "account.orders.redeemedPoints" | translate }}</span>
+            <span
+              >-{{ orderDetails.orderPayment.redeemedPointsAmount }}
+              {{
+                orderDetails.orderPayment.currency.name[
+                  currentLang === "ar" ? "ar" : "en"
+                ]
+              }}
+            </span>
+            <span class="text-xs text-gray-500"
+              >({{ orderDetails.orderPayment.numberOfPoints }} points)</span
+            >
           </div>
 
           <div class="flex justify-between border-t pt-3">
