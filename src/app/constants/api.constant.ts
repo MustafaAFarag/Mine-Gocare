@@ -21,4 +21,7 @@ export const ApiEndPoint = {
   getAllCities: 'api/services/ClientApp/City/GetAllCities',
   getAllDistricts: 'api/services/ClientApp/City/GetAllDistricts',
   getAllCountries: 'api/services/ClientApp/Country/GetCountries?IsActive=true',
+  getAllPromoCodes: 'api/services/ClientApp/PromoCode/GetAllPromoCodes',
+  ValidatePromoCode:
+    'api/services/ClientApp/PromoCode/ValidateProductPromoCode',
 };
