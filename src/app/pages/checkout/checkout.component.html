@@ -80,6 +80,7 @@
         [isLoading]="isPlacingOrder"
         [orderProducts]="mappedOrderProducts"
         (placeOrderEvent)="placeOrder()"
+        (promoApplied)="handlePromoCodeApplied($event)"
       ></app-billing-summary>
     </div>
   </div>

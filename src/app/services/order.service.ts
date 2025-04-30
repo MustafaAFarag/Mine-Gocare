@@ -52,13 +52,16 @@ export class OrderService {
 
   placeOrder(
     token: string,
-    addressId: number,
-    orderProducts: {
-      productVariantId: number;
-      quantity: number;
-      price: number;
-    }[],
-    paymentMethod: number = 0, // Default to COD (0)
+    orderRequest: {
+      addressId: number;
+      orderProducts: {
+        productVariantId: number;
+        quantity: number;
+        price: number;
+      }[];
+      paymentMethod: number;
+      promoCodeId?: number | null;
+    },
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -68,9 +71,10 @@ export class OrderService {
     });
 
     const body = {
-      addressId: addressId,
-      paymentMethod: paymentMethod,
-      orderProducts: orderProducts,
+      addressId: orderRequest.addressId,
+      paymentMethod: orderRequest.paymentMethod,
+      orderProducts: orderRequest.orderProducts,
+      promoCodeId: 10, // Static promo code ID as requested
       walletAmount: 0.0,
     };
 

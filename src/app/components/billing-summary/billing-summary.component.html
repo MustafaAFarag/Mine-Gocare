@@ -47,12 +47,35 @@
         formControlName="couponCode"
         placeholder="Enter Coupon Code Here..."
         class="flex-1 rounded-l border bg-white px-4 py-2"
+        [disabled]="isApplyingPromo"
       />
       <button
         type="submit"
-        class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none"
+        [disabled]="isApplyingPromo"
+        class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Apply now
+        <div class="flex items-center gap-2">
+          <svg
+            *ngIf="isApplyingPromo"
+            class="h-4 w-4 animate-spin"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span>{{ isApplyingPromo ? "Applying..." : "Apply now" }}</span>
+        </div>
       </button>
     </form>
   </div>
@@ -64,13 +87,32 @@
         <span class="text-gray-600">{{
           "checkout.itemTotal" | translate
         }}</span>
-        <span class="text-hover-color">${{ subTotal.toFixed(2) }}</span>
+        <span class="text-hover-color">{{ subTotal.toFixed(2) }} EGP</span>
       </div>
 
       <div class="flex justify-between">
         <span class="text-gray-600">{{ "checkout.shipping" | translate }}</span>
-        <span class="text-hover-color">${{ shipping.toFixed(2) }}</span>
+        <span class="text-hover-color">{{ shipping.toFixed(2) }} EGP</span>
       </div>
+
+      <!-- Promo Code Discount -->
+      @if (isPromoApplied && discountAmount > 0) {
+        <div class="flex justify-between text-green-600">
+          <span>Promo Code Discount</span>
+          <span>-{{ discountAmount.toFixed(2) }} EGP</span>
+        </div>
+      }
+
+      <!-- Wallet Points Info -->
+      @if (appliedPromoCode?.type === 3) {
+        <div class="rounded-md bg-blue-50 p-2 text-sm text-blue-700">
+          <p>
+            You'll receive {{ appliedPromoCode?.getCount }} points in your
+            wallet after purchasing {{ appliedPromoCode?.buyCount }} EGP worth
+            of products.
+          </p>
+        </div>
+      }
     </div>
 
     <!-- Total -->
@@ -79,19 +121,8 @@
         "checkout.total" | translate
       }}</span>
       <span class="text-xl font-bold text-hover-color"
-        >${{ total.toFixed(2) }}</span
+        >{{ finalTotal.toFixed(2) }} EGP</span
       >
-      <div class="flex justify-between" *ngIf="isPromoApplied">
-        <span class="text-gray-600">Discount</span>
-        <span class="text-green-600">-{{ discountAmount.toFixed(2) }} EGP</span>
-      </div>
-
-      <div class="mt-4 flex items-center justify-between border-t pt-4">
-        <span class="text-lg font-bold text-gray-800">Total</span>
-        <span class="text-xl font-bold text-hover-color">
-          {{ finalTotal.toFixed(2) }} EGP
-        </span>
-      </div>
     </div>
 
     <!-- Place Order Button -->

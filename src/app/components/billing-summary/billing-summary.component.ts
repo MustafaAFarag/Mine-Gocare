@@ -39,10 +39,16 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   finalTotal: number = 0;
   isPromoApplied: boolean = false;
   @Input() isLoading: boolean = false;
+  isApplyingPromo: boolean = false;
   promoCodes: PromoCode[] = [];
   accessToken = localStorage.getItem('accessToken');
+  appliedPromoCode: PromoCode | null = null;
 
   @Output() placeOrderEvent = new EventEmitter<void>();
+  @Output() promoApplied = new EventEmitter<{
+    promoCodeId: number;
+    discount: number;
+  }>();
 
   currentLang: string = 'en';
   private langSubscription: Subscription = new Subscription();
@@ -87,6 +93,29 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     });
   }
 
+  calculateDiscount(promoCode: PromoCode): number {
+    switch (promoCode.type) {
+      case 3: // Offer (wallet points)
+        if (promoCode.buyCount && promoCode.getCount) {
+          // For type 3, we'll add points to wallet after order
+          return 0;
+        }
+        return 0;
+      case 2: // Percentage
+        const percentageDiscount = (this.total * promoCode.offerAmount) / 100;
+        return promoCode.uptoAmount
+          ? Math.min(percentageDiscount, promoCode.uptoAmount)
+          : percentageDiscount;
+      case 1: // Fixed amount
+        if (this.total >= (promoCode.minimumCheckoutAmount || 0)) {
+          return promoCode.offerAmount;
+        }
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
   applyPromoCode(): void {
     const code = this.promoForm.value.couponCode;
     if (!code) {
@@ -99,6 +128,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isApplyingPromo = true;
     this.promoCodeService
       .validatePromoCode(this.accessToken!, code, this.orderProducts)
       .subscribe({
@@ -106,14 +136,26 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
           if (response.result.isValid) {
             const matchedPromo = this.promoCodes.find((p) => p.code === code);
             if (matchedPromo) {
-              this.discountAmount = matchedPromo.offerAmount;
+              this.appliedPromoCode = matchedPromo;
+              this.discountAmount = this.calculateDiscount(matchedPromo);
               this.finalTotal = this.total - this.discountAmount;
               this.isPromoApplied = true;
+
+              // Emit the promo code ID and discount for the parent component
+              this.promoApplied.emit({
+                promoCodeId: matchedPromo.id,
+                discount: this.discountAmount,
+              });
+
+              let message = `Discount of ${this.discountAmount.toFixed(2)} EGP applied.`;
+              if (matchedPromo.type === 3) {
+                message = `You will receive ${matchedPromo.getCount} points in your wallet after purchasing ${matchedPromo.buyCount} worth of products.`;
+              }
 
               this.messageService.add({
                 severity: 'success',
                 summary: 'Promo Applied',
-                detail: `Discount of ${this.discountAmount} EGP applied.`,
+                detail: message,
                 life: 3000,
               });
             }
@@ -133,6 +175,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
             detail: 'Failed to validate promo code.',
             life: 3000,
           });
+        },
+        complete: () => {
+          this.isApplyingPromo = false;
         },
       });
   }

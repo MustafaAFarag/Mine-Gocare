@@ -105,6 +105,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // Loading state
   isPlacingOrder: boolean = false;
 
+  // Promo code state
+  appliedPromoCode: { id: number; discount: number } | null = null;
+
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
@@ -278,7 +281,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   updateTotal(): void {
-    this.total = this.subTotal + this.shipping;
+    this.total =
+      this.subTotal + this.shipping - (this.appliedPromoCode?.discount || 0);
   }
 
   getSelectedShippingAddressId(): number | null {
@@ -301,13 +305,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }));
   }
 
+  handlePromoCodeApplied(event: { promoCodeId: number; discount: number }) {
+    this.appliedPromoCode = {
+      id: event.promoCodeId,
+      discount: event.discount,
+    };
+    this.updateTotal();
+  }
+
   placeOrder(): void {
     // Check if user is authenticated
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('User is not authenticated');
       alert('Please log in to place an order');
-      // Redirect to login page
       return;
     }
 
@@ -326,68 +337,52 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Debug logs
-    console.log('Cart Items:', this.cartItems);
-    this.cartItems.forEach((item, index) => {
-      console.log(`Item ${index + 1}:`, {
-        productId: item.productId,
-        variantId: item.variantId,
-        name: item.name,
-        quantity: item.quantity,
-        afterPrice: item.afterPrice,
-      });
-    });
-
-    // Prepare order products data
-    const orderProducts = this.cartItems.map((item) => {
-      if (!item.variantId) {
-        console.error(`Missing variantId for product ${item.productId}`);
-      }
-      return {
-        productVariantId: item.variantId || item.productId,
-        quantity: item.quantity,
-        price: item.afterPrice,
-      };
-    });
-
-    console.log('Order Products:', orderProducts);
-
     // Set loading state
     this.isPlacingOrder = true;
 
     // Get payment method value (0 for COD, 1 for PayTabs)
     const paymentMethodValue = this.getPaymentMethodValue();
 
+    // Prepare the order request
+    const orderRequest = {
+      addressId: selectedAddressId,
+      orderProducts: this.cartItems.map((item) => ({
+        productVariantId: item.variantId || item.productId,
+        quantity: item.quantity,
+        price: item.afterPrice,
+      })),
+      paymentMethod: paymentMethodValue,
+      promoCodeId: this.appliedPromoCode?.id || null,
+    };
+
     // Call order service to place order
-    this.orderService
-      .placeOrder(token, selectedAddressId, orderProducts, paymentMethodValue)
-      .subscribe({
-        next: (response) => {
-          this.isPlacingOrder = false;
-          if (response.success) {
-            console.log('Order placed successfully:', response);
+    this.orderService.placeOrder(token, orderRequest).subscribe({
+      next: (response) => {
+        this.isPlacingOrder = false;
+        if (response.success) {
+          console.log('Order placed successfully:', response);
 
-            // Clear cart
-            this.cartService.clearCart();
+          // Clear cart
+          this.cartService.clearCart();
 
-            // Show success message
-            alert('Order placed successfully!');
+          // Show success message
+          alert('Order placed successfully!');
 
-            // Redirect to orders page
-            this.router.navigate(['/account/orders']);
-          } else {
-            console.error('Failed to place order:', response);
-            alert(
-              'Failed to place order: ' +
-                (response.error?.message || 'Unknown error'),
-            );
-          }
-        },
-        error: (error) => {
-          this.isPlacingOrder = false;
-          console.error('Error placing order:', error);
-          alert('Error placing order: ' + (error.message || 'Unknown error'));
-        },
-      });
+          // Redirect to orders page
+          this.router.navigate(['/account/orders']);
+        } else {
+          console.error('Failed to place order:', response);
+          alert(
+            'Failed to place order: ' +
+              (response.error?.message || 'Unknown error'),
+          );
+        }
+      },
+      error: (error) => {
+        this.isPlacingOrder = false;
+        console.error('Error placing order:', error);
+        alert('Error placing order: ' + (error.message || 'Unknown error'));
+      },
+    });
   }
 }
