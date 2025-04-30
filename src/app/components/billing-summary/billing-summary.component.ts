@@ -137,22 +137,6 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
             const matchedPromo = this.promoCodes.find((p) => p.code === code);
             if (matchedPromo) {
               // Check if it's a type 3 promo and has less than 2 products
-              if (
-                matchedPromo.type === 3 &&
-                this.orderProducts.reduce(
-                  (sum, item) => sum + item.quantity,
-                  0,
-                ) < 2
-              ) {
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Invalid Promo',
-                  detail:
-                    'Type 3 promo codes require at least 2 products in your cart.',
-                  life: 3000,
-                });
-                return;
-              }
 
               this.appliedPromoCode = matchedPromo;
               this.discountAmount = this.calculateDiscount(matchedPromo);
@@ -181,7 +165,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
             this.messageService.add({
               severity: 'error',
               summary: 'Invalid Promo',
-              detail: 'The promo code is not valid for your order.',
+              detail:
+                response.result.message ||
+                'The promo code is not valid for your order.',
               life: 3000,
             });
           }
