@@ -15,6 +15,8 @@ import { PromoCode } from '../../model/PromoCodes';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { CartService } from '../../services/cart.service';
+import { CartItem } from '../../model/Cart';
 
 @Component({
   selector: 'app-billing-summary',
@@ -25,10 +27,11 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./billing-summary.component.css'],
 })
 export class BillingSummaryComponent implements OnInit, OnDestroy {
-  @Input() subTotal: number = 0;
   @Input() shipping: number = 0;
   @Input() tax: number = 0;
   @Input() total: number = 0;
+  @Input() subTotal: number = 0;
+  @Input() isLoading: boolean = false;
   promoForm!: FormGroup;
   discountAmount: number = 0;
   @Input() orderProducts: Array<{
@@ -37,12 +40,13 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     price: number;
   }> = [];
   finalTotal: number = 0;
+  cartItems: CartItem[] = [];
   isPromoApplied: boolean = false;
-  @Input() isLoading: boolean = false;
   isApplyingPromo: boolean = false;
   promoCodes: PromoCode[] = [];
   accessToken = localStorage.getItem('accessToken');
   appliedPromoCode: PromoCode | null = null;
+  private cartSubscription: Subscription = new Subscription();
 
   @Output() placeOrderEvent = new EventEmitter<void>();
   @Output() promoApplied = new EventEmitter<{
@@ -58,22 +62,33 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private promoCodeService: PromoCodesService,
     private messageService: MessageService,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
     this.promoForm = this.fb.group({
       couponCode: [''],
     });
-    this.finalTotal = this.total;
+
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang;
     });
+
+    // Subscribe to cart changes
+    this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
+      this.cartItems = items;
+      this.calculateTotals();
+    });
+
     this.fetchPromoCodes();
   }
 
   ngOnDestroy(): void {
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
+    }
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
     }
   }
 
@@ -102,12 +117,13 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
         }
         return 0;
       case 2: // Percentage
-        const percentageDiscount = (this.total * promoCode.offerAmount) / 100;
+        const percentageDiscount =
+          (this.subTotal * promoCode.offerAmount) / 100;
         return promoCode.uptoAmount
           ? Math.min(percentageDiscount, promoCode.uptoAmount)
           : percentageDiscount;
       case 1: // Fixed amount
-        if (this.total >= (promoCode.minimumCheckoutAmount || 0)) {
+        if (this.subTotal >= (promoCode.minimumCheckoutAmount || 0)) {
           return promoCode.offerAmount;
         }
         return 0;
@@ -128,6 +144,12 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Reset state before applying new promo code
+    this.isPromoApplied = false;
+    this.appliedPromoCode = null;
+    this.discountAmount = 0;
+    this.finalTotal = this.subTotal + this.shipping + this.tax;
+
     this.isApplyingPromo = true;
     this.promoCodeService
       .validatePromoCode(this.accessToken!, code, this.orderProducts)
@@ -136,11 +158,10 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
           if (response.result.isValid) {
             const matchedPromo = this.promoCodes.find((p) => p.code === code);
             if (matchedPromo) {
-              // Check if it's a type 3 promo and has less than 2 products
-
               this.appliedPromoCode = matchedPromo;
               this.discountAmount = this.calculateDiscount(matchedPromo);
-              this.finalTotal = this.total - this.discountAmount;
+              this.finalTotal =
+                this.subTotal + this.shipping + this.tax - this.discountAmount;
               this.isPromoApplied = true;
 
               // Emit the promo code ID and discount for the parent component
@@ -149,9 +170,11 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
                 discount: this.discountAmount,
               });
 
-              let message = `Discount of ${this.discountAmount.toFixed(2)} EGP applied.`;
+              let message = `Discount of ${this.discountAmount.toFixed(
+                2,
+              )} EGP applied.`;
               if (matchedPromo.type === 3) {
-                message = `You will receive ${matchedPromo.getCount} points in your wallet after purchasing ${matchedPromo.buyCount} worth of products.`;
+                message = `You'll receive ${matchedPromo.getCount} points in your wallet after purchasing ${matchedPromo.buyCount} worth of products.`;
               }
 
               this.messageService.add({
@@ -184,6 +207,25 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
           this.isApplyingPromo = false;
         },
       });
+  }
+
+  calculateTotals(): void {
+    // Calculate subtotal
+    this.subTotal = this.cartItems.reduce(
+      (total, item) => total + item.afterPrice * item.quantity,
+      0,
+    );
+
+    // Calculate final total including shipping, tax, and any discounts
+    let total = this.subTotal + this.shipping + this.tax;
+
+    // If there's an applied promo code, recalculate discount
+    if (this.appliedPromoCode) {
+      this.discountAmount = this.calculateDiscount(this.appliedPromoCode);
+      total -= this.discountAmount;
+    }
+
+    this.finalTotal = total;
   }
 
   fetchPromoCodes(): void {
