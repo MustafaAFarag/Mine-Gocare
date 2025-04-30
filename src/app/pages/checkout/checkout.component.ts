@@ -293,6 +293,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return this.paymentMethod === 'cod' ? 0 : 1;
   }
 
+  get mappedOrderProducts() {
+    return this.cartItems.map((item) => ({
+      productVariantId: item.variantId || item.productId,
+      quantity: item.quantity,
+      price: item.afterPrice,
+    }));
+  }
+
   placeOrder(): void {
     // Check if user is authenticated
     const token = localStorage.getItem('accessToken');

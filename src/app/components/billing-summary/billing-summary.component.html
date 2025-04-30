@@ -8,6 +8,7 @@
   </div>
 
   <div class="rounded-lg bg-white p-4 shadow-sm">
+    <!-- orderProducts: {{ orderProducts | json }} -->
     <!-- Header -->
     <div class="mb-4 flex items-center justify-between">
       <h2 class="font-bold text-gray-900">Promo code</h2>
@@ -36,7 +37,11 @@
     </div>
 
     <!-- Coupon Input -->
-    <div class="mt-4 flex">
+    <form
+      [formGroup]="promoForm"
+      (ngSubmit)="applyPromoCode()"
+      class="mt-4 flex"
+    >
       <input
         type="text"
         formControlName="couponCode"
@@ -44,11 +49,12 @@
         class="flex-1 rounded-l border bg-white px-4 py-2"
       />
       <button
+        type="submit"
         class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none"
       >
         Apply now
       </button>
-    </div>
+    </form>
   </div>
 
   <div class="border-t p-4">
@@ -75,6 +81,17 @@
       <span class="text-xl font-bold text-hover-color"
         >${{ total.toFixed(2) }}</span
       >
+      <div class="flex justify-between" *ngIf="isPromoApplied">
+        <span class="text-gray-600">Discount</span>
+        <span class="text-green-600">-{{ discountAmount.toFixed(2) }} EGP</span>
+      </div>
+
+      <div class="mt-4 flex items-center justify-between border-t pt-4">
+        <span class="text-lg font-bold text-gray-800">Total</span>
+        <span class="text-xl font-bold text-hover-color">
+          {{ finalTotal.toFixed(2) }} EGP
+        </span>
+      </div>
     </div>
 
     <!-- Place Order Button -->
