@@ -98,7 +98,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   subTotal: number = 0;
 
-  shipping: number = 0.0;
+  shipping: number = 78.0;
 
   total: number = 0;
 
@@ -239,7 +239,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.selectedTimeSlot = null;
     }
 
-    this.shipping = option === 'standard' ? 0.0 : 5.99;
+    this.shipping = option === 'standard' ? 78.0 : 83.99;
     this.updateTotal();
   }
 

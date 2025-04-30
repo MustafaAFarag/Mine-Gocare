@@ -74,7 +74,7 @@
     "itemsInCart": "Items in your cart",
     "itemTotal": "Item Total",
     "quantity": "Quantity",
-    "shipping": "Shipping",
+    "shipping": "Minimum Shipping",
     "tax": "Tax",
     "total": "Total",
     "applyCoupon": "Apply Coupon",
@@ -549,6 +549,7 @@
     "orders": {
       "title": "My Orders",
       "orderNumber": "Order Number",
+      "promoDiscount": "Promocode Discount",
       "date": "Date",
       "amount": "Amount",
       "status": "Status",

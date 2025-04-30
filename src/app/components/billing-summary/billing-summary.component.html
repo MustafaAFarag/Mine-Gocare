@@ -84,14 +84,16 @@
     <!-- Order Breakdown -->
     <div class="space-y-3 pt-1">
       <div class="flex justify-between">
-        <span class="text-gray-600">{{
+        <span class="font-medium text-gray-700">{{
           "checkout.itemTotal" | translate
         }}</span>
         <span class="text-hover-color">{{ subTotal.toFixed(2) }} EGP</span>
       </div>
 
       <div class="flex justify-between">
-        <span class="text-gray-600">{{ "checkout.shipping" | translate }}</span>
+        <span class="font-medium text-gray-700">{{
+          "checkout.shipping" | translate
+        }}</span>
         <span class="text-hover-color">{{ shipping.toFixed(2) }} EGP</span>
       </div>
 
