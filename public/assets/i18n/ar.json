@@ -53,7 +53,11 @@
       "message": "يبدو أنك لم تضيف أي منتجات إلى سلة التسوق بعد.",
       "continueShopping": "متابعة التسوق"
     },
+    "promoCodeTitle": "كود الخصم",
+    "enterPromoCodePlaceholder": "اكتب كود الخصم هنا",
     "shippingAddress": "عنوان الشحن",
+    "applyNow": "طبّق الآن",
+    "applying": "جارٍ التطبيق...",
     "addNewAddress": "إضافة عنوان جديد",
     "address": "العنوان",
     "pinCode": "الرمز البريدي",
@@ -531,6 +535,7 @@
     "orders": {
       "title": "طلباتي",
       "orderNumber": "رقم الطلب",
+      "promoDiscount": "خصم كود الخصم",
       "date": "التاريخ",
       "amount": "المبلغ",
       "status": "الحالة",
@@ -650,7 +655,7 @@
     "status": "الحالة",
     "debit": "مدين",
     "credit": "دائن",
-    "currency": "جنيه مصري",
+    "currency": "ح.م",
     "orderNumber": "رقم الطلب",
     "description": "الوصف"
   },

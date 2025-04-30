@@ -53,8 +53,12 @@
       "message": "Looks like you haven't added any items to your cart yet.",
       "continueShopping": "Continue Shopping"
     },
+    "promoCodeTitle": "Promo Code",
+    "enterPromoCodePlaceholder": "Enter PromoCode Here...",
     "shippingAddress": "Shipping Address",
     "addNewAddress": "Add New",
+    "applyNow": "Apply now",
+    "applying": "Applying...",
     "address": "Address",
     "pinCode": "Pin Code",
     "phone": "Phone",

@@ -280,7 +280,7 @@
           >
             <span>{{ "account.orders.promoDiscount" | translate }}</span>
             <span
-              >-{{ orderDetails.orderPayment.promoCodeDeduction }}
+              >{{ orderDetails.orderPayment.promoCodeDeduction }}
               {{
                 orderDetails.orderPayment.currency.name[
                   currentLang === "ar" ? "ar" : "en"

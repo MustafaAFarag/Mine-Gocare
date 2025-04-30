@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
 import { PromoCodesService } from '../../services/promo-codes.service';
@@ -17,6 +17,8 @@ import { MessageService } from 'primeng/api';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../model/Cart';
+
+type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-billing-summary',
@@ -33,6 +35,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   @Input() subTotal: number = 0;
   @Input() isLoading: boolean = false;
   promoForm!: FormGroup;
+  currentLang: Language = 'en';
   discountAmount: number = 0;
   @Input() orderProducts: Array<{
     productVariantId: number;
@@ -54,24 +57,22 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     discount: number;
   }>();
 
-  currentLang: string = 'en';
-  private langSubscription: Subscription = new Subscription();
-
   constructor(
     private fb: FormBuilder,
-    private languageService: LanguageService,
     private promoCodeService: PromoCodesService,
     private messageService: MessageService,
     private cartService: CartService,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.currentLang = this.translateService.currentLang as Language;
+    this.translateService.onLangChange.subscribe((event) => {
+      this.currentLang = event.lang as Language;
+    });
+  }
 
   ngOnInit(): void {
     this.promoForm = this.fb.group({
       couponCode: [''],
-    });
-
-    this.langSubscription = this.languageService.language$.subscribe((lang) => {
-      this.currentLang = lang;
     });
 
     // Subscribe to cart changes
@@ -84,9 +85,6 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.langSubscription) {
-      this.langSubscription.unsubscribe();
-    }
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
     }

@@ -11,7 +11,9 @@
     <!-- orderProducts: {{ orderProducts | json }} -->
     <!-- Header -->
     <div class="mb-4 flex items-center justify-between">
-      <h2 class="font-bold text-gray-900">Promo code</h2>
+      <h2 class="font-bold text-gray-900">
+        {{ "checkout.promoCodeTitle" | translate }}
+      </h2>
     </div>
 
     <!-- Promo Codes -->
@@ -21,7 +23,7 @@
           <div
             class="mb-1 border-b border-dashed border-red-500 pb-2 text-sm font-medium text-gray-800"
           >
-            {{ promoCode.offerName.en }}
+            {{ promoCode.offerName[currentLang] }}
           </div>
           <div class="flex items-center justify-between">
             <span class="font-medium text-gray-700">{{ promoCode.code }}</span>
@@ -45,7 +47,7 @@
       <input
         type="text"
         formControlName="couponCode"
-        placeholder="Enter Coupon Code Here..."
+        [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
         class="flex-1 rounded-l border bg-white px-4 py-2"
         [disabled]="isApplyingPromo"
       />
@@ -74,7 +76,13 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <span>{{ isApplyingPromo ? "Applying..." : "Apply now" }}</span>
+          <span>
+            {{
+              isApplyingPromo
+                ? ("checkout.applying" | translate)
+                : ("checkout.applyNow" | translate)
+            }}
+          </span>
         </div>
       </button>
     </form>
@@ -87,21 +95,28 @@
         <span class="font-medium text-gray-700">{{
           "checkout.itemTotal" | translate
         }}</span>
-        <span class="text-hover-color">{{ subTotal.toFixed(2) }} EGP</span>
+        <span class="text-hover-color"
+          >{{ subTotal.toFixed(2) }} {{ "common.currency" | translate }}</span
+        >
       </div>
 
       <div class="flex justify-between">
         <span class="font-medium text-gray-700">{{
           "checkout.shipping" | translate
         }}</span>
-        <span class="text-hover-color">{{ shipping.toFixed(2) }} EGP</span>
+        <span class="text-hover-color"
+          >{{ shipping.toFixed(2) }} {{ "common.currency" | translate }}</span
+        >
       </div>
 
       <!-- Promo Code Discount -->
       @if (isPromoApplied && discountAmount > 0) {
         <div class="flex justify-between text-green-600">
           <span>Promo Code Discount</span>
-          <span>-{{ discountAmount.toFixed(2) }} EGP</span>
+          <span
+            >-{{ discountAmount.toFixed(2) }}
+            {{ "common.currency" | translate }}</span
+          >
         </div>
       }
 
@@ -110,8 +125,8 @@
         <div class="rounded-md bg-blue-50 p-2 text-sm text-blue-700">
           <p>
             You'll receive {{ appliedPromoCode?.getCount }} points in your
-            wallet after purchasing {{ appliedPromoCode?.buyCount }} EGP worth
-            of products.
+            wallet after purchasing {{ appliedPromoCode?.buyCount }}
+            {{ "common.currency" | translate }} worth of products.
           </p>
         </div>
       }
@@ -123,7 +138,7 @@
         "checkout.total" | translate
       }}</span>
       <span class="text-xl font-bold text-hover-color"
-        >{{ finalTotal.toFixed(2) }} EGP</span
+        >{{ finalTotal.toFixed(2) }} {{ "common.currency" | translate }}</span
       >
     </div>
 
