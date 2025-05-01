@@ -19,6 +19,7 @@ import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { PointingSystemService } from '../../services/pointing-system.service';
 
 @Component({
   selector: 'app-signup-form',
@@ -63,8 +64,8 @@ export class SignupFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
     private messageService: MessageService,
+    private pointingSystemService: PointingSystemService,
   ) {}
 
   ngOnInit(): void {
@@ -170,16 +171,54 @@ export class SignupFormComponent implements OnInit {
     };
 
     this.authService.signup(signupData).subscribe({
-      next: () => {
-        this.loading = false;
-        // First emit the success event to trigger the toast
-        this.signupSuccess.emit();
-        // Then reset the form
-        this.signupForm.reset();
-        // Finally emit the toggle event to switch to login mode
-        setTimeout(() => {
-          this.toggle.emit();
-        }, 0);
+      next: (res) => {
+        // After successful signup, automatically log in the user
+        this.authService
+          .login(formValue.identifier, formValue.password)
+          .subscribe({
+            next: (loginRes) => {
+              this.loading = false;
+
+              // Now we have the access token, add the registration points
+              const token = localStorage.getItem('accessToken');
+              if (token) {
+                this.pointingSystemService
+                  .addPoints(token, 1, false)
+                  .subscribe({
+                    next: (pointsRes) => {
+                      console.log(
+                        '✅ Registration points added successfully:',
+                        pointsRes,
+                      );
+                    },
+                    error: (pointsErr) => {
+                      console.error(
+                        '❌ Error adding registration points:',
+                        pointsErr,
+                      );
+                    },
+                  });
+              }
+
+              // First emit the success event to trigger the toast
+              this.signupSuccess.emit();
+              // Then reset the form
+              this.signupForm.reset();
+              // Finally emit the toggle event to switch to login mode
+              setTimeout(() => {
+                this.toggle.emit();
+              }, 0);
+            },
+            error: (loginErr) => {
+              this.loading = false;
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail:
+                  'Account created but failed to log in automatically. Please try logging in manually.',
+              });
+            },
+          });
       },
       error: (error) => {
         this.messageService.add({
