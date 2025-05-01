@@ -138,28 +138,7 @@ export class AuthService {
 
     return this.http.post<any>(this.signupUrl, body, { headers }).pipe(
       tap((res) => {
-        if (res.success) {
-          // Create user object with the signup data
-          const userData = {
-            firstName: signupData.firstName,
-            lastName: signupData.lastName,
-            gender: signupData.gender,
-          };
-
-          // Add either email or mobile based on what was used
-          if (signupData.emailAddress) {
-            Object.assign(userData, { emailAddress: signupData.emailAddress });
-          } else if (signupData.mobileNumber) {
-            Object.assign(userData, {
-              mobileNumber: signupData.mobileNumber,
-              countryCode: signupData.countryCode,
-            });
-          }
-
-          // Save to localStorage and update subject
-          this.setLocalStorageItem('user', JSON.stringify(userData));
-          this.userSubject.next(userData);
-        } else {
+        if (!res.success) {
           throw new Error('Signup failed');
         }
       }),

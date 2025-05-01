@@ -411,6 +411,11 @@
     "haveAccount": "Already have an account?",
     "loginNow": "Login Here"
   },
+  "congrats": {
+    "title": "Congratulations!",
+    "message": "You've won 50 points for joining our platform!",
+    "button": "Continue"
+  },
   "cart-sidebar": {
     "title": "My Cart",
     "empty": "Your cart is currently empty",

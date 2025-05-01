@@ -10,13 +10,19 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CongratsModalComponent } from '../congrats-modal/congrats-modal.component';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    CongratsModalComponent,
+  ],
 })
 export class LoginFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
@@ -25,6 +31,7 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   errorMessage = '';
   showPassword = false;
+  showCongratsModal = false;
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +66,15 @@ export class LoginFormComponent implements OnInit {
         console.log('✅ Auth success:', res);
         this.loading = false;
         this.loginForm.reset(); // Reset the form fields
-        this.loginSuccess.emit();
+
+        // Check if this is the first login
+        const isFirstLogin = !localStorage.getItem('hasLoggedInBefore');
+        if (isFirstLogin) {
+          localStorage.setItem('hasLoggedInBefore', 'true');
+          this.showCongratsModal = true;
+        } else {
+          this.loginSuccess.emit();
+        }
       },
       error: (err) => {
         this.loading = false;
@@ -69,6 +84,11 @@ export class LoginFormComponent implements OnInit {
         console.error('❌ Login error:', err);
       },
     });
+  }
+
+  handleCongratsModalClose() {
+    this.showCongratsModal = false;
+    this.loginSuccess.emit();
   }
 
   toggleMode(): void {

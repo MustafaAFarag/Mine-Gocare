@@ -12,6 +12,7 @@ export class PointingSystemService {
   private getClientPointsPreviewUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientPointsPreview}`;
   private getAllPointingSettingsUrl = `${environment.apiUrl}/${ApiEndPoint.GetAllPointingSettings}`;
   private getClientsTotalPointsUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientTotalPoints}`;
+  private addPointsUrl = `${environment.apiUrl}/${ApiEndPoint.AddPoints}`;
 
   constructor(private http: HttpClient) {}
 
@@ -60,5 +61,25 @@ export class PointingSystemService {
     });
 
     return this.http.get(this.getClientsTotalPointsUrl, { headers });
+  }
+
+  addPoints(
+    token: string,
+    pointingCheckpoint: number,
+    isHolded: boolean,
+    countryId: number = 224,
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      countryId: countryId.toString(),
+      'Content-Type': 'application/json',
+    });
+
+    const body = {
+      pointingCheckpoint,
+      isHolded,
+    };
+
+    return this.http.post(this.addPointsUrl, body, { headers });
   }
 }
