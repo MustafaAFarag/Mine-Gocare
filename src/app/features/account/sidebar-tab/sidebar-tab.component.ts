@@ -49,6 +49,13 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       active: false,
     },
     {
+      name: 'Points',
+      nameKey: 'account.sidebar.points',
+      icon: 'ri-notification-line',
+      route: '/account/points',
+      active: false,
+    },
+    {
       name: 'My Wallet',
       nameKey: 'account.sidebar.wallet',
       icon: 'ri-wallet-line',

@@ -703,5 +703,21 @@
         "detail": "تم مسح قائمة الرغبات الخاصة بك"
       }
     }
+  },
+  "points": {
+    "totalPoints": "إجمالي النقاط",
+    "pointsHistory": "سجل النقاط",
+    "howToGetPoints": "كيفية الحصول على النقاط",
+    "pointEarningRules": "قواعد كسب النقاط",
+    "pointsExpiry": "انتهاء صلاحية النقاط",
+    "pointsExpiryDescription": "تنتهي صلاحية النقاط بعد {{days}} يوم من عدم النشاط",
+    "limitPerDay": "الحد: {{limit}} في اليوم",
+    "points": "نقاط",
+    "pending": "قيد الانتظار",
+    "earned": "مكتسب",
+    "noTransactions": "لم يتم العثور على معاملات النقاط",
+    "previous": "السابق",
+    "next": "التالي",
+    "balance": "الرصيد"
   }
 }

@@ -60,6 +60,10 @@ export const routes: Routes = [
             component: DashboardComponent,
           },
           {
+            path: 'points',
+            component: PointsComponent,
+          },
+          {
             path: 'notifications',
             component: NotificationsComponent,
           },

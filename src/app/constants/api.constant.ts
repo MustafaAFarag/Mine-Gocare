@@ -24,4 +24,16 @@ export const ApiEndPoint = {
   getAllPromoCodes: 'api/services/ClientApp/PromoCode/GetAllPromoCodes',
   ValidatePromoCode:
     'api/services/ClientApp/PromoCode/ValidateProductPromoCode',
+  GetClientPointsPreview:
+    'api/services/ClientApp/ClientPointing/GetClientPointsPreview',
+  AddPoints: 'api/services/ClientApp/ClientPointing/AddPoints',
+  GetAllPointingSettings:
+    'api/services/ClientApp/ClientPointing/GetALlPointingSettings',
+  GetClientTotalPoints:
+    'api/services/ClientApp/ClientPointing/GetClientTotalPoints',
+  RedeemingPoints:
+    'api/services/ClientApp/ClientPointing/RedeemingPoints?NumberOfPoints=1',
+  SetExpiredPoints: 'api/services/ClientApp/ClientPointing/SetExpiredPoints',
+  ConvertPointsToWalletCredit:
+    'api/services/ClientApp/ClientPointing/ConvertPointsToWalletCredit?NumberOfPoints=1000',
 };

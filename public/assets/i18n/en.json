@@ -721,5 +721,21 @@
         "detail": "Your wishlist has been cleared"
       }
     }
+  },
+  "points": {
+    "totalPoints": "Total Points",
+    "pointsHistory": "Points History",
+    "howToGetPoints": "How to Get Points",
+    "pointEarningRules": "Point Earning Rules",
+    "pointsExpiry": "Points Expiry",
+    "pointsExpiryDescription": "Points expire after {{days}} days of inactivity",
+    "limitPerDay": "Limit: {{limit}} per day",
+    "points": "points",
+    "pending": "Pending",
+    "earned": "Earned",
+    "noTransactions": "No point transactions found",
+    "previous": "Previous",
+    "next": "Next",
+    "balance": "Balance"
   }
 }

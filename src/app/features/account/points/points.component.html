@@ -1,101 +1,216 @@
-<div class="rounded-lg bg-white shadow-sm">
+<div *ngIf="isLoadingPoints || isLoadingSettings || isLoadingTotalPoints">
+  <app-loading></app-loading>
+</div>
+
+<div
+  class="rounded-lg bg-white shadow-sm"
+  *ngIf="!(isLoadingPoints || isLoadingSettings || isLoadingTotalPoints)"
+>
   <!-- Points Balance -->
-  <div class="flex flex-col p-6 md:flex-row md:items-center md:justify-between">
-    <div class="mb-4 flex items-center md:mb-0">
-      <div class="mr-4 rounded-md bg-red-100 p-3">
-        <i class="ri-coin-line text-2xl text-hover-color"></i>
+  <div
+    class="flex flex-col gap-4 p-4 sm:p-6 md:flex-row md:items-center md:justify-between"
+  >
+    <div class="flex items-center gap-4">
+      <div class="rounded-md bg-red-100 p-2 sm:p-3">
+        <i class="ri-coin-line text-xl text-hover-color sm:text-2xl"></i>
       </div>
       <div>
-        <h3 class="font-medium text-gray-500">Total Points</h3>
-        <p class="text-xl font-bold text-gray-800">{{ totalPoints }}</p>
+        <h3 class="text-sm font-medium text-gray-500 sm:text-base">
+          {{ "points.totalPoints" | translate }}
+        </h3>
+        <p class="text-lg font-bold text-gray-800 sm:text-xl">
+          {{ "common.currency" | translate }} {{ clientPoints.toFixed(2) }}
+        </p>
       </div>
     </div>
-    <div class="flex items-center rounded-md bg-gray-50 px-4 py-2">
-      <i class="ri-information-line mr-2 text-gray-500"></i>
-      <span class="text-gray-700"
-        >1 Points = ${{ conversionRate.toFixed(2) }} Balance</span
+    <div
+      class="flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 sm:px-4"
+    >
+      <i class="ri-information-line text-gray-500"></i>
+      <span class="text-sm text-gray-700 sm:text-base"
+        >1 {{ "points.points" | translate }} =
+        {{ "common.currency" | translate }}
+        {{ pointsClientPreview.exchangeRate.toFixed(2) || "0.00" }}
+        {{ "points.balance" | translate }}</span
       >
     </div>
   </div>
 
-  <!-- Transaction History Table -->
-  <div class="overflow-x-auto">
+  <!-- View Toggle -->
+  <div class="border-b">
+    <div class="flex">
+      <button
+        class="flex-1 border-b-2 p-3 text-sm font-medium sm:p-4 sm:text-base"
+        [class.border-hover-color]="!showHowToGetPoints"
+        [class.text-hover-color]="!showHowToGetPoints"
+        [class.border-transparent]="showHowToGetPoints"
+        [class.text-gray-500]="showHowToGetPoints"
+        (click)="showHowToGetPoints = false"
+      >
+        {{ "points.pointsHistory" | translate }}
+      </button>
+      <button
+        class="flex-1 border-b-2 p-3 text-sm font-medium sm:p-4 sm:text-base"
+        [class.border-hover-color]="showHowToGetPoints"
+        [class.text-hover-color]="showHowToGetPoints"
+        [class.border-transparent]="!showHowToGetPoints"
+        [class.text-gray-500]="!showHowToGetPoints"
+        (click)="showHowToGetPoints = true"
+      >
+        {{ "points.howToGetPoints" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Points History View -->
+  <div *ngIf="!showHowToGetPoints" class="overflow-x-auto">
     <table class="w-full">
-      <!-- Table Header -->
       <thead>
         <tr class="border-b border-t">
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Date</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Points</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Remark</th>
-          <th class="px-4 py-4 text-left font-medium text-gray-700">Status</th>
+          <th
+            class="px-3 py-3 text-left text-sm font-medium text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ "common.date" | translate }}
+          </th>
+          <th
+            class="px-3 py-3 text-left text-sm font-medium text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ "common.description" | translate }}
+          </th>
+          <th
+            class="px-3 py-3 text-left text-sm font-medium text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ "points.points" | translate }}
+          </th>
+          <th
+            class="px-3 py-3 text-left text-sm font-medium text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ "common.status" | translate }}
+          </th>
         </tr>
       </thead>
-
-      <!-- Table Body -->
       <tbody>
         <tr
-          *ngFor="let transaction of pointTransactions"
+          *ngFor="let history of pointsClientPreview?.pointHistoryDetails"
           class="border-b hover:bg-gray-50"
         >
-          <td class="px-4 py-4 text-gray-700">{{ transaction.date }}</td>
-          <td class="px-4 py-4 text-gray-700">{{ transaction.points }}</td>
-          <td class="px-4 py-4 text-gray-700">{{ transaction.remark }}</td>
-          <td class="px-4 py-4">
+          <td
+            class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ history.creationDate | date: "medium" }}
+          </td>
+          <td
+            class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ history.title[currentLang] }}
+          </td>
+          <td
+            class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+          >
+            {{ history.points }}
+          </td>
+          <td class="px-3 py-3 sm:px-4 sm:py-4">
             <span
-              class="rounded-md px-3 py-1 text-sm font-medium"
+              class="rounded-md px-2 py-1 text-xs font-medium sm:px-3 sm:text-sm"
               [ngClass]="{
-                'bg-red-100 text-red-600': transaction.status === 'debit',
-                'bg-green-100 text-green-600': transaction.status === 'credit',
+                'bg-yellow-100 text-yellow-600': history.isHolded,
+                'bg-green-100 text-green-600': !history.isHolded,
               }"
             >
-              {{ transaction.status === "debit" ? "Debit" : "Credit" }}
+              {{
+                history.isHolded
+                  ? ("points.pending" | translate)
+                  : ("points.earned" | translate)
+              }}
             </span>
           </td>
         </tr>
-
-        <!-- Empty State (shown when no transactions) -->
-        <tr *ngIf="pointTransactions.length === 0">
-          <td colspan="4" class="py-8 text-center text-gray-500">
-            <div class="flex flex-col items-center">
-              <i class="ri-coin-line mb-2 text-4xl text-gray-400"></i>
-              <p>No point transactions found.</p>
+        <tr *ngIf="!pointsClientPreview?.pointHistoryDetails?.length">
+          <td colspan="4" class="py-6 text-center text-gray-500 sm:py-8">
+            <div class="flex flex-col items-center gap-2">
+              <i class="ri-coin-line text-3xl text-gray-400 sm:text-4xl"></i>
+              <p class="text-sm sm:text-base">
+                {{ "points.noTransactions" | translate }}
+              </p>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-center gap-1 border-t p-3 sm:p-4">
+      <button
+        (click)="previousPage()"
+        class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
+        [disabled]="currentPage === 1"
+        [class.opacity-50]="currentPage === 1"
+      >
+        <i class="ri-arrow-left-s-line text-lg sm:text-xl"></i>
+      </button>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        (click)="goToPage(page)"
+        class="flex h-8 min-w-[32px] items-center justify-center rounded-md text-sm sm:h-9 sm:min-w-[36px] sm:text-base"
+        [class.bg-hover-color]="currentPage === page"
+        [class.text-white]="currentPage === page"
+        [class.hover:bg-gray-100]="currentPage !== page"
+        [class.text-gray-700]="currentPage !== page"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        (click)="nextPage()"
+        class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
+        [disabled]="currentPage === totalPages"
+        [class.opacity-50]="currentPage === totalPages"
+      >
+        <i class="ri-arrow-right-s-line text-lg sm:text-xl"></i>
+      </button>
+    </div>
   </div>
 
-  <!-- Pagination -->
-  <div class="flex items-center justify-center border-t p-4">
-    <button
-      (click)="previousPage()"
-      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
-      [disabled]="currentPage === 1"
-      [class.opacity-50]="currentPage === 1"
-    >
-      <i class="ri-arrow-left-s-line"></i>
-    </button>
-
-    <button
-      *ngFor="let page of [1]"
-      (click)="goToPage(page)"
-      class="mx-1 flex h-9 min-w-[36px] items-center justify-center rounded-md"
-      [class.bg-hover-color]="currentPage === page"
-      [class.text-white]="currentPage === page"
-      [class.hover:bg-gray-100]="currentPage !== page"
-      [class.text-gray-700]="currentPage !== page"
-    >
-      {{ page }}
-    </button>
-
-    <button
-      (click)="nextPage()"
-      class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
-      [disabled]="currentPage === totalPages"
-      [class.opacity-50]="currentPage === totalPages"
-    >
-      <i class="ri-arrow-right-s-line"></i>
-    </button>
+  <!-- How to Get Points View -->
+  <div *ngIf="showHowToGetPoints" class="p-4 sm:p-6">
+    <div class="mb-4 sm:mb-6">
+      <h3 class="mb-3 text-base font-medium text-gray-800 sm:mb-4 sm:text-lg">
+        {{ "points.pointEarningRules" | translate }}
+      </h3>
+      <div class="flex flex-col gap-3 sm:gap-4">
+        <div
+          *ngFor="let setting of pointSettings?.pointSettingList"
+          class="rounded-lg border p-3 sm:p-4"
+        >
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-medium text-gray-700 sm:text-base">
+              {{ setting.name[currentLang] }}
+            </h4>
+            <span
+              class="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-600 sm:px-3 sm:text-sm"
+            >
+              +{{ setting.points }} {{ "points.points" | translate }}
+            </span>
+          </div>
+          <p class="mt-2 text-xs text-gray-500 sm:text-sm">
+            <span *ngIf="setting.limitPerDay">{{
+              "points.limitPerDay" | translate: { limit: setting.limitPerDay }
+            }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-lg bg-gray-50 p-3 sm:p-4">
+      <h4 class="mb-2 text-sm font-medium text-gray-700 sm:text-base">
+        {{ "points.pointsExpiry" | translate }}
+      </h4>
+      <p class="text-xs text-gray-600 sm:text-sm">
+        {{
+          "points.pointsExpiryDescription"
+            | translate: { days: pointSettings.expiryDaysCount }
+        }}
+      </p>
+    </div>
   </div>
 </div>
