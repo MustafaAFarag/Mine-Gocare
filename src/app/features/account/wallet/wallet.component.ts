@@ -20,7 +20,13 @@ export class WalletComponent implements OnInit {
   walletBalance: number = 0;
   transactions: WalletTransactionList[] = [];
   isLoading: boolean = true;
+  isPaginationLoading: boolean = false;
   currentLang: Language = 'en';
+
+  // Pagination properties
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
 
   constructor(
     private walletService: WalletService,
@@ -70,19 +76,55 @@ export class WalletComponent implements OnInit {
 
   fetchClientWalletTransactionAPI() {
     if (this.token) {
-      this.walletService.getWalletTransactionList(this.token).subscribe({
-        next: (res) => {
-          this.transactions = res.result.items;
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error fetching transactions:', err);
-          this.isLoading = false;
-        },
-      });
+      this.isPaginationLoading = true;
+      this.walletService
+        .getWalletTransactionList(this.token, this.currentPage, this.pageSize)
+        .subscribe({
+          next: (res) => {
+            this.transactions = res.result.items;
+            this.totalPages = Math.ceil(res.result.totalCount / this.pageSize);
+            this.isLoading = false;
+            this.isPaginationLoading = false;
+          },
+          error: (err) => {
+            console.error('Error fetching transactions:', err);
+            this.isLoading = false;
+            this.isPaginationLoading = false;
+          },
+        });
     } else {
       console.error('Missing token');
       this.isLoading = false;
+      this.isPaginationLoading = false;
     }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1 && !this.isPaginationLoading) {
+      this.currentPage--;
+      this.fetchClientWalletTransactionAPI();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages && !this.isPaginationLoading) {
+      this.currentPage++;
+      this.fetchClientWalletTransactionAPI();
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && !this.isPaginationLoading) {
+      this.currentPage = page;
+      this.fetchClientWalletTransactionAPI();
+    }
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 }

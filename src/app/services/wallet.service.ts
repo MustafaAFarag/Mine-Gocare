@@ -26,16 +26,20 @@ export class WalletService {
     return this.http.get(url, { headers });
   }
 
-  getWalletTransactionList(token: string): Observable<any> {
+  getWalletTransactionList(
+    token: string,
+    pageNumber: number = 1,
+    pageSize: number = 5,
+  ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      CountryId: 224,
+      CountryId: '224',
     });
 
     const body = {
       paging: {
-        pageNumber: 1,
-        pageSize: 10,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
       },
     };
 

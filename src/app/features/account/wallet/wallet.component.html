@@ -27,16 +27,16 @@
         <thead>
           <tr class="border-b">
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.orderNumber" | translate }}
+              {{ "common.date" | translate }}
+            </th>
+            <th class="px-4 py-4 text-left font-medium text-gray-700">
+              {{ "wallet.reason" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
               {{ "common.amount" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.description" | translate }}
-            </th>
-            <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.date" | translate }}
+              {{ "common.orderNumber" | translate }}
             </th>
           </tr>
         </thead>
@@ -48,10 +48,10 @@
             class="border-b hover:bg-gray-50"
           >
             <td class="px-4 py-4 text-gray-700">
-              <span *ngIf="transaction.orderSerialNumber">{{
-                transaction.orderSerialNumber
-              }}</span>
-              <span *ngIf="!transaction.orderSerialNumber">-</span>
+              {{ transaction.transactionDate | date: "medium" }}
+            </td>
+            <td class="px-4 py-4 text-gray-700">
+              {{ transaction.title[currentLang] }}
             </td>
             <td class="px-4 py-4">
               <span
@@ -59,6 +59,7 @@
                 [ngClass]="{
                   'bg-red-100 text-red-600': transaction.operation === 2,
                   'bg-green-100 text-green-600': transaction.operation === 1,
+                  'bg-gray-100 text-gray-600': transaction.operation === 0,
                 }"
               >
                 {{ transaction.currency.name[currentLang] }}
@@ -66,10 +67,10 @@
               </span>
             </td>
             <td class="px-4 py-4 text-gray-700">
-              {{ transaction.title[currentLang] }}
-            </td>
-            <td class="px-4 py-4 text-gray-700">
-              {{ transaction.transactionDate | date: "medium" }}
+              <span *ngIf="transaction.orderSerialNumber">
+                {{ transaction.orderSerialNumber }}
+              </span>
+              <span *ngIf="!transaction.orderSerialNumber">-</span>
             </td>
           </tr>
 
@@ -84,6 +85,46 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-center gap-1 border-t p-3 sm:p-4">
+      <button
+        (click)="previousPage()"
+        class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
+        [disabled]="currentPage === 1 || isPaginationLoading"
+        [class.opacity-50]="currentPage === 1 || isPaginationLoading"
+      >
+        <i class="ri-arrow-left-s-line text-lg sm:text-xl"></i>
+      </button>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        (click)="goToPage(page)"
+        class="flex h-8 min-w-[32px] items-center justify-center rounded-md text-sm sm:h-9 sm:min-w-[36px] sm:text-base"
+        [class.bg-hover-color]="currentPage === page"
+        [class.text-white]="currentPage === page"
+        [class.hover:bg-gray-100]="currentPage !== page"
+        [class.text-gray-700]="currentPage !== page"
+        [disabled]="isPaginationLoading"
+        [class.opacity-50]="isPaginationLoading"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        (click)="nextPage()"
+        class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
+        [disabled]="currentPage === totalPages || isPaginationLoading"
+        [class.opacity-50]="currentPage === totalPages || isPaginationLoading"
+      >
+        <i class="ri-arrow-right-s-line text-lg sm:text-xl"></i>
+      </button>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="isPaginationLoading" class="ml-2">
+        <i class="ri-loader-4-line animate-spin text-lg text-gray-600"></i>
+      </div>
     </div>
   </div>
 </div>
