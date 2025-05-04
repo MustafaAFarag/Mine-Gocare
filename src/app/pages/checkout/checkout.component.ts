@@ -16,6 +16,7 @@ import { AuthService } from '../../services/auth.service';
 import { AddressService } from '../../services/address.service';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
+import { PointingSystemService } from '../../services/pointing-system.service';
 import { CreateAddress } from '../../model/Address';
 
 // Import sub-components
@@ -115,6 +116,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private addressService: AddressService,
     private orderService: OrderService,
+    private pointingSystemService: PointingSystemService,
     private router: Router,
   ) {}
 
@@ -358,9 +360,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Call order service to place order
     this.orderService.placeOrder(token, orderRequest).subscribe({
       next: (response) => {
-        this.isPlacingOrder = false;
         if (response.success) {
           console.log('Order placed successfully:', response);
+
+          // Add points for the order
+          this.pointingSystemService.addPoints(token, 3, false).subscribe({
+            next: (pointsResponse) => {
+              console.log('Points added successfully:', pointsResponse);
+            },
+            error: (pointsError) => {
+              console.error('Error adding points:', pointsError);
+            },
+          });
 
           // Clear cart
           this.cartService.clearCart();
@@ -377,6 +388,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               (response.error?.message || 'Unknown error'),
           );
         }
+        this.isPlacingOrder = false;
       },
       error: (error) => {
         this.isPlacingOrder = false;
