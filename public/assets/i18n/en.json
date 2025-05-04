@@ -680,7 +680,8 @@
     "credit": "Credit",
     "currency": "EGP",
     "orderNumber": "Order Number",
-    "description": "Description"
+    "description": "Description",
+    "processing": "Processing..."
   },
   "wallet": {
     "noTransactions": "No transactions found in your wallet."
@@ -741,6 +742,11 @@
     "noTransactions": "No point transactions found",
     "previous": "Previous",
     "next": "Next",
-    "balance": "Balance"
+    "balance": "Balance",
+    "redeem": "Redeem",
+    "redeemSuccess": "Points Redeemed",
+    "redeemSuccessDetail": "Successfully redeemed {{points}} points ({{amount}} EGP)",
+    "redeemError": "Redeem Failed",
+    "redeemErrorDetail": "Failed to redeem points. Please try again later."
   }
 }

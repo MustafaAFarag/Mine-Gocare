@@ -1,3 +1,5 @@
+<p-toast position="top-left" styleClass="black-text-toast"></p-toast>
+
 <div *ngIf="isLoadingPoints || isLoadingSettings || isLoadingTotalPoints">
   <app-loading></app-loading>
 </div>
@@ -19,8 +21,25 @@
           {{ "points.totalPoints" | translate }}
         </h3>
         <p class="text-lg font-bold text-gray-800 sm:text-xl">
-          {{ "common.currency" | translate }} {{ clientPoints.toFixed(2) }}
+          {{ clientPoints }} {{ "points.points" | translate }}
         </p>
+        <p class="text-sm text-gray-600">
+          {{ "common.currency" | translate }}
+          {{ getConvertedAmount() | number: "1.2-2" }}
+        </p>
+      </div>
+      <div class="flex items-center gap-4">
+        <button
+          (click)="redeemPoints()"
+          [disabled]="clientPoints === 0 || isRedeeming"
+          class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-color/90 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+        >
+          <span *ngIf="!isRedeeming">{{ "points.redeem" | translate }}</span>
+          <span *ngIf="isRedeeming" class="flex items-center gap-2">
+            <i class="ri-loader-4-line animate-spin"></i>
+            {{ "common.processing" | translate }}
+          </span>
+        </button>
       </div>
     </div>
     <div

@@ -31,8 +31,7 @@ export const ApiEndPoint = {
     'api/services/ClientApp/ClientPointing/GetALlPointingSettings',
   GetClientTotalPoints:
     'api/services/ClientApp/ClientPointing/GetClientTotalPoints',
-  RedeemingPoints:
-    'api/services/ClientApp/ClientPointing/RedeemingPoints?NumberOfPoints=1',
+  RedeemingPoints: 'api/services/ClientApp/ClientPointing/RedeemingPoints',
   SetExpiredPoints: 'api/services/ClientApp/ClientPointing/SetExpiredPoints',
   ConvertPointsToWalletCredit:
     'api/services/ClientApp/ClientPointing/ConvertPointsToWalletCredit?NumberOfPoints=1000',

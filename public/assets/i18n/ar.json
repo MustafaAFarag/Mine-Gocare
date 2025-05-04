@@ -662,7 +662,8 @@
     "credit": "دائن",
     "currency": "ح.م",
     "orderNumber": "رقم الطلب",
-    "description": "الوصف"
+    "description": "الوصف",
+    "processing": "جاري المعالجة..."
   },
   "wallet": {
     "noTransactions": "لم يتم العثور على معاملات في محفظتك."
@@ -723,6 +724,11 @@
     "noTransactions": "لم يتم العثور على معاملات النقاط",
     "previous": "السابق",
     "next": "التالي",
-    "balance": "الرصيد"
+    "balance": "الرصيد",
+    "redeem": "استبدال",
+    "redeemSuccess": "تم استبدال النقاط",
+    "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ح.م)",
+    "redeemError": "فشل الاستبدال",
+    "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً."
   }
 }
