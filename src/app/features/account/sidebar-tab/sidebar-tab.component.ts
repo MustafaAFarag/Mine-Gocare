@@ -41,13 +41,7 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       route: '/account/dashboard',
       active: false,
     },
-    {
-      name: 'Notifications',
-      nameKey: 'account.sidebar.notifications',
-      icon: 'ri-notification-line',
-      route: '/account/notifications',
-      active: false,
-    },
+
     {
       name: 'Points',
       nameKey: 'account.sidebar.points',

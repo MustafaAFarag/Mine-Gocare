@@ -36,9 +36,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private orderService: OrderService,
     private languageService: LanguageService,
   ) {
-    this.token = localStorage.getItem('accessToken');
+    this.token = this.authService.getLocalStorageItem('accessToken');
 
-    const userString = localStorage.getItem('user');
+    const userString = this.authService.getLocalStorageItem('user');
     if (userString) {
       const user = JSON.parse(userString);
       this.clientId = user.userId;

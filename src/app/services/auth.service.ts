@@ -426,21 +426,21 @@ export class AuthService {
   }
 
   // LocalStorage Helpers
-  private isBrowser(): boolean {
+  isBrowser(): boolean {
     return typeof window !== 'undefined' && !!window.localStorage;
   }
 
-  private getLocalStorageItem(key: string): string | null {
+  getLocalStorageItem(key: string): string | null {
     return this.isBrowser() ? localStorage.getItem(key) : null;
   }
 
-  private setLocalStorageItem(key: string, value: string): void {
+  setLocalStorageItem(key: string, value: string): void {
     if (this.isBrowser()) {
       localStorage.setItem(key, value);
     }
   }
 
-  private removeLocalStorageItem(key: string): void {
+  removeLocalStorageItem(key: string): void {
     if (this.isBrowser()) {
       localStorage.removeItem(key);
     }
