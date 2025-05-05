@@ -13,17 +13,25 @@ import { ToastModule } from 'primeng/toast';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-wishlist',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, ToastModule, TranslateModule],
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    ToastModule,
+    TranslateModule,
+    LoadingComponent,
+  ],
   providers: [MessageService],
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.css'],
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   wishlistItems: Product[] = [];
+  isLoading: boolean = true;
   private wishlistSubscription?: Subscription;
   private langSubscription?: Subscription;
   currentLang: string = 'en';
@@ -43,6 +51,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.wishlistSubscription = this.wishlistService.wishlistItems$.subscribe(
       (items) => {
         this.wishlistItems = items;
+        this.isLoading = false;
       },
     );
 
