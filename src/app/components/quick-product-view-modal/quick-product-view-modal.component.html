@@ -16,7 +16,13 @@
       X
     </button>
 
-    <div class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex h-[400px] items-center justify-center">
+      <app-loading></app-loading>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading" class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
       <!-- Pass productDetails to both components -->
       <app-quick-product-image
         *ngIf="productDetails"

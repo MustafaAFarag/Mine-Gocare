@@ -13,8 +13,8 @@ import { ProductService } from '../../services/product.service';
 import { ProductDetails } from '../../model/ProductDetail';
 import { getFullImageUrl } from '../../lib/utils';
 import { QuickProductInfoComponent } from '../quick-product-info/quick-product-info.component';
-import { ProductImageGalleryComponent } from '../../features/product-details/product-image-gallery/product-image-gallery.component';
 import { QuickProductImageComponent } from '../quick-product-image/quick-product-image.component';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 interface ProductImage {
   id: number;
@@ -29,6 +29,7 @@ interface ProductImage {
     FormsModule,
     QuickProductInfoComponent,
     QuickProductImageComponent,
+    LoadingComponent,
   ],
   templateUrl: './quick-product-view-modal.component.html',
   styleUrl: './quick-product-view-modal.component.css',
@@ -39,6 +40,7 @@ export class QuickProductViewModalComponent implements OnInit, OnChanges {
   @Input() variantId?: number;
   @Output() closeModal = new EventEmitter<void>();
   productDetails!: ProductDetails;
+  isLoading: boolean = false;
 
   constructor(private productService: ProductService) {}
 
@@ -70,10 +72,18 @@ export class QuickProductViewModalComponent implements OnInit, OnChanges {
 
   fetchProductDetails() {
     if (!this.productId || !this.variantId) return;
+    this.isLoading = true;
     this.productService
       .getProductDetails(this.productId, this.variantId)
-      .subscribe((response) => {
-        this.productDetails = response.result;
+      .subscribe({
+        next: (response) => {
+          this.productDetails = response.result;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching product details:', error);
+          this.isLoading = false;
+        },
       });
   }
 
