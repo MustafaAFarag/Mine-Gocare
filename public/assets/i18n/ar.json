@@ -731,5 +731,13 @@
     "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ح.م)",
     "redeemError": "فشل الاستبدال",
     "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً."
+  },
+  "alerts": {
+    "loginRequired": "يرجى تسجيل الدخول لإتمام الطلب",
+    "emptyCart": "سلة التسوق فارغة",
+    "selectShippingAddress": "يرجى اختيار عنوان الشحن",
+    "orderSuccess": "تم تقديم الطلب بنجاح!",
+    "orderFailed": "فشل تقديم الطلب: {{error}}",
+    "orderError": "خطأ في تقديم الطلب: {{error}}"
   }
 }

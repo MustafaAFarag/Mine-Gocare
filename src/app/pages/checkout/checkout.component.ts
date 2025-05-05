@@ -30,6 +30,7 @@ import { AddressFormModalComponent } from '../../components/address-form-modal/a
 // Import models
 import { CartItem } from '../../model/Cart';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout',
@@ -118,6 +119,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private orderService: OrderService,
     private pointingSystemService: PointingSystemService,
     private router: Router,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -323,14 +325,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('User is not authenticated');
-      alert('Please log in to place an order');
+      alert(this.translate.instant('alerts.loginRequired'));
       return;
     }
 
     // Check if cart is empty
     if (this.cartItems.length === 0) {
       console.error('Cart is empty');
-      alert('Your cart is empty');
+      alert(this.translate.instant('alerts.emptyCart'));
       return;
     }
 
@@ -338,7 +340,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const selectedAddressId = this.getSelectedShippingAddressId();
     if (!selectedAddressId) {
       console.error('No address selected');
-      alert('Please select a shipping address');
+      alert(this.translate.instant('alerts.selectShippingAddress'));
       return;
     }
 
@@ -371,15 +373,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           this.cartService.clearCart();
 
           // Show success message
-          alert('Order placed successfully!');
+          alert(this.translate.instant('alerts.orderSuccess'));
 
           // Redirect to orders page
           this.router.navigate(['/account/orders']);
         } else {
           console.error('Failed to place order:', response);
           alert(
-            'Failed to place order: ' +
-              (response.error?.message || 'Unknown error'),
+            this.translate.instant('alerts.orderFailed', {
+              error: response.error?.message || 'Unknown error',
+            }),
           );
         }
         this.isPlacingOrder = false;
@@ -387,7 +390,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.isPlacingOrder = false;
         console.error('Error placing order:', error);
-        alert('Error placing order: ' + (error.message || 'Unknown error'));
+        alert(
+          this.translate.instant('alerts.orderError', {
+            error: error.message || 'Unknown error',
+          }),
+        );
       },
     });
   }

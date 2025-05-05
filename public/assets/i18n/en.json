@@ -749,5 +749,13 @@
     "redeemSuccessDetail": "Successfully redeemed {{points}} points ({{amount}} EGP)",
     "redeemError": "Redeem Failed",
     "redeemErrorDetail": "Failed to redeem points. Please try again later."
+  },
+  "alerts": {
+    "loginRequired": "Please log in to place an order",
+    "emptyCart": "Your cart is empty",
+    "selectShippingAddress": "Please select a shipping address",
+    "orderSuccess": "Order placed successfully!",
+    "orderFailed": "Failed to place order: {{error}}",
+    "orderError": "Error placing order: {{error}}"
   }
 }
