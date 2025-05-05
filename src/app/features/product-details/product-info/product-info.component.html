@@ -131,11 +131,15 @@
   </div>
 
   <div
-    class="my-5 flex gap-7 text-xs font-semibold text-[#646464] lg:text-base"
+    class="my-5 flex gap-7 text-xs font-semibold lg:text-base"
+    [ngClass]="{
+      'text-hover-color': isInWishlist,
+      'text-[#646464]': !isInWishlist,
+    }"
   >
-    <div>
-      <i class="ri-heart-fill mr-2 cursor-pointer text-lg"></i>
-      <span class="">{{ "product-info.addToWishlist" | translate }}</span>
+    <div (click)="toggleWishlist()" class="cursor-pointer">
+      <i class="ri-heart-fill mr-2 text-lg"></i>
+      <span>{{ "product-info.addToWishlist" | translate }}</span>
     </div>
   </div>
 
