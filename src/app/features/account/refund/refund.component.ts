@@ -44,7 +44,6 @@ export class RefundComponent implements OnInit {
           this.orders = response.result.items.filter(
             (order: ClientOrders) => order.isCanceled === true,
           );
-          console.log('Canceled Orders:', this.orders);
         },
         (error) => {
           console.error('Error loading orders:', error);

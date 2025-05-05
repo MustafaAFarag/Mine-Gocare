@@ -28,9 +28,4 @@ export class BankDetailsComponent {
       paypalEmail: ['', [Validators.required, Validators.email]],
     });
   }
-
-  // This is just a placeholder - no actual logic as requested
-  onSubmit() {
-    console.log('Form submitted', this.bankDetailsForm.value);
-  }
 }

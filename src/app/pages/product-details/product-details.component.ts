@@ -59,7 +59,6 @@ export class ProductDetailsComponent implements OnInit {
       .subscribe((response: any) => {
         this.productDetails = response.result;
         this.isLoading = false;
-        console.log('PRODUCT DETAILS', this.productDetails);
       });
   }
 

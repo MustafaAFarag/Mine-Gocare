@@ -182,22 +182,7 @@ export class SignupFormComponent implements OnInit {
               // Now we have the access token, add the registration points
               const token = localStorage.getItem('accessToken');
               if (token) {
-                this.pointingSystemService
-                  .addPoints(token, 1, false)
-                  .subscribe({
-                    next: (pointsRes) => {
-                      console.log(
-                        '✅ Registration points added successfully:',
-                        pointsRes,
-                      );
-                    },
-                    error: (pointsErr) => {
-                      console.error(
-                        '❌ Error adding registration points:',
-                        pointsErr,
-                      );
-                    },
-                  });
+                this.pointingSystemService.addPoints(token, 1, false);
               }
 
               // First emit the success event to trigger the toast

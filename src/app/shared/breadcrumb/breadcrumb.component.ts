@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.css',
 })
-export class BreadcrumbComponent implements OnInit {
+export class BreadcrumbComponent {
   @Input() name?: string;
   @Input() soloRoute?: string;
   currentRoute: string = '';
@@ -22,9 +22,5 @@ export class BreadcrumbComponent implements OnInit {
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;
     });
-  }
-
-  ngOnInit(): void {
-    console.log('CURRENT ROUTE', this.router.url);
   }
 }

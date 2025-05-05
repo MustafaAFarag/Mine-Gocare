@@ -128,11 +128,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.languageService.language$
       .pipe(takeUntil(this.destroy$))
       .subscribe((language) => {
-        console.log(
-          'Language changed to',
-          language,
-          '- updating display language',
-        );
         this.updateDisplayLanguage();
 
         // Force a refresh of the categories and brands based on new language
@@ -149,7 +144,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.categoriesLoading = true;
     this.productService.getCategories().subscribe({
       next: (res) => {
-        console.log('Categories Fetched', res.result);
         this.categories = this.transformCategories(res.result);
         this.categoriesLoading = false;
 
@@ -449,7 +443,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     this.productService.getAllProductVariantsForClient(filters).subscribe({
       next: (res) => {
-        console.log('Products fetched:', res.result.items);
         this.products = res.result.items;
 
         if (this.selectedBrandNames.length > 0) {

@@ -4,11 +4,7 @@
     {{ "account.bankDetails.title" | translate }}
   </h2>
 
-  <form
-    [formGroup]="bankDetailsForm"
-    (ngSubmit)="onSubmit()"
-    class="flex flex-col gap-6"
-  >
+  <form [formGroup]="bankDetailsForm" class="flex flex-col gap-6">
     <!-- Bank Account Number -->
     <div class="flex items-center gap-4">
       <label for="bankAccountNumber" class="w-1/5 text-gray-600">

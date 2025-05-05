@@ -35,4 +35,8 @@ export const ApiEndPoint = {
   SetExpiredPoints: 'api/services/ClientApp/ClientPointing/SetExpiredPoints',
   ConvertPointsToWalletCredit:
     'api/services/ClientApp/ClientPointing/ConvertPointsToWalletCredit?NumberOfPoints=1000',
+  GetClientOrders: 'api/services/ClientApp/ClientOrders',
+  GetClientOrdersDetails: 'api/services/ClientApp/ClientOrders/GetClientOrders',
+  PlaceOrder: 'api/services/ClientApp/ClientOrders/PlaceOrder',
+  CancelOrder: 'api/services/ClientApp/ClientOrders/CancelOrder',
 };

@@ -82,7 +82,6 @@ export class CartComponent implements OnInit, OnDestroy {
   handleCheckout(): void {
     if (this.authService.isAuthenticated) {
       // TODO: Implement checkout logic for authenticated users
-      console.log('Proceeding to checkout...');
       this.router.navigate(['/checkout']);
     } else {
       // Show auth modal instead of redirecting
@@ -107,8 +106,6 @@ export class CartComponent implements OnInit, OnDestroy {
     // Subscribe to cart changes
     this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
-      // Log cartItems here, after they are updated
-      console.log('Updated cartItems', this.cartItems);
     });
   }
 

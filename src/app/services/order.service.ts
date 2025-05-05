@@ -1,19 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment';
+import { ApiEndPoint } from '../constants/api.constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
-  private getClientOrdersDetailsUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/ClientOrders';
-  private getClientOrdersUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/ClientOrders/GetClientOrders';
-  private placeOrderUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/ClientOrders/PlaceOrder';
-  private cancelOrderUrl =
-    'https://gocare-back-develop.salonspace1.com/api/services/ClientApp/ClientOrders/CancelOrder';
+  private getClientOrdersDetailsUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrdersDetails}`;
+  private getClientOrdersUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrders}`;
+  private placeOrderUrl = `${environment.apiUrl}/${ApiEndPoint.PlaceOrder}`;
+  private cancelOrderUrl = `${environment.apiUrl}/${ApiEndPoint.CancelOrder}`;
 
   private tenantId = '1';
   private language = 'en';

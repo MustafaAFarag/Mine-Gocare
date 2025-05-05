@@ -38,10 +38,8 @@ export class HomepageComponent implements OnInit {
   }
 
   fetchCategoriesAPI() {
-    console.log('Fetching categories...');
     this.productService.getCategories().subscribe({
       next: (res) => {
-        console.log('Categories fetched:', res.result);
         this.categories = res.result;
         this.isLoadingCategories = false;
 
@@ -61,19 +59,16 @@ export class HomepageComponent implements OnInit {
   }
 
   fetchProductsAPI() {
-    console.log('Fetching products with categoriesID:', this.categoriesID);
     this.productService
       .getAllProductVariantsForClient({
         categoryId: this.categoriesID,
       })
       .subscribe({
         next: (res) => {
-          console.log('Products fetched:', res.result.items);
           this.products = res.result.items;
           this.isLoadingProducts = false;
         },
         error: () => {
-          console.error('Error fetching products');
           this.isLoadingProducts = false;
           this.products = [];
         },
@@ -81,17 +76,12 @@ export class HomepageComponent implements OnInit {
   }
 
   onCategorySelected(categoryId: number): void {
-    console.log('Selected category:', categoryId);
-
     // Replace the current categoriesID with the selected category ID
     this.categoriesID = [categoryId]; // Only one category is selected at a time
 
     // Find the selected category object from the categories array
     this.selectedCategory =
       this.categories.find((category) => category.id === categoryId) || null;
-
-    console.log('Updated categoriesID:', this.categoriesID);
-    console.log('Updated selectedCategory:', this.selectedCategory);
 
     // Re-fetch products with the updated category ID
     this.fetchProductsAPI();

@@ -100,12 +100,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
       .subscribe((newLanguage) => {
         // Only force update if language actually changed
         if (this.currentLanguage !== newLanguage) {
-          console.log(
-            'Language changed in filter-tab from',
-            this.currentLanguage,
-            'to',
-            newLanguage,
-          );
           this.currentLanguage = newLanguage;
 
           // Store current expanded states

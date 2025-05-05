@@ -76,7 +76,6 @@ export class EverydayCasualSectionComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['products']) {
-      console.log('Products changed:', this.products);
       this.isCategoryLoading = false;
       this.cdr.detectChanges();
     }

@@ -68,7 +68,6 @@ export class PointsComponent implements OnInit {
             this.totalPages = Math.ceil(
               this.pointsClientPreview.totalCount / this.pageSize,
             );
-            console.log('Points Preview Response:', this.pointsClientPreview);
           },
           error: (error) => {
             console.error('Error fetching points preview:', error);
@@ -86,7 +85,6 @@ export class PointsComponent implements OnInit {
       this.pointingService.getAllPointingSettings(this.token).subscribe({
         next: (response) => {
           this.pointSettings = response.result;
-          console.log('All Pointing Settings Response:', this.pointSettings);
         },
         error: (error) => {
           console.error('Error fetching point settings:', error);
@@ -104,7 +102,6 @@ export class PointsComponent implements OnInit {
       this.pointingService.getClientsTotalPoints(this.token).subscribe({
         next: (response) => {
           this.clientPoints = response.result;
-          console.log('CLIENTS TOTAL POINTS', this.clientPoints);
         },
         error: (error) => {
           console.error('Error fetching total points:', error);

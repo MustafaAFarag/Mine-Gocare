@@ -145,7 +145,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       // If cart is empty, we might want to redirect to cart page
       if (this.cartItems.length === 0) {
-        console.log('Cart is empty');
         // Redirect to cart page
         this.router.navigate(['/cart']);
       }
@@ -361,17 +360,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.orderService.placeOrder(token, orderRequest).subscribe({
       next: (response) => {
         if (response.success) {
-          console.log('Order placed successfully:', response);
-
           // Add points for the order
-          this.pointingSystemService.addPoints(token, 3, false).subscribe({
-            next: (pointsResponse) => {
-              console.log('Points added successfully:', pointsResponse);
-            },
-            error: (pointsError) => {
-              console.error('Error adding points:', pointsError);
-            },
-          });
+          this.pointingSystemService.addPoints(token, 3, false);
 
           // Clear cart
           this.cartService.clearCart();

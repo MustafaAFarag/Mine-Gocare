@@ -137,7 +137,6 @@ export class AddressComponent implements OnInit {
     this.addressService.getCountries().subscribe({
       next: (response) => {
         this.countries = response.result;
-        console.log('countries', this.countries);
       },
     });
   }
@@ -260,7 +259,6 @@ export class AddressComponent implements OnInit {
         .updateAddress(this.token as string, updateData)
         .subscribe({
           next: (response) => {
-            console.log('Address updated successfully:', response);
             this.submitting = false;
             this.showAddressForm = false;
             this.editingAddressId = null;
@@ -277,7 +275,6 @@ export class AddressComponent implements OnInit {
         .createAddress(this.token as string, formData)
         .subscribe({
           next: (response) => {
-            console.log('Address saved successfully:', response);
             this.submitting = false;
             this.showAddressForm = false;
             this.fetchClientAddressesAPI(); // Refresh the address list
@@ -295,7 +292,6 @@ export class AddressComponent implements OnInit {
       this.deletingAddressId = id;
       this.addressService.deleteAddress(this.token as string, id).subscribe({
         next: (response) => {
-          console.log('Address removed successfully');
           this.deletingAddressId = null;
           this.fetchClientAddressesAPI(); // Refresh the address list
         },

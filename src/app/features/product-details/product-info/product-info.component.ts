@@ -53,7 +53,6 @@ export class ProductInfoComponent {
 
   addToCart(product: ProductDetails): void {
     // Log the incoming product details for debugging
-    console.log('Product Details:', product);
 
     const currentLang = this.languageService.getCurrentLanguage();
 
@@ -68,9 +67,6 @@ export class ProductInfoComponent {
       quantity: this.counter,
       image: product.mainImageUrl,
     };
-
-    // Log the created CartItem for debugging
-    console.log('Item to be added to Cart:', item);
 
     // Add the item to the cart using the CartService
     this.cartService.addToCart(item);

@@ -42,7 +42,6 @@ export class OrderDetailsComponent implements OnInit {
     // Subscribe to language changes
     this.translateService.onLangChange.subscribe((event) => {
       this.currentLang = event.lang;
-      console.log('Language changed to:', this.currentLang);
     });
   }
 
@@ -103,9 +102,6 @@ export class OrderDetailsComponent implements OnInit {
   ngOnInit(): void {
     // Set initial language
     this.currentLang = this.translateService.currentLang || 'en';
-    console.log('Initial language:', this.currentLang);
-    console.log('Order details component loaded for order ID:', this.orderId);
-    console.log('Order details:', this.orderDetails);
   }
 
   goBack(): void {

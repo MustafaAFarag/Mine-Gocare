@@ -49,9 +49,6 @@ export class OrdersComponent implements OnInit {
           this.orders = response.result.items;
           this.totalItems = response.result.totalCount;
           this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-          console.log('Orders loaded:', this.orders);
-          console.log('Total items:', this.totalItems);
-          console.log('Total pages:', this.totalPages);
         },
         (error) => {
           console.error('Error loading orders:', error);
@@ -80,7 +77,6 @@ export class OrdersComponent implements OnInit {
     if (this.token) {
       this.orderService.getClientOrderDetails(orderId, this.token).subscribe(
         (response) => {
-          console.log('Order details loaded:', response.result);
           this.orderDetails = response.result;
         },
         (error) => {
@@ -96,7 +92,6 @@ export class OrdersComponent implements OnInit {
     this.selectedOrderId = orderId;
     this.fetchOrderDetails(orderId);
     this.showOrderDetails = true;
-    console.log('View order details for order ID:', orderId);
   }
 
   hideOrderDetails(): void {
@@ -113,7 +108,6 @@ export class OrdersComponent implements OnInit {
           .cancelOrder(this.token, orderId, 'Order cancelled by user')
           .subscribe(
             (response) => {
-              console.log('Order cancelled successfully:', response);
               // Refresh the orders list
               this.fetchClientOrders();
             },

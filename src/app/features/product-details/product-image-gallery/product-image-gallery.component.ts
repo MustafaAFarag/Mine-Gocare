@@ -64,7 +64,6 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
           if (galleriaContainer) {
             this.stopStickyAt =
               galleryElement.offsetTop + galleriaContainer.clientHeight;
-            console.log('Stop sticky at:', this.stopStickyAt);
           }
         }
       }, 500);

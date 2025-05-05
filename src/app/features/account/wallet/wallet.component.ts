@@ -58,7 +58,6 @@ export class WalletComponent implements OnInit {
     if (this.token && this.clientId) {
       this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
         next: (res) => {
-          console.log('WALLET', res.result);
           if (res.result) {
             this.walletBalance = res.result.walletAmount || 0;
           }

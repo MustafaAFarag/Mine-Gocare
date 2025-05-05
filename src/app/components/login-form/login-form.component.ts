@@ -43,8 +43,6 @@ export class LoginFormComponent implements OnInit {
       identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
       password: ['', [Validators.required]],
     });
-
-    console.log('Login form initialized', this.loginForm);
   }
 
   onLoginSubmit() {
@@ -63,7 +61,6 @@ export class LoginFormComponent implements OnInit {
 
     this.authService.login(identifier, password).subscribe({
       next: (res) => {
-        console.log('✅ Auth success:', res);
         this.loading = false;
         this.loginForm.reset(); // Reset the form fields
 
