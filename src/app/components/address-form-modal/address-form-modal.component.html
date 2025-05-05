@@ -59,6 +59,11 @@
           <input
             type="text"
             formControlName="phoneNumber"
+            placeholder="01032345678"
+            maxlength="11"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
             [ngClass]="{
               'border-red-500':
@@ -73,7 +78,16 @@
             "
             class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
-            {{ "address.validation.phoneNumberRequired" | translate }}
+            <ng-container
+              *ngIf="addressForm.get('phoneNumber')?.errors?.['required']"
+            >
+              {{ "address.validation.phoneNumberRequired" | translate }}
+            </ng-container>
+            <ng-container
+              *ngIf="addressForm.get('phoneNumber')?.errors?.['invalidLength']"
+            >
+              {{ "address.validation.phoneNumberLength" | translate }}
+            </ng-container>
           </div>
         </div>
 

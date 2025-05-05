@@ -8,8 +8,8 @@ import { ApiEndPoint } from '../constants/api.constant';
   providedIn: 'root',
 })
 export class OrderService {
-  private getClientOrdersDetailsUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrdersDetails}`;
-  private getClientOrdersUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrders}`;
+  private getClientOrdersDetailsUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrders}`;
+  private getClientOrdersUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrdersDetails}`;
   private placeOrderUrl = `${environment.apiUrl}/${ApiEndPoint.PlaceOrder}`;
   private cancelOrderUrl = `${environment.apiUrl}/${ApiEndPoint.CancelOrder}`;
 

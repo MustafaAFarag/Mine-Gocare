@@ -165,19 +165,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   fetchClientAddresses(): void {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      this.addressService.getClientAddresses(token).subscribe({
-        next: (response) => {
-          if (response.success && response.result) {
-            // Transform API addresses to match our Address model format
-            this.transformAddresses(response.result);
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching addresses:', error);
-        },
-      });
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        this.addressService.getClientAddresses(token).subscribe({
+          next: (response) => {
+            if (response.success && response.result) {
+              // Transform API addresses to match our Address model format
+              this.transformAddresses(response.result);
+            }
+          },
+          error: (error) => {
+            console.error('Error fetching addresses:', error);
+          },
+        });
+      }
     }
   }
 
@@ -265,19 +267,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   onSaveAddress(addressData: CreateAddress): void {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      this.addressService.createAddress(token, addressData).subscribe({
-        next: (response) => {
-          if (response.success) {
-            // Refresh addresses
-            this.fetchClientAddresses();
-          }
-        },
-        error: (error) => {
-          console.error('Error creating address:', error);
-        },
-      });
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        this.addressService.createAddress(token, addressData).subscribe({
+          next: (response) => {
+            if (response.success) {
+              // Refresh addresses
+              this.fetchClientAddresses();
+            }
+          },
+          error: (error) => {
+            console.error('Error creating address:', error);
+          },
+        });
+      }
     }
   }
 

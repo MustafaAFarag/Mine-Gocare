@@ -16,8 +16,6 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CreateAddress, City, Country, District } from '../../model/Address';
 import { AddressService } from '../../services/address.service';
-import { LanguageService } from '../../services/language.service';
-import { Subscription } from 'rxjs';
 
 type Language = 'en' | 'ar';
 
@@ -68,12 +66,24 @@ export class AddressFormModalComponent implements OnInit {
       longitude: [''],
       address: ['', Validators.required],
       mapAddress: [''],
-      phoneNumber: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
       isDefault: [false],
       type: [0],
       fullName: ['', Validators.required],
       isPhoneVerified: [false],
     });
+  }
+
+  private phoneNumberValidator() {
+    return (control: any) => {
+      const value = control.value;
+      if (!value) return null;
+
+      // Remove any non-digit characters
+      const digits = value.replace(/\D/g, '');
+
+      return digits.length === 11 ? null : { invalidLength: true };
+    };
   }
 
   setupFormListeners(): void {
