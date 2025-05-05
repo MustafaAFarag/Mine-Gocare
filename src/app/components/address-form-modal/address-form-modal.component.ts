@@ -12,6 +12,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormControl,
 } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CreateAddress, City, Country, District } from '../../model/Address';
@@ -60,8 +61,14 @@ export class AddressFormModalComponent implements OnInit {
   createAddressForm(): FormGroup {
     return this.fb.group({
       countryId: [null, Validators.required],
-      cityId: [{ value: null, disabled: true }, Validators.required],
-      districtId: [{ value: null, disabled: true }, Validators.required],
+      cityId: new FormControl(
+        { value: null, disabled: true },
+        Validators.required,
+      ),
+      districtId: new FormControl(
+        { value: null, disabled: true },
+        Validators.required,
+      ),
       latitude: [''],
       longitude: [''],
       address: ['', Validators.required],

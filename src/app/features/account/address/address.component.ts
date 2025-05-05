@@ -6,6 +6,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
+  FormControl,
 } from '@angular/forms';
 import { AddressService } from '../../../services/address.service';
 import {
@@ -87,8 +88,14 @@ export class AddressComponent implements OnInit {
   createAddressForm(): FormGroup {
     return this.fb.group({
       countryId: [null, Validators.required],
-      cityId: [{ value: null, disabled: true }, Validators.required],
-      districtId: [{ value: null, disabled: true }, Validators.required],
+      cityId: new FormControl(
+        { value: null, disabled: true },
+        Validators.required,
+      ),
+      districtId: new FormControl(
+        { value: null, disabled: true },
+        Validators.required,
+      ),
       latitude: [''],
       longitude: [''],
       address: ['', Validators.required],
