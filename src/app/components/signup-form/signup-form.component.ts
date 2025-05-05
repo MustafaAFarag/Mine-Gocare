@@ -143,6 +143,18 @@ export class SignupFormComponent implements OnInit {
         const control = this.signupForm.get(key);
         control?.markAsTouched();
       });
+
+      // Check for password mismatch
+      const password = this.signupForm.get('password')?.value;
+      const confirmPassword = this.signupForm.get('confirmPassword')?.value;
+
+      if (password !== confirmPassword) {
+        this.signupForm.setErrors({ passwordMismatch: true });
+        this.signupForm
+          .get('confirmPassword')
+          ?.setErrors({ passwordMismatch: true });
+      }
+
       return;
     }
 
