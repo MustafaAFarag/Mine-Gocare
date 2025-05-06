@@ -74,7 +74,7 @@
             </div>
           </div>
           <button
-            class="text-hover-color hover:text-red-500"
+            class="text-hover-color hover:text-red-700"
             (click)="removeItem(item.productId)"
           >
             <i class="ri-close-line text-2xl"></i>
@@ -83,7 +83,7 @@
         <div class="mt-4 flex items-center justify-between">
           <div class="flex items-center rounded-md border">
             <button
-              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              class="bg-hover-color px-3 py-1 text-white hover:bg-red-700"
               (click)="updateQuantity(item.productId, item.quantity - 1)"
             >
               <i class="ri-subtract-line"></i>
@@ -95,7 +95,7 @@
               readonly
             />
             <button
-              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              class="bg-hover-color px-3 py-1 text-white hover:bg-red-700"
               (click)="updateQuantity(item.productId, item.quantity + 1)"
             >
               <i class="ri-add-line"></i>
@@ -133,8 +133,8 @@
           >
             <span class="font-bold text-gray-900">
               {{ getLocalizedText(item.currency) }}
-              {{ item.afterPrice.toFixed(2) }}</span
-            >
+              {{ item.afterPrice.toFixed(2) }}
+            </span>
             <span class="text-sm text-special-gray line-through"
               >{{ getLocalizedText(item.currency) }}
               {{ item.beforePrice.toFixed(2) }}</span
@@ -147,7 +147,7 @@
           </ng-container>
           <ng-template #regularPrice>
             <span class="font-bold text-gray-900"
-              >{{ getLocalizedText(item.currency) }}
+              >{{ "common.currency" | translate }}
               {{ item.afterPrice.toFixed(2) }}</span
             >
           </ng-template>
@@ -157,7 +157,7 @@
         <div class="col-span-1 flex items-center justify-center text-center">
           <div class="flex items-center rounded-md border">
             <button
-              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              class="bg-hover-color px-3 py-1 text-white hover:bg-red-700"
               (click)="updateQuantity(item.productId, item.quantity - 1)"
             >
               <i class="ri-subtract-line"></i>
@@ -169,7 +169,7 @@
               readonly
             />
             <button
-              class="px-3 py-1 text-gray-600 hover:bg-gray-100"
+              class="bg-hover-color px-3 py-1 text-white hover:bg-red-700"
               (click)="updateQuantity(item.productId, item.quantity + 1)"
             >
               <i class="ri-add-line"></i>
@@ -180,7 +180,7 @@
         <!-- Total -->
         <div class="col-span-1 text-center">
           <div class="text-lg font-bold text-hover-color">
-            {{ getLocalizedText(item.currency) }}
+            {{ "common.currency" | translate }}
             {{ getItemTotal(item).toFixed(2) }}
           </div>
         </div>
@@ -188,7 +188,7 @@
         <!-- Action -->
         <div class="col-span-1 text-center">
           <button
-            class="bg-gray-200 px-1 text-hover-color hover:text-red-500"
+            class="bg-gray-200 px-1 text-hover-color hover:text-red-700"
             (click)="removeItem(item.productId)"
           >
             <i class="ri-close-line text-2xl"></i>
