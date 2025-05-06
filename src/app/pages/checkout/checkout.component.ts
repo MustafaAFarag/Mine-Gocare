@@ -31,6 +31,7 @@ import { AddressFormModalComponent } from '../../components/address-form-modal/a
 import { CartItem } from '../../model/Cart';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-checkout',
@@ -45,6 +46,7 @@ import { TranslateService } from '@ngx-translate/core';
     OrderSummaryComponent,
     BillingSummaryComponent,
     AddressFormModalComponent,
+    LoadingComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
@@ -56,6 +58,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   // Address Form Modal
   showAddressFormModal = false;
+
+  // Loading states
+  loading: boolean = false;
+  cartLoading: boolean = true;
 
   // Delivery options
   deliveryOption: 'standard' | 'express' = 'standard';
@@ -129,6 +135,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
 
     // Subscribe to cart changes
+    this.cartLoading = true;
     this.cartSubscription = this.cartService.cart$.subscribe((cart) => {
       this.subTotal = cart.total;
 
@@ -144,6 +151,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }));
 
       this.updateTotal();
+      this.cartLoading = false;
 
       // If cart is empty, we might want to redirect to cart page
       if (this.cartItems.length === 0) {
@@ -170,15 +178,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (typeof window !== 'undefined' && window.localStorage) {
       const token = localStorage.getItem('accessToken');
       if (token) {
+        this.loading = true;
         this.addressService.getClientAddresses(token).subscribe({
           next: (response) => {
             if (response.success && response.result) {
               // Transform API addresses to match our Address model format
               this.transformAddresses(response.result);
             }
+            this.loading = false;
           },
           error: (error) => {
             console.error('Error fetching addresses:', error);
+            this.loading = false;
           },
         });
       }

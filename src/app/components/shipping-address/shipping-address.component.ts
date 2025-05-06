@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 })
 export class ShippingAddressComponent implements OnInit, OnDestroy {
   @Input() shippingAddresses: Address[] = [];
+  @Input() loading: boolean = false;
   @Output() addressSelected = new EventEmitter<number>();
   @Output() addNewAddress = new EventEmitter<void>();
 

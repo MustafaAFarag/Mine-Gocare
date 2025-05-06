@@ -118,7 +118,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 1024;
+    if (typeof window !== 'undefined') {
+      this.isMobile = window.innerWidth < 1024;
+    }
   }
 
   ngOnInit(): void {
