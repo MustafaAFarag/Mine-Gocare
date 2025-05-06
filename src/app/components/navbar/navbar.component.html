@@ -24,7 +24,9 @@
     </div>
 
     <!-- Logo (visible in mobile and up to lg) -->
-    <div class="mr-5 flex flex-1 justify-end gap-2 lg:order-first lg:flex-none">
+    <div
+      class="mr-5 flex flex-1 items-center justify-end gap-2 lg:order-first lg:flex-none"
+    >
       <a routerLink="/" (click)="closeMobileMenu()">
         <img
           src="/assets/images/settings/logo-berry.png"
@@ -33,7 +35,35 @@
         />
       </a>
 
-      <!-- Mobile icons removed since we have bottom mobile navigation -->
+      <!-- Icons for tablet screens (md to lg) -->
+      <div class="hidden items-center gap-4 text-xl md:flex lg:hidden">
+        <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
+        <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
+        <div class="relative cursor-pointer" routerLink="/wishlist">
+          <i class="ri-heart-line"></i>
+          <span
+            *ngIf="wishlistCount > 0"
+            class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
+          >
+            {{ wishlistCount }}
+          </span>
+        </div>
+        <div class="relative cursor-pointer" (click)="toggleCart()">
+          <i class="ri-shopping-cart-line"></i>
+          <span
+            *ngIf="cartCount > 0"
+            class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-hover-color text-sm text-white"
+          >
+            {{ cartCount }}
+          </span>
+        </div>
+        @if (currentUser) {
+          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
+          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
+        } @else {
+          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+        }
+      </div>
     </div>
 
     <!-- Desktop Navigation (visible only on xl and up) -->

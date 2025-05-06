@@ -68,6 +68,7 @@
                       {{ getLocalizedText(item.currency.name) }}
                       {{ item.priceAfterDiscount.toFixed(2) }}
                     </span>
+                    <br />
                     <span class="text-sm text-special-gray line-through"
                       >{{ getLocalizedText(item.currency.name) }}
                       {{ item.priceBeforeDiscount.toFixed(2) }}</span
@@ -146,8 +147,9 @@
             >
               <span class="font-bold text-gray-900">
                 {{ getLocalizedText(item.currency.name) }}
-                {{ item.priceAfterDiscount.toFixed(2) }}</span
-              >
+                {{ item.priceAfterDiscount.toFixed(2) }}
+              </span>
+              <br class="xl:hidden" />
               <span class="text-sm text-special-gray line-through"
                 >{{ getLocalizedText(item.currency.name) }}
                 {{ item.priceBeforeDiscount.toFixed(2) }}</span
