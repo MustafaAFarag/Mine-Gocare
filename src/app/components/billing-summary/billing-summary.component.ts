@@ -72,7 +72,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.promoForm = this.fb.group({
-      couponCode: [''],
+      couponCode: [{ value: '', disabled: false }],
     });
 
     // Subscribe to cart changes
@@ -149,6 +149,8 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     this.finalTotal = this.subTotal + this.shipping + this.tax;
 
     this.isApplyingPromo = true;
+    this.promoForm.get('couponCode')?.disable();
+
     this.promoCodeService
       .validatePromoCode(this.accessToken!, code, this.orderProducts)
       .subscribe({
@@ -203,6 +205,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.isApplyingPromo = false;
+          this.promoForm.get('couponCode')?.enable();
         },
       });
   }

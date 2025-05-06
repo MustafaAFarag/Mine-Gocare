@@ -108,17 +108,17 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart();
 
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.instant(
-        'wishlist.toast.addedToCart.summary',
-      ),
-      detail: this.translateService.instant(
-        'wishlist.toast.addedToCart.detail',
-      ),
-      life: 2000,
-      styleClass: 'black-text-toast',
-    });
+    // this.messageService.add({
+    //   severity: 'success',
+    //   summary: this.translateService.instant(
+    //     'wishlist.toast.addedToCart.summary',
+    //   ),
+    //   detail: this.translateService.instant(
+    //     'wishlist.toast.addedToCart.detail',
+    //   ),
+    //   life: 2000,
+    //   styleClass: 'black-text-toast',
+    // });
   }
 
   continueShopping(): void {
