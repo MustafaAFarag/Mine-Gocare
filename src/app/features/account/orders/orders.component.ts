@@ -15,7 +15,7 @@ type Language = 'en' | 'ar';
   styleUrls: ['./orders.component.css'],
 })
 export class OrdersComponent implements OnInit {
-  token = localStorage.getItem('accessToken');
+  token: string | null = null;
   orders: ClientOrders[] = [];
   showOrderDetails = false;
   selectedOrderId: number | null = null;
@@ -39,6 +39,10 @@ export class OrdersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Safely access localStorage in ngOnInit
+    if (typeof window !== 'undefined') {
+      this.token = localStorage.getItem('accessToken');
+    }
     this.fetchClientOrders();
   }
 

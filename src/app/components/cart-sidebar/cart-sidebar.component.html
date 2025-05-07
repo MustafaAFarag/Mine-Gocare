@@ -156,7 +156,8 @@
     <div class="mb-4 flex items-center justify-between">
       <span class="font-medium">{{ "cart-sidebar.subtotal" | translate }}</span>
       <span class="font-bold text-hover-color">
-        ${{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
+        {{ "common.currency" | translate }}
+        {{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
       </span>
     </div>
 

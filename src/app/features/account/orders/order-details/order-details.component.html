@@ -222,14 +222,33 @@
                   {{ "account.orders.paymentMethod" | translate }}:
                 </h3>
                 <p class="text-gray-600">
-                  {{ orderDetails.orderPayment.paymentMethod }}
+                  {{
+                    orderDetails.orderPayment.paymentMethod === 0
+                      ? ("account.orders.paymentCashOnDelivery" | translate)
+                      : ("account.orders.paymentCreditCard" | translate)
+                  }}
                 </p>
               </div>
               <div>
                 <h3 class="mb-2 font-medium text-gray-700">
                   {{ "account.orders.status" | translate }}:
                 </h3>
-                <p class="text-gray-600">{{ orderDetails.orderStatus }}</p>
+                <p class="text-gray-600">
+                  <ng-container *ngIf="orderDetails.orderStatus === 1">
+                    {{ "account.orders.statusPending" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 7">
+                    {{ "account.orders.statusCanceled" | translate }}
+                  </ng-container>
+                  <ng-container
+                    *ngIf="
+                      orderDetails.orderStatus !== 1 &&
+                      orderDetails.orderStatus !== 7
+                    "
+                  >
+                    {{ orderDetails.orderStatus }}
+                  </ng-container>
+                </p>
               </div>
             </div>
           </div>

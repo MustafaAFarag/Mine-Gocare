@@ -408,7 +408,7 @@
     "viewCart": "عرض السلة",
     "checkout": "الدفع",
     "quantity": "الكمية",
-    "pricePerUnit": "{{quantity}} × {{price}} دولار"
+    "pricePerUnit": "{{quantity}} × ج.م {{price}}"
   },
   "cart": {
     "header": "سلة التسوق",
@@ -552,6 +552,7 @@
       "statusShipped": "تم الشحن",
       "statusRejected": "مرفوض",
       "statusUnknown": "غير معروف",
+      "statusPending": "قيد الانتظار",
       "paymentCashOnDelivery": "الدفع عند الاستلام",
       "paymentCreditCard": "بطاقة ائتمان",
       "paymentUnknown": "غير معروف",
@@ -571,7 +572,8 @@
       "subTotal": "المجموع الفرعي",
       "shipping": "الشحن",
       "discount": "الخصم",
-      "total": "المجموع"
+      "total": "المجموع",
+      "pointsGained": "النقاط المكتسبة"
     },
     "bankDetails": {
       "title": "تفاصيل البنك",

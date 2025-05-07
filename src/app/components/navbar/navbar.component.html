@@ -27,9 +27,9 @@
     <div
       class="mr-5 flex flex-1 items-center justify-end gap-2 lg:order-first lg:flex-none"
     >
-      <a routerLink="/" (click)="closeMobileMenu()">
+      <a routerLink="/" (click)="closeMobileMenu()" class="bg-black">
         <img
-          src="/assets/images/settings/logo-berry.png"
+          src="/assets/images/settings/gocare/gocare-logo.svg"
           alt="Logo"
           class="mr-5 h-12 w-auto lg:mr-0 lg:h-14"
         />
@@ -37,7 +37,6 @@
 
       <!-- Icons for tablet screens (md to lg) -->
       <div class="hidden items-center gap-4 text-xl md:flex lg:hidden">
-        <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
         <div class="relative cursor-pointer" routerLink="/wishlist">
           <i class="ri-heart-line"></i>
@@ -114,7 +113,6 @@
 
       <!-- Icons (desktop) -->
       <div class="flex items-center gap-4 text-xl xl:text-2xl">
-        <i class="ri-scissors-line cursor-pointer" (click)="toggleGocare()"></i>
         <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
         <div class="relative cursor-pointer" routerLink="/wishlist">
           <i class="ri-heart-line"></i>
@@ -168,9 +166,9 @@
       </button>
 
       <!-- Logo at the top of the sliding menu -->
-      <a routerLink="/" (click)="closeMobileMenu()" class="mb-6">
+      <a routerLink="/" (click)="closeMobileMenu()" class="mb-6 bg-black">
         <img
-          src="/assets/images/settings/logo-berry.png"
+          src="/assets/images/settings/gocare/gocare-logo.svg"
           alt="Logo"
           class="h-12 w-auto"
         />

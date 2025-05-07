@@ -426,7 +426,7 @@
     "viewCart": "View Cart",
     "checkout": "Check Out",
     "quantity": "Quantity",
-    "pricePerUnit": "{{quantity}} x ${{price}}"
+    "pricePerUnit": "{{quantity}} x EGP {{price}}"
   },
   "cart": {
     "header": "Cart",
@@ -570,6 +570,7 @@
       "statusShipped": "Shipped",
       "statusRejected": "Rejected",
       "statusUnknown": "Unknown",
+      "statusPending": "Pending",
       "paymentCashOnDelivery": "Cash on Delivery",
       "paymentCreditCard": "Credit Card",
       "paymentUnknown": "Unknown",
@@ -589,7 +590,8 @@
       "subTotal": "Sub Total",
       "shipping": "Shipping",
       "discount": "Discount",
-      "total": "Total"
+      "total": "Total",
+      "pointsGained": "Points Gained"
     },
     "bankDetails": {
       "title": "Bank Details",

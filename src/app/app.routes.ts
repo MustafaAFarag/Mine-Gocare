@@ -16,6 +16,7 @@ import { RefundComponent } from './features/account/refund/refund.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { WishlistComponent } from './pages/wishlist/wishlist.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -49,6 +50,7 @@ export const routes: Routes = [
       {
         path: 'account',
         component: AccountComponent,
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',

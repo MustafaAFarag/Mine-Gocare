@@ -10,10 +10,10 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class InstashopSectionComponent {
   instaPosts = [
-    { id: 1, image: 'assets/images/settings/insta6-berry.jpg' },
-    { id: 2, image: 'assets/images/settings/insta7-berry.jpg' },
-    { id: 3, image: 'assets/images/settings/insta2-berry.jpg' },
-    { id: 4, image: 'assets/images/settings/insta1-berry.jpg' },
-    { id: 5, image: 'assets/images/settings/insta4-berry.jpg' },
+    { id: 1, image: 'assets/images/settings/gocare/gocare15.jpg' },
+    { id: 2, image: 'assets/images/settings/gocare/gocare9.jpg' },
+    { id: 3, image: 'assets/images/settings/gocare/gocare10.jpg' },
+    { id: 4, image: 'assets/images/settings/gocare/gocare11.jpg' },
+    { id: 5, image: 'assets/images/settings/gocare/gocare12.jpg' },
   ];
 }
