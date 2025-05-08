@@ -94,7 +94,38 @@
     "billingSection": "Billing Summary",
     "copy": "COPY CODE",
     "usePointsQuestion": "Would you prefer to pay using points?",
-    "useWalletQuestion": "Would you prefer to pay using wallet?"
+    "useWalletQuestion": "Would you prefer to pay using wallet?",
+    "toast": {
+      "codeCopied": {
+        "summary": "Copied!",
+        "detail": "Promo code copied to clipboard"
+      },
+      "emptyCode": {
+        "summary": "Empty Code",
+        "detail": "Please enter a promo code"
+      },
+      "promoApplied": {
+        "summary": "Promo Applied",
+        "detail": "Discount of {{amount}} EGP applied"
+      },
+      "promoWalletPoints": {
+        "detail": "You'll receive {{points}} points in your wallet after purchasing {{amount}} worth of products"
+      },
+      "invalidPromo": {
+        "summary": "Invalid Promo",
+        "detail": "The promo code is not valid for your order"
+      },
+      "error": {
+        "summary": "Error",
+        "detail": "Failed to validate promo code"
+      },
+      "codeNotValidForProduct": {
+        "summary": "Invalid Promo Code",
+        "detail": "This code is not valid for this product"
+      }
+    },
+    "promoDiscount": "Promo Code Discount",
+    "walletPoints": "You'll receive {{points}} points in your wallet after purchasing {{amount}} {{currency}} worth of products"
   },
   "privacy-policy": {
     "title": "Privacy and Policy",

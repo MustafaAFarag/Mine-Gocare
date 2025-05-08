@@ -96,7 +96,38 @@
     "billingSection": "ملخص الفواتير",
     "copy": "نسخ الكود",
     "usePointsQuestion": "هل تفضل الدفع باستخدام النقاط؟",
-    "useWalletQuestion": "هل تفضل الدفع باستخدام المحفظة؟"
+    "useWalletQuestion": "هل تفضل الدفع باستخدام المحفظة؟",
+    "toast": {
+      "codeCopied": {
+        "summary": "تم النسخ!",
+        "detail": "تم نسخ رمز الخصم إلى الحافظة"
+      },
+      "emptyCode": {
+        "summary": "الرمز فارغ",
+        "detail": "الرجاء إدخال رمز الخصم"
+      },
+      "promoApplied": {
+        "summary": "تم تطبيق الخصم",
+        "detail": "تم تطبيق خصم بقيمة {{amount}} جنيه"
+      },
+      "promoWalletPoints": {
+        "detail": "ستحصل على {{points}} نقطة في محفظتك بعد شراء منتجات بقيمة {{amount}}"
+      },
+      "invalidPromo": {
+        "summary": "رمز خصم غير صالح",
+        "detail": "رمز الخصم غير صالح لطلبك"
+      },
+      "error": {
+        "summary": "خطأ",
+        "detail": "فشل في التحقق من صلاحية رمز الخصم"
+      },
+      "codeNotValidForProduct": {
+        "summary": "رمز خصم غير صالح",
+        "detail": "هذا الرمز غير صالح لهذا المنتج"
+      }
+    },
+    "promoDiscount": "خصم كود الترويج",
+    "walletPoints": "ستحصل على {{points}} نقطة في محفظتك بعد شراء منتجات بقيمة {{amount}} {{currency}}"
   },
   "privacy-policy": {
     "title": "سياسة الخصوصية",

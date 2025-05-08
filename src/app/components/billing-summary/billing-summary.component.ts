@@ -98,8 +98,12 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     navigator.clipboard.writeText(code).then(() => {
       this.messageService.add({
         severity: 'success',
-        summary: 'Copied!',
-        detail: 'Promo code copied to clipboard',
+        summary: this.translateService.instant(
+          'checkout.toast.codeCopied.summary',
+        ),
+        detail: this.translateService.instant(
+          'checkout.toast.codeCopied.detail',
+        ),
         life: 2000,
         styleClass: 'black-text-toast',
       });
@@ -135,8 +139,12 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     if (!code) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Empty Code',
-        detail: 'Please enter a promo code.',
+        summary: this.translateService.instant(
+          'checkout.toast.emptyCode.summary',
+        ),
+        detail: this.translateService.instant(
+          'checkout.toast.emptyCode.detail',
+        ),
         life: 3000,
       });
       return;
@@ -170,16 +178,29 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
                 discount: this.discountAmount,
               });
 
-              let message = `Discount of ${this.discountAmount.toFixed(
-                2,
-              )} EGP applied.`;
+              let message = '';
               if (matchedPromo.type === 3) {
-                message = `You'll receive ${matchedPromo.getCount} points in your wallet after purchasing ${matchedPromo.buyCount} worth of products.`;
+                message = this.translateService.instant(
+                  'checkout.toast.promoWalletPoints.detail',
+                  {
+                    points: matchedPromo.getCount,
+                    amount: matchedPromo.buyCount,
+                  },
+                );
+              } else {
+                message = this.translateService.instant(
+                  'checkout.toast.promoApplied.detail',
+                  {
+                    amount: this.discountAmount.toFixed(2),
+                  },
+                );
               }
 
               this.messageService.add({
                 severity: 'success',
-                summary: 'Promo Applied',
+                summary: this.translateService.instant(
+                  'checkout.toast.promoApplied.summary',
+                ),
                 detail: message,
                 life: 3000,
               });
@@ -187,10 +208,19 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
           } else {
             this.messageService.add({
               severity: 'error',
-              summary: 'Invalid Promo',
+              summary: this.translateService.instant(
+                'checkout.toast.invalidPromo.summary',
+              ),
               detail:
-                response.result.message ||
-                'The promo code is not valid for your order.',
+                response.result.message ===
+                'This code is not valid for this product'
+                  ? this.translateService.instant(
+                      'checkout.toast.codeNotValidForProduct.detail',
+                    )
+                  : response.result.message ||
+                    this.translateService.instant(
+                      'checkout.toast.invalidPromo.detail',
+                    ),
               life: 3000,
             });
           }
@@ -198,8 +228,12 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
         error: () => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to validate promo code.',
+            summary: this.translateService.instant(
+              'checkout.toast.error.summary',
+            ),
+            detail: this.translateService.instant(
+              'checkout.toast.error.detail',
+            ),
             life: 3000,
           });
         },
