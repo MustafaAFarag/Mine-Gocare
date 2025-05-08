@@ -435,15 +435,6 @@
   </div>
 </div>
 
-<!-- Add Quick View Modal for List View -->
-<app-quick-product-view-modal
-  *ngIf="activeQuickViewProduct"
-  [isOpen]="isQuickViewOpen"
-  [productId]="activeQuickViewProduct.productId"
-  [variantId]="activeQuickViewProduct.variantId"
-  (closeModal)="closeQuickView()"
-></app-quick-product-view-modal>
-
 <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
 <style>

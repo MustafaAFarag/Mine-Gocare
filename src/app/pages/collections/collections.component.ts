@@ -26,7 +26,6 @@ import { MessageService } from 'primeng/api';
 
 import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
 import { Subject, takeUntil } from 'rxjs';
-import { QuickProductViewModalComponent } from '../../components/quick-product-view-modal/quick-product-view-modal.component';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
@@ -40,8 +39,6 @@ import { ToastModule } from 'primeng/toast';
     LoadingComponent,
     ToastModule,
     TranslateModule,
-
-    QuickProductViewModalComponent,
   ],
   providers: [MessageService],
 

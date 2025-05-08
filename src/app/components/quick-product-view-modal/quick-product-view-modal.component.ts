@@ -6,6 +6,7 @@ import {
   OnInit,
   OnChanges,
   SimpleChanges,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,12 +16,6 @@ import { getFullImageUrl } from '../../lib/utils';
 import { QuickProductInfoComponent } from '../quick-product-info/quick-product-info.component';
 import { QuickProductImageComponent } from '../quick-product-image/quick-product-image.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
-
-interface ProductImage {
-  id: number;
-  url: string;
-  alt: string;
-}
 
 @Component({
   selector: 'app-quick-product-view-modal',
@@ -42,17 +37,20 @@ export class QuickProductViewModalComponent implements OnInit, OnChanges {
   productDetails!: ProductDetails;
   isLoading: boolean = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
-    if (this.productId && this.variantId) {
-      this.fetchProductDetails();
-    }
+    // Remove initial fetch - we'll only fetch when modal opens
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Only fetch product details when the modal is opened
     if (
-      (changes['productId'] || changes['variantId']) &&
+      changes['isOpen'] &&
+      changes['isOpen'].currentValue === true &&
       this.productId &&
       this.variantId
     ) {
@@ -79,10 +77,12 @@ export class QuickProductViewModalComponent implements OnInit, OnChanges {
         next: (response) => {
           this.productDetails = response.result;
           this.isLoading = false;
+          this.cdr.detectChanges(); // Manually trigger change detection
         },
         error: (error) => {
           console.error('Error fetching product details:', error);
           this.isLoading = false;
+          this.cdr.detectChanges(); // Manually trigger change detection
         },
       });
   }
