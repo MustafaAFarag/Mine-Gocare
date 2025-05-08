@@ -32,6 +32,7 @@ import { CartItem } from '../../model/Cart';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-checkout',
@@ -98,7 +99,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   selectedTimeSlot: string | null = null;
 
   // Payment methods
-  paymentMethod: 'cod' | 'paytabs' = 'cod';
+  paymentMethod: 'cod' | 'paytabs' | 'wallet' = 'cod';
+  walletBalance: number = 0;
 
   shippingAddresses: Address[] = [];
   billingAddresses: Address[] = [];
@@ -117,10 +119,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   appliedPromoCode: { id: number; discount: number } | null = null;
 
   constructor(
-    private fb: FormBuilder,
     private cartService: CartService,
+    private walletService: WalletService,
     private languageService: LanguageService,
-    private authService: AuthService,
     private addressService: AddressService,
     private orderService: OrderService,
     private pointingSystemService: PointingSystemService,
@@ -162,6 +163,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     // Fetch client addresses
     this.fetchClientAddresses();
+    this.fetchClientWallet();
   }
 
   ngOnDestroy(): void {
@@ -171,6 +173,28 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
+    }
+  }
+
+  fetchClientWallet(): void {
+    const token = localStorage.getItem('accessToken');
+    const user = localStorage.getItem('user');
+    if (token && user) {
+      this.walletService
+        .getWallet(token, JSON.parse(user || '{}').userId, 224)
+        .subscribe((response) => {
+          if (response.success && response.result) {
+            this.walletBalance = response.result.walletAmount || 0;
+
+            // If wallet balance is less than total, make sure wallet isn't selected
+            if (
+              this.walletBalance < this.total &&
+              this.paymentMethod === 'wallet'
+            ) {
+              this.paymentMethod = 'cod';
+            }
+          }
+        });
     }
   }
 
@@ -263,7 +287,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.selectedTimeSlot = slotId;
   }
 
-  selectPaymentMethod(method: 'cod' | 'paytabs'): void {
+  selectPaymentMethod(method: 'cod' | 'paytabs' | 'wallet'): void {
+    // Don't allow wallet payment if balance is insufficient
+    if (method === 'wallet' && this.walletBalance < this.total) {
+      return;
+    }
+
     this.paymentMethod = method;
   }
 
@@ -312,7 +341,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   // Map payment method to API values
   getPaymentMethodValue(): number {
-    return this.paymentMethod === 'cod' ? 0 : 1;
+    if (this.paymentMethod === 'cod') return 0;
+    if (this.paymentMethod === 'paytabs') return 1;
+    return 3; // wallet
   }
 
   get mappedOrderProducts() {
@@ -358,11 +389,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Set loading state
     this.isPlacingOrder = true;
 
-    // Get payment method value (0 for COD, 1 for PayTabs)
+    // Get payment method value (0 for COD, 1 for PayTabs, 3 for Wallet)
     const paymentMethodValue = this.getPaymentMethodValue();
 
     // Prepare the order request
-    const orderRequest = {
+    const orderRequest: any = {
       addressId: selectedAddressId,
       orderProducts: this.cartItems.map((item) => ({
         productVariantId: item.variantId || item.productId,
@@ -373,6 +404,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       promoCodeId: this.appliedPromoCode?.id || null,
     };
 
+    // Add walletAmount only if paying with wallet
+    if (paymentMethodValue === 3) {
+      // Make sure to set the exact total amount as a number
+      orderRequest.walletAmount = Number(this.total.toFixed(2));
+
+      // Log the request to verify the value
+      console.log('Placing order with wallet payment:', orderRequest);
+    }
+
     // Call order service to place order
     this.orderService.placeOrder(token, orderRequest).subscribe({
       next: (response) => {
@@ -382,6 +422,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
           // Clear cart
           this.cartService.clearCart();
+
+          // Refresh wallet balance if paid with wallet
+          if (paymentMethodValue === 3) {
+            this.fetchClientWallet();
+          }
 
           // Show success message
           alert(this.translate.instant('alerts.orderSuccess'));

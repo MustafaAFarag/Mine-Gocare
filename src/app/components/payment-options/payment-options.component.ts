@@ -19,8 +19,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./payment-options.component.css'],
 })
 export class PaymentOptionsComponent implements OnInit, OnDestroy {
-  @Input() paymentMethod: 'cod' | 'paytabs' = 'cod';
-  @Output() paymentMethodSelected = new EventEmitter<'cod' | 'paytabs'>();
+  @Input() paymentMethod: 'cod' | 'paytabs' | 'wallet' = 'cod';
+  @Input() walletBalance: number = 0;
+  @Input() totalPrice: number = 0;
+
+  @Output() paymentMethodSelected = new EventEmitter<
+    'cod' | 'paytabs' | 'wallet'
+  >();
 
   currentLang: string = 'en';
   private langSubscription: Subscription = new Subscription();
@@ -40,7 +45,16 @@ export class PaymentOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectPaymentMethod(method: 'cod' | 'paytabs'): void {
+  selectPaymentMethod(method: 'cod' | 'paytabs' | 'wallet'): void {
+    // Don't allow wallet payment if balance is insufficient
+    if (method === 'wallet' && this.walletBalance < this.totalPrice) {
+      return;
+    }
+
     this.paymentMethodSelected.emit(method);
+  }
+
+  isWalletDisabled(): boolean {
+    return this.walletBalance < this.totalPrice;
   }
 }

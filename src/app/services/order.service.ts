@@ -59,6 +59,7 @@ export class OrderService {
       }[];
       paymentMethod: number;
       promoCodeId?: number | null;
+      walletAmount?: number;
     },
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -73,7 +74,7 @@ export class OrderService {
       paymentMethod: orderRequest.paymentMethod,
       orderProducts: orderRequest.orderProducts,
       promoCodeId: orderRequest.promoCodeId || null,
-      walletAmount: 0.0,
+      walletAmount: orderRequest.walletAmount || 0.0,
     };
 
     return this.http.post(this.placeOrderUrl, body, { headers });

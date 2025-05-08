@@ -67,6 +67,8 @@
       <!-- Payment Options Component -->
       <app-payment-options
         [paymentMethod]="paymentMethod"
+        [walletBalance]="walletBalance"
+        [totalPrice]="total"
         (paymentMethodSelected)="selectPaymentMethod($event)"
       ></app-payment-options>
     </div>

@@ -48,6 +48,8 @@
   },
   "checkout": {
     "title": "Checkout",
+    "wallet": "Wallet",
+    "insufficientBalance": "Insufficient balance",
     "emptyCart": {
       "title": "Your cart is empty",
       "message": "Looks like you haven't added any items to your cart yet.",

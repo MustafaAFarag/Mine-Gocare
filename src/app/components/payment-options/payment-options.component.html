@@ -67,6 +67,53 @@
           </div>
         </div>
       </div>
+
+      <!-- Wallet -->
+      <div
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'wallet'"
+        [class.opacity-50]="isWalletDisabled()"
+        [class.cursor-not-allowed]="isWalletDisabled()"
+        (click)="selectPaymentMethod('wallet')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="
+                paymentMethod === 'wallet' && !isWalletDisabled()
+              "
+              [class.bg-hover-color]="
+                paymentMethod === 'wallet' && !isWalletDisabled()
+              "
+            >
+              <div
+                *ngIf="paymentMethod === 'wallet' && !isWalletDisabled()"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex items-center justify-center gap-2">
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.wallet" | translate }}
+            </h3>
+            <p
+              class="mt-1 text-sm"
+              [class.text-red-500]="isWalletDisabled()"
+              [class.text-hover-color]="!isWalletDisabled()"
+            >
+              ( {{ "common.currency" | translate }}
+              {{ walletBalance | number: "1.2-2" }} )
+            </p>
+            <p *ngIf="isWalletDisabled()" class="mt-1 text-xs text-red-500">
+              {{ "checkout.insufficientBalance" | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

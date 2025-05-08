@@ -48,6 +48,8 @@
   },
   "checkout": {
     "title": "الدفع",
+    "wallet": "المحفظة",
+    "insufficientBalance": "رصيد غير كافي",
     "emptyCart": {
       "title": "سلة التسوق فارغة",
       "message": "يبدو أنك لم تضيف أي منتجات إلى سلة التسوق بعد.",
