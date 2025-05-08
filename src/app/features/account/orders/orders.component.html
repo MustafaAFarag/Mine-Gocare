@@ -80,7 +80,9 @@
                 ? ("account.orders.paymentCashOnDelivery" | translate)
                 : order.paymentMethod === 1
                   ? ("account.orders.paymentCreditCard" | translate)
-                  : ("account.orders.paymentUnknown" | translate)
+                  : order.paymentMethod === 3
+                    ? ("account.orders.paymentWallet" | translate)
+                    : ("account.orders.paymentUnknown" | translate)
             }}
           </td>
 
@@ -181,7 +183,9 @@
                 ? ("account.orders.paymentCashOnDelivery" | translate)
                 : order.paymentMethod === 1
                   ? ("account.orders.paymentCreditCard" | translate)
-                  : ("account.orders.paymentUnknown" | translate)
+                  : order.paymentMethod === 3
+                    ? ("account.orders.paymentWallet" | translate)
+                    : ("account.orders.paymentUnknown" | translate)
             }}
           </p>
         </div>
