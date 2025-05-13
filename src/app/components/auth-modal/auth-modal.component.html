@@ -1,41 +1,43 @@
-<p-toast position="top-left" styleClass="black-text-toast"></p-toast>
-<p-dialog
-  [(visible)]="visible"
-  [modal]="true"
-  [closable]="false"
-  [dismissableMask]="true"
-  [style]="{ width: '80vw', maxWidth: '1400px' }"
-  [contentStyle]="{ padding: '0' }"
-  [baseZIndex]="10000"
-  [showHeader]="false"
-  [transitionOptions]="'300ms cubic-bezier(0.4, 0, 0.2, 1)'"
-  styleClass="auth-modal-anim"
->
-  <div class="flex h-full w-full">
-    <!-- Left: Auth Form -->
-    <div class="flex w-full flex-col justify-center bg-white p-8 xl:w-1/2">
-      <app-login-form
-        *ngIf="isLoginMode"
-        (toggle)="toggleMode()"
-        (loginSuccess)="handleLoginSuccess()"
-      ></app-login-form>
-      <app-signup-form
-        *ngIf="!isLoginMode"
-        (toggle)="toggleMode()"
-        (signupSuccess)="handleSignupSuccess()"
-      ></app-signup-form>
-    </div>
+<ng-container *ngIf="isBrowser">
+  <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
+  <p-dialog
+    [(visible)]="visible"
+    [modal]="true"
+    [closable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '80vw', maxWidth: '1400px' }"
+    [contentStyle]="{ padding: '0' }"
+    [baseZIndex]="10000"
+    [showHeader]="false"
+    [transitionOptions]="'300ms cubic-bezier(0.4, 0, 0.2, 1)'"
+    styleClass="auth-modal-anim"
+  >
+    <div class="flex h-full w-full">
+      <!-- Left: Auth Form -->
+      <div class="flex w-full flex-col justify-center bg-white p-8 xl:w-1/2">
+        <app-login-form
+          *ngIf="isLoginMode"
+          (toggle)="toggleMode()"
+          (loginSuccess)="handleLoginSuccess()"
+        ></app-login-form>
+        <app-signup-form
+          *ngIf="!isLoginMode"
+          (toggle)="toggleMode()"
+          (signupSuccess)="handleSignupSuccess()"
+        ></app-signup-form>
+      </div>
 
-    <!-- Right: Image -->
-    <div
-      class="hidden w-1/2 bg-cover bg-center xl:block"
-      style="
-        background-image: url(&quot;/assets/images/settings/insta5-berry.jpg&quot;);
-      "
-    ></div>
-  </div>
-  <button
-    class="ri-close-line absolute right-5 top-5 rounded-full bg-gray-200 p-1 text-xl text-hover-color"
-    (click)="closeDialog()"
-  ></button>
-</p-dialog>
+      <!-- Right: Image -->
+      <div
+        class="hidden w-1/2 bg-cover bg-center xl:block"
+        style="
+          background-image: url(&quot;/assets/images/settings/insta5-berry.jpg&quot;);
+        "
+      ></div>
+    </div>
+    <button
+      class="ri-close-line absolute right-5 top-5 rounded-full bg-gray-200 p-1 text-xl text-hover-color"
+      (click)="closeDialog()"
+    ></button>
+  </p-dialog>
+</ng-container>

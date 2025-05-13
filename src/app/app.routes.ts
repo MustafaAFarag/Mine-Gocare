@@ -42,6 +42,7 @@ export const routes: Routes = [
       {
         path: 'checkout',
         component: CheckoutComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'wishlist',

@@ -1,7 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  PLATFORM_ID,
+  inject,
+} from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { LoginFormComponent } from '../login-form/login-form.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SignupFormComponent } from '../signup-form/signup-form.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -25,11 +32,15 @@ export class AuthModalComponent {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   isLoginMode: boolean = true;
+  private platformId = inject(PLATFORM_ID);
+  isBrowser: boolean;
 
   constructor(
     private messageService: MessageService,
     private translateService: TranslateService,
-  ) {}
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   // Toggle between login and signup forms
   toggleMode() {
@@ -41,34 +52,40 @@ export class AuthModalComponent {
   }
 
   handleLoginSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.instant('login.loginToastSummary'),
-      detail: this.translateService.instant('login.loginToast'),
-      life: 3000,
-      styleClass: 'top-left',
-    });
+    if (this.isBrowser) {
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant('login.loginToastSummary'),
+        detail: this.translateService.instant('login.loginToast'),
+        life: 3000,
+        styleClass: 'top-left',
+      });
+    }
     this.closeDialog();
   }
 
   handleSignupSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.instant('signup.signupToastSummary'),
-      detail: this.translateService.instant('signup.signupToast'),
-      life: 2000,
-      styleClass: 'black-text-toast',
-    });
-    this.toggleMode(); // Using the toggle method directly
+    if (this.isBrowser) {
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant('signup.signupToastSummary'),
+        detail: this.translateService.instant('signup.signupToast'),
+        life: 2000,
+        styleClass: 'black-text-toast',
+      });
+    }
+    this.toggleMode();
   }
 
   handleLoginError(error: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: error,
-      life: 2000,
-      styleClass: 'black-text-toast',
-    });
+    if (this.isBrowser) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error,
+        life: 2000,
+        styleClass: 'black-text-toast',
+      });
+    }
   }
 }

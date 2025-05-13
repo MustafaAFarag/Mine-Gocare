@@ -3,10 +3,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { LanguageService } from './services/language.service';
+import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
+import { AuthModalService } from './auth-modal.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, AuthModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -15,6 +17,8 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
   private viewportScroller = inject(ViewportScroller);
   private languageService = inject(LanguageService);
+  private authModalService = inject(AuthModalService);
+  showAuthModal = false;
 
   ngOnInit(): void {
     this.router.events
@@ -23,7 +27,13 @@ export class AppComponent implements OnInit {
         this.viewportScroller.scrollToPosition([0, 0]);
       });
 
-    // The language service constructor will handle the initial language setup
-    // by reading from localStorage or using the default
+    // Subscribe to auth modal state changes
+    this.authModalService.showModal$.subscribe((show) => {
+      this.showAuthModal = show;
+    });
+  }
+
+  onAuthModalClose() {
+    this.authModalService.hideModal();
   }
 }
