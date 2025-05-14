@@ -5,7 +5,7 @@
       <div class="p-4">
         <div class="logo mb-4">
           <img
-            src="/assets/images/settings/logo-berry.png"
+            src="/assets/images/settings/gocare/gocare-logo.svg"
             alt="Logo"
             class="h-12 w-auto"
           />
@@ -24,7 +24,13 @@
           </div>
           <div class="flex items-start">
             <i class="ri-mail-line mr-3 mt-1 -translate-y-1"></i>
-            <span>{{ "footer.emailUs" | translate }}</span>
+            <span
+              >{{ "footer.emailUs" | translate }}
+              <br />
+              <a href="mailto:support@go-care.com"
+                >support&#64;go-care.com</a
+              ></span
+            >
           </div>
         </div>
       </div>
@@ -102,14 +108,18 @@
         </h3>
         <ul class="space-y-2 text-lg">
           <li>
-            <a routerLink="" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.account" | translate
-            }}</a>
+            <a
+              routerLink="/account/dashboard"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.account" | translate }}</a
+            >
           </li>
           <li>
-            <a routerLink="" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.orders" | translate
-            }}</a>
+            <a
+              routerLink="/account/orders"
+              class="text-white hover:text-[#ff4c3b]"
+              >{{ "footer.links.orders" | translate }}</a
+            >
           </li>
           <li>
             <a routerLink="/wishlist" class="text-white hover:text-[#ff4c3b]">{{
@@ -125,61 +135,34 @@
         </ul>
       </div>
 
-      <!-- Follow Us & Newsletter -->
       <div class="p-4">
         <h3 class="mb-4 text-lg font-semibold">
           {{ "footer.followUs" | translate }}
         </h3>
-        <p class="mb-4 text-lg text-white">
-          {{ "footer.newsletterPrompt" | translate }}
-        </p>
-        <div class="mb-4 flex flex-col gap-4">
-          <input
-            type="email"
-            [placeholder]="'footer.newsletterPlaceholder' | translate"
-            class="flex-1 border-none p-2 text-lg outline-none"
-          />
-          <button class="bg-[#ff4c3b] px-3 py-2 text-sm font-bold text-white">
-            {{ "footer.subscribe" | translate }}
-          </button>
-        </div>
-
-        <!-- Fixed icons layout -->
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
           <a
-            href="https://www.facebook.com/profile.php?id=61575296578807"
+            href="https://www.facebook.com/GoCare.EG"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            aria-label="Facebook"
           >
             <i class="ri-facebook-fill text-xl text-white"></i>
           </a>
           <a
-            href="https://x.com/Berryat_"
+            href="https://x.com/GoCare_EG"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            aria-label="Twitter"
           >
             <i class="ri-twitter-x-fill text-xl text-white"></i>
           </a>
           <a
-            href="https://www.instagram.com/Berryat_"
+            href="https://www.instagram.com/gocare.eg/"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            aria-label="Instagram"
           >
             <i class="ri-instagram-fill text-xl text-white"></i>
-          </a>
-          <a
-            href="https://snapchat.com/t/dCAE0Wee"
-            target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
-          >
-            <i class="ri-snapchat-fill text-xl text-white"></i>
-          </a>
-          <a
-            href="https://tiktok.com/@berryatt"
-            target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded bg-[#323232]"
-          >
-            <i class="ri-tiktok-fill text-xl text-white"></i>
           </a>
         </div>
       </div>

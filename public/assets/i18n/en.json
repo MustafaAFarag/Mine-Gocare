@@ -31,7 +31,7 @@
   },
   "breadcrumb": {
     "home": "Home",
-    "product": "Product"
+    "collections": "Collections"
   },
   "categories": {
     "shopByCategory": "SHOP BY CATEGORY"
@@ -319,7 +319,7 @@
     "companyDescription": "Discover the latest trends and enjoy seamless shopping with our exclusive collections.",
     "address": "Riyadh / Al-Nakheel District / Al-Takhassusi Street Office No. 1/ ground floor",
     "callUs": "Call Us: +966 550070890",
-    "emailUs": "Email: Info@berryat.sa",
+    "emailUs": "Email:",
 
     "categories": "CATEGORIES",
     "usefulLinks": "USEFUL LINKS",

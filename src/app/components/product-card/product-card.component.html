@@ -125,10 +125,6 @@
     transform: translateY(80px);
   }
 
-  .limited-time-wrapper {
-    animation: slide-left 5s linear infinite;
-  }
-
   /* Hover effects for lg screens and up */
   @media (min-width: 1024px) {
     .extra-icon-1,
@@ -146,27 +142,10 @@
       opacity: 1;
       transform: translateY(80px);
     }
-
-    .limited-time-wrapper {
-      animation: none;
-    }
-
-    .product-card:hover .limited-time-wrapper {
-      animation: slide-left 5s linear infinite;
-    }
   }
 
   .extra-icon-1,
   .extra-icon-2 {
     transition: all 0.5s ease;
-  }
-
-  @keyframes slide-left {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
   }
 </style>

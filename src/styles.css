@@ -107,3 +107,20 @@ body {
 .black-text-toast .p-toast-detail {
   color: black !important;
 }
+
+/* Product card limited time offer animation */
+@keyframes slide-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.limited-time-wrapper {
+  animation: slide-left 5s linear infinite;
+  -webkit-animation: slide-left 5s linear infinite;
+  -moz-animation: slide-left 5s linear infinite;
+  -o-animation: slide-left 5s linear infinite;
+}

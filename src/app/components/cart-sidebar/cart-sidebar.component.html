@@ -27,41 +27,6 @@
     </button>
   </div>
 
-  <!-- Free Shipping Progress -->
-  <div class="border-b p-4" *ngIf="cartTotal$ | async as total">
-    <p
-      class="mb-2 text-base text-gray-600"
-      *ngIf="getRemainingForFreeShipping(total) > 0"
-    >
-      {{
-        "cart-sidebar.freeShippingMessage"
-          | translate: { amount: getRemainingForFreeShipping(total).toFixed(2) }
-      }}
-    </p>
-    <p
-      class="mb-2 text-base text-gray-600"
-      *ngIf="getRemainingForFreeShipping(total) === 0"
-    >
-      {{ "cart-sidebar.freeShippingCongrats" | translate }}
-    </p>
-    <div class="h-2 rounded-full bg-gray-200">
-      <div
-        class="relative h-full rounded-full bg-hover-color"
-        [style.width.%]="getProgressPercentage(total)"
-      >
-        <div
-          class="absolute top-2 flex h-6 w-6 -translate-y-4 items-center justify-center rounded-full bg-hover-color"
-          [ngClass]="{
-            'right-0': languageService.getCurrentLanguage() !== 'ar',
-            'left-0': languageService.getCurrentLanguage() === 'ar',
-          }"
-        >
-          <i class="ri-truck-line text-sm text-white"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Clear Cart -->
   <div class="flex justify-end px-4 py-2" *ngIf="(cartItems$ | async)?.length">
     <button
