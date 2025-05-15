@@ -62,6 +62,8 @@ export class HomepageComponent implements OnInit {
     this.productService
       .getAllProductVariantsForClient({
         categoryId: this.categoriesID,
+        pageNumber: 1,
+        pageSize: 9,
       })
       .subscribe({
         next: (res) => {
