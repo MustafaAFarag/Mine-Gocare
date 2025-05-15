@@ -37,10 +37,18 @@ export class AuthService {
     }
   }
 
-  login(emailOrPhone: string, password: string): Observable<any> {
+  login(
+    emailOrPhone: string,
+    password: string,
+    country?: {
+      code: string;
+      phoneCode: string;
+      phoneCodeCountryId: number;
+    },
+  ): Observable<any> {
     const headers = new HttpHeaders({
       'accept-language': 'en',
-      countryid: '224',
+      countryid: country?.phoneCodeCountryId?.toString() || '224',
       'abp.tenantid': '1',
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -49,11 +57,11 @@ export class AuthService {
     const isEmail = emailOrPhone.includes('@');
     let formattedPhone: string | null = null;
 
-    if (!isEmail) {
-      // Format phone number to include +20 prefix
+    if (!isEmail && country) {
+      // Format phone number with the selected country's prefix
       formattedPhone = emailOrPhone.startsWith('0')
-        ? '+20' + emailOrPhone.substring(1)
-        : '+20' + emailOrPhone;
+        ? country.phoneCode + emailOrPhone.substring(1)
+        : country.phoneCode + emailOrPhone;
     }
 
     const body = {
@@ -112,6 +120,8 @@ export class AuthService {
     confirmPassword: string;
     countryCode: string;
     gender: number;
+    phoneCode?: string;
+    PhoneCodeCountryId?: number;
   }): Observable<any> {
     const headers = new HttpHeaders({
       'accept-language': 'en',
@@ -138,8 +148,8 @@ export class AuthService {
       body.isPhoneConfirmed = false;
     } else if (signupData.mobileNumber) {
       body.mobileNumber = signupData.mobileNumber;
-      body.phoneCode = '+20';
-      body.PhoneCodeCountryId = 224;
+      body.phoneCode = signupData.phoneCode;
+      body.PhoneCodeCountryId = signupData.PhoneCodeCountryId;
       body.isEmailConfirmed = true;
       body.isPhoneConfirmed = true;
     }

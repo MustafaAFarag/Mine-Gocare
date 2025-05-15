@@ -224,6 +224,8 @@ export class SignupFormComponent implements OnInit {
         confirmPassword: formValue.confirmPassword,
         countryCode: this.selectedCountry.code,
         gender: formValue.gender,
+        phoneCode: this.selectedCountry.phoneCode,
+        PhoneCodeCountryId: this.selectedCountry.phoneCodeCountryId,
       };
       console.log('Phone Signup Payload:', signupData);
     }
@@ -232,8 +234,15 @@ export class SignupFormComponent implements OnInit {
       next: (res) => {
         console.log('Signup Response:', res);
         // After successful signup, automatically log in the user
+        const loginIdentifier = isEmail
+          ? formValue.identifier
+          : processedIdentifier;
         this.authService
-          .login(formValue.identifier, formValue.password)
+          .login(
+            loginIdentifier,
+            formValue.password,
+            isEmail ? undefined : this.selectedCountry,
+          )
           .subscribe({
             next: (loginRes) => {
               this.loading = false;
