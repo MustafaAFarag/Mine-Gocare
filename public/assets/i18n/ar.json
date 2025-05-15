@@ -441,7 +441,7 @@
     "viewCart": "عرض السلة",
     "checkout": "الدفع",
     "quantity": "الكمية",
-    "pricePerUnit": "{{quantity}} × ج.م {{price}}"
+    "pricePerUnit": "{{quantity}} × {{currency}} {{price}}"
   },
   "cart": {
     "header": "سلة التسوق",

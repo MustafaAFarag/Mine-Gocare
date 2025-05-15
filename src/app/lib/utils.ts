@@ -1,4 +1,4 @@
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 
 export function getFullImageUrl(relativePath?: string): string {
   if (!relativePath) return 'assets/default-image.png';

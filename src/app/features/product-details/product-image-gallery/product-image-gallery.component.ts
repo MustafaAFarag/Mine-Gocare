@@ -6,11 +6,12 @@ import {
   AfterViewInit,
   OnDestroy,
 } from '@angular/core';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { Product } from '../../../model/Product';
 import { CommonModule } from '@angular/common';
 import { GalleriaModule } from 'primeng/galleria';
 import { ProductDetails } from '../../../model/ProductDetail';
+import { getFullImageUrl } from '../../../lib/utils';
 
 @Component({
   selector: 'app-product-image-gallery',
@@ -148,11 +149,5 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
     this.isProcessing = false;
   }
 
-  getFullImageUrl(relativePath?: string): string {
-    if (!relativePath) return 'assets/default-image.png';
-    return `${environment.apiUrl}/Attachments${relativePath.replace(
-      /\\/g,
-      '/',
-    )}`;
-  }
+  getFullImageUrl = getFullImageUrl;
 }

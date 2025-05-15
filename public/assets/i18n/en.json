@@ -458,7 +458,7 @@
     "viewCart": "View Cart",
     "checkout": "Check Out",
     "quantity": "Quantity",
-    "pricePerUnit": "{{quantity}} x EGP {{price}}"
+    "pricePerUnit": "{{quantity}} x {{currency}} {{price}}"
   },
   "cart": {
     "header": "Cart",

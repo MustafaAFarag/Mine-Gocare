@@ -65,6 +65,7 @@
                       : {
                           quantity: item.quantity,
                           price: item.afterPrice.toFixed(2),
+                          currency: item.currency[currentLang],
                         }
                 }}
               </p>
@@ -121,7 +122,7 @@
     <div class="mb-4 flex items-center justify-between">
       <span class="font-medium">{{ "cart-sidebar.subtotal" | translate }}</span>
       <span class="font-bold text-hover-color">
-        {{ "common.currency" | translate }}
+        EGP
         {{ (cartTotal$ | async)?.toFixed(2) || "0.00" }}
       </span>
     </div>

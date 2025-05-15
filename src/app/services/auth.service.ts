@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { LoginResponse } from '../model/Auth';
 import { ApiEndPoint } from '../constants/api.constant';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({

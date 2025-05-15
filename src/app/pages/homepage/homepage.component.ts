@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Category } from '../../model/Categories';
 import { Product } from '../../model/Product';
@@ -8,6 +8,8 @@ import { OffersSectionComponent } from '../../features/homepage/offers-section/o
 import { EverydayCasualSectionComponent } from '../../features/homepage/everyday-casual-section/everyday-casual-section.component';
 import { BrandsImageSectionComponent } from '../../features/homepage/brands-image-section/brands-image-section.component';
 import { InstashopSectionComponent } from '../../features/homepage/instashop-section/instashop-section.component';
+import { CountryService } from '../../services/country.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
@@ -23,18 +25,35 @@ import { InstashopSectionComponent } from '../../features/homepage/instashop-sec
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   products: Product[] = [];
   isLoadingCategories: boolean = true;
   isLoadingProducts: boolean = true;
   categoriesID: number[] = []; // Array to hold selected category IDs
   selectedCategory: Category | null = null; // Track the selected category
+  private countrySubscription: Subscription;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private countryService: CountryService,
+  ) {
+    // Subscribe to country changes
+    this.countrySubscription = this.countryService.country$.subscribe(() => {
+      if (this.categoriesID.length > 0) {
+        this.fetchProductsAPI();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.fetchCategoriesAPI();
+  }
+
+  ngOnDestroy(): void {
+    if (this.countrySubscription) {
+      this.countrySubscription.unsubscribe();
+    }
   }
 
   fetchCategoriesAPI() {

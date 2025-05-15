@@ -8,6 +8,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { NgIf, NgClass, isPlatformBrowser } from '@angular/common';
+import { CountryService } from '../../services/country.service';
 
 @Component({
   selector: 'app-navbar-banner',
@@ -19,6 +20,7 @@ import { NgIf, NgClass, isPlatformBrowser } from '@angular/common';
 export class NavbarBannerComponent implements OnInit {
   private languageService = inject(LanguageService);
   private platformId = inject(PLATFORM_ID);
+  private countryService = inject(CountryService);
   private isBrowser: boolean;
 
   isLanguageDropdownOpen = false;
@@ -46,7 +48,7 @@ export class NavbarBannerComponent implements OnInit {
       if (savedCountry) {
         this.currentCountry = savedCountry;
       } else {
-        localStorage.setItem('country', 'EG');
+        this.countryService.setCountry('EG');
       }
     }
   }
@@ -66,9 +68,7 @@ export class NavbarBannerComponent implements OnInit {
 
   selectCountry(country: string) {
     this.currentCountry = country;
-    if (this.isBrowser) {
-      localStorage.setItem('country', country);
-    }
+    this.countryService.setCountry(country);
     this.isCountryDropdownOpen = false;
   }
 

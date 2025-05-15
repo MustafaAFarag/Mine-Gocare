@@ -14,7 +14,7 @@ import { Product } from '../../../model/Product';
 import { ChangeDetectorRef } from '@angular/core';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
 import { TranslateModule } from '@ngx-translate/core';

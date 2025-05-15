@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 import { ApiEndPoint } from '../constants/api.constant';
 import { Observable } from 'rxjs';
 

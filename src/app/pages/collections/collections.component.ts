@@ -23,6 +23,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { MessageService } from 'primeng/api';
+import { CountryService } from '../../services/country.service';
 
 import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
 import { Subject, takeUntil } from 'rxjs';
@@ -105,6 +106,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
     private messageService: MessageService,
     private translateService: TranslateService,
+    private countryService: CountryService,
   ) {
     this.checkScreenSize();
   }
@@ -122,6 +124,16 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true; // Page loading when initializing
+
+    // Subscribe to country changes
+    this.countryService.country$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Refetch products when country changes
+        if (this.categories.length > 0) {
+          this.fetchProductsAPI();
+        }
+      });
 
     // Subscribe to language changes specifically (not just direction)
     this.languageService.language$

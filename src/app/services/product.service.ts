@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '../../enviroments/enviroment';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 import { ApiEndPoint } from '../constants/api.constant';
 import { Observable } from 'rxjs';
 import { Category } from '../model/Categories';
@@ -10,7 +11,10 @@ import { Product, ProductApiResponse } from '../model/Product';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   // CATEGORY API
   getCategories(): Observable<{ result: Category[] }> {
@@ -33,6 +37,17 @@ export class ProductService {
       sortBy?: number;
     } = {},
   ): Observable<ProductApiResponse> {
+    // Get country from localStorage only in browser environment
+    let selectedCountry = 'EG';
+    if (isPlatformBrowser(this.platformId)) {
+      const storedCountry = localStorage.getItem('country');
+      console.log('Stored Country from localStorage:', storedCountry);
+      selectedCountry = storedCountry || 'EG';
+    }
+    console.log('Selected Country:', selectedCountry);
+    const countryId = selectedCountry === 'EG' ? 224 : 103;
+    console.log('COUNTRY ID:', countryId);
+
     const body = {
       paging: {
         pageNumber: filters.pageNumber ?? 1,
@@ -41,7 +56,7 @@ export class ProductService {
       categoryId: filters.categoryId ?? [],
       subCategoryId: filters.subCategoryId ?? [],
       subSubCategoryId: filters.subSubCategoryId ?? [],
-      countryId: filters.countryId ?? 224,
+      countryId: filters.countryId ?? countryId,
       brandId: filters.brandId ?? [],
       gender: filters.gender ?? [0, 1],
       sortBy: filters.sortBy ?? 0,

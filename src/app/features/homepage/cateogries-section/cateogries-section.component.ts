@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { Category } from '../../../model/Categories';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';

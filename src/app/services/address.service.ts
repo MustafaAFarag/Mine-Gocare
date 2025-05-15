@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 import { ApiEndPoint } from '../constants/api.constant';
 import { CreateAddress, UpdateAddress } from '../model/Address';
 
