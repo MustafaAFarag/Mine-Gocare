@@ -127,19 +127,21 @@ export class AuthService {
       lastName: signupData.lastName,
       password: signupData.password,
       confirmPassword: signupData.confirmPassword,
-      countryCode: 'EG',
+      countryCode: signupData.countryCode,
       gender: signupData.gender,
-      phoneCode: '+20',
-      PhoneCodeCountryId: 224,
       isAutomaticSignIn: true,
-      isEmailConfirmed: false,
-      isPhoneConfirmed: true,
     };
 
     if (signupData.emailAddress) {
       body.emailAddress = signupData.emailAddress;
+      body.isEmailConfirmed = false;
+      body.isPhoneConfirmed = false;
     } else if (signupData.mobileNumber) {
       body.mobileNumber = signupData.mobileNumber;
+      body.phoneCode = '+20';
+      body.PhoneCodeCountryId = 224;
+      body.isEmailConfirmed = true;
+      body.isPhoneConfirmed = true;
     }
 
     return this.http.post<any>(this.signupUrl, body, { headers }).pipe(

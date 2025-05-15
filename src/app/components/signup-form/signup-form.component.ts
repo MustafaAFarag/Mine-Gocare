@@ -21,6 +21,14 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { PointingSystemService } from '../../services/pointing-system.service';
 
+interface Country {
+  name: string;
+  code: string;
+  phoneCode: string;
+  phoneCodeCountryId: number;
+  flag: string;
+}
+
 @Component({
   selector: 'app-signup-form',
   standalone: true,
@@ -48,19 +56,28 @@ export class SignupFormComponent implements OnInit {
   showPassword = false;
   selectedGender: number = 1; // Default to 'Men'
   errorMessage = ''; // Add error message property
+  showCountryDropdown = false;
 
   // Added for phone input with flag
   isPhone: boolean = false;
 
-  // Egypt flag SVG placeholder
-  egyptFlagSvg: string = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 800 400">
-      <rect width="800" height="133" fill="#CE1126"/>
-      <rect width="800" height="133" y="133" fill="#FFFFFF"/>
-      <rect width="800" height="133" y="266" fill="#000000"/>
-      <path d="M400 110 l20 62h-66l53-38-20 62 53-38-20 62 53-38-20 62 53-38-20 62 53-38z" fill="#FFCC00"/>
-    </svg>
-  `;
+  countries: Country[] = [
+    {
+      name: 'Egypt',
+      code: 'EG',
+      phoneCode: '+20',
+      phoneCodeCountryId: 224,
+      flag: 'assets/images/egypt-flag-icon.svg',
+    },
+    {
+      name: 'Saudi Arabia',
+      code: 'SA',
+      phoneCode: '+966',
+      phoneCodeCountryId: 103,
+      flag: 'assets/images/settings/saudi-flag.svg',
+    },
+  ];
+  selectedCountry: Country = this.countries[0]; // Default to Egypt
 
   constructor(
     private fb: FormBuilder,
@@ -95,14 +112,18 @@ export class SignupFormComponent implements OnInit {
     if (!value) return { required: true };
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePatternWithZero = /^0\d{10}$/; // starts with 0, followed by 10 digits (total 11)
-    const phonePatternWithoutZero = /^[1-9]\d{9}$/; // doesn't start with 0, 10 digits
+
+    // Phone patterns for Egypt and Saudi Arabia
+    const egyptPatternWithZero = /^0\d{10}$/; // starts with 0, followed by 10 digits (total 11)
+    const egyptPatternWithoutZero = /^[1-9]\d{9}$/; // doesn't start with 0, 10 digits
+    const saudiPattern = /^[5-9]\d{8}$/; // 9 digits starting with 5-9
 
     const isEmail = emailPattern.test(value);
-    const isPhoneWithZero = phonePatternWithZero.test(value);
-    const isPhoneWithoutZero = phonePatternWithoutZero.test(value);
+    const isEgyptWithZero = egyptPatternWithZero.test(value);
+    const isEgyptWithoutZero = egyptPatternWithoutZero.test(value);
+    const isSaudi = saudiPattern.test(value);
 
-    if (isEmail || isPhoneWithZero || isPhoneWithoutZero) {
+    if (isEmail || isEgyptWithZero || isEgyptWithoutZero || isSaudi) {
       return null;
     }
 
@@ -119,20 +140,27 @@ export class SignupFormComponent implements OnInit {
     return null;
   }
 
-  // Method to limit phone input to 10 or 11 digits based on format
+  // Method to limit phone input based on selected country
   onIdentifierInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = input.value;
 
     // Only process if it's a numeric input (phone)
     if (/^\d*$/.test(value)) {
-      // If it starts with 0, limit to 11 digits
-      if (value.startsWith('0') && value.length > 11) {
-        this.signupForm.get('identifier')?.setValue(value.slice(0, 11));
-      }
-      // If it doesn't start with 0, limit to 10 digits
-      else if (!value.startsWith('0') && value.length > 10) {
-        this.signupForm.get('identifier')?.setValue(value.slice(0, 10));
+      if (this.selectedCountry.code === 'EG') {
+        // If it starts with 0, limit to 11 digits
+        if (value.startsWith('0') && value.length > 11) {
+          this.signupForm.get('identifier')?.setValue(value.slice(0, 11));
+        }
+        // If it doesn't start with 0, limit to 10 digits
+        else if (!value.startsWith('0') && value.length > 10) {
+          this.signupForm.get('identifier')?.setValue(value.slice(0, 10));
+        }
+      } else if (this.selectedCountry.code === 'SA') {
+        // Saudi numbers are 9 digits starting with 5-9
+        if (value.length > 9) {
+          this.signupForm.get('identifier')?.setValue(value.slice(0, 9));
+        }
       }
     }
   }
@@ -164,7 +192,9 @@ export class SignupFormComponent implements OnInit {
     const formValue = this.signupForm.value;
 
     // Determine if the identifier is email or phone
-    const isEmail = formValue.identifier.includes('@');
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formValue.identifier);
+    console.log('Is Email:', isEmail);
+    console.log('Identifier:', formValue.identifier);
 
     // Process phone number if it's a phone
     let processedIdentifier = formValue.identifier;
@@ -173,24 +203,34 @@ export class SignupFormComponent implements OnInit {
       processedIdentifier = processedIdentifier.substring(1);
     }
 
-    const signupData = {
-      firstName: formValue.firstName,
-      lastName: formValue.lastName,
-      emailAddress: isEmail ? formValue.identifier : null,
-      mobileNumber: !isEmail ? processedIdentifier : null,
-      password: formValue.password,
-      confirmPassword: formValue.confirmPassword,
-      countryCode: 'EG',
-      gender: formValue.gender,
-      phoneCode: '+20',
-      PhoneCodeCountryId: 224,
-      isAutomaticSignIn: true,
-      isEmailConfirmed: false,
-      isPhoneConfirmed: true,
-    };
+    let signupData;
+    if (isEmail) {
+      signupData = {
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        emailAddress: formValue.identifier,
+        password: formValue.password,
+        confirmPassword: formValue.confirmPassword,
+        countryCode: 'EG',
+        gender: formValue.gender,
+      };
+      console.log('Email Signup Payload:', signupData);
+    } else {
+      signupData = {
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        mobileNumber: processedIdentifier,
+        password: formValue.password,
+        confirmPassword: formValue.confirmPassword,
+        countryCode: this.selectedCountry.code,
+        gender: formValue.gender,
+      };
+      console.log('Phone Signup Payload:', signupData);
+    }
 
     this.authService.signup(signupData).subscribe({
       next: (res) => {
+        console.log('Signup Response:', res);
         // After successful signup, automatically log in the user
         this.authService
           .login(formValue.identifier, formValue.password)
@@ -204,13 +244,23 @@ export class SignupFormComponent implements OnInit {
                 this.pointingSystemService.addPoints(token, 1, false);
               }
 
-              // Refresh the page to login the user automatically
-              window.location.reload();
+              // First emit the success event to trigger the toast
+              this.signupSuccess.emit();
+              // Then reset the form
+              this.signupForm.reset();
+              // Finally emit the toggle event to switch to login mode
+              setTimeout(() => {
+                this.toggle.emit();
+              }, 0);
             },
             error: (loginErr) => {
               this.loading = false;
-              this.errorMessage =
-                'Failed to log in automatically. Please try logging in manually.';
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail:
+                  'Account created but failed to log in automatically. Please try logging in manually.',
+              });
             },
           });
       },

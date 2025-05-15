@@ -63,6 +63,7 @@ export class LoginFormComponent implements OnInit {
     this.authService.login(formValue.identifier, formValue.password).subscribe({
       next: (res) => {
         this.loading = false;
+        this.loginForm.reset();
         this.loginSuccess.emit();
       },
       error: (error) => {
@@ -74,10 +75,12 @@ export class LoginFormComponent implements OnInit {
 
   handleCongratsModalClose() {
     this.showCongratsModal = false;
+    this.loginForm.reset();
     this.loginSuccess.emit();
   }
 
   toggleMode(): void {
+    this.loginForm.reset();
     this.toggle.emit(false);
   }
 
