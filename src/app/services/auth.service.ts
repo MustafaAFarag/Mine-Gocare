@@ -50,16 +50,17 @@ export class AuthService {
     let formattedPhone: string | null = null;
 
     if (!isEmail) {
-      // Remove leading 0 from phone numbers like "01069004741" -> "1069004741"
+      // Format phone number to include +20 prefix
       formattedPhone = emailOrPhone.startsWith('0')
-        ? emailOrPhone.substring(1)
-        : emailOrPhone;
+        ? '+20' + emailOrPhone.substring(1)
+        : '+20' + emailOrPhone;
     }
 
     const body = {
       emailAddress: isEmail ? emailOrPhone : null,
       mobileNumber: isEmail ? null : formattedPhone,
       password: password,
+      rememberClient: true,
     };
 
     return this.http.post<LoginResponse>(this.loginUrl, body, { headers }).pipe(
@@ -126,8 +127,13 @@ export class AuthService {
       lastName: signupData.lastName,
       password: signupData.password,
       confirmPassword: signupData.confirmPassword,
-      countryCode: signupData.countryCode,
+      countryCode: 'EG',
       gender: signupData.gender,
+      phoneCode: '+20',
+      PhoneCodeCountryId: 224,
+      isAutomaticSignIn: true,
+      isEmailConfirmed: false,
+      isPhoneConfirmed: true,
     };
 
     if (signupData.emailAddress) {

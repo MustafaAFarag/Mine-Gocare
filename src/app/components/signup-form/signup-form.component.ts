@@ -180,6 +180,11 @@ export class SignupFormComponent implements OnInit {
       confirmPassword: formValue.confirmPassword,
       countryCode: 'EG',
       gender: formValue.gender,
+      phoneCode: '+20',
+      PhoneCodeCountryId: 224,
+      isAutomaticSignIn: true,
+      isEmailConfirmed: false,
+      isPhoneConfirmed: true,
     };
 
     this.authService.signup(signupData).subscribe({

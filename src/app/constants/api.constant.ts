@@ -3,7 +3,7 @@ export const ApiEndPoint = {
   getAllProductVariantsForClient:
     'api/services/ClientApp/Product/GetAllProductVariantsForClient',
   getProductDetails: 'api/services/ClientApp/Product/GetProductDetails',
-  SignInManually: 'api/services/AdminApp/SignIn/SignInManually',
+  SignInManually: 'api/services/ClientApp/SignIn/SignInManually',
   SignUpManually: 'api/services/ClientApp/SignUp/SignUpManually',
   GetClientAddresses: 'api/services/ClientApp/Address/GetClientAddresses',
   CreateAddress: 'api/services/ClientApp/Address/CreateAddress',

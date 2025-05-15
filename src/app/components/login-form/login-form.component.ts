@@ -11,6 +11,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CongratsModalComponent } from '../congrats-modal/congrats-modal.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login-form',
@@ -36,6 +37,7 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -56,29 +58,17 @@ export class LoginFormComponent implements OnInit {
     }
 
     this.loading = true;
-    this.errorMessage = ''; // Clear any previous error messages
-    const { identifier, password } = this.loginForm.value;
+    const formValue = this.loginForm.value;
 
-    this.authService.login(identifier, password).subscribe({
+    this.authService.login(formValue.identifier, formValue.password).subscribe({
       next: (res) => {
         this.loading = false;
-        this.loginForm.reset(); // Reset the form fields
-
-        // Check if this is the first login
-        const isFirstLogin = !localStorage.getItem('hasLoggedInBefore');
-        if (isFirstLogin) {
-          localStorage.setItem('hasLoggedInBefore', 'true');
-          this.showCongratsModal = true;
-        } else {
-          this.loginSuccess.emit();
-        }
+        this.loginSuccess.emit();
       },
-      error: (err) => {
+      error: (error) => {
         this.loading = false;
-        this.errorMessage =
-          err.message ||
-          'Login failed. Please check your credentials and try again.';
-        console.error('❌ Login error:', err);
+        this.errorMessage = error.message || 'Invalid credentials';
+        this.handleLoginError(this.errorMessage);
       },
     });
   }
@@ -119,5 +109,15 @@ export class LoginFormComponent implements OnInit {
 
   get password() {
     return this.loginForm.get('password');
+  }
+
+  handleLoginError(error: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error,
+      life: 2000,
+      styleClass: 'black-text-toast',
+    });
   }
 }
