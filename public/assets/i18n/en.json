@@ -551,6 +551,7 @@
     "productInfoTitle": "Product Info",
     "sku": "SKU",
     "unit": "Unit",
+    "stockCount": "Stock Count",
     "piece": "Piece",
     "quantity": "Quantity",
     "itemsLeft": "{{count}} Items Left",

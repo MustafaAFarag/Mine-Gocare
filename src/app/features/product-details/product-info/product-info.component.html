@@ -171,25 +171,23 @@
     </div>
   </div>
 
-  <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
+  <!-- <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
   <div>
     <h3 class="mb-5 text-2xl font-semibold">
       {{ "product-info.productInfoTitle" | translate }}
     </h3>
     <ul class="grid grid-cols-2 gap-2 text-base text-[#646464]">
-      <li>{{ "product-info.sku" | translate }}: EG0102MFF05</li>
       <li>
-        {{ "product-info.unit" | translate }}:
-        {{ "product-info.piece" | translate }}
+        {{ "product-info.sku" | translate }}:
+        {{ productDetails.productVariants[0].skuNumber }}
       </li>
       <li>
-        {{ "product-info.quantity" | translate }}:
-        {{ "product-info.itemsLeft" | translate: { count: 10 } }}
+        {{ "product-info.stockCount" | translate }}:
+        {{ productDetails.productVariants[0].stockCount }}
       </li>
-      <li>{{ "product-info.weight" | translate }}: 0.5Gms</li>
     </ul>
-  </div>
+  </div> -->
 
   <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
