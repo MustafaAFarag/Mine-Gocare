@@ -247,11 +247,26 @@ export class SignupFormComponent implements OnInit {
             next: (loginRes) => {
               this.loading = false;
 
-              // Now we have the access token, add the registration points
-              const token = localStorage.getItem('accessToken');
-              if (token) {
-                this.pointingSystemService.addPoints(token, 1, false);
-              }
+              // Wait a bit to ensure token is set
+              setTimeout(() => {
+                // Now we have the access token, add the registration points
+                const token = localStorage.getItem('accessToken');
+                console.log('Token for points:', token);
+                if (token) {
+                  this.pointingSystemService
+                    .addPoints(token, 1, false)
+                    .subscribe({
+                      next: (pointsRes) => {
+                        console.log('Points added successfully:', pointsRes);
+                      },
+                      error: (pointsErr) => {
+                        console.error('Error adding points:', pointsErr);
+                      },
+                    });
+                } else {
+                  console.error('No token found for points');
+                }
+              }, 100);
 
               // First emit the success event to trigger the toast
               this.signupSuccess.emit();
