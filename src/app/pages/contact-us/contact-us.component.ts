@@ -20,7 +20,7 @@ export class ContactUsComponent {
   constructor() {}
 
   redirectToWhatsApp() {
-    window.open('https://wa.me/966562205331', '_blank');
+    window.open('https://wa.me/2001229996404', '_blank');
   }
 
   redirectToMessenger() {

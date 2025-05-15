@@ -68,7 +68,6 @@ export class LoginFormComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         this.errorMessage = error.message || 'Invalid credentials';
-        this.handleLoginError(this.errorMessage);
       },
     });
   }
@@ -109,15 +108,5 @@ export class LoginFormComponent implements OnInit {
 
   get password() {
     return this.loginForm.get('password');
-  }
-
-  handleLoginError(error: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: error,
-      life: 2000,
-      styleClass: 'black-text-toast',
-    });
   }
 }

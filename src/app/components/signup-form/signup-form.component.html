@@ -208,6 +208,10 @@
           : ("signup.button.submit" | translate)
       }}
     </button>
+
+    <div *ngIf="errorMessage" class="mt-2 text-center text-sm text-red-500">
+      {{ errorMessage }}
+    </div>
   </form>
 
   <!-- OR Divider -->

@@ -47,6 +47,7 @@ export class SignupFormComponent implements OnInit {
   loading = false;
   showPassword = false;
   selectedGender: number = 1; // Default to 'Men'
+  errorMessage = ''; // Add error message property
 
   // Added for phone input with flag
   isPhone: boolean = false;
@@ -159,6 +160,7 @@ export class SignupFormComponent implements OnInit {
     }
 
     this.loading = true;
+    this.errorMessage = ''; // Clear any previous error message
     const formValue = this.signupForm.value;
 
     // Determine if the identifier is email or phone
@@ -202,33 +204,19 @@ export class SignupFormComponent implements OnInit {
                 this.pointingSystemService.addPoints(token, 1, false);
               }
 
-              // First emit the success event to trigger the toast
-              this.signupSuccess.emit();
-              // Then reset the form
-              this.signupForm.reset();
-              // Finally emit the toggle event to switch to login mode
-              setTimeout(() => {
-                this.toggle.emit();
-              }, 0);
+              // Refresh the page to login the user automatically
+              window.location.reload();
             },
             error: (loginErr) => {
               this.loading = false;
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail:
-                  'Account created but failed to log in automatically. Please try logging in manually.',
-              });
+              this.errorMessage =
+                'Failed to log in automatically. Please try logging in manually.';
             },
           });
       },
       error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message || 'Failed to create account',
-        });
         this.loading = false;
+        this.errorMessage = 'Mobile Number/Email is already in use';
       },
     });
   }
