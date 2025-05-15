@@ -110,8 +110,10 @@
             <span class="font-medium text-hover-color"
               >{{ "dashboard-account.phone" | translate }}:</span
             >
-            +{{
-              user.mobileNumber || ("dashboard-account.notProvided" | translate)
+            {{
+              user.mobileNumber
+                ? "+" + user.mobileNumber
+                : ("dashboard-account.notProvided" | translate)
             }}
           </span>
           <button
@@ -126,12 +128,12 @@
           </button>
         </li>
         <li class="flex items-center justify-between">
-          <span>
+          <span class="mr-4 min-w-0 flex-1">
             <span class="font-medium text-hover-color"
               >{{ "dashboard-account.email" | translate }}:</span
             >
             <span
-              class="truncate text-sm text-gray-500"
+              class="block truncate text-gray-500"
               [title]="user.emailAddress"
             >
               {{
@@ -142,7 +144,7 @@
           </span>
           <button
             (click)="updateEmail()"
-            class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+            class="flex-shrink-0 whitespace-nowrap rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
           >
             {{
               user.emailAddress
@@ -161,12 +163,12 @@
       </h3>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div class="flex items-center justify-between">
-          <p class="text-gray-600">
+          <p class="mr-4 min-w-0 flex-1 text-gray-600">
             <span class="font-medium text-hover-color"
               >{{ "dashboard-account.email" | translate }}:</span
             >
             <span
-              class="truncate text-sm text-gray-500"
+              class="block truncate text-gray-500"
               [title]="user.emailAddress"
             >
               {{
@@ -177,7 +179,7 @@
           </p>
           <button
             (click)="updateEmail()"
-            class="rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
+            class="flex-shrink-0 whitespace-nowrap rounded bg-hover-color px-3 py-1 text-sm text-white hover:bg-red-800"
           >
             {{ "dashboard-account.edit" | translate }}
           </button>

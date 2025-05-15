@@ -15,6 +15,60 @@
       </div>
     </div>
     <div class="flex items-center gap-2 pr-4 lg:pr-6">
+      <div class="country-dropdown relative">
+        <button
+          (click)="toggleCountryDropdown()"
+          class="z-50 flex items-center gap-2 rounded px-3 py-1.5 text-sm transition-colors duration-200 hover:bg-hover-color lg:text-base"
+        >
+          <img
+            [src]="
+              currentCountry === 'EG'
+                ? 'assets/images/egypt-flag-icon.svg'
+                : 'assets/images/settings/saudi-flag.svg'
+            "
+            class="h-4 w-4 lg:h-5 lg:w-5"
+          />
+          <span class="hidden sm:inline">{{
+            currentCountry === "EG" ? "Egypt" : "Saudi Arabia"
+          }}</span>
+          <i class="ri-arrow-down-s-line text-sm lg:text-base"></i>
+        </button>
+
+        <div
+          *ngIf="isCountryDropdownOpen"
+          class="absolute z-50 mt-1 w-36 rounded-md bg-white shadow-lg sm:w-40"
+          [ngClass]="{
+            'right-0': getCurrentLanguage() === 'en',
+            'left-2': getCurrentLanguage() === 'ar',
+          }"
+        >
+          <div class="py-1">
+            <button
+              (click)="selectCountry('EG')"
+              class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <img
+                src="assets/images/egypt-flag-icon.svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+              />
+              <span>Egypt</span>
+            </button>
+            <button
+              (click)="selectCountry('SA')"
+              class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <img
+                src="assets/images/settings/saudi-flag.svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+              />
+              <span>Saudi Arabia</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-gray-400"></div>
+
       <div class="language-dropdown relative">
         <button
           (click)="toggleLanguageDropdown()"
