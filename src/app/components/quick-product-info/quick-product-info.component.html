@@ -32,8 +32,40 @@
     <span class="font-semibold uppercase text-gray-600"
       >{{ "product-info.price" | translate }}:
     </span>
-    <span class="text-xl font-semibold text-hover-color">
-      {{ productDetails.productVariants[0].currency.name[currentLang] }}
+    <span
+      *ngIf="
+        productDetails.productVariants[0].priceAfterDiscount !==
+        productDetails.productVariants[0].priceBeforeDiscount
+      "
+      class="text-xl font-semibold text-hover-color"
+    >
+      {{
+        languageService.getCurrentLanguage() === "ar"
+          ? productDetails.productVariants[0].currency.name.ar
+          : productDetails.productVariants[0].currency.name.en
+      }}
+      {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
+      <span class="text-sm text-gray-400 line-through">
+        {{
+          languageService.getCurrentLanguage() === "ar"
+            ? productDetails.productVariants[0].currency.name.ar
+            : productDetails.productVariants[0].currency.name.en
+        }}
+        {{ productDetails.productVariants[0].priceBeforeDiscount.toFixed(2) }}
+      </span>
+    </span>
+    <span
+      *ngIf="
+        productDetails.productVariants[0].priceAfterDiscount ===
+        productDetails.productVariants[0].priceBeforeDiscount
+      "
+      class="text-xl font-semibold text-hover-color"
+    >
+      {{
+        languageService.getCurrentLanguage() === "ar"
+          ? productDetails.productVariants[0].currency.name.ar
+          : productDetails.productVariants[0].currency.name.en
+      }}
       {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
     </span>
   </div>

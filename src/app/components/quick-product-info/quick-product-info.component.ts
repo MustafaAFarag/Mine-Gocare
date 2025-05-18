@@ -9,6 +9,7 @@ import { Product } from '../../model/Product';
 import { CartItem } from '../../model/Cart';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { LanguageService } from '../../services/language.service';
 
 type Language = 'ar' | 'en';
 
@@ -30,6 +31,7 @@ export class QuickProductInfoComponent {
     private wishlistService: WishlistService,
     private translateService: TranslateService,
     private messageService: MessageService,
+    public languageService: LanguageService,
   ) {
     this.currentLang = this.translateService.currentLang as Language;
     this.translateService.onLangChange.subscribe((event) => {
