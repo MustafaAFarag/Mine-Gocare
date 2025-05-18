@@ -29,7 +29,8 @@
             class="h-4 w-4 lg:h-5 lg:w-5"
           />
           <span class="hidden sm:inline">{{
-            currentCountry === "EG" ? "Egypt" : "Saudi Arabia"
+            (currentCountry === "EG" ? "common.egypt" : "common.saudiArabia")
+              | translate
           }}</span>
           <i class="ri-arrow-down-s-line text-sm lg:text-base"></i>
         </button>
@@ -51,7 +52,7 @@
                 src="assets/images/egypt-flag-icon.svg"
                 class="h-4 w-4 lg:h-5 lg:w-5"
               />
-              <span>Egypt</span>
+              <span>{{ "common.egypt" | translate }}</span>
             </button>
             <button
               (click)="selectCountry('SA')"
@@ -61,7 +62,7 @@
                 src="assets/images/settings/saudi-flag.svg"
                 class="h-4 w-4 lg:h-5 lg:w-5"
               />
-              <span>Saudi Arabia</span>
+              <span>{{ "common.saudiArabia" | translate }}</span>
             </button>
           </div>
         </div>

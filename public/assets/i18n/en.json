@@ -702,6 +702,8 @@
   },
   "common": {
     "save": "Save",
+    "egypt": "Egypt",
+    "saudiArabia": "Saudi Arabia",
     "update": "Update",
     "cancel": "Cancel",
     "edit": "Edit",
