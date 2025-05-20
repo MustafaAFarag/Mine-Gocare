@@ -70,38 +70,75 @@
     class="mt-auto overflow-hidden border-t-2 border-red-500 p-2"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
   >
-    <div class="limited-time-wrapper flex gap-8 whitespace-nowrap">
-      <div class="limited-time-item flex items-center gap-2">
-        <i class="ri-discount-percent-fill text-hover-color"></i>
-        <span
-          >{{ "product-card.limitedTimeOffer" | translate }} :
-          {{ product.discountPercentage.toFixed(0) }}%
-          {{ "product-card.off" | translate }}</span
-        >
-      </div>
-      <div class="limited-time-item flex items-center gap-2">
-        <i class="ri-discount-percent-fill text-hover-color"></i>
-        <span
-          >{{ "product-card.limitedTimeOffer" | translate }} :
-          {{ product.discountPercentage.toFixed(0) }}%
-          {{ "product-card.off" | translate }}</span
-        >
-      </div>
-      <div class="limited-time-item flex items-center gap-2">
-        <i class="ri-discount-percent-fill text-hover-color"></i>
-        <span
-          >{{ "product-card.limitedTimeOffer" | translate }} :
-          {{ product.discountPercentage.toFixed(0) }}%
-          {{ "product-card.off" | translate }}</span
-        >
-      </div>
-      <div class="limited-time-item flex items-center gap-2">
-        <i class="ri-discount-percent-fill text-hover-color"></i>
-        <span
-          >{{ "product-card.limitedTimeOffer" | translate }} :
-          {{ product.discountPercentage.toFixed(0) }}% off</span
-        >
-      </div>
+    <div class="stock-ticker">
+      <ul>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+      </ul>
+      <ul aria-hidden="true">
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+        <li class="limited-time-item">
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
+            >{{ "product-card.limitedTimeOffer" | translate }} :
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
+          >
+        </li>
+      </ul>
     </div>
   </div>
 </div>
