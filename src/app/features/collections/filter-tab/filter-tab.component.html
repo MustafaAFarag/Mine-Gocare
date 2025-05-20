@@ -97,36 +97,58 @@
           *ngFor="let category of filteredCategories; trackBy: trackByCategory"
           class="category-item"
         >
-          <div
-            class="flex cursor-pointer items-center"
-            (click)="toggleCategory(category)"
-          >
-            <!-- Checkbox -->
+          <div class="flex items-center justify-between">
             <div
-              class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
-              [ngClass]="{
-                'border-hover-color bg-hover-color': category.selected,
-                'border-gray-300': !category.selected,
-              }"
+              class="flex cursor-pointer items-center"
+              (click)="toggleCategory(category)"
             >
-              <i
-                *ngIf="category.selected"
-                class="ri-check-line text-xs text-white"
-              ></i>
+              <!-- Checkbox -->
+              <div
+                class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                [ngClass]="{
+                  'border-hover-color bg-hover-color': category.selected,
+                  'border-gray-300': !category.selected,
+                }"
+              >
+                <i
+                  *ngIf="category.selected"
+                  class="ri-check-line text-xs text-white"
+                ></i>
+              </div>
+
+              <!-- Category name -->
+              <span [ngClass]="{ 'text-hover-color': category.selected }">
+                {{ category.name }}
+              </span>
             </div>
 
-            <!-- Category name -->
-            <span [ngClass]="{ 'text-hover-color': category.selected }">
-              {{ category.name }}
-            </span>
+            <!-- Expand/Collapse Icon for categories with subcategories -->
+            <button
+              *ngIf="
+                category.isParent &&
+                category.subcategories &&
+                category.subcategories.length > 0
+              "
+              (click)="toggleCategoryExpansion(category, $event)"
+              class="ml-2 text-gray-500 hover:text-gray-700"
+            >
+              <i
+                [class]="
+                  isCategoryExpanded(category)
+                    ? 'ri-arrow-up-s-line'
+                    : 'ri-arrow-down-s-line'
+                "
+              ></i>
+            </button>
           </div>
 
-          <!-- Subcategories (indented) - always displayed -->
+          <!-- Subcategories (indented) - shown only if expanded -->
           <div
             *ngIf="
               category.isParent &&
               category.subcategories &&
-              category.subcategories.length > 0
+              category.subcategories.length > 0 &&
+              isCategoryExpanded(category)
             "
             [ngClass]="{
               'mr-6': languageService.getCurrentLanguage() === 'ar',
@@ -138,36 +160,60 @@
               *ngFor="let subcategory of category.subcategories"
               class="category-item"
             >
-              <div
-                class="flex cursor-pointer items-center"
-                (click)="toggleCategory(subcategory)"
-              >
-                <!-- Subcategory checkbox -->
+              <div class="flex items-center justify-between">
                 <div
-                  class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
-                  [ngClass]="{
-                    'border-hover-color bg-hover-color': subcategory.selected,
-                    'border-gray-300': !subcategory.selected,
-                  }"
+                  class="flex cursor-pointer items-center"
+                  (click)="toggleCategory(subcategory)"
                 >
-                  <i
-                    *ngIf="subcategory.selected"
-                    class="ri-check-line text-xs text-white"
-                  ></i>
+                  <!-- Subcategory checkbox -->
+                  <div
+                    class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                    [ngClass]="{
+                      'border-hover-color bg-hover-color': subcategory.selected,
+                      'border-gray-300': !subcategory.selected,
+                    }"
+                  >
+                    <i
+                      *ngIf="subcategory.selected"
+                      class="ri-check-line text-xs text-white"
+                    ></i>
+                  </div>
+
+                  <!-- Subcategory name -->
+                  <span
+                    [ngClass]="{ 'text-hover-color': subcategory.selected }"
+                  >
+                    {{ subcategory.name }}
+                  </span>
                 </div>
 
-                <!-- Subcategory name -->
-                <span [ngClass]="{ 'text-hover-color': subcategory.selected }">
-                  {{ subcategory.name }}
-                </span>
+                <!-- Expand/Collapse Icon for subcategories with sub-subcategories -->
+                <button
+                  *ngIf="
+                    subcategory.isParent &&
+                    subcategory.subcategories &&
+                    subcategory.subcategories.length > 0
+                  "
+                  (click)="toggleSubCategoryExpansion(subcategory, $event)"
+                  class="ml-2 text-gray-500 hover:text-gray-700"
+                >
+                  <i
+                    [class]="
+                      isSubCategoryExpanded(subcategory)
+                        ? 'ri-arrow-up-s-line'
+                        : 'ri-arrow-down-s-line'
+                    "
+                  ></i>
+                </button>
               </div>
 
-              <!-- Sub-subcategories (double indented) -->
+              <!-- Sub-subcategories (double indented) - shown only if expanded -->
               <div
                 *ngIf="
                   subcategory.isParent &&
                   subcategory.subcategories &&
-                  subcategory.subcategories.length > 0
+                  subcategory.subcategories.length > 0 &&
+                  isSubCategoryExpanded(subcategory)
                 "
                 [ngClass]="{
                   'mr-6': languageService.getCurrentLanguage() === 'ar',

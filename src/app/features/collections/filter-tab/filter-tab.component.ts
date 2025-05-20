@@ -32,6 +32,10 @@ export class FilterTabComponent implements OnInit, OnDestroy {
   // Track current language to detect changes
   private currentLanguage: string = '';
 
+  // Add expanded state tracking
+  expandedCategories: Set<number> = new Set();
+  expandedSubCategories: Set<number> = new Set();
+
   @Input() categories: Category[] = [];
   @Input() brands: Brand[] = [];
   @Input() activeFilters: string[] = [];
@@ -328,5 +332,38 @@ export class FilterTabComponent implements OnInit, OnDestroy {
 
   trackByBrand(index: number, brand: Brand): number | string {
     return brand.id || brand.name || index;
+  }
+
+  // Add methods to handle category expansion
+  toggleCategoryExpansion(category: Category, event: Event): void {
+    event.stopPropagation(); // Prevent category selection when clicking expand icon
+    if (category.id) {
+      if (this.expandedCategories.has(category.id)) {
+        this.expandedCategories.delete(category.id);
+      } else {
+        this.expandedCategories.add(category.id);
+      }
+    }
+  }
+
+  toggleSubCategoryExpansion(subcategory: Category, event: Event): void {
+    event.stopPropagation(); // Prevent subcategory selection when clicking expand icon
+    if (subcategory.id) {
+      if (this.expandedSubCategories.has(subcategory.id)) {
+        this.expandedSubCategories.delete(subcategory.id);
+      } else {
+        this.expandedSubCategories.add(subcategory.id);
+      }
+    }
+  }
+
+  isCategoryExpanded(category: Category): boolean {
+    return category.id ? this.expandedCategories.has(category.id) : false;
+  }
+
+  isSubCategoryExpanded(subcategory: Category): boolean {
+    return subcategory.id
+      ? this.expandedSubCategories.has(subcategory.id)
+      : false;
   }
 }

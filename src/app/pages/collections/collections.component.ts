@@ -316,7 +316,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       // Update active filters array for display
       this.rebuildActiveFilters();
 
-      // Fetch products with applied filters
+      // Fetch products with applied filters and pagination
       this.fetchProductsAPI();
     });
   }
@@ -437,6 +437,13 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   fetchProductsAPI() {
     this.productsLoading = true;
+    let pageSize = 9; // default for grid3
+    if (this.viewMode === 'grid4') {
+      pageSize = 8;
+    } else if (this.viewMode === 'grid2' || this.viewMode === 'list') {
+      pageSize = 6;
+    }
+
     const filters = {
       categoryId:
         this.selectedCategoryIds.length > 0
@@ -450,11 +457,14 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.selectedSubSubCategoryIds.length > 0
           ? this.selectedSubSubCategoryIds
           : undefined,
+      pageNumber: this.currentPage,
+      pageSize: pageSize,
     };
 
     this.productService.getAllProductVariantsForClient(filters).subscribe({
       next: (res) => {
         this.products = res.result.items;
+        this.totalPages = Math.ceil(res.result.totalCount / pageSize); // Calculate total pages based on totalCount and current page size
 
         if (this.selectedBrandNames.length > 0) {
           this.filteredProducts = this.products.filter((product) =>
@@ -469,7 +479,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         // Apply the current sort order to the products
         this.applySortingToProducts();
 
-        this.applyPagination();
+        // No need to apply pagination here since we're getting paginated data from the server
+        this.paginatedProducts = this.filteredProducts;
+
         this.isLoading = false;
         this.productsLoading = false;
       },
@@ -987,7 +999,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   setViewMode(mode: 'grid2' | 'grid3' | 'grid4' | 'list'): void {
     this.viewMode = mode;
+    this.currentPage = 1; // Reset to first page when changing view mode
     this.updateUrlParams();
+    this.fetchProductsAPI(); // Refetch with new page size
   }
 
   // Methods for FilterTabComponent
@@ -1290,11 +1304,11 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
   }
 
-  // Method to change page
+  // Update changePage method to fetch new page from server
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.applyPagination();
+      this.fetchProductsAPI(); // Fetch new page from server
 
       // Update URL with new page number
       const queryParams = {
