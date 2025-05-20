@@ -122,9 +122,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
           // but don't mutate the actual data
           this.categories = [...this.categories];
 
-          // Don't modify the brands array directly, as it may be reducing to a single brand
-          // Just let the parent component rebuild active filters instead
-
           // Delay emitting an event to refresh the parent component's active filters
           // without causing filter sections to collapse
           setTimeout(() => {
@@ -140,16 +137,20 @@ export class FilterTabComponent implements OnInit, OnDestroy {
         }
       });
 
-    // Subscribe to country changes
-    this.countryService.country$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        // Clear brand search term when country changes
-        this.brandSearchTerm = '';
-
-        // Notify parent to rebuild active filters
-        this.filterRemoved.emit('');
+    // Subscribe to country changes with error handling
+    if (this.countryService && this.countryService.country$) {
+      this.countryService.country$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: () => {
+          // Clear brand search term when country changes
+          this.brandSearchTerm = '';
+          // Notify parent to rebuild active filters
+          this.filterRemoved.emit('');
+        },
+        error: (error) => {
+          console.error('Error in country subscription:', error);
+        },
       });
+    }
   }
 
   ngOnDestroy(): void {
