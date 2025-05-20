@@ -402,14 +402,14 @@
                 <!-- Show page number -->
                 <button
                   *ngIf="!page.ellipsis"
-                  (click)="changePage(page)"
+                  (click)="changePage(page.number)"
                   [ngClass]="{
-                    'bg-hover-color text-white': currentPage === page,
-                    'hover:bg-gray-100': currentPage !== page,
+                    'bg-hover-color text-white': currentPage === page.number,
+                    'hover:bg-gray-100': currentPage !== page.number,
                   }"
                   class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
                 >
-                  {{ page }}
+                  {{ page.display }}
                 </button>
               </ng-container>
 

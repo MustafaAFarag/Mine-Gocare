@@ -1326,27 +1326,50 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Helper method to generate page array for the pagination UI
+  // Add method to convert numbers to Arabic numerals
+  private convertToArabicNumerals(num: number): string {
+    if (this.languageService.getCurrentLanguage() === 'ar') {
+      const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+      return num
+        .toString()
+        .replace(/[0-9]/g, (d) => arabicNumerals[parseInt(d)]);
+    }
+    return num.toString();
+  }
+
+  // Update getPageArray method to use Arabic numerals
   getPageArray(): any[] {
     // If there are 5 or fewer pages, show all pages
     if (this.totalPages <= 5) {
-      return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+      return Array.from({ length: this.totalPages }, (_, i) => ({
+        number: i + 1,
+        display: this.convertToArabicNumerals(i + 1),
+      }));
     }
 
     const pages = [];
 
     // Always show first page
-    pages.push(1);
+    pages.push({
+      number: 1,
+      display: this.convertToArabicNumerals(1),
+    });
 
     // Current page is in first 3 pages
     if (this.currentPage <= 3) {
-      pages.push(2, 3);
+      pages.push(
+        { number: 2, display: this.convertToArabicNumerals(2) },
+        { number: 3, display: this.convertToArabicNumerals(3) },
+      );
       // Add ellipsis if there are more pages after 3
       if (this.totalPages > 3) {
         pages.push({ ellipsis: true });
         // Add last page if it's not already included
         if (this.totalPages > 4) {
-          pages.push(this.totalPages);
+          pages.push({
+            number: this.totalPages,
+            display: this.convertToArabicNumerals(this.totalPages),
+          });
         }
       }
     }
@@ -1357,18 +1380,37 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       for (let i = this.totalPages - 2; i <= this.totalPages; i++) {
         if (i > 1) {
           // Avoid duplicate with first page
-          pages.push(i);
+          pages.push({
+            number: i,
+            display: this.convertToArabicNumerals(i),
+          });
         }
       }
     }
     // Current page is somewhere in the middle
     else {
       pages.push({ ellipsis: true });
-      pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
+      pages.push(
+        {
+          number: this.currentPage - 1,
+          display: this.convertToArabicNumerals(this.currentPage - 1),
+        },
+        {
+          number: this.currentPage,
+          display: this.convertToArabicNumerals(this.currentPage),
+        },
+        {
+          number: this.currentPage + 1,
+          display: this.convertToArabicNumerals(this.currentPage + 1),
+        },
+      );
       // Add ellipsis if there are more pages after current+1
       if (this.currentPage + 1 < this.totalPages) {
         pages.push({ ellipsis: true });
-        pages.push(this.totalPages);
+        pages.push({
+          number: this.totalPages,
+          display: this.convertToArabicNumerals(this.totalPages),
+        });
       }
     }
 
