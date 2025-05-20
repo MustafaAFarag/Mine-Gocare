@@ -20,7 +20,9 @@
 
     <div class="icon-wrapper absolute right-4 top-2 z-10">
       <i
-        [class]="isInWishlist ? 'ri-heart-fill text-red-500' : 'ri-heart-line'"
+        [class]="
+          isInWishlist ? 'ri-heart-fill text-hover-color' : 'ri-heart-line'
+        "
         class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="toggleWishlist($event)"
       ></i>
@@ -67,7 +69,7 @@
     </div>
   </div>
   <div
-    class="mt-auto overflow-hidden border-t-2 border-red-500 p-2"
+    class="mt-auto overflow-hidden border-t-2 border-hover-color p-2"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
   >
     <div class="stock-ticker">

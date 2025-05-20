@@ -4,8 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "hover-color": "#a01a40",
-        "special-gray": "#323232",
+        "hover-color": "#8446B0",
+        "button-bg": "#412b9a",
+        "special-gray": "#616161",
         "bg-color": "#fafaf2",
       },
       maxWidth: {

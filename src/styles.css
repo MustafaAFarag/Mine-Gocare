@@ -6,22 +6,17 @@
 /* Light mode (default) */
 
 :root {
-  --text-color: #22060e;
-  --body-bg-color: #fafaf2;
+  --primary-text: #212121;
+  --secondary-text: #616161;
+  --primary-purple: #8446b0;
+  --body-bg-color: #fcfcfc;
   --hover-color: #a01a40;
-}
-
-/* Use gocare class instead of dark-mode */
-.gocare {
-  --text-color: #f5e6e9;
-  --body-bg-color: #1a0912;
-  --hover-color: #e05676;
 }
 
 body {
   background-color: var(--body-bg-color);
   width: 100%;
-  color: var(--text-color);
+  color: var(--primary-text);
   font-family: "Montserrat", sans-serif;
 }
 

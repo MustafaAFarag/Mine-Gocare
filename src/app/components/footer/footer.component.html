@@ -44,7 +44,7 @@
           <li *ngFor="let category of categories">
             <a
               (click)="navigateToCategory(category)"
-              class="cursor-pointer text-white transition-colors hover:text-[#ff4c3b]"
+              class="cursor-pointer text-white transition-colors hover:text-hover-color"
             >
               {{ getCategoryName(category) }}
             </a>
@@ -59,42 +59,42 @@
         </h3>
         <ul class="space-y-2 text-lg">
           <li>
-            <a href="#" class="text-white hover:text-[#ff4c3b]">{{
+            <a href="#" class="text-white hover:text-hover-color">{{
               "footer.links.home" | translate
             }}</a>
           </li>
           <li>
             <a
               routerLink="/collections"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.collections" | translate }}</a
             >
           </li>
           <li>
             <a
               routerLink="/contact-us"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.contactUs" | translate }}</a
             >
           </li>
           <li>
             <a
               routerLink="/privacy-policy"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.privacyPolicy" | translate }}</a
             >
           </li>
           <li>
             <a
               routerLink="/refund-policy"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.refundPolicy" | translate }}</a
             >
           </li>
           <li>
             <a
               routerLink="/terms-and-conditions"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.termsAndConditions" | translate }}</a
             >
           </li>
@@ -110,25 +110,27 @@
           <li>
             <a
               routerLink="/account/dashboard"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.account" | translate }}</a
             >
           </li>
           <li>
             <a
               routerLink="/account/orders"
-              class="text-white hover:text-[#ff4c3b]"
+              class="text-white hover:text-hover-color"
               >{{ "footer.links.orders" | translate }}</a
             >
           </li>
           <li>
-            <a routerLink="/wishlist" class="text-white hover:text-[#ff4c3b]">{{
-              "footer.links.wishlist" | translate
-            }}</a>
+            <a
+              routerLink="/wishlist"
+              class="text-white hover:text-hover-color"
+              >{{ "footer.links.wishlist" | translate }}</a
+            >
           </li>
 
           <li>
-            <a href="/contact-us" class="text-white hover:text-[#ff4c3b]">{{
+            <a href="/contact-us" class="text-white hover:text-hover-color">{{
               "footer.links.contact" | translate
             }}</a>
           </li>
@@ -143,7 +145,7 @@
           <a
             href="https://www.facebook.com/GoCare.EG"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Facebook"
           >
             <i class="ri-facebook-fill text-xl text-white"></i>
@@ -151,7 +153,7 @@
           <a
             href="https://x.com/GoCare_EG"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Twitter"
           >
             <i class="ri-twitter-x-fill text-xl text-white"></i>
@@ -159,7 +161,7 @@
           <a
             href="https://www.instagram.com/gocare.eg/"
             target="_blank"
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110 hover:bg-[#ff4c3b]"
+            class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Instagram"
           >
             <i class="ri-instagram-fill text-xl text-white"></i>
