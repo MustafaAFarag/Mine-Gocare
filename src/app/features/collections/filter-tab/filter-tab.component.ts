@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
+import { CountryService } from '../../../services/country.service';
 import {
   Category,
   Brand,
@@ -92,7 +93,10 @@ export class FilterTabComponent implements OnInit, OnDestroy {
   @Output() allFiltersCleared = new EventEmitter<void>();
   @Output() closeFilterSidebar = new EventEmitter<void>();
 
-  constructor(public languageService: LanguageService) {}
+  constructor(
+    public languageService: LanguageService,
+    private countryService: CountryService,
+  ) {}
 
   ngOnInit(): void {
     // Store initial language
@@ -134,6 +138,17 @@ export class FilterTabComponent implements OnInit, OnDestroy {
             this.showPrice = expandedStates.price;
           }, 0);
         }
+      });
+
+    // Subscribe to country changes
+    this.countryService.country$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Clear brand search term when country changes
+        this.brandSearchTerm = '';
+
+        // Notify parent to rebuild active filters
+        this.filterRemoved.emit('');
       });
   }
 

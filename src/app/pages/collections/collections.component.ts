@@ -129,6 +129,11 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.countryService.country$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
+        // Clear existing brands and selected brand filters
+        this.brands = [];
+        this.selectedBrandNames = [];
+        this.brandsLoading = true;
+
         // Refetch products when country changes
         if (this.categories.length > 0) {
           this.fetchProductsAPI();
@@ -437,6 +442,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   fetchProductsAPI() {
     this.productsLoading = true;
+    this.brandsLoading = true; // Set brands loading to true when fetching products
+
     let pageSize = 9; // default for grid3
     if (this.viewMode === 'grid4') {
       pageSize = 8;
@@ -464,7 +471,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.productService.getAllProductVariantsForClient(filters).subscribe({
       next: (res) => {
         this.products = res.result.items;
-        this.totalPages = Math.ceil(res.result.totalCount / pageSize); // Calculate total pages based on totalCount and current page size
+        this.totalPages = Math.ceil(res.result.totalCount / pageSize);
 
         if (this.selectedBrandNames.length > 0) {
           this.filteredProducts = this.products.filter((product) =>
@@ -489,41 +496,37 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         console.error('Error fetching products:', err);
         this.isLoading = false;
         this.productsLoading = false;
+        this.brandsLoading = false; // Make sure to set brands loading to false on error
       },
     });
   }
 
-  // Extract available brands from products for the filter
+  // Update extractBrandsFromProducts method
   extractBrandsFromProducts() {
-    if (!this.brandsLoading && this.products.length > 0) {
-      // Only extract brands if we haven't already done it
-      if (this.brands.length === 0) {
-        const uniqueBrands = new Map();
-        const currentLang = this.languageService.getCurrentLanguage();
+    if (this.products.length > 0) {
+      const uniqueBrands = new Map();
+      const currentLang = this.languageService.getCurrentLanguage();
 
-        this.products.forEach((product) => {
-          // Using the English name as key to avoid duplicates
-          const brandKey = product.brand.en;
-          if (!uniqueBrands.has(brandKey)) {
-            uniqueBrands.set(brandKey, {
-              name:
-                product.brand.ar && currentLang === 'ar'
-                  ? product.brand.ar
-                  : product.brand.en,
-              en: product.brand.en,
-              ar: product.brand.ar || product.brand.en, // Fallback to English if Arabic not available
-              id: uniqueBrands.size + 1, // Generate a simple numeric ID
-              selected: this.selectedBrandNames.includes(product.brand.en), // Set selected state based on current filters
-            });
-          }
-        });
+      this.products.forEach((product) => {
+        // Using the English name as key to avoid duplicates
+        const brandKey = product.brand.en;
+        if (!uniqueBrands.has(brandKey)) {
+          uniqueBrands.set(brandKey, {
+            name:
+              product.brand.ar && currentLang === 'ar'
+                ? product.brand.ar
+                : product.brand.en,
+            en: product.brand.en,
+            ar: product.brand.ar || product.brand.en, // Fallback to English if Arabic not available
+            id: uniqueBrands.size + 1, // Generate a simple numeric ID
+            selected: this.selectedBrandNames.includes(product.brand.en), // Set selected state based on current filters
+          });
+        }
+      });
 
-        this.brands = Array.from(uniqueBrands.values());
-      } else {
-        // Update brand names based on current language
-        this.updateBrandNames();
-      }
+      this.brands = Array.from(uniqueBrands.values());
     }
+    this.brandsLoading = false; // Always set brands loading to false after processing
   }
 
   getFullImageUrl = getFullImageUrl;
