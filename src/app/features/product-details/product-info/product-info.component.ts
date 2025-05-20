@@ -111,7 +111,7 @@ export class ProductInfoComponent {
       beforePrice: product.productVariants[0].priceBeforeDiscount,
       quantity: this.counter,
       image: product.mainImageUrl,
-      currency: product.productVariants[0].currency,
+      currency: product.productVariants[0].currency.name,
     };
 
     // Add the item to the cart using the CartService

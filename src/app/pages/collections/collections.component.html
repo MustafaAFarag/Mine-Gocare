@@ -386,7 +386,13 @@
                 }"
                 class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
               >
-                <i class="ri-arrow-left-s-line"></i>
+                <i
+                  [class]="
+                    languageService.getCurrentLanguage() === 'ar'
+                      ? 'ri-arrow-right-s-line'
+                      : 'ri-arrow-left-s-line'
+                  "
+                ></i>
               </button>
 
               <!-- Page Number Buttons with Ellipsis -->
@@ -404,7 +410,7 @@
                   *ngIf="!page.ellipsis"
                   (click)="changePage(page.number)"
                   [ngClass]="{
-                    'bg-hover-color text-white': currentPage === page.number,
+                    'bg-hover-color/80 text-white': currentPage === page.number,
                     'hover:bg-gray-100': currentPage !== page.number,
                   }"
                   class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
@@ -425,7 +431,13 @@
                 }"
                 class="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300"
               >
-                <i class="ri-arrow-right-s-line"></i>
+                <i
+                  [class]="
+                    languageService.getCurrentLanguage() === 'ar'
+                      ? 'ri-arrow-left-s-line'
+                      : 'ri-arrow-right-s-line'
+                  "
+                ></i>
               </button>
             </div>
           </div>

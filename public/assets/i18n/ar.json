@@ -699,7 +699,7 @@
     "status": "الحالة",
     "debit": "مدين",
     "credit": "دائن",
-    "currency": "ح.م",
+    "currency": "ج.م",
     "orderNumber": "رقم الطلب",
     "description": "الوصف",
     "processing": "جاري المعالجة..."
@@ -724,7 +724,8 @@
     },
     "desktopView": {
       "youSave": "وفرت",
-      "addToCart": "أضف إلى السلة"
+      "addToCart": "أضف إلى السلة",
+      "off": "خصم"
     },
     "actions": {
       "continueShopping": "متابعة التسوق",
@@ -767,7 +768,7 @@
     "balance": "الرصيد",
     "redeem": "استبدال",
     "redeemSuccess": "تم استبدال النقاط",
-    "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ح.م)",
+    "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ج.م)",
     "redeemError": "فشل الاستبدال",
     "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً."
   },

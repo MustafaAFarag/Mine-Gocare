@@ -742,7 +742,8 @@
     },
     "desktopView": {
       "youSave": "You Save",
-      "addToCart": "Add to Cart"
+      "addToCart": "Add to Cart",
+      "off": "OFF"
     },
     "actions": {
       "continueShopping": "Continue Shopping",

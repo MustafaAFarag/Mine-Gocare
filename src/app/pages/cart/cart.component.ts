@@ -95,11 +95,17 @@ export class CartComponent implements OnInit, OnDestroy {
     return currentLang === 'ar' && textObj?.ar ? textObj.ar : textObj.en;
   }
 
-  // Get localized currency for cart summary
   getLocalizedCurrency(): string {
-    if (this.cartItems.length === 0) return '$'; // Default currency if cart is empty
-    // Use the currency from the first item in the cart
-    return this.getLocalizedText(this.cartItems[0].currency);
+    const country = localStorage.getItem('country') || 'EG';
+    const language = this.languageService.getCurrentLanguage();
+
+    if (country === 'EG') {
+      return language === 'ar' ? 'ج.م' : 'EGP';
+    } else if (country === 'SA') {
+      return language === 'ar' ? 'ر.س' : 'SAR';
+    }
+
+    return 'EGP'; // Default fallback
   }
 
   ngOnInit() {

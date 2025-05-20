@@ -24,7 +24,7 @@
           <div *ngIf="!showEmailInput">
             <button
               (click)="addEmail()"
-              class="mt-1 flex items-center gap-1 text-sm text-hover-color hover:text-red-800"
+              class="mt-1 flex items-center gap-1 text-sm text-hover-color hover:text-hover-color/80"
             >
               <i class="ri-add-line"></i>
               {{ "account.sidebar.addEmail" | translate }}
@@ -42,7 +42,7 @@
                 <button
                   (click)="updateEmail()"
                   [disabled]="isUpdatingEmail || !emailInput"
-                  class="flex-1 rounded bg-hover-color py-1 text-sm text-white transition hover:bg-red-800 disabled:opacity-50"
+                  class="flex-1 rounded bg-hover-color py-1 text-sm text-white transition hover:bg-hover-color/80 disabled:opacity-50"
                 >
                   <span *ngIf="!isUpdatingEmail">{{
                     "common.save" | translate
@@ -72,9 +72,9 @@
       <li *ngFor="let item of sidebarItems">
         <a
           [routerLink]="item.route"
-          [class.bg-red-100]="item.active"
-          [class.text-hover-color]="item.active"
-          class="flex items-center gap-2 px-6 py-3 hover:bg-red-200"
+          [class.bg-[#CBB1DD]]="item.active"
+          [class.text-purple-900]="item.active"
+          class="flex items-center gap-2 px-6 py-3 font-medium hover:bg-hover-color/80"
         >
           <i [class]="item.icon" class="text-lg"></i>
           <span>{{ item.nameKey | translate }}</span>
@@ -86,7 +86,7 @@
   <!-- Logout Button -->
   <div class="p-4">
     <button
-      class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-red-800"
+      class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-hover-color/80"
       (click)="logout()"
     >
       <i class="ri-logout-box-line mr-2"></i>
