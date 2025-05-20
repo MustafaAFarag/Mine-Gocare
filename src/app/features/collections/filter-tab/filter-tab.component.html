@@ -99,12 +99,12 @@
         >
           <div class="flex items-center justify-between">
             <div
-              class="flex cursor-pointer items-center"
+              class="flex cursor-pointer items-center gap-2"
               (click)="toggleCategory(category)"
             >
               <!-- Checkbox -->
               <div
-                class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                class="flex h-4 w-4 items-center justify-center rounded border"
                 [ngClass]="{
                   'border-hover-color bg-hover-color': category.selected,
                   'border-gray-300': !category.selected,
@@ -130,7 +130,7 @@
                 category.subcategories.length > 0
               "
               (click)="toggleCategoryExpansion(category, $event)"
-              class="ml-2 text-gray-500 hover:text-gray-700"
+              class="text-gray-500 hover:text-gray-700"
             >
               <i
                 [class]="
@@ -150,11 +150,7 @@
               category.subcategories.length > 0 &&
               isCategoryExpanded(category)
             "
-            [ngClass]="{
-              'mr-6': languageService.getCurrentLanguage() === 'ar',
-              'ml-6': languageService.getCurrentLanguage() !== 'ar',
-            }"
-            class="mt-2 space-y-2"
+            class="mt-2 flex flex-col gap-2"
           >
             <div
               *ngFor="let subcategory of category.subcategories"
@@ -162,12 +158,12 @@
             >
               <div class="flex items-center justify-between">
                 <div
-                  class="flex cursor-pointer items-center"
+                  class="flex cursor-pointer items-center gap-2"
                   (click)="toggleCategory(subcategory)"
                 >
                   <!-- Subcategory checkbox -->
                   <div
-                    class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                    class="flex h-4 w-4 items-center justify-center rounded border"
                     [ngClass]="{
                       'border-hover-color bg-hover-color': subcategory.selected,
                       'border-gray-300': !subcategory.selected,
@@ -195,7 +191,7 @@
                     subcategory.subcategories.length > 0
                   "
                   (click)="toggleSubCategoryExpansion(subcategory, $event)"
-                  class="ml-2 text-gray-500 hover:text-gray-700"
+                  class="text-gray-500 hover:text-gray-700"
                 >
                   <i
                     [class]="
@@ -215,20 +211,16 @@
                   subcategory.subcategories.length > 0 &&
                   isSubCategoryExpanded(subcategory)
                 "
-                [ngClass]="{
-                  'mr-6': languageService.getCurrentLanguage() === 'ar',
-                  'ml-6': languageService.getCurrentLanguage() !== 'ar',
-                }"
-                class="mt-2 space-y-2"
+                class="mt-2 flex flex-col gap-2"
               >
                 <div
                   *ngFor="let subSubcategory of subcategory.subcategories"
-                  class="flex cursor-pointer items-center"
+                  class="flex cursor-pointer items-center gap-2"
                   (click)="toggleCategory(subSubcategory)"
                 >
                   <!-- Sub-subcategory checkbox -->
                   <div
-                    class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+                    class="flex h-4 w-4 items-center justify-center rounded border"
                     [ngClass]="{
                       'border-hover-color bg-hover-color':
                         subSubcategory.selected,
@@ -370,17 +362,22 @@
             class="ri-check-line text-xs text-white"
           ></i>
         </div>
-        <div class="flex items-center">
-          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-            <i
-              *ngIf="star <= rating.value"
-              class="ri-star-fill text-yellow-400"
-            ></i>
-          </ng-container>
-          <span class="ml-1"
-            >{{ rating.value }}
-            {{ "collections.productCard.rating" | translate }}</span
-          >
+        <div class="flex items-center gap-2">
+          <!-- Stars -->
+          <div class="flex items-center gap-1">
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <i
+                *ngIf="star <= rating.value"
+                class="ri-star-fill text-yellow-400"
+              ></i>
+            </ng-container>
+          </div>
+
+          <!-- Rating Text -->
+          <div class="flex items-center text-gray-700">
+            <span class="mr-1">{{ rating.value }}</span>
+            <span>{{ "collections.productCard.rating" | translate }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -422,10 +419,11 @@
         </div>
         <span [ngClass]="{ 'text-hover-color': priceRange.selected }">
           <ng-container *ngIf="priceRange.max !== null">
-            {{ priceRange.min }}-{{ priceRange.max }} {{ currency }}
+            {{ priceRange.min }}-{{ priceRange.max }}
+            {{ getLocalizedCurrency() }}
           </ng-container>
           <ng-container *ngIf="priceRange.max === null">
-            {{ priceRange.min }}+ {{ currency }}
+            {{ priceRange.min }}+ {{ getLocalizedCurrency() }}
           </ng-container>
         </span>
       </div>

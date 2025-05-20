@@ -366,4 +366,18 @@ export class FilterTabComponent implements OnInit, OnDestroy {
       ? this.expandedSubCategories.has(subcategory.id)
       : false;
   }
+
+  // Add method to get localized currency
+  getLocalizedCurrency(): string {
+    const country = localStorage.getItem('country') || 'EG';
+    const language = this.languageService.getCurrentLanguage();
+
+    if (country === 'EG') {
+      return language === 'ar' ? 'ج.م' : 'EGP';
+    } else if (country === 'SA') {
+      return language === 'ar' ? 'ر.س' : 'SAR';
+    }
+
+    return 'EGP'; // Default fallback
+  }
 }
