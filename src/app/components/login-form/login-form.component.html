@@ -26,7 +26,7 @@
           <button
             type="button"
             (click)="showCountryDropdown = !showCountryDropdown"
-            class="flex h-full items-center gap-1 rounded-l-md border border-r-0 border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
+            class="flex h-full items-center gap-1 rounded-l-md border  border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
           >
             <img
               [src]="selectedCountry.flag"
@@ -45,7 +45,7 @@
             <div
               *ngFor="let country of countries"
               (click)="selectedCountry = country; showCountryDropdown = false"
-              class="flex cursor-pointer items-center gap-2 px-3 py-2 hover:bg-gray-50"
+              class="flex cursor-pointer items-center gap-2 px-2 py-2 hover:bg-gray-50"
             >
               <img
                 [src]="country.flag"

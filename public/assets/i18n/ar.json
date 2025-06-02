@@ -499,7 +499,7 @@
       "onlyLeftInStock": "بقي {{stockCount}} فقط في المخزون",
       "price": "السعر",
       "discount": "خصم {{discountPercentage}}%",
-      "rating": "التقييم",
+      "rating": "التقييم ",
       "noRating": "لا يوجد تقييم"
     },
     "noProductsFound": {

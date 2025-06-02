@@ -24,9 +24,20 @@
   animation-play-state: paused;
 }
 
+/* RTL support for the animation */
+[data-lang="ar"] .stock-ticker ul {
+  animation: scroll-rtl 20s linear infinite;
+}
+
 @keyframes scroll {
   to {
     transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes scroll-rtl {
+  to {
+    transform: translateX(calc(100% + var(--gap)));
   }
 }
 

@@ -385,8 +385,13 @@ export class FilterTabComponent implements OnInit, OnDestroy {
 
   // Add method to get localized currency
   getLocalizedCurrency(): string {
-    const country = localStorage.getItem('country') || 'EG';
     const language = this.languageService.getCurrentLanguage();
+    let country = 'EG'; // Default country
+
+    // Safely check if we're in browser environment
+    if (typeof window !== 'undefined' && window.localStorage) {
+      country = localStorage.getItem('country') || 'EG';
+    }
 
     if (country === 'EG') {
       return language === 'ar' ? 'ج.م' : 'EGP';
