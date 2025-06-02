@@ -46,14 +46,14 @@ export class LoginFormComponent implements OnInit {
 
   countries: Country[] = [
     {
-      name: 'Egypt',
+      name: 'common.egypt',
       code: 'EG',
       phoneCode: '+20',
       phoneCodeCountryId: 224,
       flag: 'assets/images/egypt-flag-icon.svg',
     },
     {
-      name: 'Saudi Arabia',
+      name: 'common.saudiArabia',
       code: 'SA',
       phoneCode: '+966',
       phoneCodeCountryId: 103,
@@ -67,6 +67,15 @@ export class LoginFormComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
   ) {}
+
+  getLanguage(): string {
+    if (typeof window !== 'undefined') {
+      const lang = localStorage.getItem('language') || 'en';
+      console.log('Current language:', lang);
+      return lang;
+    }
+    return 'en';
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

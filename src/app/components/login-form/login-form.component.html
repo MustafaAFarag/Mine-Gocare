@@ -40,8 +40,12 @@
           <!-- Dropdown menu -->
           <div
             *ngIf="showCountryDropdown"
-            class="absolute left-0 top-full z-50 mt-1 w-48 rounded-md border border-gray-300 bg-white shadow-lg"
+            class="absolute top-full z-50 mt-1 w-48 rounded-md border border-gray-300 bg-white shadow-lg"
+            [class.right-0]="getLanguage() === 'ar'"
+            [class.left-0]="getLanguage() !== 'ar'"
           >
+            <!-- Debug output -->
+            <div class="hidden">Current language: {{getLanguage()}}</div>
             <div
               *ngFor="let country of countries"
               (click)="selectedCountry = country; showCountryDropdown = false"
@@ -49,11 +53,11 @@
             >
               <img
                 [src]="country.flag"
-                [alt]="country.name"
+                [alt]="country.name | translate"
                 class="h-4 w-6 object-contain"
               />
               <span class="text-sm"
-                >{{ country.name }} ({{ country.phoneCode }})</span
+                >{{ country.name | translate }} ({{ country.phoneCode }})</span
               >
             </div>
           </div>

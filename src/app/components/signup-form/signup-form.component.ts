@@ -86,6 +86,15 @@ export class SignupFormComponent implements OnInit {
     private pointingSystemService: PointingSystemService,
   ) {}
 
+  getLanguage(): string {
+    if (typeof window !== 'undefined') {
+      const lang = localStorage.getItem('language') || 'en';
+      console.log('Current language:', lang);
+      return lang;
+    }
+    return 'en';
+  }
+
   ngOnInit(): void {
     this.signupForm = this.fb.group(
       {
