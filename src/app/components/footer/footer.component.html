@@ -27,7 +27,7 @@
             <span
               >{{ "footer.emailUs" | translate }}
               <br />
-              <a href="mailto:support@go-care.com"
+              <a href="mailto:support@go-care.com" id="footer-email-link"
                 >support&#64;go-care.com</a
               ></span
             >
@@ -45,6 +45,7 @@
             <a
               (click)="navigateToCategory(category)"
               class="cursor-pointer text-white transition-colors hover:text-hover-color"
+              [id]="'footer-category-link-' + category.id"
             >
               {{ getCategoryName(category) }}
             </a>
@@ -59,14 +60,18 @@
         </h3>
         <ul class="space-y-2 text-lg">
           <li>
-            <a href="#" class="text-white hover:text-hover-color">{{
-              "footer.links.home" | translate
-            }}</a>
+            <a
+              href="#"
+              class="text-white hover:text-hover-color"
+              id="footer-home-link"
+              >{{ "footer.links.home" | translate }}</a
+            >
           </li>
           <li>
             <a
               routerLink="/collections"
               class="text-white hover:text-hover-color"
+              id="footer-collections-link"
               >{{ "footer.links.collections" | translate }}</a
             >
           </li>
@@ -74,6 +79,7 @@
             <a
               routerLink="/contact-us"
               class="text-white hover:text-hover-color"
+              id="footer-contact-us-link"
               >{{ "footer.links.contactUs" | translate }}</a
             >
           </li>
@@ -81,6 +87,7 @@
             <a
               routerLink="/privacy-policy"
               class="text-white hover:text-hover-color"
+              id="footer-privacy-policy-link"
               >{{ "footer.links.privacyPolicy" | translate }}</a
             >
           </li>
@@ -88,6 +95,7 @@
             <a
               routerLink="/refund-policy"
               class="text-white hover:text-hover-color"
+              id="footer-refund-policy-link"
               >{{ "footer.links.refundPolicy" | translate }}</a
             >
           </li>
@@ -95,6 +103,7 @@
             <a
               routerLink="/terms-and-conditions"
               class="text-white hover:text-hover-color"
+              id="footer-terms-and-conditions-link"
               >{{ "footer.links.termsAndConditions" | translate }}</a
             >
           </li>
@@ -111,6 +120,7 @@
             <a
               routerLink="/account/dashboard"
               class="text-white hover:text-hover-color"
+              id="footer-account-link"
               >{{ "footer.links.account" | translate }}</a
             >
           </li>
@@ -118,6 +128,7 @@
             <a
               routerLink="/account/orders"
               class="text-white hover:text-hover-color"
+              id="footer-orders-link"
               >{{ "footer.links.orders" | translate }}</a
             >
           </li>
@@ -125,14 +136,18 @@
             <a
               routerLink="/wishlist"
               class="text-white hover:text-hover-color"
+              id="footer-wishlist-link"
               >{{ "footer.links.wishlist" | translate }}</a
             >
           </li>
 
           <li>
-            <a href="/contact-us" class="text-white hover:text-hover-color">{{
-              "footer.links.contact" | translate
-            }}</a>
+            <a
+              href="/contact-us"
+              class="text-white hover:text-hover-color"
+              id="footer-contact-link"
+              >{{ "footer.links.contact" | translate }}</a
+            >
           </li>
         </ul>
       </div>
@@ -147,6 +162,7 @@
             target="_blank"
             class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Facebook"
+            id="footer-facebook-link"
           >
             <i class="ri-facebook-fill text-xl text-white"></i>
           </a>
@@ -155,6 +171,7 @@
             target="_blank"
             class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Twitter"
+            id="footer-twitter-link"
           >
             <i class="ri-twitter-x-fill text-xl text-white"></i>
           </a>
@@ -163,6 +180,7 @@
             target="_blank"
             class="hover:bg-hover-ctext-hover-color flex h-10 w-10 items-center justify-center rounded-full bg-[#323232] transition-all hover:scale-110"
             aria-label="Instagram"
+            id="footer-instagram-link"
           >
             <i class="ri-instagram-fill text-xl text-white"></i>
           </a>
