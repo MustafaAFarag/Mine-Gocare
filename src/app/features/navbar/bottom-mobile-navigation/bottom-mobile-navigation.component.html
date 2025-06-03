@@ -4,6 +4,7 @@
   <div class="flex items-center justify-between px-4 py-3 text-2xl">
     <a
       routerLink="/"
+      id="bottom-mobile-navigation-home-link"
       class="flex flex-col items-center text-center"
       routerLinkActive="text-hover-color"
       [routerLinkActiveOptions]="{ exact: true }"
@@ -13,6 +14,7 @@
     </a>
 
     <a
+      id="bottom-mobile-navigation-search-link"
       class="flex cursor-pointer flex-col items-center text-center"
       (click)="toggleSearch()"
     >
@@ -22,6 +24,7 @@
 
     <a
       routerLink="/cart"
+      id="bottom-mobile-navigation-cart-link"
       class="flex flex-col items-center text-center"
       routerLinkActive="text-hover-color"
     >
@@ -39,6 +42,7 @@
 
     <a
       routerLink="/wishlist"
+      id="bottom-mobile-navigation-wishlist-link"
       class="flex flex-col items-center text-center"
       routerLinkActive="text-hover-color"
     >
@@ -56,6 +60,7 @@
 
     <a
       routerLink="/account/dashboard"
+      id="bottom-mobile-navigation-user-link"
       class="flex flex-col items-center text-center"
       routerLinkActive="text-hover-color"
     >

@@ -1,11 +1,16 @@
 <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
-<div class="search-overlay" (click)="closeSearchPanel()"></div>
+<div
+  class="search-overlay"
+  (click)="closeSearchPanel()"
+  id="search-overlay"
+></div>
 <div class="search-container bg-white p-4 shadow-md">
   <div class="mb-4 flex items-center justify-between gap-4">
     <h2 class="text-xl font-semibold">{{ "search.title" | translate }}</h2>
     <button
       (click)="closeSearchPanel()"
+      id="search-close-button"
       class="p-2 text-gray-500 hover:text-gray-700"
     >
       <i class="ri-close-line text-2xl"></i>
@@ -17,6 +22,7 @@
       <input
         type="text"
         [(ngModel)]="searchTerm"
+        id="search-input"
         (ngModelChange)="onSearch()"
         placeholder="{{ 'search.placeholder' | translate }}"
         class="w-full rounded-md border border-gray-300 bg-white p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -47,21 +53,22 @@
             class="flex flex-col items-start justify-between gap-4 rounded-md p-3 transition-colors hover:bg-gray-50 sm:flex-row sm:items-center"
           >
             <a
+              [id]="'search-product-link-' + product.productId"
               [routerLink]="[
                 '/product-details',
                 product.productId,
                 product.variantId,
               ]"
               (click)="closeSearchPanel()"
-              class="flex w-full items-center gap-4 sm:w-auto"
+              class="flex w-full items-start gap-4 sm:w-auto sm:flex-1"
             >
               <img
                 [src]="getFullImageUrl(product.mainImageUrl)"
                 [alt]="product.name[getCurrentLang()]"
-                class="h-16 w-16 rounded-md object-cover"
+                class="h-16 w-16 flex-shrink-0 rounded-md object-cover"
               />
               <div class="flex min-w-0 flex-1 flex-col gap-1">
-                <h3 class="truncate font-medium">
+                <h3 class="line-clamp-2 font-medium">
                   {{ product.name[getCurrentLang()] }}
                 </h3>
                 <p class="truncate text-sm text-gray-500">
@@ -86,9 +93,12 @@
                 </div>
               </div>
             </a>
-            <div class="flex w-full justify-end gap-2 sm:w-auto">
+            <div
+              class="flex w-full justify-end gap-2 sm:w-auto sm:flex-shrink-0"
+            >
               <button
                 (click)="toggleWishlist(product)"
+                [id]="'search-wishlist-button-' + product.productId"
                 class="flex flex-1 items-center justify-center rounded-md border border-gray-300 p-2 text-gray-600 hover:bg-gray-100 sm:flex-none"
                 [title]="
                   isInWishlist(product)
@@ -106,6 +116,7 @@
               </button>
               <button
                 (click)="addToCart(product)"
+                [id]="'search-add-to-cart-button-' + product.productId"
                 class="flex flex-1 items-center justify-center rounded-md bg-hover-color p-2 text-white hover:bg-opacity-90 sm:flex-none"
                 title="Add to Cart"
               >
