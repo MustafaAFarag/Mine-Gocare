@@ -10,6 +10,7 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <!-- Cash on Delivery -->
       <div
+        id="payment-option-cod"
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="paymentMethod === 'cod'"
         (click)="selectPaymentMethod('cod')"
@@ -18,6 +19,7 @@
           <!-- Radio Button -->
           <div>
             <div
+              id="payment-radio-cod"
               class="flex h-5 w-5 items-center justify-center rounded-full border-2"
               [class.border-hover-color]="paymentMethod === 'cod'"
               [class.bg-hover-color]="paymentMethod === 'cod'"
@@ -40,6 +42,7 @@
 
       <!-- PayTabs (Credit Card) -->
       <div
+        id="payment-option-paytabs"
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="paymentMethod === 'paytabs'"
         (click)="selectPaymentMethod('paytabs')"
@@ -48,6 +51,7 @@
           <!-- Radio Button -->
           <div>
             <div
+              id="payment-radio-paytabs"
               class="flex h-5 w-5 items-center justify-center rounded-full border-2"
               [class.border-hover-color]="paymentMethod === 'paytabs'"
               [class.bg-hover-color]="paymentMethod === 'paytabs'"
@@ -70,6 +74,7 @@
 
       <!-- Wallet -->
       <div
+        id="payment-option-wallet"
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="paymentMethod === 'wallet'"
         [class.opacity-50]="isWalletDisabled()"
@@ -80,6 +85,7 @@
           <!-- Radio Button -->
           <div>
             <div
+              id="payment-radio-wallet"
               class="flex h-5 w-5 items-center justify-center rounded-full border-2"
               [class.border-hover-color]="
                 paymentMethod === 'wallet' && !isWalletDisabled()
@@ -101,6 +107,7 @@
               {{ "checkout.wallet" | translate }}
             </h3>
             <p
+              id="wallet-balance"
               class="mt-1 text-sm"
               [class.text-red-500]="isWalletDisabled()"
               [class.text-hover-color]="!isWalletDisabled()"
@@ -108,7 +115,11 @@
               ( {{ "common.currency" | translate }}
               {{ walletBalance | number: "1.2-2" }} )
             </p>
-            <p *ngIf="isWalletDisabled()" class="mt-1 text-xs text-red-500">
+            <p
+              *ngIf="isWalletDisabled()"
+              id="wallet-insufficient-balance"
+              class="mt-1 text-xs text-red-500"
+            >
               {{ "checkout.insufficientBalance" | translate }}
             </p>
           </div>

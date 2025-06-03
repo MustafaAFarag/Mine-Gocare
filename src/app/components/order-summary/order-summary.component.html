@@ -11,23 +11,33 @@
   <div class="space-y-4 p-4">
     <div
       *ngFor="let item of cartItems"
+      id="order-item-{{ item.productId }}"
       class="flex flex-col gap-3 border-b pb-4"
     >
       <div class="flex items-center gap-3">
         <div class="h-16 w-16 flex-shrink-0">
           <img
+            id="order-item-image-{{ item.productId }}"
             [src]="getfullImageUrl(item.image)"
             [alt]="currentLang === 'en' ? item.name.en : item.name.ar"
             class="h-full w-full rounded object-cover"
           />
         </div>
         <div class="flex-1">
-          <h3 class="text-gray-800">
+          <h3 id="order-item-name-{{ item.productId }}" class="text-gray-800">
             {{ currentLang === "en" ? item.name.en : item.name.ar }}
           </h3>
-          <p class="text-sm text-gray-600">${{ item.afterPrice.toFixed(2) }}</p>
+          <p
+            id="order-item-price-{{ item.productId }}"
+            class="text-sm text-gray-600"
+          >
+            ${{ item.afterPrice.toFixed(2) }}
+          </p>
         </div>
-        <div class="font-medium text-hover-color">
+        <div
+          id="order-item-total-{{ item.productId }}"
+          class="font-medium text-hover-color"
+        >
           ${{ (item.afterPrice * item.quantity).toFixed(2) }}
         </div>
       </div>
@@ -39,6 +49,7 @@
         >
         <div class="flex h-8 items-center">
           <button
+            id="decrease-quantity-{{ item.productId }}"
             type="button"
             (click)="decrementQuantity(item)"
             class="flex h-full w-8 items-center justify-center rounded-l border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -60,11 +71,13 @@
             </svg>
           </button>
           <div
+            id="item-quantity-{{ item.productId }}"
             class="flex h-full min-w-[2rem] items-center justify-center border-y border-gray-300 px-2 text-sm"
           >
             {{ item.quantity }}
           </div>
           <button
+            id="increase-quantity-{{ item.productId }}"
             type="button"
             (click)="incrementQuantity(item)"
             class="flex h-full w-8 items-center justify-center rounded-r border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
