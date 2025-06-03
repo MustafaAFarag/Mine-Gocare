@@ -16,7 +16,9 @@
             "outputPath": "dist/mine-gocare",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -37,6 +39,7 @@
           },
           "configurations": {
             "production": {
+              "outputPath": "dist/mine-gocare-production-03-06-25",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -58,6 +61,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "outputPath": "dist/mine-gocare-development-03-06-25",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -67,6 +71,31 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "testing": {
+              "outputPath": "dist/mine-gocare-testing-03-06-25",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testing.ts"
+                }
+              ],
+              "optimization": true,
+              "extractLicenses": true,
+              "sourceMap": true,
+              "outputHashing": "all",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ]
             }
           },
           "defaultConfiguration": "development"
@@ -79,6 +108,9 @@
             },
             "development": {
               "buildTarget": "mine-gocare:build:development"
+            },
+            "testing": {
+              "buildTarget": "mine-gocare:build:testing"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +121,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
@@ -97,7 +132,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.css"
+            ],
             "scripts": []
           }
         }
