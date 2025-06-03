@@ -40,6 +40,7 @@ export class EverydayCasualSectionComponent implements OnInit, OnDestroy {
   @Input() isLoadingProducts!: boolean;
   @Input() selectedCategory: any;
   isCategoryLoading: boolean = false;
+  hasError: boolean = false;
   private langSubscription?: Subscription;
 
   @Output() categorySelected = new EventEmitter<number>(); // Emit category ID when clicked
@@ -77,6 +78,10 @@ export class EverydayCasualSectionComponent implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['products']) {
       this.isCategoryLoading = false;
+      // Set hasError to true if products is null or undefined
+      this.hasError =
+        changes['products'].currentValue === null ||
+        changes['products'].currentValue === undefined;
       this.cdr.detectChanges();
     }
   }

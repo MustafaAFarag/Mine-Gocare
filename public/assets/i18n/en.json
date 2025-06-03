@@ -720,7 +720,9 @@
     "currency": "EGP",
     "orderNumber": "Order Number",
     "description": "Description",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "errorLoadingProducts": "Error loading products. Please try again later.",
+    "noProductsAvailable": "No products available in this category."
   },
   "wallet": {
     "noTransactions": "No transactions found in your wallet.",

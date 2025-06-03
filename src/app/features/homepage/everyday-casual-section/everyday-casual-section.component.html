@@ -2,10 +2,7 @@
   <app-loading></app-loading>
 </div>
 
-<section
-  class="everyday-casual-section py-16"
-  *ngIf="!isLoadingProducts && products.length"
->
+<section class="everyday-casual-section py-16" *ngIf="!isLoadingProducts">
   <div class="container mx-auto max-w-8xl px-4">
     <h2 class="text-center text-4xl font-extrabold">
       {{ "everyday-casual.everydayCasual" | translate }}
@@ -32,13 +29,33 @@
       <app-loading></app-loading>
     </div>
 
-    <div
-      *ngIf="!isCategoryLoading"
-      class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-    >
-      @for (product of products; track product.productId) {
-        <app-product-card [product]="product"></app-product-card>
-      }
+    <div *ngIf="!isCategoryLoading">
+      <!-- Show error message if there was an error loading products -->
+      <div *ngIf="hasError" class="py-8 text-center">
+        <p class="text-lg text-red-500">
+          {{ "common.errorLoadingProducts" | translate }}
+        </p>
+      </div>
+
+      <!-- Show no products message if products array is empty -->
+      <div
+        *ngIf="!hasError && (!products || products.length === 0)"
+        class="py-8 text-center"
+      >
+        <p class="text-lg text-gray-600">
+          {{ "common.noProductsAvailable" | translate }}
+        </p>
+      </div>
+
+      <!-- Show products grid if we have products -->
+      <div
+        *ngIf="!hasError && products && products.length > 0"
+        class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+      >
+        @for (product of products; track product.productId) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
     </div>
   </div>
 </section>
