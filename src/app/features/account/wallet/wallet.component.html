@@ -91,6 +91,7 @@
     <div class="flex items-center justify-center gap-1 border-t p-3 sm:p-4">
       <button
         (click)="previousPage()"
+        id="wallet-previous-page-button"
         class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
         [disabled]="currentPage === 1 || isPaginationLoading"
         [class.opacity-50]="currentPage === 1 || isPaginationLoading"
@@ -101,6 +102,7 @@
       <button
         *ngFor="let page of getPageNumbers()"
         (click)="goToPage(page)"
+        id="wallet-page-button"
         class="flex h-8 min-w-[32px] items-center justify-center rounded-md text-sm sm:h-9 sm:min-w-[36px] sm:text-base"
         [class.bg-hover-color]="currentPage === page"
         [class.text-white]="currentPage === page"
@@ -114,6 +116,7 @@
 
       <button
         (click)="nextPage()"
+        id="wallet-next-page-button"
         class="rounded-md p-1.5 text-gray-600 hover:bg-gray-100 sm:p-2"
         [disabled]="currentPage === totalPages || isPaginationLoading"
         [class.opacity-50]="currentPage === totalPages || isPaginationLoading"

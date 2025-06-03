@@ -74,6 +74,7 @@
   >
     <button
       (click)="previousPage()"
+      id="refund-previous-page-button"
       class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
       [disabled]="currentPage === 1"
       [class.opacity-50]="currentPage === 1"
@@ -84,6 +85,7 @@
     <button
       *ngFor="let page of [1]"
       (click)="goToPage(page)"
+      id="refund-page-button"
       class="mx-1 flex h-9 min-w-[36px] items-center justify-center rounded-md"
       [class.bg-hover-color]="currentPage === page"
       [class.text-white]="currentPage === page"
@@ -95,6 +97,7 @@
 
     <button
       (click)="nextPage()"
+      id="refund-next-page-button"
       class="rounded-md p-2 text-gray-600 hover:bg-gray-100"
       [disabled]="currentPage === totalPages"
       [class.opacity-50]="currentPage === totalPages"
