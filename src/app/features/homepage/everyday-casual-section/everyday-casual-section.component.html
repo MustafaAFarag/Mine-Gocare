@@ -19,6 +19,7 @@
         *ngFor="let category of categories"
         class="px-4 py-2 text-lg font-semibold uppercase"
         (click)="onCategoryClick(category.id)"
+        [id]="'category-tab-' + category.id"
         [ngClass]="{
           'text-hover-color': category.id === selectedCategory?.id,
         }"
