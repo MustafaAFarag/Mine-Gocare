@@ -741,7 +741,8 @@
     "description": "الوصف",
     "processing": "جاري المعالجة...",
     "errorLoadingProducts": "خطأ في تحميل المنتجات. يرجى المحاولة مرة أخرى لاحقاً.",
-    "noProductsAvailable": "لا توجد منتجات متاحة في هذه الفئة."
+    "noProductsAvailable": "لا توجد منتجات متاحة في هذه الفئة.",
+    "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً."
   },
   "wallet": {
     "noTransactions": "لم يتم العثور على معاملات في محفظتك.",
