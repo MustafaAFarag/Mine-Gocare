@@ -246,8 +246,6 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
             if (matchedPromo) {
               this.appliedPromoCode = matchedPromo;
               this.discountAmount = this.calculateDiscount(matchedPromo);
-              this.finalTotal =
-                this.subTotal + this.shipping + this.tax - this.discountAmount;
               this.isPromoApplied = true;
 
               // Emit the promo code ID and discount for the parent component
@@ -255,6 +253,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
                 promoCodeId: matchedPromo.id,
                 discount: this.discountAmount,
               });
+
+              // Fetch updated order summary after applying promo code
+              this.fetchOrderSummary();
 
               let message = '';
               if (matchedPromo.type === 3) {
