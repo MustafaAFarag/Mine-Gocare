@@ -7,97 +7,100 @@
     </h2>
   </div>
 
-  <div class="rounded-lg bg-white p-4 shadow-sm">
-    <!-- orderProducts: {{ orderProducts | json }} -->
-    <!-- Header -->
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="font-bold text-gray-900">
-        {{ "checkout.promoCodeTitle" | translate }}
-      </h2>
-    </div>
+  <div *ngIf="hasPromoCodeInCart" class="rounded-lg bg-white p-4 shadow-sm">
+   <!-- Header -->
+    @if (hasPromoCodeInCart) {
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="font-bold text-gray-900">
+          {{ "checkout.promoCodeTitle" | translate }} 
+        </h2>
+      </div>
 
-    <!-- Promo Codes -->
-    <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-      @for (promoCode of promoCodes; track $index) {
-        <div
-          id="promo-code-{{ promoCode.code }}"
-          class="border-b bg-gray-100 p-2"
-        >
-          <div
-            id="promo-name-{{ promoCode.code }}"
-            class="mb-1 border-b border-dashed border-red-500 pb-2 text-sm font-medium text-gray-800"
-          >
-            {{ promoCode.offerName[currentLang] }}
-          </div>
-          <div class="flex items-center justify-between">
-            <span
-              id="promo-code-text-{{ promoCode.code }}"
-              class="font-medium text-gray-700"
+      <!-- Promo Codes -->
+      <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        @for (item of cartItems; track $index) {
+          @if (item.promoCodeDetail) {
+            <div
+              id="promo-code-{{ item.promoCodeDetail.code }}"
+              class="border-b bg-gray-100 p-2"
             >
-              {{ promoCode.code }}
-            </span>
-            <button
-              id="copy-promo-{{ promoCode.code }}"
-              class="text-sm text-hover-color hover:text-red-800 focus:outline-none"
-              (click)="copyPromoCode(promoCode.code)"
-            >
-              <i class="ri-file-copy-line"></i>
-            </button>
-          </div>
-        </div>
-      }
-    </div>
+              <div
+                id="promo-name-{{ item.promoCodeDetail.code }}"
+                class="mb-1 border-b border-dashed border-red-500 pb-2 text-sm font-medium text-gray-800"
+              >
+                {{ item.promoCodeDetail.name[currentLang] }}
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  id="promo-code-text-{{ item.promoCodeDetail.code }}"
+                  class="font-medium text-gray-700"
+                >
+                  {{ item.promoCodeDetail.code }}
+                </span>
+                <button
+                  id="copy-promo-{{ item.promoCodeDetail.code }}"
+                  class="text-sm text-hover-color hover:text-red-800 focus:outline-none"
+                  (click)="copyPromoCode(item.promoCodeDetail.code)"
+                >
+                  <i class="ri-file-copy-line"></i>
+                </button>
+              </div>
+            </div>
+          }
+        }
+      </div>
 
-    <!-- Coupon Input -->
-    <form
-      id="promo-code-form"
-      [formGroup]="promoForm"
-      (ngSubmit)="applyPromoCode()"
-      class="mt-4 flex"
-    >
-      <input
-        id="promo-code-input"
-        type="text"
-        formControlName="couponCode"
-        [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
-        class="flex-1 rounded-l border bg-white px-4 py-2"
-      />
-      <button
-        id="apply-promo-button"
-        type="submit"
-        [disabled]="isApplyingPromo"
-        class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+      <!-- Coupon Input -->
+      <form
+        id="promo-code-form"
+        [formGroup]="promoForm"
+        (ngSubmit)="applyPromoCode()"
+        class="mt-4 flex"
       >
-        <div class="flex items-center gap-2">
-          <svg
-            *ngIf="isApplyingPromo"
-            class="h-4 w-4 animate-spin"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          <span>
-            {{
-              isApplyingPromo
-                ? ("checkout.applying" | translate)
-                : ("checkout.applyNow" | translate)
-            }}
-          </span>
-        </div>
-      </button>
-    </form>
+        <input
+          id="promo-code-input"
+          type="text"
+          formControlName="couponCode"
+          [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
+          class="flex-1 rounded-l border bg-white px-4 py-2"
+        />
+        <button
+          id="apply-promo-button"
+          type="submit"
+          [disabled]="isApplyingPromo"
+          class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <div class="flex items-center gap-2">
+            <svg
+              *ngIf="isApplyingPromo"
+              class="h-4 w-4 animate-spin"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <span>
+              {{
+                isApplyingPromo
+                  ? ("checkout.applying" | translate)
+                  : ("checkout.applyNow" | translate)
+              }}
+            </span>
+          </div>
+        </button>
+      </form>
+    }
   </div>
 
   <div class="border-t p-4">

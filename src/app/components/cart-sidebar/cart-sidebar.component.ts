@@ -90,6 +90,11 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
         this.handleStorageChange.bind(this),
       );
     }
+
+    // Subscribe to cart items and log them
+    this.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
+      console.log('Cart Items:', items);
+    });
   }
 
   ngOnDestroy() {

@@ -145,7 +145,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
-      currency: product.currency,
+      promoCodeDetail: product.promoCodeDetail,
+      currency: product.currency.name,
     };
 
     this.cartService.addToCart(cartItem);

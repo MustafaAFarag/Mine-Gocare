@@ -150,7 +150,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         beforePrice: item.beforePrice,
         quantity: item.quantity,
         image: item.image,
+        promoCodeDetail: item.promoCodeDetail,
       }));
+
+      console.log('cartItems', this.cartItems);
 
       this.updateTotal();
       this.cartLoading = false;

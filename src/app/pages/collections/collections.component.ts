@@ -1048,6 +1048,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
+      promoCodeDetail: product.promoCodeDetail,
     };
 
     this.cartService.addToCart(cartItem);

@@ -37,6 +37,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   promoForm!: FormGroup;
   currentLang: Language = 'en';
   discountAmount: number = 0;
+  hasPromoCodeInCart: boolean = false;
   @Input() orderProducts: Array<{
     productVariantId: number;
     quantity: number;
@@ -250,6 +251,11 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       (total, item) => total + item.afterPrice * item.quantity,
       0,
     );
+
+
+    console.log('cartItems', this.cartItems);
+    // Check if any cart item has a promoCodeDetail
+    this.hasPromoCodeInCart = this.cartItems.some(item => item.promoCodeDetail !== null);
 
     // Calculate final total including shipping, tax, and any discounts
     let total = this.subTotal + this.shipping + this.tax;

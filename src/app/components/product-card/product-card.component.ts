@@ -130,6 +130,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
+      promoCodeDetail: product.promoCodeDetail,
       currency: product.currency.name,
     };
     console.log("CART ITEM", cartItem);

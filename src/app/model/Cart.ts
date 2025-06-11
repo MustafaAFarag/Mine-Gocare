@@ -7,6 +7,21 @@ export interface CartItem {
   beforePrice: number;
   quantity: number;
   currency?: any;
+  promoCodeDetail ?: {
+    hasLabel: boolean
+    name: Name
+    code: string
+    maxUsagePerClient: number
+    promoCodeType: number
+    amount: number
+    maxDiscountValue: any
+    minCheckOutAmount: number
+  } | null;
+}
+
+interface Name {
+  en: string
+  ar: string
 }
 
 export interface Cart {
