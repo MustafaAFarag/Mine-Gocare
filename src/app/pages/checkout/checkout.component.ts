@@ -153,7 +153,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         promoCodeDetail: item.promoCodeDetail,
       }));
 
-      console.log('cartItems', this.cartItems);
 
       this.updateTotal();
       this.cartLoading = false;
@@ -210,7 +209,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.addressService.getClientAddresses(token).subscribe({
           next: (response) => {
             if (response.success && response.result) {
-              // Transform API addresses to match our Address model format
+              // Transform API addresses to match our Address format and set the first one as selected
               this.transformAddresses(response.result);
             }
             this.loading = false;
@@ -336,11 +335,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.subTotal + this.shipping - (this.appliedPromoCode?.discount || 0);
   }
 
-  getSelectedShippingAddressId(): number | null {
+  getSelectedShippingAddressId(): number | undefined {
     const selectedAddress = this.shippingAddresses.find(
       (addr) => addr.isSelected,
     );
-    return selectedAddress ? selectedAddress.id : null;
+    return selectedAddress?.id;
   }
 
   // Map payment method to API values
@@ -467,5 +466,34 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getCurrency(): string {
     const lang = this.getLanguage();
     return this.cartItems[0]?.currency?.[lang] || this.cartItems[0]?.currency?.en || 'EGP';
+  }
+
+  handleOrderSummaryUpdate(summary: any): void {
+    if (summary) {
+      console.log('Updating checkout with summary:', summary);
+      this.subTotal = summary.subTotal || 0;
+      this.shipping = summary.shippingFees || 0;
+      this.total = summary.total || 0;
+
+      // Update wallet balance if available
+      if (summary.availableWalletAmount !== undefined) {
+        this.walletBalance = summary.availableWalletAmount;
+      }
+
+      // Update the cart items if they've changed
+      if (summary.items) {
+        this.cartItems = summary.items.map((item: any) => ({
+          productId: item.productId,
+          variantId: item.variantId,
+          name: item.name,
+          currency: item.currency,
+          afterPrice: item.afterPrice,
+          beforePrice: item.beforePrice,
+          quantity: item.quantity,
+          image: item.image,
+          promoCodeDetail: item.promoCodeDetail,
+        }));
+      }
+    }
   }
 }

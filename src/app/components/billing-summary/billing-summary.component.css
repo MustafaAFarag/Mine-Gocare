@@ -1,1 +1,12 @@
 /* Billing summary component styles */
+
+.loading-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner i {
+  font-size: 1rem;
+  color: var(--primary-color);
+}

@@ -7,191 +7,223 @@
     </h2>
   </div>
 
-  <div *ngIf="hasPromoCodeInCart" class="rounded-lg bg-white p-4 shadow-sm">
-   <!-- Header -->
-    @if (hasPromoCodeInCart) {
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="font-bold text-gray-900">
-          {{ "checkout.promoCodeTitle" | translate }} 
-        </h2>
-      </div>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex items-center justify-center p-4">
+    <div class="h-6 w-6 animate-spin rounded-full border-2 border-hover-color border-t-transparent"></div>
+  </div>
 
-      <!-- Promo Codes -->
-      <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        @for (item of cartItems; track $index) {
-          @if (item.promoCodeDetail) {
-            <div
-              id="promo-code-{{ item.promoCodeDetail.code }}"
-              class="border-b bg-gray-100 p-2"
-            >
+  <div *ngIf="!loading">
+    <div *ngIf="hasPromoCodeInCart" class="rounded-lg bg-white p-4 shadow-sm">
+      <!-- Header -->
+      @if (hasPromoCodeInCart) {
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="font-bold text-gray-900">
+            {{ "checkout.promoCodeTitle" | translate }} 
+          </h2>
+        </div>
+
+        <!-- Promo Codes -->
+        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+          @for (item of cartItems; track $index) {
+            @if (item.promoCodeDetail) {
               <div
-                id="promo-name-{{ item.promoCodeDetail.code }}"
-                class="mb-1 border-b border-dashed border-red-500 pb-2 text-sm font-medium text-gray-800"
+                id="promo-code-{{ item.promoCodeDetail.code }}"
+                class="border-b bg-gray-100 p-2"
               >
-                {{ item.promoCodeDetail.name[currentLang] }}
-              </div>
-              <div class="flex items-center justify-between">
-                <span
-                  id="promo-code-text-{{ item.promoCodeDetail.code }}"
-                  class="font-medium text-gray-700"
+                <div
+                  id="promo-name-{{ item.promoCodeDetail.code }}"
+                  class="mb-1 border-b border-dashed border-red-500 pb-2 text-sm font-medium text-gray-800"
                 >
-                  {{ item.promoCodeDetail.code }}
-                </span>
-                <button
-                  id="copy-promo-{{ item.promoCodeDetail.code }}"
-                  class="text-sm text-hover-color hover:text-red-800 focus:outline-none"
-                  (click)="copyPromoCode(item.promoCodeDetail.code)"
-                >
-                  <i class="ri-file-copy-line"></i>
-                </button>
+                  {{ item.promoCodeDetail.name[currentLang] }}
+                </div>
+                <div class="flex items-center justify-between">
+                  <span
+                    id="promo-code-text-{{ item.promoCodeDetail.code }}"
+                    class="font-medium text-gray-700"
+                  >
+                    {{ item.promoCodeDetail.code }}
+                  </span>
+                  <button
+                    id="copy-promo-{{ item.promoCodeDetail.code }}"
+                    class="text-sm text-hover-color hover:text-red-800 focus:outline-none"
+                    (click)="copyPromoCode(item.promoCodeDetail.code)"
+                  >
+                    <i class="ri-file-copy-line"></i>
+                  </button>
+                </div>
               </div>
-            </div>
+            }
           }
+        </div>
+
+        <!-- Coupon Input -->
+        <form
+          id="promo-code-form"
+          [formGroup]="promoForm"
+          (ngSubmit)="applyPromoCode()"
+          class="mt-4 flex"
+        >
+          <div class="relative flex-1">
+            <input
+              id="promo-code-input"
+              type="text"
+              formControlName="couponCode"
+              [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
+              class="w-full rounded-l border bg-white px-4 py-2 pr-8"
+            />
+            @if (promoForm.get('couponCode')?.value) {
+              <button
+                type="button"
+                (click)="clearPromoCode()"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <i class="ri-close-line text-lg"></i>
+              </button>
+            }
+          </div>
+          <button
+            id="apply-promo-button"
+            type="submit"
+            [disabled]="isApplyingPromo"
+            class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <div class="flex items-center gap-2">
+              <svg
+                *ngIf="isApplyingPromo"
+                class="h-4 w-4 animate-spin"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>
+                {{
+                  isApplyingPromo
+                    ? ("checkout.applying" | translate)
+                    : ("checkout.applyNow" | translate)
+                }}
+              </span>
+            </div>
+          </button>
+        </form>
+      }
+    </div>
+
+    <div class="border-t p-4">
+      <!-- Order Breakdown -->
+      <div class="space-y-3 pt-1">
+        <div class="flex justify-between">
+          <span class="font-medium text-gray-700">{{
+            "checkout.itemTotal" | translate
+          }}</span>
+          <span id="subtotal-amount" class="text-hover-color">
+            {{ orderSummary?.subTotal?.toFixed(2) || subTotal.toFixed(2) }} {{ "common.currency" | translate }}
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-medium text-gray-700">{{
+            "checkout.shipping" | translate
+          }}</span>
+          <span *ngIf="!loading" id="shipping-amount" class="text-hover-color">
+            {{ orderSummary?.shippingFees?.toFixed(2) || shipping.toFixed(2) }} {{ "common.currency" | translate }} 
+          </span>
+          <span *ngIf="loading" class="loading-spinner">
+            <i class="pi pi-spin pi-spinner"></i>
+          </span>
+        </div>
+
+        <!-- Checkout Discount -->
+        @if (orderSummary?.totalDiscount > 0) {
+          <div class="flex justify-between text-green-600">
+            <span>{{ "checkout.checkoutDiscount" | translate }}</span>
+            <span id="checkout-discount-amount">
+              -{{ orderSummary.totalDiscount.toFixed(2) }} 
+              {{ "common.currency" | translate }}
+            </span>
+          </div>
+        }
+
+        <!-- Promo Code Discount -->
+        @if (isPromoApplied && discountAmount > 0) {
+          <div class="flex justify-between text-green-600">
+            <span>{{ "checkout.promoDiscount" | translate }}</span>
+            <span id="discount-amount">
+              -{{ discountAmount.toFixed(2) }} 
+              {{ "common.currency" | translate }}
+            </span>
+          </div>
+        }
+
+        <!-- Wallet Points Info -->
+        @if (appliedPromoCode?.type === 3) {
+          <div
+            id="wallet-points-info"
+            class="rounded-md bg-blue-50 p-2 text-sm text-blue-700"
+          >
+            <p>
+              {{
+                "checkout.walletPoints"
+                  | translate
+                    : {
+                        points: appliedPromoCode?.getCount,
+                        amount: appliedPromoCode?.buyCount,
+                        currency: ("common.currency" | translate),
+                      }
+              }}
+            </p>
+          </div>
         }
       </div>
 
-      <!-- Coupon Input -->
-      <form
-        id="promo-code-form"
-        [formGroup]="promoForm"
-        (ngSubmit)="applyPromoCode()"
-        class="mt-4 flex"
+      <!-- Total -->
+      <div class="mt-4 flex items-center justify-between border-t pt-4">
+        <span class="text-lg font-bold text-gray-800">{{
+          "checkout.total" | translate
+        }}</span>
+        <span id="final-total-amount" class="text-xl font-bold text-hover-color">
+          {{ orderSummary?.total?.toFixed(2) || finalTotal.toFixed(2) }} {{ "common.currency" | translate }}
+        </span>
+      </div>
+
+      <!-- Place Order Button -->
+      <button
+        id="place-order-button"
+        (click)="placeOrder()"
+        [disabled]="isLoading || loading"
+        class="mt-6 w-full rounded bg-hover-color py-3 text-white transition hover:bg-red-800 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
       >
-        <input
-          id="promo-code-input"
-          type="text"
-          formControlName="couponCode"
-          [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
-          class="flex-1 rounded-l border bg-white px-4 py-2"
-        />
-        <button
-          id="apply-promo-button"
-          type="submit"
-          [disabled]="isApplyingPromo"
-          class="rounded-r border border-hover-color bg-white px-4 py-2 text-hover-color hover:bg-red-50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <div class="flex items-center gap-2">
-            <svg
-              *ngIf="isApplyingPromo"
-              class="h-4 w-4 animate-spin"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            <span>
-              {{
-                isApplyingPromo
-                  ? ("checkout.applying" | translate)
-                  : ("checkout.applyNow" | translate)
-              }}
-            </span>
-          </div>
-        </button>
-      </form>
-    }
-  </div>
-
-  <div class="border-t p-4">
-    <!-- Order Breakdown -->
-    <div class="space-y-3 pt-1">
-      <div class="flex justify-between">
-        <span class="font-medium text-gray-700">{{
-          "checkout.itemTotal" | translate
-        }}</span>
-        <span id="subtotal-amount" class="text-hover-color">
-          {{ subTotal.toFixed(2) }} {{ "common.currency" | translate }}
+        <span *ngIf="!isLoading && !loading">{{ "checkout.placeOrder" | translate }}</span>
+        <span *ngIf="isLoading || loading" class="flex items-center justify-center gap-2">
+          <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          {{ "checkout.processing" | translate }}
         </span>
-      </div>
-
-      <div class="flex justify-between">
-        <span class="font-medium text-gray-700">{{
-          "checkout.shipping" | translate
-        }}</span>
-        <span id="shipping-amount" class="text-hover-color">
-          {{ shipping.toFixed(2) }} {{ "common.currency" | translate }}
-        </span>
-      </div>
-
-      <!-- Promo Code Discount -->
-      @if (isPromoApplied && discountAmount > 0) {
-        <div class="flex justify-between text-green-600">
-          <span>{{ "checkout.promoDiscount" | translate }}</span>
-          <span id="discount-amount">
-            -{{ discountAmount.toFixed(2) }}
-            {{ "common.currency" | translate }}
-          </span>
-        </div>
-      }
-
-      <!-- Wallet Points Info -->
-      @if (appliedPromoCode?.type === 3) {
-        <div
-          id="wallet-points-info"
-          class="rounded-md bg-blue-50 p-2 text-sm text-blue-700"
-        >
-          <p>
-            {{
-              "checkout.walletPoints"
-                | translate
-                  : {
-                      points: appliedPromoCode?.getCount,
-                      amount: appliedPromoCode?.buyCount,
-                      currency: ("common.currency" | translate),
-                    }
-            }}
-          </p>
-        </div>
-      }
+      </button>
     </div>
-
-    <!-- Total -->
-    <div class="mt-4 flex items-center justify-between border-t pt-4">
-      <span class="text-lg font-bold text-gray-800">{{
-        "checkout.total" | translate
-      }}</span>
-      <span id="final-total-amount" class="text-xl font-bold text-hover-color">
-        {{ finalTotal.toFixed(2) }} {{ "common.currency" | translate }}
-      </span>
-    </div>
-
-    <!-- Place Order Button -->
-    <button
-      id="place-order-button"
-      (click)="placeOrder()"
-      [disabled]="isLoading"
-      class="mt-6 w-full rounded bg-hover-color py-3 text-white transition hover:bg-red-800 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
-    >
-      <span *ngIf="!isLoading">{{ "checkout.placeOrder" | translate }}</span>
-      <span *ngIf="isLoading" class="flex items-center justify-center gap-2">
-        <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
-          <circle
-            class="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"
-          ></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        {{ "checkout.processing" | translate }}
-      </span>
-    </button>
   </div>
 </div>

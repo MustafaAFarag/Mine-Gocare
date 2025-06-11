@@ -12,6 +12,7 @@ export class OrderService {
   private getClientOrdersUrl = `${environment.apiUrl}/${ApiEndPoint.GetClientOrdersDetails}`;
   private placeOrderUrl = `${environment.apiUrl}/${ApiEndPoint.PlaceOrder}`;
   private cancelOrderUrl = `${environment.apiUrl}/${ApiEndPoint.CancelOrder}`;
+  private getOrderSummaryUrl = `${environment.apiUrl}/${ApiEndPoint.getOrderSummary}`;
 
   private tenantId = '1';
   private language = 'en';
@@ -30,6 +31,32 @@ export class OrderService {
     });
 
     return this.http.get(url, { headers });
+  }
+
+  getOrderSummary(
+    token: string,
+    orderRequest: {
+      orderProducts: {
+        productVariantId: number;
+        quantity: number;
+        price: number;
+      }[];
+      addressId: number;
+      promoCodeId?: number;
+    }
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      countryid: this.countryId
+    });
+
+    const body = {
+      orderProducts: orderRequest.orderProducts,
+      addressId: orderRequest.addressId,
+      promoCodeId: orderRequest.promoCodeId || null
+    };
+
+    return this.http.post(this.getOrderSummaryUrl, body, { headers });
   }
 
   getClientOrders(token: string): Observable<any> {

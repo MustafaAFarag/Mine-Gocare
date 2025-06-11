@@ -76,9 +76,10 @@
 
     <!-- Right Column (Order Summary) -->
     <div class="space-y-4 md:space-y-6 lg:col-span-1">
-      <!-- Order Summary Component -->
-      <app-order-summary [cartItems]="cartItems"></app-order-summary>
-
+      <!-- Order Summary Component (Cart Items) -->
+      <app-order-summary 
+        [cartItems]="cartItems"
+      ></app-order-summary>
 
       <!-- Billing Summary Component -->
       <app-billing-summary
@@ -87,8 +88,10 @@
         [total]="total"
         [isLoading]="isPlacingOrder"
         [orderProducts]="mappedOrderProducts"
+        [selectedAddressId]="getSelectedShippingAddressId()"
         (placeOrderEvent)="placeOrder()"
         (promoApplied)="handlePromoCodeApplied($event)"
+        (summaryUpdated)="handleOrderSummaryUpdate($event)"
       ></app-billing-summary>
     </div>
   </div>

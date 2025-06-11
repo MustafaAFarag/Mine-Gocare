@@ -110,6 +110,10 @@
         "summary": "Promo Applied",
         "detail": "Discount of {{amount}} EGP applied"
       },
+      "promoRemoved": {
+        "summary": "Promo Removed",
+        "detail": "Promo code has been removed"
+      },
       "promoWalletPoints": {
         "detail": "You'll receive {{points}} points in your wallet after purchasing {{amount}} worth of products"
       },
@@ -124,6 +128,38 @@
       "codeNotValidForProduct": {
         "summary": "Invalid Promo Code",
         "detail": "This code is not valid for this product"
+      },
+      "orderPlaced": {
+        "summary": "Order Placed",
+        "detail": "Your order has been placed successfully"
+      },
+      "orderFailed": {
+        "summary": "Order Failed",
+        "detail": "Failed to place your order. Please try again"
+      },
+      "addressAdded": {
+        "summary": "Address Added",
+        "detail": "New address has been added successfully"
+      },
+      "addressUpdated": {
+        "summary": "Address Updated",
+        "detail": "Address has been updated successfully"
+      },
+      "addressDeleted": {
+        "summary": "Address Deleted",
+        "detail": "Address has been deleted successfully"
+      },
+      "deliverySelected": {
+        "summary": "Delivery Selected",
+        "detail": "Delivery option has been selected successfully"
+      },
+      "timeSlotSelected": {
+        "summary": "Time Slot Selected",
+        "detail": "Delivery time slot has been selected successfully"
+      },
+      "paymentSelected": {
+        "summary": "Payment Selected",
+        "detail": "Payment method has been selected successfully"
       }
     },
     "promoDiscount": "Promo Code Discount",

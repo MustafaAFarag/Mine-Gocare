@@ -17,6 +17,7 @@ import { MessageService } from 'primeng/api';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../model/Cart';
+import { OrderService } from '../../services/order.service';
 
 type Language = 'en' | 'ar';
 
@@ -34,15 +35,26 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   @Input() total: number = 0;
   @Input() subTotal: number = 0;
   @Input() isLoading: boolean = false;
-  promoForm!: FormGroup;
-  currentLang: Language = 'en';
-  discountAmount: number = 0;
-  hasPromoCodeInCart: boolean = false;
+  @Input() set selectedAddressId(value: number | undefined) {
+    if (value !== undefined) {
+      this._selectedAddressId = value;
+      this.fetchOrderSummary();
+    }
+  }
+  get selectedAddressId(): number | undefined {
+    return this._selectedAddressId;
+  }
+  private _selectedAddressId: number | undefined = undefined;
   @Input() orderProducts: Array<{
     productVariantId: number;
     quantity: number;
     price: number;
   }> = [];
+
+  promoForm!: FormGroup;
+  currentLang: Language = 'en';
+  discountAmount: number = 0;
+  hasPromoCodeInCart: boolean = false;
   finalTotal: number = 0;
   cartItems: CartItem[] = [];
   isPromoApplied: boolean = false;
@@ -51,12 +63,15 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   accessToken = localStorage.getItem('accessToken');
   appliedPromoCode: PromoCode | null = null;
   private cartSubscription: Subscription = new Subscription();
+  orderSummary: any = null;
+  loading: boolean = false;
 
   @Output() placeOrderEvent = new EventEmitter<void>();
   @Output() promoApplied = new EventEmitter<{
     promoCodeId: number;
     discount: number;
   }>();
+  @Output() summaryUpdated = new EventEmitter<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -64,6 +79,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private cartService: CartService,
     private translateService: TranslateService,
+    private orderService: OrderService,
   ) {
     this.currentLang = this.translateService.currentLang as Language;
     this.translateService.onLangChange.subscribe((event) => {
@@ -80,6 +96,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
       this.calculateTotals();
+      this.fetchOrderSummary(); // Fetch order summary when cart changes
     });
 
     this.fetchPromoCodes();
@@ -88,6 +105,48 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
+    }
+  }
+
+  fetchOrderSummary(): void {
+    if (!this.accessToken || !this.selectedAddressId) return;
+
+    this.loading = true;
+    const orderRequest = {
+      orderProducts: this.orderProducts,
+      addressId: this.selectedAddressId,
+      promoCodeId: this.appliedPromoCode?.id
+    };
+
+    this.orderService.getOrderSummary(this.accessToken, orderRequest).subscribe({
+      next: (response) => {
+        console.log('Order Summary Response:', response.result);
+        if (response.success) {
+          this.orderSummary = response.result;
+          
+          this.updateTotalsFromSummary();
+          this.summaryUpdated.emit(this.orderSummary);
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching order summary:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  updateTotalsFromSummary(): void {
+    if (this.orderSummary) {
+      // Only update shipping fees from API response
+      this.shipping = this.orderSummary.shippingFees || 0;
+      
+      // Recalculate final total with new shipping
+      this.finalTotal = this.subTotal + this.shipping + this.tax;
+      if (this.appliedPromoCode) {
+        this.discountAmount = this.calculateDiscount(this.appliedPromoCode);
+        this.finalTotal -= this.discountAmount;
+      }
     }
   }
 
@@ -108,6 +167,24 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
         life: 2000,
         styleClass: 'black-text-toast',
       });
+    });
+  }
+
+  clearPromoCode(): void {
+    this.promoForm.get('couponCode')?.setValue('');
+    this.isPromoApplied = false;
+    this.appliedPromoCode = null;
+    this.discountAmount = 0;
+    this.calculateTotals();
+    this.promoApplied.emit({ promoCodeId: 0, discount: 0 });
+
+    // Show toast message
+    this.messageService.add({
+      severity: 'info',
+      summary: this.translateService.instant('checkout.toast.promoRemoved.summary'),
+      detail: this.translateService.instant('checkout.toast.promoRemoved.detail'),
+      life: 2000,
+      styleClass: 'black-text-toast',
     });
   }
 
@@ -251,7 +328,6 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       (total, item) => total + item.afterPrice * item.quantity,
       0,
     );
-
 
     console.log('cartItems', this.cartItems);
     // Check if any cart item has a promoCodeDetail

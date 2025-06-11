@@ -112,6 +112,10 @@
         "summary": "تم تطبيق الخصم",
         "detail": "تم تطبيق خصم بقيمة {{amount}} جنيه"
       },
+      "promoRemoved": {
+        "summary": "تم إزالة الخصم",
+        "detail": "تم إزالة رمز الخصم"
+      },
       "promoWalletPoints": {
         "detail": "ستحصل على {{points}} نقطة في محفظتك بعد شراء منتجات بقيمة {{amount}}"
       },
@@ -126,6 +130,38 @@
       "codeNotValidForProduct": {
         "summary": "رمز خصم غير صالح",
         "detail": "هذا الرمز غير صالح لهذا المنتج"
+      },
+      "orderPlaced": {
+        "summary": "تم تقديم الطلب",
+        "detail": "تم تقديم طلبك بنجاح"
+      },
+      "orderFailed": {
+        "summary": "فشل الطلب",
+        "detail": "فشل في تقديم طلبك. يرجى المحاولة مرة أخرى"
+      },
+      "addressAdded": {
+        "summary": "تمت إضافة العنوان",
+        "detail": "تمت إضافة العنوان الجديد بنجاح"
+      },
+      "addressUpdated": {
+        "summary": "تم تحديث العنوان",
+        "detail": "تم تحديث العنوان بنجاح"
+      },
+      "addressDeleted": {
+        "summary": "تم حذف العنوان",
+        "detail": "تم حذف العنوان بنجاح"
+      },
+      "deliverySelected": {
+        "summary": "تم اختيار التوصيل",
+        "detail": "تم اختيار خيار التوصيل بنجاح"
+      },
+      "timeSlotSelected": {
+        "summary": "تم اختيار موعد التوصيل",
+        "detail": "تم اختيار موعد التوصيل بنجاح"
+      },
+      "paymentSelected": {
+        "summary": "تم اختيار طريقة الدفع",
+        "detail": "تم اختيار طريقة الدفع بنجاح"
       }
     },
     "promoDiscount": "خصم كود الترويج",

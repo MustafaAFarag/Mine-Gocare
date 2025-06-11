@@ -10,6 +10,7 @@ export const ApiEndPoint = {
   DeleteAddress: 'api/services/ClientApp/Address/DeleteAddress',
   UpdateAddress: 'api/services/ClientApp/Address/UpdateAddress',
   GetWallet: 'api/services/AdminApp/ClientWalletService/GetClientWalletData',
+  getOrderSummary : 'api/services/ClientApp/ClientOrders/CalculateOrderSummary',
   GetWalletTransactionList:
     'api/services/ClientApp/ClientWalletService/GetWalletTransactionList',
   updateClientName: 'api/services/ClientApp/Client/UpdateName',
