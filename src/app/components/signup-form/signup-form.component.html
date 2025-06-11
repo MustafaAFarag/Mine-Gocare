@@ -13,6 +13,7 @@
   <form
     [formGroup]="signupForm"
     (ngSubmit)="onSignupSubmit()"
+    id="signup-form"
     class="flex flex-col gap-2"
   >
     <!-- First Name -->
@@ -23,6 +24,8 @@
       <input
         formControlName="firstName"
         [placeholder]="'signup.fields.firstName.placeholder' | translate"
+        id="signup-form-first-name-input"
+        [disabled]="loading"
         class="w-full border border-gray-300 bg-white p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-sm"
       />
       <div
@@ -43,6 +46,8 @@
       <input
         formControlName="lastName"
         [placeholder]="'signup.fields.lastName.placeholder' | translate"
+        id="signup-form-last-name-input"
+        [disabled]="loading"
         class="w-full border border-gray-300 bg-white p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-sm"
       />
       <div
@@ -66,7 +71,9 @@
           <button
             type="button"
             (click)="showCountryDropdown = !showCountryDropdown"
-            class="flex h-full items-center gap-1 rounded-l-md border  border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
+            class="flex h-full items-center gap-1 rounded-l-md border border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
+            id="signup-form-country-dropdown-button"
+            [disabled]="loading"
           >
             <img
               [src]="selectedCountry.flag"
@@ -75,7 +82,7 @@
             />
             <span class="px-2 text-sm font-medium">{{
               selectedCountry.phoneCode
-            }}</span> 
+            }}</span>
           </button>
           <!-- Dropdown menu -->
           <div
@@ -84,12 +91,11 @@
             [class.right-0]="getLanguage() === 'ar'"
             [class.left-0]="getLanguage() !== 'ar'"
           >
-            <!-- Debug output -->
-            <div class="hidden">Current language: {{getLanguage()}}</div>
             <div
               *ngFor="let country of countries"
               (click)="selectedCountry = country; showCountryDropdown = false"
               class="flex cursor-pointer items-center gap-2 px-2 py-2 hover:bg-gray-50"
+              [id]="'signup-form-country-dropdown-item-' + country.code"
             >
               <img
                 [src]="country.flag"
@@ -105,6 +111,8 @@
         <input
           formControlName="identifier"
           [placeholder]="'signup.fields.identifier.placeholder' | translate"
+          id="signup-form-identifier-input"
+          [disabled]="loading"
           class="w-full border border-gray-300 bg-white p-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-sm"
           [ngClass]="{ 'rounded-l-md': !isPhone, 'rounded-r-md': true }"
           (input)="onIdentifierInput($event)"
@@ -138,6 +146,8 @@
             inputId="gender-women"
             class="-translate-y-1"
             formControlName="gender"
+            id="signup-form-gender-women"
+            [disabled]="loading"
           ></p-radioButton>
           <label for="gender-women" class="text-xs lg:text-sm">
             {{ "signup.fields.gender.options.women" | translate }}
@@ -150,6 +160,8 @@
             inputId="gender-men"
             class="-translate-y-1"
             formControlName="gender"
+            id="signup-form-gender-men"
+            [disabled]="loading"
           ></p-radioButton>
           <label for="gender-men" class="text-xs lg:text-sm">
             {{ "signup.fields.gender.options.men" | translate }}
@@ -168,11 +180,15 @@
           [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           [placeholder]="'signup.fields.password.placeholder' | translate"
+          id="signup-form-password-input"
+          [disabled]="loading"
           class="w-full border border-gray-300 bg-white p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-sm"
         />
         <button
           type="button"
           (click)="togglePasswordVisibility()"
+          id="signup-form-password-toggle-button"
+          [disabled]="loading"
           class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 lg:text-xl"
         >
           <i [class]="showPassword ? 'ri-eye-close-line' : 'ri-eye-line'"></i>
@@ -203,11 +219,15 @@
           [placeholder]="
             'signup.fields.confirmPassword.placeholder' | translate
           "
+          id="signup-form-confirm-password-input"
+          [disabled]="loading"
           class="w-full border border-gray-300 bg-white p-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-sm"
         />
         <button
           type="button"
           (click)="togglePasswordVisibility()"
+          id="signup-form-confirm-password-toggle-button"
+          [disabled]="loading"
           class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 lg:text-xl"
         >
           <i [class]="showPassword ? 'ri-eye-close-line' : 'ri-eye-line'"></i>
@@ -232,6 +252,7 @@
     <!-- Submit Button -->
     <button
       type="submit"
+      id="signup-form-submit-button"
       [disabled]="loading"
       class="w-full border border-gray-300 bg-hover-color p-1.5 text-xs font-bold uppercase text-white focus:outline-none focus:ring-2 lg:text-sm"
     >

@@ -7,7 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:mine-gocare": "node dist/mine-gocare/server/server.mjs"
+    "serve:ssr:mine-gocare": "node dist/mine-gocare/server/server.mjs",
+    "build:dev": "node build-config.js && ng build --configuration=development",
+    "build:prod": "node build-config.js && ng build --configuration=production",
+    "build:test": "node build-config.js && ng build --configuration=testing"
   },
   "private": true,
   "dependencies": {

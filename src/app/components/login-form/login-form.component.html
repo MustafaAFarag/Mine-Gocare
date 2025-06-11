@@ -13,6 +13,7 @@
   <form
     [formGroup]="loginForm"
     (ngSubmit)="onLoginSubmit()"
+    id="login-form"
     class="flex flex-col gap-3"
     novalidate
   >
@@ -26,7 +27,8 @@
           <button
             type="button"
             (click)="showCountryDropdown = !showCountryDropdown"
-            class="flex h-full items-center gap-1 rounded-l-md border  border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
+            id="login-form-country-dropdown-button"
+            class="flex h-full items-center gap-1 rounded-l-md border border-gray-300 bg-white px-2 py-1 text-sm hover:bg-gray-50"
           >
             <img
               [src]="selectedCountry.flag"
@@ -44,10 +46,9 @@
             [class.right-0]="getLanguage() === 'ar'"
             [class.left-0]="getLanguage() !== 'ar'"
           >
-            <!-- Debug output -->
-            <div class="hidden">Current language: {{getLanguage()}}</div>
             <div
               *ngFor="let country of countries"
+              [id]="'login-form-country-dropdown-item-' + country.code"
               (click)="selectedCountry = country; showCountryDropdown = false"
               class="flex cursor-pointer items-center gap-2 px-2 py-2 hover:bg-gray-50"
             >
@@ -67,6 +68,7 @@
           type="text"
           formControlName="identifier"
           [placeholder]="'login.fields.identifier.placeholder' | translate"
+          [disabled]="loading"
           class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
           [ngClass]="{ 'rounded-l-md': !isPhone, 'rounded-r-md': true }"
         />
@@ -95,10 +97,12 @@
           [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           [placeholder]="'login.fields.password.placeholder' | translate"
+          [disabled]="loading"
           class="w-full border border-gray-300 bg-white p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 lg:text-base"
         />
         <button
           type="button"
+          id="login-form-password-toggle-button"
           (click)="togglePasswordVisibility()"
           class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 lg:text-xl"
         >
@@ -123,6 +127,7 @@
 
     <button
       type="submit"
+      id="login-form-submit-button"
       [disabled]="loading"
       class="w-full border border-gray-300 bg-hover-color p-2 text-sm font-bold uppercase text-white focus:outline-none focus:ring-2 lg:text-base"
     >
@@ -146,7 +151,11 @@
 
   <p class="text-center text-sm">
     {{ "login.noAccount" | translate }}
-    <a (click)="toggleMode()" class="cursor-pointer text-hover-color">
+    <a
+      (click)="toggleMode()"
+      class="cursor-pointer text-hover-color"
+      id="login-form-register-now-link"
+    >
       <br />{{ "login.registerNow" | translate }}
     </a>
   </p>

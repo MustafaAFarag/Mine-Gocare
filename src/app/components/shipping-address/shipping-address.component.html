@@ -4,6 +4,7 @@
       {{ "checkout.shippingAddress" | translate }}
     </h2>
     <button
+      id="add-new-shipping-address"
       (click)="addNewShippingAddress()"
       class="flex items-center gap-1 text-sm text-hover-color hover:text-orange-600"
     >
@@ -42,6 +43,7 @@
   <div *ngIf="!loading" class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
     <div
       *ngFor="let address of shippingAddresses"
+      id="shipping-address-{{ address.id }}"
       class="cursor-pointer overflow-hidden rounded-lg border"
       [class.border-hover-color]="address.isSelected"
       (click)="selectShippingAddress(address.id)"
@@ -50,6 +52,7 @@
         <!-- Radio Button -->
         <div class="mt-1">
           <div
+            id="shipping-address-radio-{{ address.id }}"
             class="flex h-5 w-5 items-center justify-center rounded-full border-2"
             [class.border-hover-color]="address.isSelected"
             [class.bg-hover-color]="address.isSelected"

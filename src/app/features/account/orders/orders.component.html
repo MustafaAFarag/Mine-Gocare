@@ -90,6 +90,7 @@
             <div class="flex justify-center gap-3">
               <button
                 (click)="viewOrderDetails(order.id)"
+                id="orders-view-order-details-button"
                 class="text-gray-500 hover:text-gray-700"
                 [attr.aria-label]="'account.orders.viewDetails' | translate"
               >
@@ -98,6 +99,7 @@
               <button
                 *ngIf="order.status === 1 && !order.isCanceled"
                 (click)="cancelOrder(order.id)"
+                id="orders-cancel-order-button"
                 class="text-red-500 hover:text-red-700"
                 [attr.aria-label]="'account.orders.cancelOrder' | translate"
               >
@@ -194,6 +196,7 @@
       <div class="mt-3 flex justify-end gap-3 border-t pt-3">
         <button
           (click)="viewOrderDetails(order.id)"
+          id="orders-view-order-details-button"
           class="text-gray-500 hover:text-gray-700"
           [attr.aria-label]="'account.orders.viewDetails' | translate"
         >
@@ -202,6 +205,7 @@
         <button
           *ngIf="order.status === 1 && !order.isCanceled"
           (click)="cancelOrder(order.id)"
+          id="orders-cancel-order-button"
           class="text-red-500 hover:text-red-700"
           [attr.aria-label]="'account.orders.cancelOrder' | translate"
         >
@@ -229,6 +233,7 @@
   >
     <button
       (click)="changePage(currentPage - 1)"
+      id="orders-previous-page-button"
       [disabled]="currentPage === 1"
       class="rounded-md p-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
       [attr.aria-label]="'account.orders.previousPage' | translate"
@@ -240,6 +245,7 @@
       <button
         *ngFor="let page of [].constructor(totalPages); let i = index"
         (click)="changePage(i + 1)"
+        id="orders-page-button"
         class="rounded-md px-3 py-1 text-sm font-medium"
         [ngClass]="{
           'bg-hover-color text-white': currentPage === i + 1,
@@ -252,6 +258,7 @@
 
     <button
       (click)="changePage(currentPage + 1)"
+      id="orders-next-page-button"
       [disabled]="currentPage === totalPages"
       class="rounded-md p-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
       [attr.aria-label]="'account.orders.nextPage' | translate"

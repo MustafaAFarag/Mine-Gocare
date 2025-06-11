@@ -21,8 +21,6 @@ type Language = 'en' | 'ar';
   styleUrls: ['./points.component.css'],
 })
 export class PointsComponent implements OnInit {
-  showHowToGetPoints: boolean = false;
-  totalPoints: number = 1970;
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;

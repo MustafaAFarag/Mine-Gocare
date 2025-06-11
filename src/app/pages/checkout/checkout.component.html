@@ -34,6 +34,7 @@
       {{ "checkout.emptyCart.message" | translate }}
     </p>
     <a
+      id="empty-cart-continue-shopping"
       href="/collections"
       class="inline-block rounded-lg bg-hover-color px-6 py-3 font-medium text-white transition-colors hover:bg-orange-600"
     >
@@ -111,6 +112,7 @@
         </p>
       </div>
       <button
+        id="mobile-place-order"
         (click)="placeOrder()"
         class="rounded-lg bg-hover-color px-5 py-3 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300"
       >

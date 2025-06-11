@@ -24,6 +24,7 @@
           <div *ngIf="!showEmailInput">
             <button
               (click)="addEmail()"
+              id="account-sidebar-add-email-button"
               class="mt-1 flex items-center gap-1 text-sm text-hover-color hover:text-hover-color/80"
             >
               <i class="ri-add-line"></i>
@@ -36,11 +37,13 @@
                 type="email"
                 [(ngModel)]="emailInput"
                 [placeholder]="'account.sidebar.emailPlaceholder' | translate"
+                id="account-sidebar-email-input"
                 class="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm focus:border-hover-color focus:outline-none"
               />
               <div class="flex gap-2">
                 <button
                   (click)="updateEmail()"
+                  id="account-sidebar-update-email-button"
                   [disabled]="isUpdatingEmail || !emailInput"
                   class="flex-1 rounded bg-hover-color py-1 text-sm text-white transition hover:bg-hover-color/80 disabled:opacity-50"
                 >
@@ -53,6 +56,7 @@
                 </button>
                 <button
                   (click)="cancelEmailUpdate()"
+                  id="account-sidebar-cancel-email-update-button"
                   [disabled]="isUpdatingEmail"
                   class="flex-1 rounded border border-gray-300 py-1 text-sm text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
                 >
@@ -72,6 +76,7 @@
       <li *ngFor="let item of sidebarItems">
         <a
           [routerLink]="item.route"
+          [id]="'account-sidebar-item-' + item.nameKey"
           [class.bg-[#CBB1DD]]="item.active"
           [class.text-purple-900]="item.active"
           class="flex items-center gap-2 px-6 py-3 font-medium hover:bg-hover-color/80"
@@ -88,6 +93,7 @@
     <button
       class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-hover-color/80"
       (click)="logout()"
+      id="account-sidebar-logout-button"
     >
       <i class="ri-logout-box-line mr-2"></i>
       {{ "account.sidebar.logout" | translate }}

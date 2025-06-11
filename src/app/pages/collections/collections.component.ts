@@ -1313,15 +1313,13 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       this.currentPage = page;
       this.fetchProductsAPI(); // Fetch new page from server
 
-      // Update URL with new page number
-      const queryParams = {
-        ...this.route.snapshot.queryParams,
-        page: this.currentPage,
-      };
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams,
-        queryParamsHandling: 'merge',
+      // Update URL with new page number using updateUrlParams instead of direct navigation
+      this.updateUrlParams();
+
+      // Smooth scroll to top of the page
+      window.scrollTo({
+        top: 100,
+        behavior: 'smooth',
       });
     }
   }

@@ -18,6 +18,7 @@
         *ngFor="let category of categories; let i = index"
         class="flex cursor-pointer flex-col items-center"
         (click)="navigateToCategory(category)"
+        [id]="'category-card-' + i"
       >
         <div class="category-image-container mb-4">
           <img

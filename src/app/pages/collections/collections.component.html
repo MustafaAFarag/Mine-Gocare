@@ -44,7 +44,11 @@
         ></app-filter-tab>
       </div>
       <!-- Close area -->
-      <div class="flex-1" (click)="closeFilterSidebar()"></div>
+      <div
+        id="mobile-filter-overlay"
+        class="flex-1"
+        (click)="closeFilterSidebar()"
+      ></div>
     </div>
 
     <div class="mt-8 flex flex-col gap-6 lg:flex-row">
@@ -92,6 +96,7 @@
         <!-- Mobile Filter Button -->
         <div *ngIf="isMobile" class="mb-4 flex justify-between">
           <button
+            id="mobile-filter-toggle"
             (click)="toggleFilterSidebar()"
             class="flex items-center rounded-md bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
           >
@@ -111,6 +116,7 @@
           <div class="flex gap-4">
             <div class="relative">
               <select
+                id="sort-order-select"
                 (change)="applySortOrder($event)"
                 class="appearance-none rounded-md border bg-white py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-red-300 lg:pr-10"
               >
@@ -136,6 +142,7 @@
           <!-- View Mode Buttons (Hidden on Mobile) -->
           <div class="hidden gap-2 sm:flex">
             <button
+              id="view-mode-grid2"
               (click)="setViewMode('grid2')"
               [ngClass]="{
                 'bg-hover-color text-white': viewMode === 'grid2',
@@ -147,6 +154,7 @@
               <i class="ri-layout-2-line"></i>
             </button>
             <button
+              id="view-mode-grid3"
               (click)="setViewMode('grid3')"
               [ngClass]="{
                 'bg-hover-color text-white': viewMode === 'grid3',
@@ -158,6 +166,7 @@
               <i class="ri-layout-3-line"></i>
             </button>
             <button
+              id="view-mode-grid4"
               (click)="setViewMode('grid4')"
               [ngClass]="{
                 'bg-hover-color text-white': viewMode === 'grid4',
@@ -169,6 +178,7 @@
               <i class="ri-layout-4-line"></i>
             </button>
             <button
+              id="view-mode-list"
               (click)="setViewMode('list')"
               [ngClass]="{
                 'bg-hover-color text-white': viewMode === 'list',
@@ -203,6 +213,7 @@
             {{ "collections.noProductsFound.message" | translate }}
           </p>
           <button
+            id="clear-filters-no-products"
             (click)="clearAllFilters()"
             class="mt-4 rounded-md bg-hover-color px-4 py-2 text-white hover:bg-opacity-90"
           >
@@ -274,6 +285,7 @@
                   />
                   <div class="icon-wrapper absolute right-2 top-2 z-10">
                     <i
+                      id="wishlist-{{ product.productId }}"
                       [class]="
                         isInWishlist(product)
                           ? 'ri-heart-fill text-red-500'
@@ -284,10 +296,12 @@
                     ></i>
 
                     <i
+                      id="cart-{{ product.productId }}"
                       class="ri-shopping-cart-line extra-icon-1 absolute left-0 cursor-pointer rounded-full bg-white p-1 text-xl text-hover-color shadow"
                       (click)="addToCartWithToast(product, $event)"
                     ></i>
                     <i
+                      id="quick-view-{{ product.productId }}"
                       class="ri-search-line extra-icon-2 absolute left-0 cursor-pointer rounded-full bg-white p-1 text-xl text-hover-color shadow"
                       (click)="openQuickView(product, $event)"
                     ></i>
@@ -308,6 +322,7 @@
 
                 <!-- Product Name -->
                 <h3
+                  id="product-name-{{ product.productId }}"
                   class="mb-2 cursor-pointer text-lg font-medium text-gray-800"
                   (click)="
                     navigateToProductDetails(
@@ -378,6 +393,7 @@
             <div class="flex items-center gap-2">
               <!-- Previous Page Button -->
               <button
+                id="prev-page"
                 [disabled]="currentPage === 1"
                 (click)="changePage(currentPage - 1)"
                 [ngClass]="{
@@ -408,6 +424,7 @@
                 <!-- Show page number -->
                 <button
                   *ngIf="!page.ellipsis"
+                  id="page-{{ page.number }}"
                   (click)="changePage(page.number)"
                   [ngClass]="{
                     'bg-hover-color/80 text-white': currentPage === page.number,
@@ -421,6 +438,7 @@
 
               <!-- Next Page Button -->
               <button
+                id="next-page"
                 [disabled]="currentPage === totalPages"
                 (click)="changePage(currentPage + 1)"
                 [ngClass]="{

@@ -16,6 +16,7 @@
       [alt]="getLocalizedText(product.name)"
       class="absolute inset-0 h-full w-full object-contain"
       (click)="navigateToProductDetails(product.productId, product.variantId)"
+      [id]="'product-card-image-' + product.productId"
     />
 
     <div class="icon-wrapper absolute right-4 top-2 z-10">
@@ -25,15 +26,18 @@
         "
         class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="toggleWishlist($event)"
+        [id]="'product-card-wishlist-button-' + product.productId"
       ></i>
 
       <i
         class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="addToCart(product); $event.stopPropagation()"
+        [id]="'product-card-add-to-cart-button-' + product.productId"
       ></i>
       <i
         (click)="openQuickView(); $event.stopPropagation()"
         class="ri-search-line extra-icon-2 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
+        [id]="'product-card-quick-view-button-' + product.productId"
       ></i>
     </div>
   </div>
@@ -42,6 +46,7 @@
   <div
     class="flex flex-grow flex-col p-4"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
+    [id]="'product-card-details-link-' + product.productId"
   >
     <h3 class="line-clamp-1 text-lg font-medium">
       {{ getLocalizedText(product.name) }}
@@ -69,14 +74,15 @@
     </div>
   </div>
   <div
-    class="mt-auto overflow-hidden border-t-2 border-hover-color p-2 " 
+    class="mt-auto overflow-hidden border-t-2 border-hover-color p-2"
     (click)="navigateToProductDetails(product.productId, product.variantId)"
+    [id]="'product-card-details-link-' + product.productId"
   >
-    <div  class="stock-ticker"  >
+    <div class="stock-ticker">
       <ul>
         <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color "></i>
-          <span 
+          <i class="ri-discount-percent-fill text-hover-color"></i>
+          <span
             >{{ "product-card.limitedTimeOffer" | translate }} :
             {{ product.discountPercentage.toFixed(0) }}%
             {{ "product-card.off" | translate }}</span
@@ -133,12 +139,14 @@
           >
         </li>
         <li class="limited-time-item h-[42px]">
-          <i class="ri-discount-percent-fill"
-          *ngIf="product.discountPercentage > 0"         ></i>
+          <i
+            class="ri-discount-percent-fill"
+            *ngIf="product.discountPercentage > 0"
+          ></i>
           <span *ngIf="product.discountPercentage > 0"
             >{{ "product-card.limitedTimeOffer" | translate }} :
-             {{ product.discountPercentage.toFixed(0) }}%
-             {{ "product-card.off" | translate }}</span
+            {{ product.discountPercentage.toFixed(0) }}%
+            {{ "product-card.off" | translate }}</span
           >
         </li>
       </ul>

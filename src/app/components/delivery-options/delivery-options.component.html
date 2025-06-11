@@ -10,6 +10,7 @@
     <div class="mb-4 grid grid-cols-2 gap-4">
       <!-- Standard Delivery Option -->
       <div
+        id="delivery-option-standard"
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="deliveryOption === 'standard'"
         (click)="selectDeliveryOption('standard')"
@@ -18,6 +19,7 @@
           <!-- Radio Button -->
           <div class="mt-1">
             <div
+              id="delivery-radio-standard"
               class="flex h-5 w-5 items-center justify-center rounded-full border-2"
               [class.border-hover-color]="deliveryOption === 'standard'"
               [class.bg-hover-color]="deliveryOption === 'standard'"
@@ -43,6 +45,7 @@
 
       <!-- Express Delivery Option -->
       <div
+        id="delivery-option-express"
         class="cursor-pointer overflow-hidden rounded-lg border p-4"
         [class.border-hover-color]="deliveryOption === 'express'"
         (click)="selectDeliveryOption('express')"
@@ -51,6 +54,7 @@
           <!-- Radio Button -->
           <div class="mt-1">
             <div
+              id="delivery-radio-express"
               class="flex h-5 w-5 items-center justify-center rounded-full border-2"
               [class.border-hover-color]="deliveryOption === 'express'"
               [class.bg-hover-color]="deliveryOption === 'express'"
@@ -85,6 +89,7 @@
       </h3>
       <div
         *ngFor="let slot of timeSlots"
+        id="time-slot-{{ slot.id }}"
         class="cursor-pointer rounded border p-2 text-center text-sm"
         [class.bg-orange-100]="selectedTimeSlot === slot.id"
         [class.border-hover-color]="selectedTimeSlot === slot.id"

@@ -1,8 +1,17 @@
 <div class="container mx-auto px-4 py-4 md:py-6" *ngIf="orderDetails">
   <!-- Order Header -->
   <div class="mb-4 flex items-center gap-2 md:mb-6">
-    <a (click)="goBack()" class="cursor-pointer text-gray-600">←</a>
-    <h1 class="text-lg font-bold md:text-xl">
+    <a
+      (click)="goBack()"
+      class="cursor-pointer text-gray-600"
+      id="order-details-go-back-button"
+    >
+      ←
+    </a>
+    <h1
+      class="text-lg font-bold md:text-xl"
+      id="order-details-order-number-title"
+    >
       {{ "account.orders.orderNumber" | translate }}:
       {{ orderDetails.serialNumber }}
     </h1>

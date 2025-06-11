@@ -12,6 +12,7 @@
         class="text-2xl"
         aria-label="Toggle menu"
         (click)="toggleMobileMenu()"
+        id="navbar-hamburger-menu"
       >
         <i
           class="ri-menu-line"
@@ -27,18 +28,27 @@
     <div
       class="mr-5 flex flex-1 items-center justify-end gap-2 lg:order-first lg:flex-none"
     >
-      <a routerLink="/" (click)="closeMobileMenu()">
+      <a routerLink="/" (click)="closeMobileMenu()" id="navbar-logo-link">
         <img
           src="/assets/images/settings/gocare/logo-gocare-black.svg"
           alt="Logo"
           class="mr-5 h-12 w-auto lg:mr-0 lg:h-14"
+          id="navbar-logo"
         />
       </a>
 
       <!-- Icons for tablet screens (md to lg) -->
       <div class="hidden items-center gap-4 text-xl md:flex lg:hidden">
-        <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        <div class="relative cursor-pointer" routerLink="/wishlist">
+        <i
+          class="ri-search-line cursor-pointer"
+          (click)="toggleSearch()"
+          id="navbar-search-icon-tablet"
+        ></i>
+        <div
+          class="relative cursor-pointer"
+          routerLink="/wishlist"
+          id="navbar-wishlist-icon-tablet"
+        >
           <i class="ri-heart-line"></i>
           <span
             *ngIf="wishlistCount > 0"
@@ -47,7 +57,11 @@
             {{ wishlistCount }}
           </span>
         </div>
-        <div class="relative cursor-pointer" (click)="toggleCart()">
+        <div
+          class="relative cursor-pointer"
+          (click)="toggleCart()"
+          id="navbar-cart-icon-tablet"
+        >
           <i class="ri-shopping-cart-line"></i>
           <span
             *ngIf="cartCount > 0"
@@ -57,10 +71,22 @@
           </span>
         </div>
         @if (currentUser) {
-          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
-          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
+          <i
+            class="ri-user-line cursor-pointer"
+            routerLink="/account"
+            id="navbar-user-icon-tablet"
+          ></i>
+          <i
+            class="ri-logout-box-line cursor-pointer"
+            (click)="logout()"
+            id="navbar-logout-icon-tablet"
+          ></i>
         } @else {
-          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+          <i
+            class="ri-user-line cursor-pointer"
+            (click)="showDialog()"
+            id="navbar-user-icon-tablet-logged-out"
+          ></i>
         }
       </div>
     </div>
@@ -76,45 +102,72 @@
               routerLink="/"
               routerLinkActive="text-blue-600"
               (click)="scrollToTop()"
+              id="navbar-home-link-desktop"
               >{{ "navbar.home" | translate }}</a
             >
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/collections" routerLinkActive="text-blue-600">{{
-              "navbar.collections" | translate
-            }}</a>
+            <a
+              routerLink="/collections"
+              routerLinkActive="text-blue-600"
+              id="navbar-collections-link-desktop"
+            >
+              {{ "navbar.collections" | translate }}
+            </a>
           </li>
 
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/contact-us" routerLinkActive="text-blue-600">{{
-              "navbar.contactUs" | translate
-            }}</a>
+            <a
+              routerLink="/contact-us"
+              routerLinkActive="text-blue-600"
+              id="navbar-contact-us-link-desktop"
+            >
+              {{ "navbar.contactUs" | translate }}
+            </a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/privacy-policy" routerLinkActive="text-blue-600">{{
-              "navbar.privacyPolicy" | translate
-            }}</a>
+            <a
+              routerLink="/privacy-policy"
+              routerLinkActive="text-blue-600"
+              id="navbar-privacy-policy-link-desktop"
+            >
+              {{ "navbar.privacyPolicy" | translate }}
+            </a>
           </li>
 
           <li class="flex items-center gap-1 hover:text-hover-color">
-            <a routerLink="/refund-policy" routerLinkActive="text-blue-600">{{
-              "navbar.refundPolicy" | translate
-            }}</a>
+            <a
+              routerLink="/refund-policy"
+              routerLinkActive="text-blue-600"
+              id="navbar-refund-policy-link-desktop"
+            >
+              {{ "navbar.refundPolicy" | translate }}
+            </a>
           </li>
           <li class="flex items-center gap-1 hover:text-hover-color">
             <a
               routerLink="/terms-and-conditions"
               routerLinkActive="text-blue-600"
-              >{{ "navbar.termsAndConditions" | translate }}</a
+              id="navbar-terms-and-conditions-link-desktop"
             >
+              {{ "navbar.termsAndConditions" | translate }}
+            </a>
           </li>
         </ul>
       </div>
 
       <!-- Icons (desktop) -->
       <div class="flex items-center gap-4 text-xl xl:text-2xl">
-        <i class="ri-search-line cursor-pointer" (click)="toggleSearch()"></i>
-        <div class="relative cursor-pointer" routerLink="/wishlist">
+        <i
+          class="ri-search-line cursor-pointer"
+          (click)="toggleSearch()"
+          id="navbar-search-icon-desktop"
+        ></i>
+        <div
+          class="relative cursor-pointer"
+          routerLink="/wishlist"
+          id="navbar-wishlist-icon-desktop"
+        >
           <i class="ri-heart-line"></i>
           <span
             *ngIf="wishlistCount > 0"
@@ -123,7 +176,11 @@
             {{ wishlistCount }}
           </span>
         </div>
-        <div class="relative cursor-pointer" (click)="toggleCart()">
+        <div
+          class="relative cursor-pointer"
+          (click)="toggleCart()"
+          id="navbar-cart-icon-desktop"
+        >
           <i class="ri-shopping-cart-line"></i>
           <span
             *ngIf="cartCount > 0"
@@ -133,10 +190,22 @@
           </span>
         </div>
         @if (currentUser) {
-          <i class="ri-user-line cursor-pointer" routerLink="/account"></i>
-          <i class="ri-logout-box-line cursor-pointer" (click)="logout()"></i>
+          <i
+            class="ri-user-line cursor-pointer"
+            routerLink="/account"
+            id="navbar-user-icon-desktop"
+          ></i>
+          <i
+            class="ri-logout-box-line cursor-pointer"
+            (click)="logout()"
+            id="navbar-logout-icon-desktop"
+          ></i>
         } @else {
-          <i class="ri-user-line cursor-pointer" (click)="showDialog()"></i>
+          <i
+            class="ri-user-line cursor-pointer"
+            (click)="showDialog()"
+            id="navbar-user-icon-desktop-logged-out"
+          ></i>
         }
       </div>
     </div>
@@ -161,12 +230,18 @@
       <button
         class="absolute right-4 top-4 text-2xl text-black"
         (click)="closeMobileMenu()"
+        id="navbar-mobile-menu-close"
       >
         <i class="ri-close-line"></i>
       </button>
 
       <!-- Logo at the top of the sliding menu -->
-      <a routerLink="/" (click)="closeMobileMenu()" class="mb-6">
+      <a
+        routerLink="/"
+        (click)="closeMobileMenu()"
+        class="mb-6"
+        id="navbar-mobile-logo-link"
+      >
         <img
           src="/assets/images/settings/gocare/logo-gocare-black.svg"
           alt="Logo"
@@ -179,12 +254,14 @@
         routerLink="/"
         (click)="closeMobileMenu(); scrollToTop()"
         class="py-4 text-left"
+        id="navbar-mobile-home-link"
         >{{ "navbar.home" | translate }}</a
       >
       <a
         routerLink="/collections"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
+        id="navbar-mobile-collections-link"
         >{{ "navbar.collections" | translate }}</a
       >
 
@@ -193,6 +270,7 @@
         routerLink="/contact-us"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
+        id="navbar-mobile-contact-us-link"
       >
         {{ "navbar.contactUs" | translate }}
       </a>
@@ -200,6 +278,7 @@
         routerLink="/privacy-policy"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
+        id="navbar-mobile-privacy-policy-link"
       >
         {{ "navbar.privacyPolicy" | translate }}
       </a>
@@ -208,6 +287,7 @@
         routerLink="/refund-policy"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
+        id="navbar-mobile-refund-policy-link"
       >
         {{ "navbar.refundPolicy" | translate }}
       </a>
@@ -215,6 +295,7 @@
         routerLink="/terms-and-conditions"
         (click)="closeMobileMenu()"
         class="py-4 text-left"
+        id="navbar-mobile-terms-and-conditions-link"
       >
         {{ "navbar.termsAndConditions" | translate }}
       </a>
