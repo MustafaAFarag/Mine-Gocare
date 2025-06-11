@@ -1039,6 +1039,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
+    console.log("PRODUCT ADDED TO CART", product);
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: product.variantId,
@@ -1054,25 +1055,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   // Add to cart with toast notification
-  addToCartWithToast(product: Product, event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-
-    const cartItem: CartItem = {
-      productId: product.productId,
-      variantId: product.variantId,
-      name: product.name,
-      image: product.mainImageUrl,
-      afterPrice: product.priceAfterDiscount,
-      beforePrice: product.priceBeforeDiscount,
-      quantity: 1,
-      currency: product.currency.name,
-    };
-
-    this.cartService.addToCart(cartItem);
-    this.cartSidebarService.openCart();
-  }
+  
 
   // Toggle wishlist with toast notification
   toggleWishlist(product: Product, event: Event): void {

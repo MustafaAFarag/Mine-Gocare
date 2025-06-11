@@ -108,7 +108,7 @@
       <div>
         <p class="text-sm text-gray-600">{{ "checkout.total" | translate }}:</p>
         <p class="text-lg font-bold text-hover-color">
-          ${{ total.toFixed(2) }}
+          {{ getCurrency() }} {{ total.toFixed(2) }}
         </p>
       </div>
       <button

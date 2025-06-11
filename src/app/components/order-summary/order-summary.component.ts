@@ -39,12 +39,25 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang;
     });
+
+    // Add console log to verify cart items
+    console.log('Cart Items in Order Summary:', this.cartItems);
   }
 
   ngOnDestroy(): void {
     if (this.langSubscription) {
       this.langSubscription.unsubscribe();
     }
+  }
+
+  getLanguage(): string {
+    const storedLang = localStorage.getItem('language');
+    return storedLang || 'en';
+  }
+
+  getCurrency(item: CartItem): string {
+    const lang = this.getLanguage();
+    return item.currency[lang] || item.currency.en;
   }
 
   incrementQuantity(item: CartItem): void {

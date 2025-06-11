@@ -121,6 +121,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
+    console.log("PRODUCT ADDED TO CART", product);
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: product.variantId,
@@ -131,6 +132,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       quantity: 1,
       currency: product.currency.name,
     };
+    console.log("CART ITEM", cartItem);
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }

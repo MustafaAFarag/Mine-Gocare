@@ -31,14 +31,14 @@
             id="order-item-price-{{ item.productId }}"
             class="text-sm text-gray-600"
           >
-            ${{ item.afterPrice.toFixed(2) }}
+            {{ getCurrency(item) }} {{ item.afterPrice.toFixed(2) }}
           </p>
         </div>
         <div
           id="order-item-total-{{ item.productId }}"
           class="font-medium text-hover-color"
         >
-          ${{ (item.afterPrice * item.quantity).toFixed(2) }}
+          {{ getCurrency(item) }} {{ (item.afterPrice * item.quantity).toFixed(2) }}
         </div>
       </div>
 

@@ -145,6 +145,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         productId: item.productId,
         variantId: item.variantId,
         name: item.name,
+        currency: item.currency,
         afterPrice: item.afterPrice,
         beforePrice: item.beforePrice,
         quantity: item.quantity,
@@ -453,5 +454,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  getLanguage(): string {
+    const storedLang = localStorage.getItem('language');
+    return storedLang || 'en';
+  }
+
+  getCurrency(): string {
+    const lang = this.getLanguage();
+    return this.cartItems[0]?.currency?.[lang] || this.cartItems[0]?.currency?.en || 'EGP';
   }
 }
