@@ -69,10 +69,13 @@
                       : {
                           quantity: item.quantity,
                           price: item.afterPrice.toFixed(2),
-                          currency: item.currency.en,
+                          currency: item.currency[currentLang],
                         }
                 }}
               </p>
+              <span class="text-sm text-red-500 line-through">
+                {{item.beforePrice.toFixed(2)}} {{ item.currency[currentLang] }}
+              </span>
             </div>
             <button
               class="bg-gray-200 px-2 text-lg text-hover-color hover:text-red-900"

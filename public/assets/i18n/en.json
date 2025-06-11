@@ -48,6 +48,7 @@
   },
   "checkout": {
     "title": "Checkout",
+    "checkoutDiscount": "Checkout Discount",
     "wallet": "Wallet",
     "insufficientBalance": "Insufficient balance",
     "emptyCart": {

@@ -34,12 +34,15 @@
           <h3 id="order-item-name-{{ item.productId }}" class="text-gray-800">
             {{ currentLang === "en" ? item.name.en : item.name.ar }}
           </h3>
-          <p
+          <span
             id="order-item-price-{{ item.productId }}"
-            class="text-sm text-gray-600"
+            class="text-base text-gray-600"
           >
             {{ getCurrency(item) }} {{ item.afterPrice.toFixed(2) }}
-          </p>
+        </span>
+          <span class="text-xs text-red-500 line-through">
+            {{ getCurrency(item) }} {{ item.beforePrice.toFixed(2) }}
+          </span>
         </div>
         <div
           id="order-item-total-{{ item.productId }}"

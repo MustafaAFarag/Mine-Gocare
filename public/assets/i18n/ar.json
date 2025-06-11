@@ -49,6 +49,7 @@
   "checkout": {
     "title": "الدفع",
     "wallet": "المحفظة",
+    "checkoutDiscount": "خصم الدفع",
     "insufficientBalance": "رصيد غير كافي",
     "emptyCart": {
       "title": "سلة التسوق فارغة",
