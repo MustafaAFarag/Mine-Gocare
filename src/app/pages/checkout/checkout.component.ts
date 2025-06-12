@@ -104,6 +104,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   totalPoints: number = 0;
   pointsValueInEGP: number = 0;
   readonly POINTS_TO_EGP_RATIO = 0.5; // 1 point = 0.5 EGP
+  deliveryNotes: string = '';
 
   shippingAddresses: Address[] = [];
   billingAddresses: Address[] = [];
@@ -437,6 +438,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       promoCodeId: this.appliedPromoCode?.id || null,
       redeemedPointsAmount: 0, // Default to 0
       walletAmount: 0, // Default to 0
+      deleiveryNotes: this.deliveryNotes, // Add delivery notes
     };
 
     // Add walletAmount only if paying with wallet
@@ -498,6 +500,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  onDeliveryNotesChange(notes: string): void {
+    this.deliveryNotes = notes;
   }
 
   getLanguage(): string {

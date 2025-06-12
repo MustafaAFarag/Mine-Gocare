@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="rounded-lg bg-white shadow-sm">
+<div class="bg-white shadow-sm">
   <div class="border-b p-4">
     <h2 class="text-lg font-bold text-gray-800">
       {{ "checkout.orderSummary" | translate }}
@@ -116,6 +116,24 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- Delivery Notes -->
+    <div class="mt-4">
+      <label
+        for="delivery-notes"
+        class="mb-2 block text-sm font-medium text-gray-700"
+      >
+        {{ "checkout.deliveryNotes" | translate }}
+      </label>
+      <textarea
+        id="delivery-notes"
+        [(ngModel)]="deliveryNotes"
+        (ngModelChange)="onDeliveryNotesChange($event)"
+        rows="3"
+        class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-hover-color focus:outline-none focus:ring-1 focus:ring-hover-color"
+        [placeholder]="'checkout.deliveryNotesPlaceholder' | translate"
+      ></textarea>
     </div>
   </div>
 </div>

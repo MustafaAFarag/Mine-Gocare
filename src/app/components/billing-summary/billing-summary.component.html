@@ -1,6 +1,6 @@
 <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
-<div class="rounded-lg bg-white shadow-sm">
+<div class="bg-white shadow-sm">
   <div class="p-4">
     <h2 class="text-lg font-bold text-gray-800">
       {{ "checkout.billingSection" | translate }}
@@ -9,7 +9,9 @@
 
   <!-- Loading State -->
   <div *ngIf="loading" class="flex items-center justify-center p-4">
-    <div class="h-6 w-6 animate-spin rounded-full border-2 border-hover-color border-t-transparent"></div>
+    <div
+      class="h-6 w-6 animate-spin rounded-full border-2 border-hover-color border-t-transparent"
+    ></div>
   </div>
 
   <div *ngIf="!loading">
@@ -18,7 +20,7 @@
       @if (hasPromoCodeInCart) {
         <div class="mb-4 flex items-center justify-between">
           <h2 class="font-bold text-gray-900">
-            {{ "checkout.promoCodeTitle" | translate }} 
+            {{ "checkout.promoCodeTitle" | translate }}
           </h2>
         </div>
 
@@ -71,7 +73,7 @@
               [placeholder]="'checkout.enterPromoCodePlaceholder' | translate"
               class="w-full rounded-l border bg-white px-4 py-2 pr-8"
             />
-            @if (promoForm.get('couponCode')?.value) {
+            @if (promoForm.get("couponCode")?.value) {
               <button
                 type="button"
                 (click)="clearPromoCode()"
@@ -128,7 +130,8 @@
             "checkout.itemTotal" | translate
           }}</span>
           <span id="subtotal-amount" class="text-hover-color">
-            {{ orderSummary?.subTotal?.toFixed(2) || subTotal.toFixed(2) }} {{ "common.currency" | translate }}
+            {{ orderSummary?.subTotal?.toFixed(2) || subTotal.toFixed(2) }}
+            {{ "common.currency" | translate }}
           </span>
         </div>
 
@@ -137,7 +140,8 @@
             "checkout.shipping" | translate
           }}</span>
           <span *ngIf="!loading" id="shipping-amount" class="text-hover-color">
-            {{ orderSummary?.shippingFees?.toFixed(2) || shipping.toFixed(2) }} {{ "common.currency" | translate }} 
+            {{ orderSummary?.shippingFees?.toFixed(2) || shipping.toFixed(2) }}
+            {{ "common.currency" | translate }}
           </span>
           <span *ngIf="loading" class="loading-spinner">
             <i class="pi pi-spin pi-spinner"></i>
@@ -149,7 +153,7 @@
           <div class="flex justify-between text-green-600">
             <span>{{ "checkout.checkoutDiscount" | translate }}</span>
             <span id="checkout-discount-amount">
-              -{{ orderSummary.totalDiscount.toFixed(2) }} 
+              -{{ orderSummary.totalDiscount.toFixed(2) }}
               {{ "common.currency" | translate }}
             </span>
           </div>
@@ -160,7 +164,7 @@
           <div class="flex justify-between text-green-600">
             <span>{{ "checkout.promoDiscount" | translate }}</span>
             <span id="discount-amount">
-              -{{ discountAmount.toFixed(2) }} 
+              -{{ discountAmount.toFixed(2) }}
               {{ "common.currency" | translate }}
             </span>
           </div>
@@ -192,8 +196,12 @@
         <span class="text-lg font-bold text-gray-800">{{
           "checkout.total" | translate
         }}</span>
-        <span id="final-total-amount" class="text-xl font-bold text-hover-color">
-          {{ orderSummary?.total?.toFixed(2) || finalTotal.toFixed(2) }} {{ "common.currency" | translate }}
+        <span
+          id="final-total-amount"
+          class="text-xl font-bold text-hover-color"
+        >
+          {{ orderSummary?.total?.toFixed(2) || finalTotal.toFixed(2) }}
+          {{ "common.currency" | translate }}
         </span>
       </div>
 
@@ -204,8 +212,13 @@
         [disabled]="isLoading || loading"
         class="mt-6 w-full rounded bg-hover-color py-3 text-white transition hover:bg-red-800 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
       >
-        <span *ngIf="!isLoading && !loading">{{ "checkout.placeOrder" | translate }}</span>
-        <span *ngIf="isLoading || loading" class="flex items-center justify-center gap-2">
+        <span *ngIf="!isLoading && !loading">{{
+          "checkout.placeOrder" | translate
+        }}</span>
+        <span
+          *ngIf="isLoading || loading"
+          class="flex items-center justify-center gap-2"
+        >
           <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
             <circle
               class="opacity-25"

@@ -7,6 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { getFullImageUrl } from '../../lib/utils';
 import { CartItem } from '../../model/Cart';
 import { TranslateModule } from '@ngx-translate/core';
@@ -18,7 +19,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-order-summary',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './order-summary.component.html',
   styleUrls: ['./order-summary.component.css'],
 })
@@ -26,12 +27,16 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   @Input() cartItems: CartItem[] = [];
   @Input() selectedAddressId: number | undefined = undefined;
   @Input() promoCodeId: number | undefined = undefined;
-  @Output() summaryUpdated = new EventEmitter<any>();
+  @Input() loading: boolean = false;
+  @Input() currentLang: string = 'en';
 
-  currentLang: string = 'en';
-  private langSubscription: Subscription = new Subscription();
+  @Output() summaryUpdated = new EventEmitter<any>();
+  @Output() deliveryNotesChange = new EventEmitter<string>();
+
   orderSummary: any = null;
-  loading: boolean = false;
+  deliveryNotes: string = '';
+
+  private langSubscription: Subscription = new Subscription();
 
   getfullImageUrl = getFullImageUrl;
 
@@ -63,13 +68,13 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     const orderRequest = {
-      orderProducts: this.cartItems.map(item => ({
+      orderProducts: this.cartItems.map((item) => ({
         productVariantId: item.variantId || item.productId,
         quantity: item.quantity,
-        price: item.afterPrice
+        price: item.afterPrice,
       })),
       addressId: this.selectedAddressId,
-      promoCodeId: this.promoCodeId
+      promoCodeId: this.promoCodeId,
     };
 
     console.log('Order Summary Request:', orderRequest);
@@ -86,18 +91,12 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error fetching order summary:', error);
         this.loading = false;
-      }
+      },
     });
   }
 
-  getLanguage(): string {
-    const storedLang = localStorage.getItem('language');
-    return storedLang || 'en';
-  }
-
   getCurrency(item: CartItem): string {
-    const lang = this.getLanguage();
-    return item.currency[lang] || item.currency.en;
+    return item.currency?.[this.currentLang] || item.currency?.en || 'EGP';
   }
 
   incrementQuantity(item: CartItem): void {
@@ -112,5 +111,9 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
       this.cartService.removeFromCart(item.productId);
     }
     this.fetchOrderSummary(); // Refresh summary after quantity change
+  }
+
+  onDeliveryNotesChange(notes: string): void {
+    this.deliveryNotesChange.emit(notes);
   }
 }

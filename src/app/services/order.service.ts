@@ -88,6 +88,7 @@ export class OrderService {
       promoCodeId?: number | null;
       walletAmount?: number;
       redeemedPointsAmount?: number;
+      deleiveryNotes?: string;
     },
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -104,6 +105,7 @@ export class OrderService {
       promoCodeId: orderRequest.promoCodeId || null,
       walletAmount: orderRequest.walletAmount || 0.0,
       redeemedPointsAmount: orderRequest.redeemedPointsAmount || 0,
+      deleiveryNotes: orderRequest.deleiveryNotes || '',
     };
 
     return this.http.post(this.placeOrderUrl, body, { headers });
