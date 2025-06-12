@@ -40,38 +40,6 @@
         </div>
       </div>
 
-      <!-- PayTabs (Credit Card) -->
-      <div
-        id="payment-option-paytabs"
-        class="cursor-pointer overflow-hidden rounded-lg border p-4"
-        [class.border-hover-color]="paymentMethod === 'paytabs'"
-        (click)="selectPaymentMethod('paytabs')"
-      >
-        <div class="flex items-center gap-3">
-          <!-- Radio Button -->
-          <div>
-            <div
-              id="payment-radio-paytabs"
-              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
-              [class.border-hover-color]="paymentMethod === 'paytabs'"
-              [class.bg-hover-color]="paymentMethod === 'paytabs'"
-            >
-              <div
-                *ngIf="paymentMethod === 'paytabs'"
-                class="h-2 w-2 rounded-full bg-white"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1">
-            <h3 class="font-medium text-gray-800">
-              {{ "checkout.creditCardPayTabs" | translate }}
-            </h3>
-          </div>
-        </div>
-      </div>
-
       <!-- Wallet -->
       <div
         id="payment-option-wallet"

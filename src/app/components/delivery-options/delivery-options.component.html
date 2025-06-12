@@ -43,59 +43,24 @@
         </div>
       </div>
 
-      <!-- Express Delivery Option -->
+      <!-- Time Slots (Only visible when express delivery is selected) -->
       <div
-        id="delivery-option-express"
-        class="cursor-pointer overflow-hidden rounded-lg border p-4"
-        [class.border-hover-color]="deliveryOption === 'express'"
-        (click)="selectDeliveryOption('express')"
+        *ngIf="deliveryOption === 'express'"
+        class="mt-3 grid grid-cols-2 gap-2"
       >
-        <div class="flex items-start gap-3">
-          <!-- Radio Button -->
-          <div class="mt-1">
-            <div
-              id="delivery-radio-express"
-              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
-              [class.border-hover-color]="deliveryOption === 'express'"
-              [class.bg-hover-color]="deliveryOption === 'express'"
-            >
-              <div
-                *ngIf="deliveryOption === 'express'"
-                class="h-2 w-2 rounded-full bg-white"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex-1">
-            <h3 class="font-medium text-gray-800">
-              {{ "checkout.express" | translate }}
-            </h3>
-            <p class="text-sm text-gray-600">
-              {{ "checkout.expressDescription" | translate }}
-            </p>
-          </div>
+        <h3 class="col-span-2 mb-2 text-sm font-medium text-gray-700">
+          {{ "checkout.selectTimeSlot" | translate }}
+        </h3>
+        <div
+          *ngFor="let slot of timeSlots"
+          id="time-slot-{{ slot.id }}"
+          class="cursor-pointer rounded border p-2 text-center text-sm"
+          [class.bg-orange-100]="selectedTimeSlot === slot.id"
+          [class.border-hover-color]="selectedTimeSlot === slot.id"
+          (click)="selectTimeSlot(slot.id)"
+        >
+          {{ getLocalizedTime(slot) }}
         </div>
-      </div>
-    </div>
-
-    <!-- Time Slots (Only visible when express delivery is selected) -->
-    <div
-      *ngIf="deliveryOption === 'express'"
-      class="mt-3 grid grid-cols-2 gap-2"
-    >
-      <h3 class="col-span-2 mb-2 text-sm font-medium text-gray-700">
-        {{ "checkout.selectTimeSlot" | translate }}
-      </h3>
-      <div
-        *ngFor="let slot of timeSlots"
-        id="time-slot-{{ slot.id }}"
-        class="cursor-pointer rounded border p-2 text-center text-sm"
-        [class.bg-orange-100]="selectedTimeSlot === slot.id"
-        [class.border-hover-color]="selectedTimeSlot === slot.id"
-        (click)="selectTimeSlot(slot.id)"
-      >
-        {{ getLocalizedTime(slot) }}
       </div>
     </div>
   </div>
