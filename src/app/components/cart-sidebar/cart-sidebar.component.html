@@ -60,9 +60,9 @@
           <div class="flex items-center justify-between">
             <div>
               <h3 class="font-medium text-gray-800">
-                {{ getLocalizedText(item.name) }} 
+                {{ getLocalizedText(item.name) }}
               </h3>
-              <p class="text-sm font-medium text-gray-500">
+              <span class="black text-sm font-bold">
                 {{
                   "cart-sidebar.pricePerUnit"
                     | translate
@@ -72,9 +72,13 @@
                           currency: item.currency[currentLang],
                         }
                 }}
-              </p>
-              <span class="text-sm text-red-500 line-through">
-                {{item.beforePrice.toFixed(2)}} {{ item.currency[currentLang] }}
+              </span>
+              <span
+                *ngIf="item.beforePrice !== item.afterPrice"
+                class="text-sm text-gray-400 line-through"
+              >
+                {{ item.beforePrice.toFixed(2) }}
+                {{ item.currency[currentLang] }}
               </span>
             </div>
             <button

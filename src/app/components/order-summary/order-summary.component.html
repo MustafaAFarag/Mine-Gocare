@@ -1,7 +1,9 @@
 <!-- Loading State -->
 <div *ngIf="loading" class="rounded-lg bg-white p-4 shadow-sm">
   <div class="flex items-center justify-center py-4">
-    <div class="h-6 w-6 animate-spin rounded-full border-2 border-hover-color border-t-transparent"></div>
+    <div
+      class="h-6 w-6 animate-spin rounded-full border-2 border-hover-color border-t-transparent"
+    ></div>
   </div>
 </div>
 
@@ -36,11 +38,14 @@
           </h3>
           <span
             id="order-item-price-{{ item.productId }}"
-            class="text-base text-gray-600"
+            class="text-base font-bold text-black"
           >
             {{ getCurrency(item) }} {{ item.afterPrice.toFixed(2) }}
-        </span>
-          <span class="text-xs text-red-500 line-through">
+          </span>
+          <span
+            *ngIf="item.beforePrice !== item.afterPrice"
+            class="text-xs text-gray-400 line-through"
+          >
             {{ getCurrency(item) }} {{ item.beforePrice.toFixed(2) }}
           </span>
         </div>
@@ -48,7 +53,8 @@
           id="order-item-total-{{ item.productId }}"
           class="font-medium text-hover-color"
         >
-          {{ getCurrency(item) }} {{ (item.afterPrice * item.quantity).toFixed(2) }}
+          {{ getCurrency(item) }}
+          {{ (item.afterPrice * item.quantity).toFixed(2) }}
         </div>
       </div>
 
