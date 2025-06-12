@@ -93,6 +93,64 @@
           </div>
         </div>
       </div>
+
+      <!-- Points -->
+      <div
+        id="payment-option-points"
+        class="cursor-pointer overflow-hidden rounded-lg border p-4"
+        [class.border-hover-color]="paymentMethod === 'points'"
+        [class.opacity-50]="isPointsDisabled()"
+        [class.cursor-not-allowed]="isPointsDisabled()"
+        (click)="selectPaymentMethod('points')"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Radio Button -->
+          <div>
+            <div
+              id="payment-radio-points"
+              class="flex h-5 w-5 items-center justify-center rounded-full border-2"
+              [class.border-hover-color]="
+                paymentMethod === 'points' && !isPointsDisabled()
+              "
+              [class.bg-hover-color]="
+                paymentMethod === 'points' && !isPointsDisabled()
+              "
+            >
+              <div
+                *ngIf="paymentMethod === 'points' && !isPointsDisabled()"
+                class="h-2 w-2 rounded-full bg-white"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex items-center justify-center gap-2">
+            <h3 class="font-medium text-gray-800">
+              {{ "checkout.redeemPoints" | translate }}
+            </h3>
+            <p
+              id="points-balance"
+              class="mt-1 text-sm"
+              [class.text-red-500]="isPointsDisabled()"
+              [class.text-hover-color]="!isPointsDisabled()"
+            >
+              ( {{ totalPoints | number: "1.0-0" }}
+              {{ "checkout.points" | translate }} =
+              {{ pointsValueInEGP | number: "1.2-2" }}
+              {{ "common.currency" | translate }} )
+            </p>
+            <p
+              *ngIf="isPointsDisabled()"
+              id="points-insufficient"
+              class="mt-1 text-xs text-red-500"
+            >
+              {{ "checkout.insufficientPoints" | translate }}
+              ({{ "checkout.requiredPoints" | translate }}:
+              {{ getRequiredPoints() | number: "1.0-0" }})
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

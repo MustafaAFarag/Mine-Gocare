@@ -99,8 +99,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   selectedTimeSlot: string | null = null;
 
   // Payment methods
-  paymentMethod: 'cod' | 'paytabs' | 'wallet' = 'cod';
+  paymentMethod: 'cod' | 'wallet' | 'points' = 'cod';
   walletBalance: number = 0;
+  totalPoints: number = 0;
+  pointsValueInEGP: number = 0;
+  readonly POINTS_TO_EGP_RATIO = 0.5; // 1 point = 0.5 EGP
 
   shippingAddresses: Address[] = [];
   billingAddresses: Address[] = [];
@@ -153,7 +156,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         promoCodeDetail: item.promoCodeDetail,
       }));
 
-
       this.updateTotal();
       this.cartLoading = false;
 
@@ -167,6 +169,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Fetch client addresses
     this.fetchClientAddresses();
     this.fetchClientWallet();
+    this.fetchTotalPoints();
   }
 
   ngOnDestroy(): void {
@@ -290,9 +293,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.selectedTimeSlot = slotId;
   }
 
-  selectPaymentMethod(method: 'cod' | 'paytabs' | 'wallet'): void {
+  selectPaymentMethod(method: 'cod' | 'wallet' | 'points'): void {
     // Don't allow wallet payment if balance is insufficient
     if (method === 'wallet' && this.walletBalance < this.total) {
+      return;
+    }
+
+    // Don't allow points payment if no points available
+    if (method === 'points' && this.totalPoints <= 0) {
       return;
     }
 
@@ -344,9 +352,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   // Map payment method to API values
   getPaymentMethodValue(): number {
-    if (this.paymentMethod === 'cod') return 0;
-    if (this.paymentMethod === 'paytabs') return 1;
-    return 3; // wallet
+    if (this.paymentMethod === 'cod') return 1;
+    if (this.paymentMethod === 'wallet') return 3;
+    return 4; // points
   }
 
   get mappedOrderProducts() {
@@ -363,6 +371,28 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       discount: event.discount,
     };
     this.updateTotal();
+  }
+
+  fetchTotalPoints(): void {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      this.pointingSystemService.getClientsTotalPoints(token).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.totalPoints = response.result || 0;
+            this.pointsValueInEGP = this.totalPoints * this.POINTS_TO_EGP_RATIO;
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching total points:', error);
+        },
+      });
+    }
+  }
+
+  getRequiredPoints(): number {
+    // Calculate how many points are needed to cover the total price
+    return Math.ceil(this.total / this.POINTS_TO_EGP_RATIO);
   }
 
   placeOrder(): void {
@@ -392,7 +422,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Set loading state
     this.isPlacingOrder = true;
 
-    // Get payment method value (0 for COD, 1 for PayTabs, 3 for Wallet)
+    // Get payment method value (1 for COD, 3 for Wallet, 4 for Points)
     const paymentMethodValue = this.getPaymentMethodValue();
 
     // Prepare the order request
@@ -405,23 +435,30 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       })),
       paymentMethod: paymentMethodValue,
       promoCodeId: this.appliedPromoCode?.id || null,
+      redeemedPointsAmount: 0, // Default to 0
+      walletAmount: 0, // Default to 0
     };
 
     // Add walletAmount only if paying with wallet
     if (paymentMethodValue === 3) {
-      // Make sure to set the exact total amount as a number
       orderRequest.walletAmount = Number(this.total.toFixed(2));
+    }
 
-      // Log the request to verify the value
-      console.log('Placing order with wallet payment:', orderRequest);
+    // Add points amount if paying with points
+    if (paymentMethodValue === 4) {
+      // Calculate required points for the total amount
+      const requiredPoints = this.getRequiredPoints();
+      orderRequest.redeemedPointsAmount = requiredPoints;
     }
 
     // Call order service to place order
     this.orderService.placeOrder(token, orderRequest).subscribe({
       next: (response) => {
         if (response.success) {
-          // Add points for the order
-          this.pointingSystemService.addPoints(token, 3, false);
+          // Add points for the order if not paying with points
+          if (paymentMethodValue !== 4) {
+            this.pointingSystemService.addPoints(token, 3, false);
+          }
 
           // Clear cart
           this.cartService.clearCart();
@@ -429,6 +466,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           // Refresh wallet balance if paid with wallet
           if (paymentMethodValue === 3) {
             this.fetchClientWallet();
+          }
+
+          // Refresh points if paid with points
+          if (paymentMethodValue === 4) {
+            this.fetchTotalPoints();
           }
 
           // Show success message
@@ -465,7 +507,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   getCurrency(): string {
     const lang = this.getLanguage();
-    return this.cartItems[0]?.currency?.[lang] || this.cartItems[0]?.currency?.en || 'EGP';
+    return (
+      this.cartItems[0]?.currency?.[lang] ||
+      this.cartItems[0]?.currency?.en ||
+      'EGP'
+    );
   }
 
   handleOrderSummaryUpdate(summary: any): void {

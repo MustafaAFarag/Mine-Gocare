@@ -43,17 +43,17 @@ export class OrderService {
       }[];
       addressId: number;
       promoCodeId?: number;
-    }
+    },
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryid: this.countryId
+      countryid: this.countryId,
     });
 
     const body = {
       orderProducts: orderRequest.orderProducts,
       addressId: orderRequest.addressId,
-      promoCodeId: orderRequest.promoCodeId || null
+      promoCodeId: orderRequest.promoCodeId || null,
     };
 
     return this.http.post(this.getOrderSummaryUrl, body, { headers });
@@ -87,6 +87,7 @@ export class OrderService {
       paymentMethod: number;
       promoCodeId?: number | null;
       walletAmount?: number;
+      redeemedPointsAmount?: number;
     },
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -102,6 +103,7 @@ export class OrderService {
       orderProducts: orderRequest.orderProducts,
       promoCodeId: orderRequest.promoCodeId || null,
       walletAmount: orderRequest.walletAmount || 0.0,
+      redeemedPointsAmount: orderRequest.redeemedPointsAmount || 0,
     };
 
     return this.http.post(this.placeOrderUrl, body, { headers });
