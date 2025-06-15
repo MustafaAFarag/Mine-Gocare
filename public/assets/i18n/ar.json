@@ -810,35 +810,20 @@
     "limitPerDay": "الحد: {{limit}} في اليوم",
     "points": "نقاط",
     "pending": "قيد الانتظار",
-    "earned": "مكتسب",
+    "earned": "مكتسبة",
     "noTransactions": "لم يتم العثور على معاملات النقاط",
     "previous": "السابق",
     "next": "التالي",
     "balance": "الرصيد",
-    "redeemButton": "استبدال",
-
-    "redeem": {
-      "title": "استبدال النقاط",
-      "subtitle": "تحويل نقاطك إلى عملة",
-      "availablePoints": "النقاط المتاحة",
-      "exchangeRate": "سعر الصرف",
-      "amount": "مبلغ الاستبدال",
-      "enterAmount": "أدخل المبلغ للاستبدال",
-      "youWillReceive": "ستحصل على",
-      "redeeming": "جاري الاستبدال...",
-      "error": {
-        "exceedsAvailable": "المبلغ يتجاوز النقاط المتاحة"
-      }
-    },
-    "redeemPoints": "استبدال النقاط",
-    "availablePoints": "النقاط المتاحة",
-    "pointsToRedeem": "النقاط المراد استبدالها",
-    "equivalentAmount": "المبلغ المكافئ",
+    "redeemButton": "استبدال النقاط",
+    "expirationHint": "لديك {{points}} نقطة تنتهي في {{date}}",
+    "expiresOn": "تنتهي في",
+    "expired": "منتهية",
+    "redeemed": "تم الاستبدال",
     "redeemSuccess": "تم استبدال النقاط",
-    "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ج.م)",
+    "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} جنيه)",
     "redeemError": "فشل الاستبدال",
-    "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً.",
-    "expirationHint": "أقرب نقاط مكتسبة ({{points}}) ستنتهي في {{date}}. استخدمها قبل انتهاء صلاحيتها!"
+    "redeemErrorDetail": "فشل في استبدال النقاط. يرجى المحاولة مرة أخرى."
   },
   "alerts": {
     "loginRequired": "يرجى تسجيل الدخول لإتمام الطلب",

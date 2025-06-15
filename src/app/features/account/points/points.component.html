@@ -107,7 +107,13 @@
           <td
             class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
           >
-            {{ history.creationDate | date: "medium" }}
+            <div class="flex flex-col">
+              <span>{{ history.creationDate | date: "medium" }}</span>
+              <span class="text-xs text-gray-500">
+                {{ "points.expiresOn" | translate }}:
+                {{ history.expiryDate | date: "medium" }}
+              </span>
+            </div>
           </td>
           <td
             class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
@@ -115,22 +121,34 @@
             {{ history.title[currentLang] }}
           </td>
           <td
-            class="px-3 py-3 text-sm text-gray-700 sm:px-4 sm:py-4 sm:text-base"
+            class="px-3 py-3 text-sm sm:px-4 sm:py-4 sm:text-base"
+            [ngClass]="{
+              'text-red-600': !history.isAddition || history.isExpired,
+              'text-green-600': history.isAddition && !history.isExpired,
+            }"
           >
-            {{ history.points }}
+            {{ !history.isAddition || history.isExpired ? "-" : "+"
+            }}{{ history.points }}
           </td>
           <td class="px-3 py-3 sm:px-4 sm:py-4">
             <span
               class="rounded-md px-2 py-1 text-xs font-medium sm:px-3 sm:text-sm"
               [ngClass]="{
                 'bg-yellow-100 text-yellow-600': history.isHolded,
-                'bg-green-100 text-green-600': !history.isHolded,
+                'bg-green-100 text-green-600':
+                  history.isAddition && !history.isExpired,
+                'bg-red-100 text-red-600':
+                  !history.isAddition || history.isExpired,
               }"
             >
               {{
-                history.isHolded
-                  ? ("points.pending" | translate)
-                  : ("points.earned" | translate)
+                history.isExpired
+                  ? ("points.expired" | translate)
+                  : history.isHolded
+                    ? ("points.pending" | translate)
+                    : !history.isAddition
+                      ? ("points.redeemed" | translate)
+                      : ("points.earned" | translate)
               }}
             </span>
           </td>
