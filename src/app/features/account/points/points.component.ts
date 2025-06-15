@@ -183,4 +183,23 @@ export class PointsComponent implements OnInit {
         });
     }
   }
+
+  getFormattedExpiryDate(): string {
+    if (this.pointsClientPreview?.nerestExpiryDate) {
+      const date = new Date(this.pointsClientPreview.nerestExpiryDate);
+      return date.toLocaleDateString(
+        this.currentLang === 'en' ? 'en-US' : 'ar-SA',
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+      );
+    }
+    return '';
+  }
+
+  hasExpiringPoints(): boolean {
+    return this.pointsClientPreview?.nearestExpiredPoints > 0;
+  }
 }

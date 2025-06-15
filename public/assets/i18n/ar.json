@@ -819,7 +819,8 @@
     "redeemSuccess": "تم استبدال النقاط",
     "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ج.م)",
     "redeemError": "فشل الاستبدال",
-    "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً."
+    "redeemErrorDetail": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى لاحقاً.",
+    "expirationHint": "أقرب نقاط مكتسبة ({{points}}) ستنتهي في {{date}}. استخدمها قبل انتهاء صلاحيتها!"
   },
   "alerts": {
     "loginRequired": "يرجى تسجيل الدخول لإتمام الطلب",

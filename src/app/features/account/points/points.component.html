@@ -8,51 +8,71 @@
   class="rounded-lg bg-white shadow-sm"
   *ngIf="!(isLoadingPoints || isLoadingSettings || isLoadingTotalPoints)"
 >
-  <!-- Points Balance -->
-  <div
-    class="flex flex-col gap-4 p-4 sm:p-6 md:flex-row md:items-center md:justify-between"
-  >
-    <div class="flex items-center gap-4">
-      <div class="rounded-md bg-red-100 p-2 sm:p-3">
-        <i class="ri-coin-line text-xl text-hover-color sm:text-2xl"></i>
-      </div>
-      <div>
-        <h3 class="text-sm font-medium text-gray-500 sm:text-base">
-          {{ "points.totalPoints" | translate }}
-        </h3>
-        <p class="text-lg font-bold text-gray-800 sm:text-xl">
-          {{ clientPoints }} {{ "points.points" | translate }}
-        </p>
-        <p class="text-sm text-gray-600">
-          {{ "common.currency" | translate }}
-          {{ getConvertedAmount() | number: "1.2-2" }}
-        </p>
-      </div>
+  <div class="flex flex-col gap-4 p-4 sm:p-6">
+    <!-- Points Balance and Exchange Rate -->
+    <div
+      class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    >
       <div class="flex items-center gap-4">
-        <button
-          (click)="redeemPoints()"
-          id="points-redeem-button"
-          [disabled]="clientPoints === 0 || isRedeeming"
-          class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-color/90 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+        <div class="rounded-md bg-red-100 p-2 sm:p-3">
+          <i class="ri-coin-line text-xl text-hover-color sm:text-2xl"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-gray-500 sm:text-base">
+            {{ "points.totalPoints" | translate }}
+          </h3>
+          <p class="text-lg font-bold text-gray-800 sm:text-xl">
+            {{ clientPoints }} {{ "points.points" | translate }}
+          </p>
+          <p class="text-sm text-gray-600">
+            {{ "common.currency" | translate }}
+            {{ getConvertedAmount() | number: "1.2-2" }}
+          </p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            (click)="redeemPoints()"
+            id="points-redeem-button"
+            [disabled]="clientPoints === 0 || isRedeeming"
+            class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-color/90 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+          >
+            <span *ngIf="!isRedeeming">{{ "points.redeem" | translate }}</span>
+            <span *ngIf="isRedeeming" class="flex items-center gap-2">
+              <i class="ri-loader-4-line animate-spin"></i>
+              {{ "common.processing" | translate }}
+            </span>
+          </button>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 sm:px-4"
+      >
+        <i class="ri-information-line text-gray-500"></i>
+        <span class="text-sm text-gray-700 sm:text-base"
+          >1 {{ "points.points" | translate }} =
+          {{ "common.currency" | translate }}
+          {{ pointsClientPreview.exchangeRate.toFixed(2) || "0.00" }}
+          {{ "points.balance" | translate }}</span
         >
-          <span *ngIf="!isRedeeming">{{ "points.redeem" | translate }}</span>
-          <span *ngIf="isRedeeming" class="flex items-center gap-2">
-            <i class="ri-loader-4-line animate-spin"></i>
-            {{ "common.processing" | translate }}
-          </span>
-        </button>
       </div>
     </div>
+
+    <!-- Points Expiration Hint -->
     <div
-      class="flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 sm:px-4"
+      *ngIf="hasExpiringPoints()"
+      class="flex items-center gap-2 rounded-md bg-yellow-50 px-3 py-2 sm:px-4"
     >
-      <i class="ri-information-line text-gray-500"></i>
-      <span class="text-sm text-gray-700 sm:text-base"
-        >1 {{ "points.points" | translate }} =
-        {{ "common.currency" | translate }}
-        {{ pointsClientPreview.exchangeRate.toFixed(2) || "0.00" }}
-        {{ "points.balance" | translate }}</span
-      >
+      <i class="ri-time-line text-yellow-500"></i>
+      <span class="text-sm text-yellow-700 sm:text-base">
+        {{
+          "points.expirationHint"
+            | translate
+              : {
+                  date: getFormattedExpiryDate(),
+                  points: pointsClientPreview.nearestExpiredPoints,
+                }
+        }}
+      </span>
     </div>
   </div>
 
