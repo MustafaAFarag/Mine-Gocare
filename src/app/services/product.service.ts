@@ -35,6 +35,8 @@ export class ProductService {
       subSubCategoryId?: number[];
       brandId?: number[];
       sortBy?: number;
+      minPrice?: number;
+      maxPrice?: number;
     } = {},
   ): Observable<ProductApiResponse> {
     // Get country from localStorage only in browser environment
@@ -48,7 +50,7 @@ export class ProductService {
     const countryId = selectedCountry === 'EG' ? 224 : 103;
     console.log('COUNTRY ID:', countryId);
 
-    const body = {
+    const body: any = {
       paging: {
         pageNumber: filters.pageNumber ?? 1,
         pageSize: filters.pageSize ?? 10,
@@ -61,6 +63,14 @@ export class ProductService {
       gender: filters.gender ?? [0, 1],
       sortBy: filters.sortBy ?? 0,
     };
+
+    // Only add price filters if they are explicitly set
+    if (filters.minPrice !== undefined) {
+      body.minPrice = filters.minPrice;
+    }
+    if (filters.maxPrice !== undefined) {
+      body.maxPrice = filters.maxPrice;
+    }
 
     return this.http.post<ProductApiResponse>(
       `${environment.apiUrl}/${ApiEndPoint.getAllProductVariantsForClient}`,

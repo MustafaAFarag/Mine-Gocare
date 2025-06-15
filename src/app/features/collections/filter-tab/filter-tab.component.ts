@@ -42,7 +42,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
   @Input() activeFilters: string[] = [];
   @Input() showCategories: boolean = true;
   @Input() showBrands: boolean = true;
-  @Input() showRatings: boolean = true;
   @Input() showPrice: boolean = true;
   @Input() isMobile: boolean = false;
   @Input() categoriesLoading: boolean = false;
@@ -80,11 +79,10 @@ export class FilterTabComponent implements OnInit, OnDestroy {
   ];
 
   @Output() filterToggled = new EventEmitter<
-    'categories' | 'brands' | 'ratings' | 'price'
+    'categories' | 'brands' | 'price'
   >();
   @Output() categoryToggled = new EventEmitter<Category>();
   @Output() brandToggled = new EventEmitter<Brand>();
-  @Output() ratingToggled = new EventEmitter<RatingOption>();
   @Output() priceRangeChanged = new EventEmitter<{
     min: number;
     max: number | null;
@@ -114,7 +112,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
           const expandedStates = {
             categories: this.showCategories,
             brands: this.showBrands,
-            ratings: this.showRatings,
             price: this.showPrice,
           };
 
@@ -131,7 +128,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
             // Restore expanded states
             this.showCategories = expandedStates.categories;
             this.showBrands = expandedStates.brands;
-            this.showRatings = expandedStates.ratings;
             this.showPrice = expandedStates.price;
           }, 0);
         }
@@ -158,7 +154,7 @@ export class FilterTabComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
+  toggleFilter(section: 'categories' | 'brands' | 'price'): void {
     this.filterToggled.emit(section);
   }
 
@@ -168,11 +164,6 @@ export class FilterTabComponent implements OnInit, OnDestroy {
 
   toggleBrand(brand: Brand): void {
     this.brandToggled.emit(brand);
-  }
-
-  toggleRating(rating: RatingOption): void {
-    rating.selected = !rating.selected;
-    this.ratingToggled.emit(rating);
   }
 
   resetRatingCheckboxes(): void {

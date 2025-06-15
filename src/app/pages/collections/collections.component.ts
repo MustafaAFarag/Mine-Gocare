@@ -53,7 +53,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   // Filter states
   showCategories: boolean = true;
   showBrands: boolean = true;
-  showRatings: boolean = true;
   showPrice: boolean = true;
   products: Product[] = [];
   filteredProducts: Product[] = [];
@@ -70,7 +69,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   selectedSubCategoryIds: number[] = [];
   selectedSubSubCategoryIds: number[] = [];
   selectedBrandNames: string[] = [];
-  selectedRatings: number[] = [];
 
   // Price filter properties
   absoluteMinPrice: number = 0;
@@ -280,11 +278,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.updateBrandSelectionState();
       }
 
-      // Apply rating filters from URL
-      if (params['rating']) {
-        this.selectedRatings = params['rating'].split(',').map(Number);
-      }
-
       // Apply price filters from URL
       if (params['minPrice']) {
         this.currentMinPrice = Number(params['minPrice']);
@@ -372,14 +365,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Add ratings to active filters
-    for (const rating of this.selectedRatings) {
-      const ratingText = `${rating} rating`;
-      if (!this.activeFilters.includes(ratingText)) {
-        this.activeFilters.push(ratingText);
-      }
-    }
-
     // Add price filter if set
     if (
       this.currentMinPrice !== this.absoluteMinPrice ||
@@ -457,7 +442,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       sortBy = 1; // High to low
     }
 
-    const filters = {
+    const filters: any = {
       categoryId:
         this.selectedCategoryIds.length > 0
           ? this.selectedCategoryIds
@@ -474,6 +459,14 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       pageSize: pageSize,
       sortBy: sortBy,
     };
+
+    // Only add price filters if they are different from default values
+    if (this.currentMinPrice > this.absoluteMinPrice) {
+      filters.minPrice = this.currentMinPrice;
+    }
+    if (this.currentMaxPrice < this.absoluteMaxPrice) {
+      filters.maxPrice = this.currentMaxPrice;
+    }
 
     this.productService.getAllProductVariantsForClient(filters).subscribe({
       next: (res) => {
@@ -543,10 +536,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   viewMode: 'grid2' | 'grid3' | 'grid4' | 'list' = 'grid3';
 
   // Methods
-  toggleFilter(section: 'categories' | 'brands' | 'ratings' | 'price'): void {
+  toggleFilter(section: 'categories' | 'brands' | 'price'): void {
     if (section === 'categories') this.showCategories = !this.showCategories;
     if (section === 'brands') this.showBrands = !this.showBrands;
-    if (section === 'ratings') this.showRatings = !this.showRatings;
     if (section === 'price') this.showPrice = !this.showPrice;
   }
 
@@ -723,32 +715,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Check ratings (format: "X rating")
-    if (filter.endsWith(' rating')) {
-      const ratingStr = filter.split(' ')[0];
-      const ratingValue = parseInt(ratingStr, 10);
-
-      if (!isNaN(ratingValue) && this.selectedRatings.includes(ratingValue)) {
-        this.selectedRatings = this.selectedRatings.filter(
-          (r) => r !== ratingValue,
-        );
-
-        // Update the UI in the filter tab component
-        if (this.filterTabComponent) {
-          const ratingOption = this.filterTabComponent.ratingOptions.find(
-            (r) => r.value === ratingValue,
-          );
-          if (ratingOption) {
-            ratingOption.selected = false;
-          }
-        }
-
-        this.updateUrlParams();
-        this.filterProductsByRating();
-        return;
-      }
-    }
-
     // Check if it's a price filter
     if (filter.startsWith('Price:')) {
       // Reset price to default
@@ -844,11 +810,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Add brands to URL if selected
     if (this.selectedBrandNames.length > 0) {
       queryParams['brand'] = this.selectedBrandNames.join(',');
-    }
-
-    // Add ratings to URL if selected
-    if (this.selectedRatings.length > 0) {
-      queryParams['rating'] = this.selectedRatings.join(',');
     }
 
     // Add price range to URL if not default
@@ -992,7 +953,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.selectedSubCategoryIds = [];
     this.selectedSubSubCategoryIds = [];
     this.selectedBrandNames = [];
-    this.selectedRatings = [];
     this.currentMinPrice = this.absoluteMinPrice;
     this.currentMaxPrice = this.absoluteMaxPrice;
 
@@ -1010,9 +970,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   // Methods for FilterTabComponent
-  handleFilterToggled(
-    section: 'categories' | 'brands' | 'ratings' | 'price',
-  ): void {
+  handleFilterToggled(section: 'categories' | 'brands' | 'price'): void {
     this.toggleFilter(section);
   }
 
@@ -1128,52 +1086,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   // New methods for rating and price filters
-  handleRatingToggled(rating: RatingOption): void {
-    if (rating.selected) {
-      // Add rating to the active filters
-      const ratingText = `${rating.value} rating`;
-      if (!this.activeFilters.includes(ratingText)) {
-        this.activeFilters.push(ratingText);
-      }
-
-      if (!this.selectedRatings.includes(rating.value)) {
-        this.selectedRatings.push(rating.value);
-      }
-    } else {
-      // Remove rating from the active filters
-      const ratingText = `${rating.value} rating`;
-      this.activeFilters = this.activeFilters.filter(
-        (filter) => filter !== ratingText,
-      );
-
-      this.selectedRatings = this.selectedRatings.filter(
-        (r) => r !== rating.value,
-      );
-    }
-
-    // Update URL parameters
-    this.updateUrlParams();
-
-    this.filterProductsByRating();
-  }
-
-  filterProductsByRating(): void {
-    if (this.selectedRatings.length === 0) {
-      // No rating filter, reset to all products filtered by other criteria
-      this.fetchProductsAPI();
-      return;
-    }
-
-    // Find the minimum rating from selected ratings
-    const minRating = Math.min(...this.selectedRatings);
-
-    // Filter products by minimum rating
-    this.filteredProducts = this.products.filter(
-      (product) => product.rating >= minRating,
-    );
-    this.applyPagination();
-  }
-
   handlePriceRangeChanged(priceRange: {
     min: number;
     max: number | null;
@@ -1206,19 +1118,13 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
-    // Filter products by price
-    this.filterProductsByPrice();
+    // Fetch products with new price filter
+    this.fetchProductsAPI();
   }
 
+  // Remove client-side price filtering since we're using API filtering
   filterProductsByPrice(): void {
-    this.filteredProducts = this.products.filter((product) => {
-      const meetsMinPrice = product.priceAfterDiscount >= this.currentMinPrice;
-      const meetsMaxPrice =
-        this.currentMaxPrice === null ||
-        product.priceAfterDiscount <= this.currentMaxPrice;
-      return meetsMinPrice && meetsMaxPrice;
-    });
-    this.applyPagination();
+    this.fetchProductsAPI();
   }
 
   // Update applySortOrder method
