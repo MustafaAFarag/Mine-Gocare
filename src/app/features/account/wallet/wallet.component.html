@@ -22,7 +22,12 @@
 
     <!-- Transaction History Table -->
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <!-- Loading Spinner for List -->
+      <div *ngIf="isPaginationLoading" class="flex justify-center py-8">
+        <app-loading></app-loading>
+      </div>
+
+      <table *ngIf="!isPaginationLoading" class="w-full">
         <!-- Table Header -->
         <thead>
           <tr class="border-b">
@@ -36,7 +41,7 @@
               {{ "common.amount" | translate }}
             </th>
             <th class="px-4 py-4 text-left font-medium text-gray-700">
-              {{ "common.orderNumber" | translate }}
+              {{ "common.description" | translate }}
             </th>
           </tr>
         </thead>
@@ -48,29 +53,32 @@
             class="border-b hover:bg-gray-50"
           >
             <td class="px-4 py-4 text-gray-700">
-              {{ transaction.transactionDate | date: "medium" }}
+              {{ transaction.transactionDate | date: "short" }}
             </td>
             <td class="px-4 py-4 text-gray-700">
-              {{ transaction.title[currentLang] }}
+              {{
+                transaction.reason
+                  ? transaction.reason
+                  : transaction.title[currentLang]
+              }}
             </td>
             <td class="px-4 py-4">
               <span
                 class="rounded-md px-3 py-1 text-sm font-medium"
                 [ngClass]="{
-                  'bg-red-100 text-red-600': transaction.operation === 2,
-                  'bg-green-100 text-green-600': transaction.operation === 1,
-                  'bg-gray-100 text-gray-600': transaction.operation === 0,
+                  'bg-red-100 text-red-600': transaction.transactionType === 6,
+                  'bg-green-100 text-green-600':
+                    transaction.transactionType === 5 ||
+                    transaction.transactionType === 16,
                 }"
               >
                 {{ transaction.currency.name[currentLang] }}
+                {{ transaction.transactionType === 6 ? "-" : "+" }}
                 {{ transaction.amount.toFixed(2) }}
               </span>
             </td>
             <td class="px-4 py-4 text-gray-700">
-              <span *ngIf="transaction.orderSerialNumber">
-                {{ transaction.orderSerialNumber }}
-              </span>
-              <span *ngIf="!transaction.orderSerialNumber">-</span>
+              {{ transaction.description[currentLang] }}
             </td>
           </tr>
 
@@ -123,11 +131,6 @@
       >
         <i class="ri-arrow-right-s-line text-lg sm:text-xl"></i>
       </button>
-
-      <!-- Loading Spinner -->
-      <div *ngIf="isPaginationLoading" class="ml-2">
-        <i class="ri-loader-4-line animate-spin text-lg text-gray-600"></i>
-      </div>
     </div>
   </div>
 </div>
