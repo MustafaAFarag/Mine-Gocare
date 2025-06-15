@@ -442,13 +442,19 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   fetchProductsAPI() {
     this.productsLoading = true;
-    this.brandsLoading = true; // Set brands loading to true when fetching products
+    this.brandsLoading = true;
 
-    let pageSize = 9; // default for grid3
+    let pageSize = 9;
     if (this.viewMode === 'grid4') {
       pageSize = 8;
     } else if (this.viewMode === 'grid2' || this.viewMode === 'list') {
       pageSize = 6;
+    }
+
+    // Convert sort order to API format
+    let sortBy = 0; // Default to low to high
+    if (this.sortOrder === 'price-desc') {
+      sortBy = 1; // High to low
     }
 
     const filters = {
@@ -466,6 +472,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
           : undefined,
       pageNumber: this.currentPage,
       pageSize: pageSize,
+      sortBy: sortBy,
     };
 
     this.productService.getAllProductVariantsForClient(filters).subscribe({
@@ -482,11 +489,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         }
 
         this.extractBrandsFromProducts();
-
-        // Apply the current sort order to the products
-        this.applySortingToProducts();
-
-        // No need to apply pagination here since we're getting paginated data from the server
         this.paginatedProducts = this.filteredProducts;
 
         this.isLoading = false;
@@ -496,7 +498,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         console.error('Error fetching products:', err);
         this.isLoading = false;
         this.productsLoading = false;
-        this.brandsLoading = false; // Make sure to set brands loading to false on error
+        this.brandsLoading = false;
       },
     });
   }
@@ -1039,7 +1041,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
-    console.log("PRODUCT ADDED TO CART", product);
+    console.log('PRODUCT ADDED TO CART', product);
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: product.variantId,
@@ -1056,7 +1058,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   // Add to cart with toast notification
-  
 
   // Toggle wishlist with toast notification
   toggleWishlist(product: Product, event: Event): void {
@@ -1228,9 +1229,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
-    // Apply sorting to the products
-    this.applySortingToProducts();
-    this.applyPagination();
+    // Fetch products with the new sort order
+    this.fetchProductsAPI();
   }
 
   // Transform API categories to our UI format
