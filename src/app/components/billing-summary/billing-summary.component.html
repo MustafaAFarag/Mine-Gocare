@@ -131,7 +131,7 @@
           }}</span>
           <span id="subtotal-amount" class="text-hover-color">
             {{ orderSummary?.subTotal?.toFixed(2) || subTotal.toFixed(2) }}
-            {{ "common.currency" | translate }}
+            {{ getCurrency() }}
           </span>
         </div>
 
@@ -141,7 +141,7 @@
           }}</span>
           <span *ngIf="!loading" id="shipping-amount" class="text-hover-color">
             {{ orderSummary?.shippingFees?.toFixed(2) || shipping.toFixed(2) }}
-            {{ "common.currency" | translate }}
+            {{ getCurrency() }}
           </span>
           <span *ngIf="loading" class="loading-spinner">
             <i class="pi pi-spin pi-spinner"></i>
@@ -154,7 +154,7 @@
             <span>{{ "checkout.checkoutDiscount" | translate }}</span>
             <span id="checkout-discount-amount">
               -{{ orderSummary.totalDiscount.toFixed(2) }}
-              {{ "common.currency" | translate }}
+              {{ getCurrency() }}
             </span>
           </div>
         }
@@ -165,7 +165,7 @@
             <span>{{ "checkout.promoDiscount" | translate }}</span>
             <span id="discount-amount">
               -{{ discountAmount.toFixed(2) }}
-              {{ "common.currency" | translate }}
+              {{ getCurrency() }}
             </span>
           </div>
         }
@@ -201,7 +201,7 @@
           class="text-xl font-bold text-hover-color"
         >
           {{ orderSummary?.total?.toFixed(2) || finalTotal.toFixed(2) }}
-          {{ "common.currency" | translate }}
+          {{ getCurrency() }}
         </span>
       </div>
 

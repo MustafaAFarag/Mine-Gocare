@@ -63,6 +63,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   accessToken = localStorage.getItem('accessToken');
   appliedPromoCode: PromoCode | null = null;
   private cartSubscription: Subscription = new Subscription();
+  private langSubscription: Subscription = new Subscription();
   orderSummary: any = null;
   loading: boolean = false;
 
@@ -80,11 +81,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private translateService: TranslateService,
     private orderService: OrderService,
+    private languageService: LanguageService,
   ) {
     this.currentLang = this.translateService.currentLang as Language;
-    this.translateService.onLangChange.subscribe((event) => {
-      this.currentLang = event.lang as Language;
-    });
   }
 
   ngOnInit(): void {
@@ -92,11 +91,16 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       couponCode: [{ value: '', disabled: false }],
     });
 
+    // Subscribe to language changes
+    this.langSubscription = this.languageService.language$.subscribe((lang) => {
+      this.currentLang = lang as Language;
+    });
+
     // Subscribe to cart changes
     this.cartSubscription = this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
       this.calculateTotals();
-      this.fetchOrderSummary(); // Fetch order summary when cart changes
+      this.fetchOrderSummary();
     });
 
     this.fetchPromoCodes();
@@ -105,6 +109,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
+    }
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
     }
   }
 
@@ -115,32 +122,34 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     const orderRequest = {
       orderProducts: this.orderProducts,
       addressId: this.selectedAddressId,
-      promoCodeId: this.appliedPromoCode?.id
+      promoCodeId: this.appliedPromoCode?.id,
     };
 
-    this.orderService.getOrderSummary(this.accessToken, orderRequest).subscribe({
-      next: (response) => {
-        console.log('Order Summary Response:', response.result);
-        if (response.success) {
-          this.orderSummary = response.result;
-          
-          this.updateTotalsFromSummary();
-          this.summaryUpdated.emit(this.orderSummary);
-        }
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching order summary:', error);
-        this.loading = false;
-      }
-    });
+    this.orderService
+      .getOrderSummary(this.accessToken, orderRequest)
+      .subscribe({
+        next: (response) => {
+          console.log('Order Summary Response:', response.result);
+          if (response.success) {
+            this.orderSummary = response.result;
+
+            this.updateTotalsFromSummary();
+            this.summaryUpdated.emit(this.orderSummary);
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching order summary:', error);
+          this.loading = false;
+        },
+      });
   }
 
   updateTotalsFromSummary(): void {
     if (this.orderSummary) {
       // Only update shipping fees from API response
       this.shipping = this.orderSummary.shippingFees || 0;
-      
+
       // Recalculate final total with new shipping
       this.finalTotal = this.subTotal + this.shipping + this.tax;
       if (this.appliedPromoCode) {
@@ -181,8 +190,12 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     // Show toast message
     this.messageService.add({
       severity: 'info',
-      summary: this.translateService.instant('checkout.toast.promoRemoved.summary'),
-      detail: this.translateService.instant('checkout.toast.promoRemoved.detail'),
+      summary: this.translateService.instant(
+        'checkout.toast.promoRemoved.summary',
+      ),
+      detail: this.translateService.instant(
+        'checkout.toast.promoRemoved.detail',
+      ),
       life: 2000,
       styleClass: 'black-text-toast',
     });
@@ -332,7 +345,9 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
 
     console.log('cartItems', this.cartItems);
     // Check if any cart item has a promoCodeDetail
-    this.hasPromoCodeInCart = this.cartItems.some(item => item.promoCodeDetail !== null);
+    this.hasPromoCodeInCart = this.cartItems.some(
+      (item) => item.promoCodeDetail !== null,
+    );
 
     // Calculate final total including shipping, tax, and any discounts
     let total = this.subTotal + this.shipping + this.tax;
@@ -357,5 +372,17 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  getCurrency(): string {
+    const country = localStorage.getItem('country');
+    const language = localStorage.getItem('language');
+
+    if (country === 'EG') {
+      return language === 'ar' ? 'ج.م' : 'EGP';
+    } else if (country === 'SA') {
+      return language === 'ar' ? 'ر.س' : 'SAR';
+    }
+    return 'EGP';
   }
 }
