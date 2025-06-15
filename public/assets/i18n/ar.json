@@ -815,7 +815,25 @@
     "previous": "السابق",
     "next": "التالي",
     "balance": "الرصيد",
-    "redeem": "استبدال",
+    "redeemButton": "استبدال",
+
+    "redeem": {
+      "title": "استبدال النقاط",
+      "subtitle": "تحويل نقاطك إلى عملة",
+      "availablePoints": "النقاط المتاحة",
+      "exchangeRate": "سعر الصرف",
+      "amount": "مبلغ الاستبدال",
+      "enterAmount": "أدخل المبلغ للاستبدال",
+      "youWillReceive": "ستحصل على",
+      "redeeming": "جاري الاستبدال...",
+      "error": {
+        "exceedsAvailable": "المبلغ يتجاوز النقاط المتاحة"
+      }
+    },
+    "redeemPoints": "استبدال النقاط",
+    "availablePoints": "النقاط المتاحة",
+    "pointsToRedeem": "النقاط المراد استبدالها",
+    "equivalentAmount": "المبلغ المكافئ",
     "redeemSuccess": "تم استبدال النقاط",
     "redeemSuccessDetail": "تم استبدال {{points}} نقطة بنجاح ({{amount}} ج.م)",
     "redeemError": "فشل الاستبدال",

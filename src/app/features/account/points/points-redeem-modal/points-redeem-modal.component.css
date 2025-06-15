@@ -1,0 +1,37 @@
+::ng-deep .p-dialog-content {
+  overflow-y: auto;
+  background: white !important;
+  padding: 0 !important;
+}
+
+::ng-deep .p-dialog {
+  background: white !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .p-component-overlay {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .p-dialog .p-dialog-header {
+  background: white !important;
+  border: none !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+::ng-deep .p-dialog .p-dialog-content {
+  background: white !important;
+  border: none !important;
+}
+
+::ng-deep .p-dialog .p-dialog-footer {
+  background: white !important;
+  border: none !important;
+  border-radius: 0 0 8px 8px !important;
+}

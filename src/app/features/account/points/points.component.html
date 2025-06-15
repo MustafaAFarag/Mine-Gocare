@@ -31,16 +31,12 @@
         </div>
         <div class="flex items-center gap-4">
           <button
-            (click)="redeemPoints()"
+            (click)="openRedeemModal()"
             id="points-redeem-button"
-            [disabled]="clientPoints === 0 || isRedeeming"
+            [disabled]="clientPoints === 0"
             class="rounded-md bg-hover-color px-4 py-2 text-sm font-medium text-white hover:bg-hover-color/90 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
           >
-            <span *ngIf="!isRedeeming">{{ "points.redeem" | translate }}</span>
-            <span *ngIf="isRedeeming" class="flex items-center gap-2">
-              <i class="ri-loader-4-line animate-spin"></i>
-              {{ "common.processing" | translate }}
-            </span>
+            {{ "points.redeemButton" | translate }}
           </button>
         </div>
       </div>
@@ -188,4 +184,14 @@
       </button>
     </div>
   </div>
+
+  <!-- Points Redeem Modal -->
+  <app-points-redeem-modal
+    [visible]="showRedeemModal"
+    [availablePoints]="clientPoints"
+    [exchangeRate]="pointsClientPreview.exchangeRate || 0.01"
+    [isRedeeming]="isRedeeming"
+    (close)="closeRedeemModal()"
+    (redeem)="redeemPoints($event)"
+  ></app-points-redeem-modal>
 </div>

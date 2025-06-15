@@ -9,13 +9,20 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { PointsRedeemModalComponent } from './points-redeem-modal/points-redeem-modal.component';
 
 type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-points',
   standalone: true,
-  imports: [CommonModule, TranslateModule, LoadingComponent, ToastModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    LoadingComponent,
+    ToastModule,
+    PointsRedeemModalComponent,
+  ],
   providers: [MessageService],
   templateUrl: './points.component.html',
   styleUrls: ['./points.component.css'],
@@ -30,6 +37,7 @@ export class PointsComponent implements OnInit {
   clientPoints!: number;
   currentLang: Language = 'en';
   isRedeeming: boolean = false;
+  showRedeemModal: boolean = false;
 
   // Loading states
   isLoadingPoints: boolean = false;
@@ -144,43 +152,51 @@ export class PointsComponent implements OnInit {
     return this.clientPoints * (this.pointsClientPreview?.exchangeRate || 0.01);
   }
 
-  redeemPoints(): void {
-    if (this.token && this.clientPoints > 0) {
+  openRedeemModal(): void {
+    this.showRedeemModal = true;
+  }
+
+  closeRedeemModal(): void {
+    this.showRedeemModal = false;
+  }
+
+  redeemPoints(points: number): void {
+    if (this.token && points > 0) {
       this.isRedeeming = true;
-      this.pointingService
-        .redeemingPoints(this.token, 224, this.clientPoints)
-        .subscribe({
-          next: (response) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: this.translateService.instant('points.redeemSuccess'),
-              detail: this.translateService.instant(
-                'points.redeemSuccessDetail',
-                {
-                  points: this.clientPoints,
-                  amount: this.getConvertedAmount(),
-                },
-              ),
-              life: 3000,
-              styleClass: 'black-text-toast',
-            });
-            // Refresh points after successful redemption
-            this.fetchClientsTotalPoints();
-            this.fetchPointsClientPreview();
-          },
-          error: (error) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: this.translateService.instant('points.redeemError'),
-              detail: this.translateService.instant('points.redeemErrorDetail'),
-              life: 3000,
-              styleClass: 'black-text-toast',
-            });
-          },
-          complete: () => {
-            this.isRedeeming = false;
-          },
-        });
+      this.pointingService.redeemingPoints(this.token, 224, points).subscribe({
+        next: (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('points.redeemSuccess'),
+            detail: this.translateService.instant(
+              'points.redeemSuccessDetail',
+              {
+                points: points,
+                amount:
+                  points * (this.pointsClientPreview?.exchangeRate || 0.01),
+              },
+            ),
+            life: 3000,
+            styleClass: 'black-text-toast',
+          });
+          // Refresh points after successful redemption
+          this.fetchClientsTotalPoints();
+          this.fetchPointsClientPreview();
+          this.closeRedeemModal();
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('points.redeemError'),
+            detail: this.translateService.instant('points.redeemErrorDetail'),
+            life: 3000,
+            styleClass: 'black-text-toast',
+          });
+        },
+        complete: () => {
+          this.isRedeeming = false;
+        },
+      });
     }
   }
 
