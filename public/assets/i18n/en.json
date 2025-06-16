@@ -470,7 +470,7 @@
         "placeholder": "Password",
         "errors": {
           "required": "Password is required",
-          "minlength": "Password must be at least 6 characters"
+          "minlength": "Password must be at least 8 characters"
         }
       },
       "confirmPassword": {

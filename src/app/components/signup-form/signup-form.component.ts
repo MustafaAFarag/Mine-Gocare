@@ -102,7 +102,7 @@ export class SignupFormComponent implements OnInit {
         lastName: ['', [Validators.required]],
         identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
         gender: [1, [Validators.required]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
       },
       { validator: this.passwordMatchValidator },
