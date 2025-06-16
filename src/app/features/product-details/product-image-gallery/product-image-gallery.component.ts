@@ -22,6 +22,7 @@ import { getFullImageUrl } from '../../../lib/utils';
 })
 export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   @Input() productDetails!: ProductDetails;
+  @Input() selectedVariant: any;
   private boundScrollHandler: any;
 
   images: any[] = [];
@@ -42,8 +43,7 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (
-      changes['productDetails'] &&
-      changes['productDetails'].currentValue &&
+      (changes['productDetails'] || changes['selectedVariant']) &&
       !this.isProcessing
     ) {
       this.loadImages();
@@ -51,13 +51,11 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // Use ngAfterViewInit only for DOM manipulations or scroll setup
     if (typeof window !== 'undefined' && !this.galleryInitialized) {
       this.galleryInitialized = true;
       this.boundScrollHandler = this.onScroll.bind(this);
       window.addEventListener('scroll', this.boundScrollHandler);
 
-      // Setup stopStickyAt logic after view initialization
       setTimeout(() => {
         const galleryElement = document.getElementById('product-gallery');
         if (galleryElement) {
@@ -92,11 +90,9 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
       const galleryTop =
         galleryElement.getBoundingClientRect().top + window.scrollY;
       const galleryHeight = galleryElement.clientHeight;
-      // Increased buffer zone to make it stick earlier
-      const bufferZone = 250; // Changed from 30 to 150px
+      const bufferZone = 250;
 
       if (scrollPosition > galleryTop - bufferZone) {
-        // Changed from + to - to trigger earlier
         this.isSticky = true;
       } else if (scrollPosition < galleryTop - bufferZone) {
         this.isSticky = false;
@@ -115,29 +111,31 @@ export class ProductImageGalleryComponent implements AfterViewInit, OnDestroy {
     this.imagesLoaded = false;
     this.images = [];
 
-    if (this.productDetails?.mainImageUrl) {
+    // Only use variant's images
+    if (this.selectedVariant?.mainImageUrl) {
       this.images.push({
-        itemImageSrc: this.getFullImageUrl(this.productDetails.mainImageUrl),
+        itemImageSrc: this.getFullImageUrl(this.selectedVariant.mainImageUrl),
         thumbnailImageSrc: this.getFullImageUrl(
-          this.productDetails.mainImageUrl,
+          this.selectedVariant.mainImageUrl,
         ),
         alt: 'Main Product Image',
         title: 'Main Product Image',
       });
     }
 
-    if (this.productDetails?.gallaryImageUrls?.length) {
-      this.productDetails.gallaryImageUrls.forEach((image, index) => {
-        this.images.push({
-          itemImageSrc: this.getFullImageUrl(image.imageUrl),
-          thumbnailImageSrc: this.getFullImageUrl(image.imageUrl),
-          alt: `Gallery Image ${index + 1}`,
-          title: `Gallery Image ${index + 1}`,
-        });
-      });
+    if (this.selectedVariant?.gallaryImageUrls?.length) {
+      this.selectedVariant.gallaryImageUrls.forEach(
+        (image: any, index: number) => {
+          this.images.push({
+            itemImageSrc: this.getFullImageUrl(image.imageUrl),
+            thumbnailImageSrc: this.getFullImageUrl(image.imageUrl),
+            alt: `Gallery Image ${index + 1}`,
+            title: `Gallery Image ${index + 1}`,
+          });
+        },
+      );
     }
 
-    // Use Promise.resolve() to avoid unexpected async issues
     Promise.resolve().then(() => {
       this.finishLoading();
     });

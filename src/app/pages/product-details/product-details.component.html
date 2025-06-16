@@ -8,10 +8,14 @@
     <!-- Left: Image Gallery -->
     <app-product-image-gallery
       [productDetails]="productDetails"
+      [selectedVariant]="selectedVariant"
     ></app-product-image-gallery>
 
     <!-- Right: Product Info -->
-    <app-product-info [productDetails]="productDetails"></app-product-info>
+    <app-product-info
+      [productDetails]="productDetails"
+      (variantSelected)="onVariantSelected($event)"
+    ></app-product-info>
   </section>
   <app-product-info-tabs></app-product-info-tabs>
 </div>

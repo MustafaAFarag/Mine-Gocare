@@ -30,6 +30,7 @@ export class ProductDetailsComponent implements OnInit {
   productDetails!: ProductDetails;
   isLoading: boolean = true;
   currentLanguage: string = 'en';
+  selectedVariant: any;
 
   constructor(
     public productService: ProductService,
@@ -58,8 +59,15 @@ export class ProductDetailsComponent implements OnInit {
       .getProductDetails(productId, variantId)
       .subscribe((response: any) => {
         this.productDetails = response.result;
+        this.selectedVariant =
+          this.productDetails.productVariants.find((v) => v.isSelected) ||
+          this.productDetails.productVariants[0];
         this.isLoading = false;
       });
+  }
+
+  onVariantSelected(variant: any): void {
+    this.selectedVariant = variant;
   }
 
   getLocalizedProductName(): string {

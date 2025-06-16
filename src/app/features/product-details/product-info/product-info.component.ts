@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductDetails } from '../../../model/ProductDetail';
 import { CartService } from '../../../services/cart.service';
@@ -23,6 +23,8 @@ export class ProductInfoComponent {
   selectedColor: string = '';
   selectedSize: string = '';
 
+  @Output() variantSelected = new EventEmitter<any>();
+
   @Input()
   set productDetails(value: ProductDetails) {
     this._productDetails = value;
@@ -35,6 +37,7 @@ export class ProductInfoComponent {
       this.totalPrice = this.unitPrice;
       this.counter = 1; // Reset counter when variant changes
       this.checkWishlistStatus();
+      this.variantSelected.emit(this.selectedVariant);
     }
   }
   get productDetails() {
@@ -117,6 +120,7 @@ export class ProductInfoComponent {
     this.totalPrice = this.counter * this.unitPrice;
     this.counter = 1; // Reset counter when variant changes
     this.checkWishlistStatus();
+    this.variantSelected.emit(variant);
   }
 
   addToCart(product: ProductDetails): void {
