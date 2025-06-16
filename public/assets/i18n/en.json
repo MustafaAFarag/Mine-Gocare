@@ -436,9 +436,14 @@
     "signupToastSummary": "Success",
     "signupToast": "Account created successfully!",
     "fields": {
+      "terms": {
+        "label": "I agree to the ",
+        "link": "Terms & Conditions and Privacy Policy."
+      },
       "firstName": {
         "label": "First Name",
         "placeholder": "John",
+
         "errors": {
           "required": "First name is required"
         }

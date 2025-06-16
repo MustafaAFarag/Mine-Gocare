@@ -15,10 +15,12 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MessageModule } from 'primeng/message';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { PointingSystemService } from '../../services/pointing-system.service';
+import { AuthModalService } from '../../auth-modal.service';
 
 interface Country {
   name: string;
@@ -44,6 +46,7 @@ interface Country {
     CheckboxModule,
     MessageModule,
     TranslateModule,
+    RouterModule,
   ],
   providers: [AuthService],
 })
@@ -82,6 +85,8 @@ export class SignupFormComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private pointingSystemService: PointingSystemService,
+    private router: Router,
+    private authModalService: AuthModalService,
   ) {}
 
   getLanguage(): string {
@@ -102,6 +107,7 @@ export class SignupFormComponent implements OnInit {
         gender: [1, [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
+        acceptTerms: [false, [Validators.requiredTrue]],
       },
       { validator: this.passwordMatchValidator },
     );
@@ -342,5 +348,15 @@ export class SignupFormComponent implements OnInit {
 
   get confirmPassword() {
     return this.signupForm.get('confirmPassword');
+  }
+
+  get acceptTerms() {
+    return this.signupForm.get('acceptTerms');
+  }
+
+  handleTermsClick(event: Event) {
+    event.preventDefault();
+    this.authModalService.hideModal();
+    this.router.navigate(['/terms-and-conditions']);
   }
 }

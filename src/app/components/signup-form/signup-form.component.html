@@ -255,6 +255,41 @@
       </div>
     </div>
 
+    <!-- Terms and Policy Checkbox -->
+    <div class="mt-2">
+      <div class="flex items-start gap-2">
+        <p-checkbox
+          formControlName="acceptTerms"
+          [binary]="true"
+          id="signup-form-terms-checkbox"
+          [disabled]="loading"
+          styleClass="mt-1"
+        ></p-checkbox>
+        <label
+          for="signup-form-terms-checkbox"
+          class="text-xs text-gray-600 lg:text-sm"
+        >
+          {{ "signup.fields.terms.label" | translate }}
+          <a
+            (click)="handleTermsClick($event)"
+            class="cursor-pointer text-hover-color hover:underline"
+          >
+            {{ "signup.fields.terms.link" | translate }}
+          </a>
+        </label>
+      </div>
+      <div
+        *ngIf="
+          acceptTerms?.invalid && (acceptTerms?.dirty || acceptTerms?.touched)
+        "
+        class="mt-1 text-xs text-red-500"
+      >
+        <div *ngIf="acceptTerms?.errors?.['required']">
+          {{ "signup.fields.terms.errors.required" | translate }}
+        </div>
+      </div>
+    </div>
+
     <!-- Submit Button -->
     <button
       type="submit"
