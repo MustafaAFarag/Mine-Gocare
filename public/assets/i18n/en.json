@@ -611,7 +611,12 @@
     "weight": "Weight",
     "deliveryDetailsTitle": "Delivery Details",
     "deliveryTime": "3-5 Business days",
-    "returnPolicy": "30-Day Return Policy",
+    "returnPolicy": "Returnable",
+    "nonReturnable": "Non-Returnable",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "availableInStock": "Available in Stock",
     "guaranteedSafeCheckout": "Guaranteed Safe Checkout",
     "secureCheckout": "Secure Checkout"
   },

@@ -164,73 +164,96 @@
     </p>
   </div>
 
-  <div
-    class="mt-5 inline-flex items-center justify-between rounded bg-gray-100 p-2"
-  >
-    <i
-      *ngIf="languageService.getCurrentLanguage() === 'ar'"
-      class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
-      (click)="decreaseCounter()"
-    ></i>
+  <div class="flex items-center gap-10">
+    <div
+      class="mt-5 inline-flex items-center justify-between rounded bg-gray-100 p-2"
+    >
+      <i
+        *ngIf="languageService.getCurrentLanguage() === 'ar'"
+        class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+        (click)="decreaseCounter()"
+      ></i>
 
-    <i
-      *ngIf="languageService.getCurrentLanguage() !== 'ar'"
-      class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
-      (click)="decreaseCounter()"
-    ></i>
-    <span class="mx-10 font-bold text-black">{{ counter }}</span>
-    <i
-      *ngIf="languageService.getCurrentLanguage() === 'ar'"
-      class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
-      (click)="increaseCounter()"
-    ></i>
-    <i
-      *ngIf="languageService.getCurrentLanguage() !== 'ar'"
-      class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
-      (click)="increaseCounter()"
-    ></i>
+      <i
+        *ngIf="languageService.getCurrentLanguage() !== 'ar'"
+        class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+        (click)="decreaseCounter()"
+      ></i>
+      <span class="mx-10 font-bold text-black">{{ counter }}</span>
+      <i
+        *ngIf="languageService.getCurrentLanguage() === 'ar'"
+        class="ri-arrow-left-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+        (click)="increaseCounter()"
+      ></i>
+      <i
+        *ngIf="languageService.getCurrentLanguage() !== 'ar'"
+        class="ri-arrow-right-s-line cursor-pointer rounded bg-white p-1 text-lg font-bold text-black"
+        (click)="increaseCounter()"
+      ></i>
+    </div>
+    <div class="mt-2 text-sm text-gray-600">
+      {{ "product-info.availableInStock" | translate }}:
+      {{ selectedVariant?.stockCount }}
+    </div>
   </div>
 
   <div class="mt-6 flex gap-4">
     <button
       (click)="addToCart(productDetails)"
-      class="bg-hover-color px-4 py-4 font-semibold text-white hover:bg-pink-800 lg:px-6"
+      [disabled]="selectedVariant?.stockCount === 0"
+      class="bg-hover-color px-4 py-4 font-semibold text-white hover:bg-pink-800 disabled:cursor-not-allowed disabled:bg-gray-400 lg:px-6"
     >
       <i class="ri-shopping-cart-line mr-2 cursor-pointer text-xl"></i>
-      {{ "product-info.addToCart" | translate }}
+      {{
+        selectedVariant?.stockCount === 0
+          ? ("product-info.outOfStock" | translate)
+          : ("product-info.addToCart" | translate)
+      }}
     </button>
   </div>
 
-  <div
-    class="my-5 flex gap-7 text-xs font-semibold lg:text-base"
-    [ngClass]="{
-      'text-hover-color': isInWishlist,
-      'text-[#646464]': !isInWishlist,
-    }"
-  >
-    <div (click)="toggleWishlist()" class="cursor-pointer">
-      <i class="ri-heart-fill mr-2 text-lg"></i>
-      <span>{{ "product-info.addToWishlist" | translate }}</span>
+  <div class="my-5 flex items-center justify-between">
+    <!-- Wishlist -->
+    <div
+      class="flex gap-7 text-xs font-semibold lg:text-base"
+      [ngClass]="{
+        'text-hover-color': isInWishlist,
+        'text-[#646464]': !isInWishlist,
+      }"
+    >
+      <div (click)="toggleWishlist()" class="cursor-pointer">
+        <i class="ri-heart-fill mr-2 text-lg"></i>
+        <span>{{ "product-info.addToWishlist" | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Stock Information -->
+    <div class="flex items-center gap-4 text-sm">
+      <div
+        *ngIf="selectedVariant?.hasLowQuantity"
+        class="flex items-center text-lg text-orange-500"
+      >
+        <i class="ri-alert-line mr-2"></i>
+        <span>{{ "product-info.lowStock" | translate }}</span>
+      </div>
+      <div
+        *ngIf="selectedVariant?.stockCount === 0"
+        class="flex items-center text-lg text-red-500"
+      >
+        <i class="ri-close-circle-line mr-2"></i>
+        <span>{{ "product-info.outOfStock" | translate }}</span>
+      </div>
+      <div
+        *ngIf="
+          selectedVariant?.stockCount > 0 && !selectedVariant?.hasLowQuantity
+        "
+        class="flex items-center text-lg text-green-500"
+      >
+        <i class="ri-checkbox-circle-line mr-2"></i>
+        <span>{{ "product-info.inStock" | translate }}</span>
+      </div>
     </div>
   </div>
-
-  <!-- <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
-
-  <div>
-    <h3 class="mb-5 text-2xl font-semibold">
-      {{ "product-info.productInfoTitle" | translate }}
-    </h3>
-    <ul class="grid grid-cols-2 gap-2 text-base text-[#646464]">
-      <li>
-        {{ "product-info.sku" | translate }}:
-        {{ productDetails.productVariants[0].skuNumber }}
-      </li>
-      <li>
-        {{ "product-info.stockCount" | translate }}:
-        {{ productDetails.productVariants[0].stockCount }}
-      </li>
-    </ul>
-  </div> -->
 
   <div class="my-4 border-t-2 border-dotted border-gray-400"></div>
 
@@ -243,9 +266,14 @@
         <i class="ri-truck-line mr-2"></i>
         <span>{{ "product-info.deliveryTime" | translate }}</span>
       </div>
-      <div>
+      <div class="flex items-center">
         <i class="ri-arrow-left-right-line mr-2"></i>
-        <span>{{ "product-info.returnPolicy" | translate }}</span>
+        <span *ngIf="!productDetails.isNotReturnable">{{
+          "product-info.returnPolicy" | translate
+        }}</span>
+        <span *ngIf="productDetails.isNotReturnable" class="text-red-500">{{
+          "product-info.nonReturnable" | translate
+        }}</span>
       </div>
     </div>
   </div>

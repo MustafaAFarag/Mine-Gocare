@@ -33,6 +33,7 @@ export class ProductInfoComponent {
         value.productVariants[0];
       this.unitPrice = this.selectedVariant?.priceAfterDiscount ?? 0;
       this.totalPrice = this.unitPrice;
+      this.counter = 1; // Reset counter when variant changes
       this.checkWishlistStatus();
     }
   }
@@ -45,8 +46,10 @@ export class ProductInfoComponent {
   totalPrice: number = 0;
 
   increaseCounter() {
-    this.counter++;
-    this.totalPrice = this.counter * this.unitPrice;
+    if (this.counter < this.selectedVariant?.stockCount) {
+      this.counter++;
+      this.totalPrice = this.counter * this.unitPrice;
+    }
   }
 
   decreaseCounter() {
@@ -112,6 +115,7 @@ export class ProductInfoComponent {
     this.selectedVariant = variant;
     this.unitPrice = variant.priceAfterDiscount;
     this.totalPrice = this.counter * this.unitPrice;
+    this.counter = 1; // Reset counter when variant changes
     this.checkWishlistStatus();
   }
 
