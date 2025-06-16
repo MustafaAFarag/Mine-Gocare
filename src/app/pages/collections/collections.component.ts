@@ -69,7 +69,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   selectedCategoryIds: number[] = [];
   selectedSubCategoryIds: number[] = [];
   selectedSubSubCategoryIds: number[] = [];
-  selectedBrandNames: string[] = [];
+  selectedBrandIds: number[] = [];
 
   // Price filter properties
   absoluteMinPrice: number = 0;
@@ -132,7 +132,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         // Clear existing brands and selected brand filters
         this.brands = [];
-        this.selectedBrandNames = [];
+        this.selectedBrandIds = [];
         this.brandsLoading = true;
 
         // Refetch products when country changes
@@ -174,8 +174,24 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.brandService.getBrands().subscribe((response) => {
-      console.log('BRANDS RESPONSE', response.result);
+    // Fetch brands from brandService
+    this.brandsLoading = true;
+    this.brandService.getBrands().subscribe({
+      next: (response) => {
+        const currentLang = this.languageService.getCurrentLanguage();
+        this.brands = response.result.map((brand: any) => ({
+          name: currentLang === 'ar' ? brand.name.ar : brand.name.en,
+          en: brand.name.en,
+          ar: brand.name.ar,
+          id: brand.id,
+          selected: this.selectedBrandIds.includes(brand.id),
+        }));
+        this.brandsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching brands:', error);
+        this.brandsLoading = false;
+      },
     });
   }
 
@@ -279,7 +295,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
       // Apply brand filters from URL
       if (params['brand']) {
-        this.selectedBrandNames = params['brand'].split(',');
+        this.selectedBrandIds = params['brand'].split(',').map(Number);
 
         // Update selected state in brands
         this.updateBrandSelectionState();
@@ -363,17 +379,13 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     }
 
     // Add brand names to active filters
-    for (const brandName of this.selectedBrandNames) {
-      // Find the brand object to get its localized name
-      const brand = this.brands.find((b) => b.en === brandName);
-      if (brand && brand.en) {
+    for (const brand of this.brands) {
+      if (brand.id && this.selectedBrandIds.includes(brand.id)) {
         const localizedBrandName =
-          currentLang === 'ar' && brand.ar ? brand.ar : brand.en;
+          currentLang === 'ar' && brand.ar ? brand.ar : brand.en || '';
         if (!this.activeFilters.includes(localizedBrandName)) {
           this.activeFilters.push(localizedBrandName);
         }
-      } else if (!this.activeFilters.includes(brandName)) {
-        this.activeFilters.push(brandName);
       }
     }
 
@@ -431,7 +443,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   // Update selected state in brands
   private updateBrandSelectionState(): void {
     for (const brand of this.brands) {
-      if (brand.en && this.selectedBrandNames.includes(brand.en)) {
+      if (brand.id && this.selectedBrandIds.includes(brand.id)) {
         brand.selected = true;
       }
     }
@@ -439,7 +451,6 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   fetchProductsAPI() {
     this.productsLoading = true;
-    this.brandsLoading = true;
 
     let pageSize = 9;
     if (this.viewMode === 'grid4') {
@@ -467,10 +478,12 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.selectedSubSubCategoryIds.length > 0
           ? this.selectedSubSubCategoryIds
           : undefined,
+      brandId:
+        this.selectedBrandIds.length > 0 ? this.selectedBrandIds : undefined,
       pageNumber: this.currentPage,
       pageSize: pageSize,
       sortBy: sortBy,
-      gender: this.selectedGender, // Add gender filter
+      gender: this.selectedGender,
     };
 
     // Only add price filters if they are different from default values
@@ -485,16 +498,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.products = res.result.items;
         this.totalPages = Math.ceil(res.result.totalCount / pageSize);
-
-        if (this.selectedBrandNames.length > 0) {
-          this.filteredProducts = this.products.filter((product) =>
-            this.selectedBrandNames.includes(product.brand.en),
-          );
-        } else {
-          this.filteredProducts = this.products;
-        }
-
-        this.extractBrandsFromProducts();
+        this.filteredProducts = this.products;
         this.paginatedProducts = this.filteredProducts;
 
         this.isLoading = false;
@@ -504,37 +508,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         console.error('Error fetching products:', err);
         this.isLoading = false;
         this.productsLoading = false;
-        this.brandsLoading = false;
       },
     });
-  }
-
-  // Update extractBrandsFromProducts method
-  extractBrandsFromProducts() {
-    if (this.products.length > 0) {
-      const uniqueBrands = new Map();
-      const currentLang = this.languageService.getCurrentLanguage();
-
-      this.products.forEach((product) => {
-        // Using the English name as key to avoid duplicates
-        const brandKey = product.brand.en;
-        if (!uniqueBrands.has(brandKey)) {
-          uniqueBrands.set(brandKey, {
-            name:
-              product.brand.ar && currentLang === 'ar'
-                ? product.brand.ar
-                : product.brand.en,
-            en: product.brand.en,
-            ar: product.brand.ar || product.brand.en, // Fallback to English if Arabic not available
-            id: uniqueBrands.size + 1, // Generate a simple numeric ID
-            selected: this.selectedBrandNames.includes(product.brand.en), // Set selected state based on current filters
-          });
-        }
-      });
-
-      this.brands = Array.from(uniqueBrands.values());
-    }
-    this.brandsLoading = false; // Always set brands loading to false after processing
   }
 
   getFullImageUrl = getFullImageUrl;
@@ -630,17 +605,17 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.activeFilters.push(brand.name);
       }
 
-      if (brand.en && !this.selectedBrandNames.includes(brand.en)) {
-        this.selectedBrandNames.push(brand.en);
+      if (brand.id && !this.selectedBrandIds.includes(brand.id)) {
+        this.selectedBrandIds.push(brand.id);
       }
     } else {
       this.activeFilters = this.activeFilters.filter(
         (filter) => filter !== brand.name,
       );
 
-      if (brand.en) {
-        this.selectedBrandNames = this.selectedBrandNames.filter(
-          (name) => name !== brand.en,
+      if (brand.id) {
+        this.selectedBrandIds = this.selectedBrandIds.filter(
+          (id) => id !== brand.id,
         );
       }
     }
@@ -716,11 +691,11 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Check brands - need to match by localized name
     for (const brand of this.brands) {
       const localizedBrandName =
-        currentLang === 'ar' && brand.ar ? brand.ar : brand.en;
-      if (localizedBrandName === filter && brand.en) {
+        currentLang === 'ar' && brand.ar ? brand.ar : brand.en || '';
+      if (localizedBrandName === filter && brand.id) {
         brand.selected = false;
-        this.selectedBrandNames = this.selectedBrandNames.filter(
-          (name) => name !== brand.en,
+        this.selectedBrandIds = this.selectedBrandIds.filter(
+          (id) => id !== brand.id,
         );
         this.updateUrlParams();
         this.fetchProductsAPI();
@@ -820,9 +795,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Add brands to URL if selected
-    if (this.selectedBrandNames.length > 0) {
-      queryParams['brand'] = this.selectedBrandNames.join(',');
+    // Add brand IDs to URL if selected
+    if (this.selectedBrandIds.length > 0) {
+      queryParams['brand'] = this.selectedBrandIds.join(',');
     }
 
     // Add price range to URL if not default
@@ -970,7 +945,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.selectedCategoryIds = [];
     this.selectedSubCategoryIds = [];
     this.selectedSubSubCategoryIds = [];
-    this.selectedBrandNames = [];
+    this.selectedBrandIds = [];
     this.currentMinPrice = this.absoluteMinPrice;
     this.currentMaxPrice = this.absoluteMaxPrice;
 

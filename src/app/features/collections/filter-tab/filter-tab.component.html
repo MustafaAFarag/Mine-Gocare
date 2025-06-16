@@ -312,36 +312,42 @@
         {{ "No brands found" | translate }}
       </div>
 
+      <!-- Brands Grid Container -->
       <div
-        class="space-y-3"
         *ngIf="!brandsLoading && filteredBrands.length > 0"
+        class="custom-scrollbar max-h-[300px] overflow-y-auto pr-2"
       >
-        <div
-          *ngFor="let brand of filteredBrands; trackBy: trackByBrand"
-          id="brand-{{ brand.id }}"
-          class="flex cursor-pointer items-center"
-          (click)="toggleBrand(brand)"
-        >
-          <!-- Checkbox -->
+        <div class="grid grid-cols-2 gap-2">
           <div
-            class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
-            [ngClass]="{
-              'border-hover-color bg-hover-color': brand.selected,
-              'border-gray-300': !brand.selected,
-            }"
+            *ngFor="let brand of filteredBrands; trackBy: trackByBrand"
+            id="brand-{{ brand.id }}"
+            class="flex cursor-pointer items-center rounded-md border border-gray-200 p-2 hover:bg-gray-50"
+            (click)="toggleBrand(brand)"
           >
-            <i
-              *ngIf="brand.selected"
-              class="ri-check-line text-xs text-white"
-            ></i>
+            <!-- Checkbox -->
+            <div
+              class="mr-2 flex h-4 w-4 items-center justify-center rounded border"
+              [ngClass]="{
+                'border-hover-color bg-hover-color': brand.selected,
+                'border-gray-300': !brand.selected,
+              }"
+            >
+              <i
+                *ngIf="brand.selected"
+                class="ri-check-line text-xs text-white"
+              ></i>
+            </div>
+            <span
+              class="truncate text-sm"
+              [ngClass]="{ 'text-hover-color': brand.selected }"
+            >
+              {{
+                languageService.getCurrentLanguage() === "ar" && brand.ar
+                  ? brand.ar
+                  : brand.en
+              }}
+            </span>
           </div>
-          <span [ngClass]="{ 'text-hover-color': brand.selected }">
-            {{
-              languageService.getCurrentLanguage() === "ar" && brand.ar
-                ? brand.ar
-                : brand.en
-            }}
-          </span>
         </div>
       </div>
     </div>
@@ -396,3 +402,30 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Custom scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #9a9b9c;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #9a9b9c;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9a9b9c;
+  }
+
+  /* For Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #9a9b9c #f1f1f1;
+  }
+</style>
