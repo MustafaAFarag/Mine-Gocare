@@ -9,8 +9,12 @@
   >
     {{
       languageService.getCurrentLanguage() === "ar"
-        ? productDetails.productName.ar
-        : productDetails.productName.en
+        ? selectedVariant?.id === productDetails.productVariants[0].id
+          ? productDetails.productName.ar
+          : selectedVariant?.variantName.ar
+        : selectedVariant?.id === productDetails.productVariants[0].id
+          ? productDetails.productName.en
+          : selectedVariant?.variantName.en
     }}
   </h2>
 
@@ -32,16 +36,11 @@
 
   <div class="flex items-center justify-center md:justify-start">
     <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-      <i
-        [ngClass]="{
-          'ri-star-fill text-yellow-400': i < 3,
-          'ri-star-line text-gray-400': i >= 3,
-        }"
-      ></i>
+      <i class="ri-star-fill text-yellow-400"></i>
     </ng-container>
     <span class="mx-2">|</span>
     <span class="text-sm font-semibold text-gray-600">
-      {{ productDetails.productVariants[0].rating }}
+      {{ selectedVariant?.rating }}
       {{ "product-info.ratings" | translate }}
     </span>
   </div>
@@ -52,39 +51,39 @@
     </span>
     <span
       *ngIf="
-        productDetails.productVariants[0].priceAfterDiscount !==
-        productDetails.productVariants[0].priceBeforeDiscount
+        selectedVariant?.priceAfterDiscount !==
+        selectedVariant?.priceBeforeDiscount
       "
       class="text-xl font-semibold text-hover-color"
     >
       {{
         languageService.getCurrentLanguage() === "ar"
-          ? productDetails.productVariants[0].currency.name.ar
-          : productDetails.productVariants[0].currency.name.en
+          ? selectedVariant?.currency.name.ar
+          : selectedVariant?.currency.name.en
       }}
-      {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
+      {{ selectedVariant?.priceAfterDiscount.toFixed(2) }}
       <span class="text-sm text-gray-400 line-through">
         {{
           languageService.getCurrentLanguage() === "ar"
-            ? productDetails.productVariants[0].currency.name.ar
-            : productDetails.productVariants[0].currency.name.en
+            ? selectedVariant?.currency.name.ar
+            : selectedVariant?.currency.name.en
         }}
-        {{ productDetails.productVariants[0].priceBeforeDiscount.toFixed(2) }}
+        {{ selectedVariant?.priceBeforeDiscount.toFixed(2) }}
       </span>
     </span>
     <span
       *ngIf="
-        productDetails.productVariants[0].priceAfterDiscount ===
-        productDetails.productVariants[0].priceBeforeDiscount
+        selectedVariant?.priceAfterDiscount ===
+        selectedVariant?.priceBeforeDiscount
       "
       class="text-xl font-semibold text-hover-color"
     >
       {{
         languageService.getCurrentLanguage() === "ar"
-          ? productDetails.productVariants[0].currency.name.ar
-          : productDetails.productVariants[0].currency.name.en
+          ? selectedVariant?.currency.name.ar
+          : selectedVariant?.currency.name.en
       }}
-      {{ productDetails.productVariants[0].priceAfterDiscount.toFixed(2) }}
+      {{ selectedVariant?.priceAfterDiscount.toFixed(2) }}
     </span>
   </div>
 
@@ -97,14 +96,58 @@
     "
   ></div>
 
-  <div *ngIf="productDetails.hasVariant" class="mt-6 flex items-center gap-4">
-    <ng-container *ngFor="let variant of productDetails.productVariants">
-      <span>{{
-        languageService.getCurrentLanguage() === "ar"
-          ? variant.variantName.ar
-          : variant.variantName.en
-      }}</span>
-    </ng-container>
+  <div *ngIf="productDetails.hasVariant" class="mt-6">
+    <!-- Color Variants -->
+    <div
+      *ngIf="productDetails.productVariants[0].variantType.name.en === 'Color'"
+      class="mb-4"
+    >
+      <h3 class="mb-2 text-lg font-semibold text-gray-800">
+        {{ "product-info.color" | translate }}:
+      </h3>
+      <div class="flex flex-wrap gap-2">
+        <div
+          *ngFor="let variant of productDetails.productVariants"
+          class="relative cursor-pointer"
+          (click)="onVariantSelect(variant)"
+        >
+          <div
+            class="h-8 w-8 rounded-full border-2"
+            [class.border-hover-color]="selectedVariant?.id === variant.id"
+            [class.border-gray-300]="selectedVariant?.id !== variant.id"
+            [style.background-color]="variant.variantTypeSettings"
+          ></div>
+          <div
+            *ngIf="selectedVariant?.id === variant.id"
+            class="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-hover-color"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Size Variants -->
+    <div
+      *ngIf="productDetails.productVariants[0].variantType.name.en === 'Size'"
+      class="mb-4"
+    >
+      <h3 class="mb-2 text-lg font-semibold text-gray-800">
+        {{ "product-info.size" | translate }}:
+      </h3>
+      <div class="flex flex-wrap gap-2">
+        <button
+          *ngFor="let variant of productDetails.productVariants"
+          (click)="onVariantSelect(variant)"
+          class="rounded border px-4 py-2 text-sm font-medium transition-all"
+          [class.border-hover-color]="selectedVariant?.id === variant.id"
+          [class.bg-hover-color]="selectedVariant?.id === variant.id"
+          [class.text-white]="selectedVariant?.id === variant.id"
+          [class.border-gray-300]="selectedVariant?.id !== variant.id"
+          [class.text-gray-700]="selectedVariant?.id !== variant.id"
+        >
+          {{ variant.variantTypeSettings }}
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="mt-4">
@@ -113,11 +156,11 @@
       <span class="text-hover-color">
         {{
           languageService.getCurrentLanguage() === "ar"
-            ? productDetails.productVariants[0].currency.name.ar
-            : productDetails.productVariants[0].currency.name.en
+            ? selectedVariant?.currency.name.ar
+            : selectedVariant?.currency.name.en
         }}
-        {{ totalPrice.toFixed(2) }}</span
-      >
+        {{ totalPrice.toFixed(2) }}
+      </span>
     </p>
   </div>
 
