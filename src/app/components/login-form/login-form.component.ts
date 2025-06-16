@@ -65,7 +65,6 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService,
   ) {}
 
   getLanguage(): string {
@@ -125,7 +124,13 @@ export class LoginFormComponent implements OnInit {
         next: (res) => {
           this.loading = false;
           this.loginForm.reset();
-          this.loginSuccess.emit();
+          // Only show congrats modal if user just registered
+          if (localStorage.getItem('showCongratsOnLogin') === 'true') {
+            this.showCongratsModal = true;
+            localStorage.removeItem('showCongratsOnLogin'); // Remove the flag after showing
+          } else {
+            this.loginSuccess.emit();
+          }
         },
         error: (error) => {
           this.loading = false;

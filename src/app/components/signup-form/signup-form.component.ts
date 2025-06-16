@@ -9,7 +9,6 @@ import {
   ValidationErrors,
   FormsModule,
 } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
@@ -46,7 +45,7 @@ interface Country {
     MessageModule,
     TranslateModule,
   ],
-  providers: [MessageService, AuthService],
+  providers: [AuthService],
 })
 export class SignupFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
@@ -82,7 +81,6 @@ export class SignupFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService,
     private pointingSystemService: PointingSystemService,
   ) {}
 
@@ -98,8 +96,8 @@ export class SignupFormComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group(
       {
-        firstName: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
+        firstName: ['', [Validators.required, this.nameValidator]],
+        lastName: ['', [Validators.required, this.nameValidator]],
         identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
         gender: [1, [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(8)]],
@@ -113,6 +111,18 @@ export class SignupFormComponent implements OnInit {
       // Check if the input is numeric to determine if it's a phone number
       this.isPhone = value && /^\d+$/.test(value);
     });
+  }
+
+  nameValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value?.trim();
+    if (!value) return { required: true };
+
+    // Check if name contains any numbers
+    if (/\d/.test(value)) {
+      return { containsNumbers: true };
+    }
+
+    return null;
   }
 
   emailOrPhoneValidator(control: AbstractControl): ValidationErrors | null {
@@ -242,6 +252,9 @@ export class SignupFormComponent implements OnInit {
     this.authService.signup(signupData).subscribe({
       next: (res) => {
         console.log('Signup Response:', res);
+        // Emit success event to parent
+        this.signupSuccess.emit();
+
         // After successful signup, automatically log in the user
         const loginIdentifier = isEmail
           ? formValue.identifier
@@ -267,6 +280,8 @@ export class SignupFormComponent implements OnInit {
                     .subscribe({
                       next: (pointsRes) => {
                         console.log('Points added successfully:', pointsRes);
+                        // Set flag for new registration
+                        localStorage.setItem('showCongratsOnLogin', 'true');
                       },
                       error: (pointsErr) => {
                         console.error('Error adding points:', pointsErr);
@@ -277,29 +292,25 @@ export class SignupFormComponent implements OnInit {
                 }
               }, 100);
 
-              // First emit the success event to trigger the toast
-              this.signupSuccess.emit();
-              // Then reset the form
+              // Reset the form and switch to login mode
               this.signupForm.reset();
-              // Finally emit the toggle event to switch to login mode
-              setTimeout(() => {
-                this.toggle.emit();
-              }, 0);
+              this.toggle.emit();
             },
             error: (loginErr) => {
               this.loading = false;
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail:
-                  'Account created but failed to log in automatically. Please try logging in manually.',
-              });
+              this.errorMessage =
+                'Account created but failed to log in automatically. Please try logging in manually.';
             },
           });
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = 'Mobile Number/Email is already in use';
+        if (error.error?.message?.includes('already in use')) {
+          this.errorMessage = 'Mobile Number/Email is already in use';
+        } else {
+          this.errorMessage =
+            error.error?.message || 'An error occurred during registration';
+        }
       },
     });
   }

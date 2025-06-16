@@ -5,6 +5,7 @@ import {
   Output,
   PLATFORM_ID,
   inject,
+  OnInit,
 } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { LoginFormComponent } from '../login-form/login-form.component';
@@ -13,6 +14,7 @@ import { SignupFormComponent } from '../signup-form/signup-form.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthModalService } from '../../auth-modal.service';
 
 @Component({
   selector: 'app-auth-modal',
@@ -28,7 +30,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css',
 })
-export class AuthModalComponent {
+export class AuthModalComponent implements OnInit {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   isLoginMode: boolean = true;
@@ -38,8 +40,15 @@ export class AuthModalComponent {
   constructor(
     private messageService: MessageService,
     private translateService: TranslateService,
+    private authModalService: AuthModalService,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
+  ngOnInit() {
+    this.authModalService.showModal$.subscribe((show) => {
+      this.visible = show;
+    });
   }
 
   // Toggle between login and signup forms
@@ -48,7 +57,7 @@ export class AuthModalComponent {
   }
 
   closeDialog() {
-    this.visibleChange.emit(false);
+    this.authModalService.hideModal();
   }
 
   handleLoginSuccess() {

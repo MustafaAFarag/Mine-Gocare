@@ -1,0 +1,10 @@
+:host ::ng-deep .black-text-toast {
+  position: fixed !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  z-index: 10001 !important;
+}
+
+:host ::ng-deep .black-text-toast .p-toast-message {
+  color: black;
+}

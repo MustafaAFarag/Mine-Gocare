@@ -1,5 +1,9 @@
 <ng-container *ngIf="isBrowser">
-  <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
+  <p-toast
+    position="top-left"
+    styleClass="black-text-toast"
+    [baseZIndex]="10001"
+  ></p-toast>
   <p-dialog
     [(visible)]="visible"
     [modal]="true"

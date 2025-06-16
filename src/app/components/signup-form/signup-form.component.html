@@ -35,6 +35,9 @@
         <div *ngIf="firstName?.errors?.['required']">
           {{ "signup.fields.firstName.errors.required" | translate }}
         </div>
+        <div *ngIf="firstName?.errors?.['containsNumbers']">
+          {{ "signup.fields.firstName.errors.containsNumbers" | translate }}
+        </div>
       </div>
     </div>
 
@@ -56,6 +59,9 @@
       >
         <div *ngIf="lastName?.errors?.['required']">
           {{ "signup.fields.lastName.errors.required" | translate }}
+        </div>
+        <div *ngIf="lastName?.errors?.['containsNumbers']">
+          {{ "signup.fields.lastName.errors.containsNumbers" | translate }}
         </div>
       </div>
     </div>
