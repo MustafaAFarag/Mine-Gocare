@@ -28,6 +28,7 @@ import { CountryService } from '../../services/country.service';
 import { Category, Brand, RatingOption } from '../../model/shared-interfaces';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
+import { BrandService } from '../../services/brand.service';
 
 @Component({
   selector: 'app-collections',
@@ -82,6 +83,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
   // Add sortOrder as a class property
   sortOrder: string = 'price-asc';
+  selectedGender: number[] = [0, 1]; // Default to all genders
 
   // Pagination properties
   currentPage: number = 1;
@@ -105,6 +107,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private translateService: TranslateService,
     private countryService: CountryService,
+    private brandService: BrandService,
   ) {
     this.checkScreenSize();
   }
@@ -169,6 +172,10 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.categoriesLoading = false;
         this.isLoading = false;
       },
+    });
+
+    this.brandService.getBrands().subscribe((response) => {
+      console.log('BRANDS RESPONSE', response.result);
     });
   }
 
@@ -290,6 +297,11 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       // Apply sort order from URL
       if (params['sort']) {
         this.sortOrder = params['sort'];
+      }
+
+      // Apply gender filter from URL
+      if (params['gender']) {
+        this.selectedGender = params['gender'] === 'women' ? [0] : [1];
       }
 
       // Apply view mode from URL
@@ -458,6 +470,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       pageNumber: this.currentPage,
       pageSize: pageSize,
       sortBy: sortBy,
+      gender: this.selectedGender, // Add gender filter
     };
 
     // Only add price filters if they are different from default values
@@ -826,6 +839,11 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       queryParams['sort'] = this.sortOrder;
     }
 
+    // Add gender filter to URL if not default
+    if (this.selectedGender.length === 1) {
+      queryParams['gender'] = this.selectedGender[0] === 0 ? 'women' : 'men';
+    }
+
     // Add pagination to URL
     queryParams['page'] = this.currentPage;
 
@@ -1136,6 +1154,29 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     this.updateUrlParams();
 
     // Fetch products with the new sort order
+    this.fetchProductsAPI();
+  }
+
+  // Add applyGenderFilter method
+  applyGenderFilter(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+
+    switch (value) {
+      case 'women':
+        this.selectedGender = [0];
+        break;
+      case 'men':
+        this.selectedGender = [1];
+        break;
+      default:
+        this.selectedGender = [0, 1]; // All genders
+    }
+
+    // Update URL parameters
+    this.updateUrlParams();
+
+    // Fetch products with the new gender filter
     this.fetchProductsAPI();
   }
 

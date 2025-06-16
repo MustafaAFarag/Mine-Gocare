@@ -541,7 +541,13 @@
     "header": "Collections",
     "loading": "Loading...",
     "filters": {
+      "gender": {
+        "all": "Women & Men",
+        "women": "Women",
+        "men": "Men"
+      },
       "button": "Filters",
+
       "clearAll": "Clear All Filters",
       "noProducts": "No products found",
       "adjustFilters": "Try adjusting your filters or clearing them to see more products",

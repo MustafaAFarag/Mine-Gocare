@@ -10,7 +10,7 @@ export const ApiEndPoint = {
   DeleteAddress: 'api/services/ClientApp/Address/DeleteAddress',
   UpdateAddress: 'api/services/ClientApp/Address/UpdateAddress',
   GetWallet: 'api/services/AdminApp/ClientWalletService/GetClientWalletData',
-  getOrderSummary : 'api/services/ClientApp/ClientOrders/CalculateOrderSummary',
+  getOrderSummary: 'api/services/ClientApp/ClientOrders/CalculateOrderSummary',
   GetWalletTransactionList:
     'api/services/ClientApp/ClientWalletService/GetWalletTransactionList',
   updateClientName: 'api/services/ClientApp/Client/UpdateName',
@@ -40,4 +40,5 @@ export const ApiEndPoint = {
   GetClientOrdersDetails: 'api/services/ClientApp/ClientOrders/GetClientOrders',
   PlaceOrder: 'api/services/ClientApp/ClientOrders/PlaceOrder',
   CancelOrder: 'api/services/ClientApp/ClientOrders/CancelOrder',
+  getBrands: 'api/services/ClientApp/ProductBrand/GetAll',
 };

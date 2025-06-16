@@ -133,6 +133,41 @@
                 class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
               ></i>
             </div>
+
+            <!-- Gender Filter -->
+            <div class="relative">
+              <select
+                id="gender-filter-select"
+                (change)="applyGenderFilter($event)"
+                class="appearance-none rounded-md border bg-white py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-red-300 lg:pr-10"
+              >
+                <option
+                  value="all"
+                  [selected]="!selectedGender || selectedGender.length === 2"
+                >
+                  {{ "collections.filters.gender.all" | translate }}
+                </option>
+                <option
+                  value="women"
+                  [selected]="
+                    selectedGender.length === 1 && selectedGender[0] === 0
+                  "
+                >
+                  {{ "collections.filters.gender.women" | translate }}
+                </option>
+                <option
+                  value="men"
+                  [selected]="
+                    selectedGender.length === 1 && selectedGender[0] === 1
+                  "
+                >
+                  {{ "collections.filters.gender.men" | translate }}
+                </option>
+              </select>
+              <i
+                class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400"
+              ></i>
+            </div>
           </div>
 
           <!-- View Mode Buttons (Hidden on Mobile) -->
