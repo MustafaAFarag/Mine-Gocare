@@ -42,7 +42,9 @@
   },
   "product-card": {
     "off": "خصم",
-    "limitedTimeOffer": "عرض لفترة محدودة"
+    "limitedTimeOffer": "عرض لفترة محدودة",
+    "stock": "المخزون",
+    "lowStock": "مخزون منخفض"
   },
   "insta-shop": {
     "instaShop": "متجر انستغرام"
@@ -575,6 +577,8 @@
   "product-info": {
     "trending": "يبيع بسرعة! 5 أشخاص لديهم هذا في سلاتهم",
     "ratings": "التقييمات",
+    "color": "اللون",
+    "size": "الحجم",
     "price": "السعر",
     "totalPrice": "السعر الإجمالي",
     "addToCart": "إضافة إلى السلة",

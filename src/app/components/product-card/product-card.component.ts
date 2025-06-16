@@ -6,6 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  HostListener,
 } from '@angular/core';
 import { Product } from '../../model/Product';
 import { getFullImageUrl } from '../../lib/utils';
@@ -21,6 +22,7 @@ import { WishlistService } from '../../services/wishlist.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { QuickProductViewModalComponent } from '../quick-product-view-modal/quick-product-view-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-card',
@@ -29,6 +31,7 @@ import { QuickProductViewModalComponent } from '../quick-product-view-modal/quic
     TranslateModule,
     ToastModule,
     QuickProductViewModalComponent,
+    FormsModule,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
@@ -43,6 +46,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   currentLang: string = 'en';
   isInWishlist: boolean = false;
   isQuickViewOpen = false;
+  selectedVariant: any = null;
 
   private languageService = inject(LanguageService);
   private cdr = inject(ChangeDetectorRef);
@@ -63,6 +67,11 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     this.isInWishlist = this.wishlistService.isInWishlist(
       this.product.productId,
       this.product.variantId,
+    );
+
+    // Set initial selected variant
+    this.selectedVariant = this.product.productVariants?.find(
+      (v) => v.isSelected,
     );
 
     // Subscribe to wishlist changes
@@ -121,7 +130,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
-    console.log("PRODUCT ADDED TO CART", product);
+    console.log('PRODUCT ADDED TO CART', product);
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: product.variantId,
@@ -133,7 +142,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       promoCodeDetail: product.promoCodeDetail,
       currency: product.currency.name,
     };
-    console.log("CART ITEM", cartItem);
+    console.log('CART ITEM', cartItem);
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }
@@ -180,5 +189,16 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       }
     }
     this.cdr.markForCheck();
+  }
+
+  selectVariant(variant: any): void {
+    if (variant) {
+      this.selectedVariant = variant;
+      this.cdr.markForCheck();
+      // Navigate to product details with the selected variant
+      console.log('SELECTED VARIANT', variant);
+      console.log('PRODUCT', this.product);
+      this.navigateToProductDetails(this.product.productId, variant.id);
+    }
   }
 }

@@ -4,7 +4,10 @@
 >
   <!-- Image container with relative positioning -->
   <div class="relative h-64 w-full">
-    <div class="absolute bottom-2 left-2 z-10 bg-gray-100 px-2 py-1 shadow">
+    <div
+      *ngIf="product.rating !== 0"
+      class="absolute bottom-2 left-2 z-10 bg-gray-100 px-2 py-1 shadow"
+    >
       <span class="flex items-center font-medium">
         <i class="ri-star-fill mr-1 text-sm text-yellow-400"></i>
         {{ product.rating.toFixed(1) }}
@@ -72,128 +75,191 @@
         >
       </p>
     </div>
-  </div>
-  <div
-    class="mt-auto overflow-hidden border-t-2 border-hover-color p-2"
-    (click)="navigateToProductDetails(product.productId, product.variantId)"
-    [id]="'product-card-details-link-' + product.productId"
-  >
-    <div class="stock-ticker">
-      <ul>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
+
+    <!-- Stock Information -->
+    <div class="flex items-center justify-between">
+      <div class="mb-2">
+        <p
+          class="text-sm"
+          [ngClass]="{
+            'text-red-500': product.lowQuantity,
+            'text-green-500': !product.lowQuantity,
+          }"
+        >
+          <i class="ri-stock-line mr-1"></i>
+          {{ "product-card.stock" | translate }}: {{ product.stockCount }}
+          <span *ngIf="product.lowQuantity" class="ml-2">
+            ({{ "product-card.lowStock" | translate }})
+          </span>
+        </p>
+      </div>
+
+      <div>
+        <!-- Variants -->
+        <div class="mb-2">
+          <!-- Color Variants -->
+          <div
+            *ngIf="
+              product.productVariants[0]?.variantType?.name?.en === 'Color'
+            "
+            class="flex flex-wrap gap-2"
           >
-        </li>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
+            <div
+              *ngFor="let variant of product.productVariants"
+              class="h-6 w-6 cursor-pointer rounded-full border border-gray-300"
+              [style]="'background-color: ' + variant.variantTypeSettings"
+              [class.ring-2]="variant.isSelected"
+              [class.ring-hover-color]="variant.isSelected"
+              [title]="getLocalizedText(variant.variantName)"
+            ></div>
+          </div>
+
+          <!-- Size Variants -->
+          <div
+            *ngIf="product.productVariants[0]?.variantType?.name?.en === 'Size'"
+            class="flex flex-wrap gap-2"
+            (click)="$event.stopPropagation()"
           >
-        </li>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-      </ul>
-      <ul aria-hidden="true">
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-        <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
-          <i class="ri-discount-percent-fill text-hover-color"></i>
-          <span
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-        <li class="limited-time-item h-[42px]">
-          <i
-            class="ri-discount-percent-fill"
-            *ngIf="product.discountPercentage > 0"
-          ></i>
-          <span *ngIf="product.discountPercentage > 0"
-            >{{ "product-card.limitedTimeOffer" | translate }} :
-            {{ product.discountPercentage.toFixed(0) }}%
-            {{ "product-card.off" | translate }}</span
-          >
-        </li>
-      </ul>
+            <select
+              class="rounded border border-gray-300 bg-white px-3 py-1 text-sm hover:border-hover-color"
+              [(ngModel)]="selectedVariant"
+              (ngModelChange)="selectVariant($event)"
+              (click)="$event.stopPropagation()"
+            >
+              <option [ngValue]="null">Select Size</option>
+              <option
+                *ngFor="let variant of product.productVariants"
+                [ngValue]="variant"
+              >
+                {{ variant.variantTypeSettings }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mt-auto overflow-hidden border-t-2 border-hover-color p-2"
+      (click)="navigateToProductDetails(product.productId, product.variantId)"
+      [id]="'product-card-details-link-' + product.productId"
+    >
+      <div class="stock-ticker">
+        <ul>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+        </ul>
+        <ul aria-hidden="true">
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item" *ngIf="product.discountPercentage > 0">
+            <i class="ri-discount-percent-fill text-hover-color"></i>
+            <span
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+          <li class="limited-time-item h-[42px]">
+            <i
+              class="ri-discount-percent-fill"
+              *ngIf="product.discountPercentage > 0"
+            ></i>
+            <span *ngIf="product.discountPercentage > 0"
+              >{{ "product-card.limitedTimeOffer" | translate }} :
+              {{ product.discountPercentage.toFixed(0) }}%
+              {{ "product-card.off" | translate }}</span
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-<app-quick-product-view-modal
-  [isOpen]="isQuickViewOpen"
-  [productId]="product.productId"
-  [variantId]="product.variantId"
-  (closeModal)="closeQuickView()"
-></app-quick-product-view-modal>
-<p-toast position="top-left" styleClass="black-text-toast"></p-toast>
+  <app-quick-product-view-modal
+    [isOpen]="isQuickViewOpen"
+    [productId]="product.productId"
+    [variantId]="product.variantId"
+    (closeModal)="closeQuickView()"
+  ></app-quick-product-view-modal>
+  <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
 
-<style>
-  /* Default styles for mobile and tablet */
-  .extra-icon-1,
-  .extra-icon-2 {
-    opacity: 1;
-    transform: translateY(40px);
-  }
-
-  .extra-icon-2 {
-    transform: translateY(80px);
-  }
-
-  /* Hover effects for lg screens and up */
-  @media (min-width: 1024px) {
+  <style>
+    /* Default styles for mobile and tablet */
     .extra-icon-1,
     .extra-icon-2 {
-      opacity: 0;
-      transform: translateY(0);
-    }
-
-    .product-card:hover .extra-icon-1 {
       opacity: 1;
       transform: translateY(40px);
     }
 
-    .product-card:hover .extra-icon-2 {
-      opacity: 1;
+    .extra-icon-2 {
       transform: translateY(80px);
     }
-  }
 
-  .extra-icon-1,
-  .extra-icon-2 {
-    transition: all 0.5s ease;
-  }
-</style>
+    /* Hover effects for lg screens and up */
+    @media (min-width: 1024px) {
+      .extra-icon-1,
+      .extra-icon-2 {
+        opacity: 0;
+        transform: translateY(0);
+      }
+
+      .product-card:hover .extra-icon-1 {
+        opacity: 1;
+        transform: translateY(40px);
+      }
+
+      .product-card:hover .extra-icon-2 {
+        opacity: 1;
+        transform: translateY(80px);
+      }
+    }
+
+    .extra-icon-1,
+    .extra-icon-2 {
+      transition: all 0.5s ease;
+    }
+  </style>
+</div>

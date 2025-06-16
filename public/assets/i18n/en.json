@@ -42,7 +42,9 @@
   },
   "product-card": {
     "off": "Off",
-    "limitedTimeOffer": "Limited Time Offer"
+    "limitedTimeOffer": "Limited Time Offer",
+    "stock": "Stock",
+    "lowStock": "Low Stock"
   },
   "insta-shop": {
     "instaShop": "INSTA SHOP"
@@ -598,6 +600,8 @@
   "product-info": {
     "trending": "Selling fast! 5 people have this in their carts",
     "ratings": "Ratings",
+    "color": "Color",
+    "size": "Size",
     "price": "Price",
     "totalPrice": "Total Price",
     "addToCart": "Add To Cart",
