@@ -90,7 +90,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.products = response.result.items;
-          this.filteredProducts = this.products.slice(0, 5); // Show first 5 products by default
+          this.filteredProducts = []; // Initialize as empty array instead of showing first 5 products
           this.isLoading = false;
         },
         error: (error) => {
@@ -117,7 +117,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   onSearch(): void {
     if (!this.searchTerm.trim()) {
-      this.filteredProducts = this.products.slice(0, 5);
+      this.filteredProducts = []; // Show no products when input is empty
       return;
     }
 

@@ -20,6 +20,7 @@
     "title": "Search Products",
     "placeholder": "Search for products...",
     "noResults": "No products found",
+    "startSearching": "Start searching to find products",
     "addedToCart": "{{productName}} has been added to your cart",
     "addedToCartSummary": "Added to Cart",
     "addedToWishlist": "{{productName}} has been added to your wishlist",

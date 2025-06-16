@@ -44,7 +44,11 @@
       </div>
     } @else if (filteredProducts.length === 0) {
       <div class="py-8 text-center text-gray-500">
-        {{ "search.noResults" | translate }}
+        @if (searchTerm.trim() === "") {
+          {{ "search.startSearching" | translate }}
+        } @else {
+          {{ "search.noResults" | translate }}
+        }
       </div>
     } @else {
       <div class="grid grid-cols-1 gap-4">
