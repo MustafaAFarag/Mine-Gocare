@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Add wallet fetch if token and clientId are available
     if (this.token && this.clientId) {
       observables.push(
-        this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+        this.walletService.getWallet(this.token, this.clientId).subscribe({
           next: (res) => {
             this.wallet = res.result;
             this.isLoadingWallet = false;
@@ -302,7 +302,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   fetchWalletData(): void {
     if (this.token && this.clientId) {
       this.isLoadingWallet = true;
-      this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+      this.walletService.getWallet(this.token, this.clientId).subscribe({
         next: (res) => {
           this.wallet = res.result;
           this.isLoadingWallet = false;

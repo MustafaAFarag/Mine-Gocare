@@ -188,7 +188,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const user = localStorage.getItem('user');
     if (token && user) {
       this.walletService
-        .getWallet(token, JSON.parse(user || '{}').userId, 224)
+        .getWallet(token, JSON.parse(user || '{}').userId)
         .subscribe((response) => {
           if (response.success && response.result) {
             this.walletBalance = response.result.walletAmount || 0;

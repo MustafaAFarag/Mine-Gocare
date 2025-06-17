@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WalletService } from '../../../services/wallet.service';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WalletTransactionList } from '../../../model/Wallet';
+import { CountryService } from '../../../services/country.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 type Language = 'en' | 'ar';
 
@@ -14,7 +17,8 @@ type Language = 'en' | 'ar';
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.css'],
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   token: string | null;
   clientId: number;
   walletBalance: number = 0;
@@ -31,6 +35,7 @@ export class WalletComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private translateService: TranslateService,
+    private countryService: CountryService,
   ) {
     this.token = localStorage.getItem('accessToken');
 
@@ -47,6 +52,15 @@ export class WalletComponent implements OnInit {
     this.translateService.onLangChange.subscribe((event) => {
       this.currentLang = event.lang as Language;
     });
+
+    // Subscribe to country changes
+    this.countryService.country$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Refetch all data when country changes
+        this.fetchClientWalletAPI();
+        this.fetchClientWalletTransactionAPI();
+      });
   }
 
   ngOnInit(): void {
@@ -54,9 +68,14 @@ export class WalletComponent implements OnInit {
     this.fetchClientWalletTransactionAPI();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   fetchClientWalletAPI() {
     if (this.token && this.clientId) {
-      this.walletService.getWallet(this.token, this.clientId, 224).subscribe({
+      this.walletService.getWallet(this.token, this.clientId).subscribe({
         next: (res) => {
           if (res.result) {
             this.walletBalance = res.result.walletAmount || 0;

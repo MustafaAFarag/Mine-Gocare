@@ -13,16 +13,17 @@ export class WalletService {
 
   constructor(private http: HttpClient) {}
 
-  getWallet(
-    token: string,
-    clientId: number,
-    countryId: number,
-  ): Observable<any> {
+  private get countryId(): string {
+    const country = localStorage.getItem('country');
+    return country === 'SA' ? '103' : '224'; // Default to EG (224) if not SA
+  }
+
+  getWallet(token: string, clientId: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
-    const url = `${this.getWalletUrl}?ClientId=${clientId}&CountryId=${countryId}`;
+    const url = `${this.getWalletUrl}?ClientId=${clientId}&CountryId=${this.countryId}`;
     return this.http.get(url, { headers });
   }
 
@@ -33,7 +34,7 @@ export class WalletService {
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      CountryId: '224',
+      CountryId: this.countryId,
     });
 
     const body = {
