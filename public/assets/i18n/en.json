@@ -657,6 +657,7 @@
     },
     "orders": {
       "title": "My Orders",
+
       "orderNumber": "Order Number",
       "promoDiscount": "Promocode Discount",
       "date": "Date",
@@ -668,8 +669,13 @@
       "statusInProgress": "In Progress",
       "statusCompleted": "Completed",
       "statusShipped": "Shipped",
+      "statusPendingShipping": "Pending Shipping",
+      "statusDeliveryInProgress": "Delivery In Progress",
+      "statusDelivered": "Delivered",
       "statusRejected": "Rejected",
       "statusUnknown": "Unknown",
+      "paymentRedeemingPoints": "Redeeming Points",
+      "statusNew": "New Order",
       "walletUsed": "Wallet Used",
       "statusPending": "Pending",
       "paymentCashOnDelivery": "Cash on Delivery",

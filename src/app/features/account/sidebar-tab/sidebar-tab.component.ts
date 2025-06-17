@@ -63,21 +63,6 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       route: '/account/orders',
       active: false,
     },
-
-    {
-      name: 'Bank Details',
-      nameKey: 'account.sidebar.bankDetails',
-      icon: 'ri-bank-line',
-      route: '/account/bank-details',
-      active: false,
-    },
-    {
-      name: 'Refund History',
-      nameKey: 'account.sidebar.refundHistory',
-      icon: 'ri-refund-line',
-      route: '/account/refund',
-      active: false,
-    },
     {
       name: 'Saved Address',
       nameKey: 'account.sidebar.savedAddress',

@@ -16,6 +16,7 @@ interface OrderItem {
 }
 
 interface OrderStatus {
+  id: number;
   name: string;
   isActive: boolean;
   date?: string;
@@ -47,14 +48,6 @@ export class OrderDetailsComponent implements OnInit {
 
   orderNumber: string = '#1020';
   orderDate: string = '06 Jul 2024';
-
-  orderStatuses: OrderStatus[] = [
-    { name: 'Pending', isActive: true, date: '06 Jul 2024' },
-    { name: 'Processing', isActive: false },
-    { name: 'Shipped', isActive: false },
-    { name: 'Out For Delivery', isActive: false },
-    { name: 'Delivered', isActive: false },
-  ];
 
   getImageFullUrl = getFullImageUrl;
 
@@ -114,13 +107,15 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   // Helper methods to handle order status display
-  getOrderStatuses() {
+  getOrderStatuses(): OrderStatus[] {
     const statuses = [
-      { id: 1, name: 'Pending', isActive: false },
-      { id: 2, name: 'Processing', isActive: false },
-      { id: 3, name: 'Shipped', isActive: false },
-      { id: 4, name: 'Delivered', isActive: false },
-      { id: 5, name: 'Cancelled', isActive: false },
+      { id: 1, name: 'New Order', isActive: false },
+      { id: 2, name: 'Pending Order', isActive: false },
+      { id: 3, name: 'Confirmed Order', isActive: false },
+      { id: 4, name: 'Pending Shipping Company', isActive: false },
+      { id: 5, name: 'Delivery in Progress', isActive: false },
+      { id: 6, name: 'Delivered', isActive: false },
+      { id: 7, name: 'Cancelled', isActive: false },
     ];
 
     if (this.orderDetails) {

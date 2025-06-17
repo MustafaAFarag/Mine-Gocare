@@ -232,13 +232,16 @@
                 </h3>
                 <p class="text-gray-600">
                   {{
-                    orderDetails.orderPayment.paymentMethod === 0
+                    orderDetails.orderPayment.paymentMethod === 1
                       ? ("account.orders.paymentCashOnDelivery" | translate)
-                      : orderDetails.orderPayment.paymentMethod === 1
+                      : orderDetails.orderPayment.paymentMethod === 2
                         ? ("account.orders.paymentCreditCard" | translate)
                         : orderDetails.orderPayment.paymentMethod === 3
                           ? ("account.orders.paymentWallet" | translate)
-                          : ("account.orders.paymentUnknown" | translate)
+                          : orderDetails.orderPayment.paymentMethod === 4
+                            ? ("account.orders.paymentRedeemingPoints"
+                              | translate)
+                            : ("account.orders.paymentUnknown" | translate)
                   }}
                 </p>
               </div>
@@ -248,18 +251,25 @@
                 </h3>
                 <p class="text-gray-600">
                   <ng-container *ngIf="orderDetails.orderStatus === 1">
+                    {{ "account.orders.statusNew" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 2">
                     {{ "account.orders.statusPending" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 3">
+                    {{ "account.orders.statusConfirmed" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 4">
+                    {{ "account.orders.statusPendingShipping" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 5">
+                    {{ "account.orders.statusDeliveryInProgress" | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="orderDetails.orderStatus === 6">
+                    {{ "account.orders.statusDelivered" | translate }}
                   </ng-container>
                   <ng-container *ngIf="orderDetails.orderStatus === 7">
                     {{ "account.orders.statusCanceled" | translate }}
-                  </ng-container>
-                  <ng-container
-                    *ngIf="
-                      orderDetails.orderStatus !== 1 &&
-                      orderDetails.orderStatus !== 7
-                    "
-                  >
-                    {{ orderDetails.orderStatus }}
                   </ng-container>
                 </p>
               </div>

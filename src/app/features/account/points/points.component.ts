@@ -67,14 +67,12 @@ export class PointsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         // Refetch all data when country changes
         this.fetchPointsClientPreview();
-        this.fetchAllPointingSettings();
         this.fetchClientsTotalPoints();
       });
   }
 
   ngOnInit(): void {
     this.fetchPointsClientPreview();
-    this.fetchAllPointingSettings();
     this.fetchClientsTotalPoints();
   }
 
@@ -102,23 +100,6 @@ export class PointsComponent implements OnInit, OnDestroy {
             this.isLoadingPoints = false;
           },
         });
-    }
-  }
-
-  fetchAllPointingSettings(): void {
-    if (this.token) {
-      this.isLoadingSettings = true;
-      this.pointingService.getAllPointingSettings(this.token).subscribe({
-        next: (response) => {
-          this.pointSettings = response.result;
-        },
-        error: (error) => {
-          console.error('Error fetching point settings:', error);
-        },
-        complete: () => {
-          this.isLoadingSettings = false;
-        },
-      });
     }
   }
 

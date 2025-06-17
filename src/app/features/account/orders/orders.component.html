@@ -49,40 +49,47 @@
             <span
               class="rounded-md px-3 py-1 text-sm font-medium"
               [ngClass]="{
-                'bg-yellow-100 text-yellow-600':
-                  order.status === 1 && !order.isCanceled,
-                'bg-green-100 text-green-600':
-                  order.status === 2 && !order.isCanceled,
-                'bg-blue-100 text-blue-600':
-                  order.status === 3 && !order.isCanceled,
+                'bg-yellow-100 text-yellow-600': order.status === 1,
+                'bg-orange-100 text-orange-600': order.status === 2,
+                'bg-blue-100 text-blue-600': order.status === 3,
+                'bg-purple-100 text-purple-600': order.status === 4,
+                'bg-indigo-100 text-indigo-600': order.status === 5,
+                'bg-green-100 text-green-600': order.status === 6,
                 'bg-red-100 text-red-600':
-                  order.status === 4 || order.isCanceled,
+                  order.status === 7 || order.isCanceled,
               }"
             >
               {{
                 order.isCanceled
                   ? ("account.orders.statusCanceled" | translate)
                   : order.status === 1
-                    ? ("account.orders.statusInProgress" | translate)
+                    ? ("account.orders.statusNew" | translate)
                     : order.status === 2
-                      ? ("account.orders.statusCompleted" | translate)
+                      ? ("account.orders.statusPending" | translate)
                       : order.status === 3
-                        ? ("account.orders.statusShipped" | translate)
+                        ? ("account.orders.statusConfirmed" | translate)
                         : order.status === 4
-                          ? ("account.orders.statusRejected" | translate)
-                          : ("account.orders.statusUnknown" | translate)
+                          ? ("account.orders.statusPendingShipping" | translate)
+                          : order.status === 5
+                            ? ("account.orders.statusDeliveryInProgress"
+                              | translate)
+                            : order.status === 6
+                              ? ("account.orders.statusDelivered" | translate)
+                              : ("account.orders.statusUnknown" | translate)
               }}
             </span>
           </td>
           <td class="py-4 text-center text-gray-700">
             {{
-              order.paymentMethod === 0
+              order.paymentMethod === 1
                 ? ("account.orders.paymentCashOnDelivery" | translate)
-                : order.paymentMethod === 1
+                : order.paymentMethod === 2
                   ? ("account.orders.paymentCreditCard" | translate)
                   : order.paymentMethod === 3
                     ? ("account.orders.paymentWallet" | translate)
-                    : ("account.orders.paymentUnknown" | translate)
+                    : order.paymentMethod === 4
+                      ? ("account.orders.paymentRedeemingPoints" | translate)
+                      : ("account.orders.paymentUnknown" | translate)
             }}
           </td>
 
@@ -141,27 +148,32 @@
         <span
           class="rounded-md px-3 py-1 text-sm font-medium"
           [ngClass]="{
-            'bg-yellow-100 text-yellow-600':
-              order.status === 1 && !order.isCanceled,
-            'bg-green-100 text-green-600':
-              order.status === 2 && !order.isCanceled,
-            'bg-blue-100 text-blue-600':
-              order.status === 3 && !order.isCanceled,
-            'bg-red-100 text-red-600': order.status === 4 || order.isCanceled,
+            'bg-yellow-100 text-yellow-600': order.status === 1,
+            'bg-orange-100 text-orange-600': order.status === 2,
+            'bg-blue-100 text-blue-600': order.status === 3,
+            'bg-purple-100 text-purple-600': order.status === 4,
+            'bg-indigo-100 text-indigo-600': order.status === 5,
+            'bg-green-100 text-green-600': order.status === 6,
+            'bg-red-100 text-red-600': order.status === 7 || order.isCanceled,
           }"
         >
           {{
             order.isCanceled
               ? ("account.orders.statusCanceled" | translate)
               : order.status === 1
-                ? ("account.orders.statusInProgress" | translate)
+                ? ("account.orders.statusNew" | translate)
                 : order.status === 2
-                  ? ("account.orders.statusCompleted" | translate)
+                  ? ("account.orders.statusPending" | translate)
                   : order.status === 3
-                    ? ("account.orders.statusShipped" | translate)
+                    ? ("account.orders.statusConfirmed" | translate)
                     : order.status === 4
-                      ? ("account.orders.statusRejected" | translate)
-                      : ("account.orders.statusUnknown" | translate)
+                      ? ("account.orders.statusPendingShipping" | translate)
+                      : order.status === 5
+                        ? ("account.orders.statusDeliveryInProgress"
+                          | translate)
+                        : order.status === 6
+                          ? ("account.orders.statusDelivered" | translate)
+                          : ("account.orders.statusUnknown" | translate)
           }}
         </span>
       </div>
@@ -181,13 +193,15 @@
           </p>
           <p class="font-medium">
             {{
-              order.paymentMethod === 0
+              order.paymentMethod === 1
                 ? ("account.orders.paymentCashOnDelivery" | translate)
-                : order.paymentMethod === 1
+                : order.paymentMethod === 2
                   ? ("account.orders.paymentCreditCard" | translate)
                   : order.paymentMethod === 3
                     ? ("account.orders.paymentWallet" | translate)
-                    : ("account.orders.paymentUnknown" | translate)
+                    : order.paymentMethod === 4
+                      ? ("account.orders.paymentRedeemingPoints" | translate)
+                      : ("account.orders.paymentUnknown" | translate)
             }}
           </p>
         </div>
