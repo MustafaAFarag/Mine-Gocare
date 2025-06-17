@@ -63,6 +63,18 @@ export class WalletComponent implements OnInit, OnDestroy {
       });
   }
 
+  getCurrency(): string {
+    const country = localStorage.getItem('country');
+    const language = localStorage.getItem('language');
+
+    if (country === 'EG') {
+      return language === 'ar' ? 'ج.م' : 'EGP';
+    } else if (country === 'SA') {
+      return language === 'ar' ? 'ر.س' : 'SAR';
+    }
+    return 'EGP';
+  }
+
   ngOnInit(): void {
     this.fetchClientWalletAPI();
     this.fetchClientWalletTransactionAPI();

@@ -180,6 +180,18 @@ export class PointsComponent implements OnInit, OnDestroy {
     this.showRedeemModal = false;
   }
 
+  getCurrency(): string {
+    const country = localStorage.getItem('country');
+    const language = localStorage.getItem('language');
+
+    if (country === 'EG') {
+      return language === 'ar' ? 'ج.م' : 'EGP';
+    } else if (country === 'SA') {
+      return language === 'ar' ? 'ر.س' : 'SAR';
+    }
+    return 'EGP';
+  }
+
   redeemPoints(points: number): void {
     if (this.token && points > 0) {
       this.isRedeeming = true;

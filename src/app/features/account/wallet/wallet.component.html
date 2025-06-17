@@ -15,7 +15,7 @@
           {{ "checkout.walletBalance" | translate }}
         </h3>
         <p class="text-xl font-bold text-gray-800">
-          {{ "common.currency" | translate }} {{ walletBalance.toFixed(2) }}
+          {{ getCurrency() }} {{ walletBalance.toFixed(2) }}
         </p>
       </div>
     </div>

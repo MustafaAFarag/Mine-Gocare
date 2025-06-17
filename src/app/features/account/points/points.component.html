@@ -25,7 +25,7 @@
             {{ clientPoints }} {{ "points.points" | translate }}
           </p>
           <p class="text-sm text-gray-600">
-            {{ "common.currency" | translate }}
+            {{ getCurrency() }}
             {{ getConvertedAmount() | number: "1.2-2" }}
           </p>
         </div>
@@ -46,7 +46,7 @@
         <i class="ri-information-line text-gray-500"></i>
         <span class="text-sm text-gray-700 sm:text-base"
           >1 {{ "points.points" | translate }} =
-          {{ "common.currency" | translate }}
+          {{ getCurrency() }}
           {{ pointsClientPreview.exchangeRate.toFixed(2) || "0.00" }}
           {{ "points.balance" | translate }}</span
         >
