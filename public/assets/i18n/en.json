@@ -676,6 +676,8 @@
       "statusUnknown": "Unknown",
       "paymentRedeemingPoints": "Redeeming Points",
       "statusNew": "New Order",
+      "orderCancelled": "Order Cancelled",
+      "orderDelivered": "Order Delivered",
       "walletUsed": "Wallet Used",
       "statusPending": "Pending",
       "paymentCashOnDelivery": "Cash on Delivery",

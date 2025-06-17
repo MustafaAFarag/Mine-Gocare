@@ -18,22 +18,49 @@
   </div>
 
   <!-- Order Status -->
-  <div
-    *ngIf="!orderDetails.isCanceled"
-    class="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mb-8 md:grid-cols-5"
-  >
+  <div class="mb-6 md:mb-8">
+    <!-- Cancelled Order Message -->
     <div
-      *ngFor="let status of getOrderStatuses()"
-      class="rounded-md p-3 text-center md:p-4"
-      [ngClass]="
-        status.isActive
-          ? 'bg-orange-50 text-orange-600'
-          : 'bg-gray-50 text-gray-600'
-      "
+      *ngIf="orderDetails.orderStatus === 7"
+      class="mb-4 rounded-lg bg-red-50 p-4 text-center"
     >
-      <div class="text-sm font-medium md:text-base">{{ status.name }}</div>
-      <div *ngIf="status.isActive && orderDetails.date" class="mt-1 text-xs">
-        {{ orderDetails.date | date: "dd MMM yyyy" }}
+      <i class="ri-close-circle-line mb-2 text-3xl text-red-600"></i>
+      <p class="text-lg font-medium text-red-600">
+        {{ "account.orders.orderCancelled" | translate }}
+      </p>
+    </div>
+
+    <!-- Delivered Order Message -->
+    <div
+      *ngIf="orderDetails.orderStatus === 6"
+      class="mb-4 rounded-lg bg-green-50 p-4 text-center"
+    >
+      <i class="ri-check-double-line mb-2 text-3xl text-green-600"></i>
+      <p class="text-lg font-medium text-green-600">
+        {{ "account.orders.orderDelivered" | translate }}
+      </p>
+    </div>
+
+    <!-- Status Timeline -->
+    <div
+      *ngIf="orderDetails.orderStatus !== 7"
+      class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+    >
+      <div
+        *ngFor="let status of getOrderStatuses(); let i = index"
+        class="flex flex-col items-start rounded-md p-3 md:p-4"
+        [ngClass]="getStatusClasses(status, i)"
+      >
+        <!-- Status Icon -->
+        <div class="mb-2 flex items-center gap-2">
+          <i [class]="status.icon" class="text-xl"></i>
+          <div class="text-sm font-medium md:text-base">{{ status.name }}</div>
+        </div>
+
+        <!-- Status Date -->
+        <div *ngIf="status.isActive && orderDetails?.date" class="mt-1 text-xs">
+          {{ orderDetails.date | date: "dd MMM yyyy" }}
+        </div>
       </div>
     </div>
   </div>
@@ -175,6 +202,7 @@
     <div class="md:col-span-2">
       <div class="rounded-lg bg-white p-4 shadow-sm md:p-6">
         <h2 class="mb-4 border-b pb-2 text-lg font-bold text-gray-800">
+          <i class="ri-user-line mr-2"></i>
           {{ "account.orders.consumerDetails" | translate }}
         </h2>
 
@@ -183,12 +211,15 @@
           <div class="flex flex-col gap-3 md:gap-4">
             <div>
               <h3 class="mb-2 font-medium text-gray-700">
+                <i class="ri-user-settings-line mr-2"></i>
                 {{ "account.orders.clientDetails" | translate }}:
               </h3>
               <p class="text-gray-600">
                 {{ orderDetails.orderClientDetails.clientName }}<br />
+                <i class="ri-mail-line mr-1"></i>
                 {{ "account.orders.email" | translate }}:
                 {{ orderDetails.orderClientDetails.clientEmail }}<br />
+                <i class="ri-phone-line mr-1"></i>
                 {{ "account.orders.phone" | translate }}:
                 {{ orderDetails.orderClientDetails.clientPhoneNumber }}
               </p>
@@ -196,6 +227,7 @@
 
             <div>
               <h3 class="mb-2 font-medium text-gray-700">
+                <i class="ri-file-list-line mr-2"></i>
                 {{ "account.orders.deliveryNotes" | translate }}:
               </h3>
               <p class="text-gray-600">
@@ -208,6 +240,7 @@
           <div class="flex flex-col gap-3 md:gap-4">
             <div>
               <h3 class="mb-2 font-medium text-gray-700">
+                <i class="ri-map-pin-line mr-2"></i>
                 {{ "account.orders.shippingAddress" | translate }}:
               </h3>
               <p class="text-gray-600">
@@ -228,49 +261,81 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <h3 class="mb-2 font-medium text-gray-700">
+                  <i class="ri-bank-card-line mr-2"></i>
                   {{ "account.orders.paymentMethod" | translate }}:
                 </h3>
                 <p class="text-gray-600">
-                  {{
-                    orderDetails.orderPayment.paymentMethod === 1
-                      ? ("account.orders.paymentCashOnDelivery" | translate)
-                      : orderDetails.orderPayment.paymentMethod === 2
-                        ? ("account.orders.paymentCreditCard" | translate)
-                        : orderDetails.orderPayment.paymentMethod === 3
-                          ? ("account.orders.paymentWallet" | translate)
-                          : orderDetails.orderPayment.paymentMethod === 4
-                            ? ("account.orders.paymentRedeemingPoints"
-                              | translate)
-                            : ("account.orders.paymentUnknown" | translate)
-                  }}
+                  <span
+                    [ngClass]="
+                      getPaymentMethodColor(
+                        orderDetails.orderPayment.paymentMethod
+                      )
+                    "
+                    class="inline-flex items-center rounded-md px-2 py-1 text-sm"
+                  >
+                    <i
+                      [class]="
+                        getPaymentMethodIcon(
+                          orderDetails.orderPayment.paymentMethod
+                        )
+                      "
+                      class="mr-1"
+                    ></i>
+                    {{
+                      orderDetails.orderPayment.paymentMethod === 1
+                        ? ("account.orders.paymentCashOnDelivery" | translate)
+                        : orderDetails.orderPayment.paymentMethod === 2
+                          ? ("account.orders.paymentCreditCard" | translate)
+                          : orderDetails.orderPayment.paymentMethod === 3
+                            ? ("account.orders.paymentWallet" | translate)
+                            : orderDetails.orderPayment.paymentMethod === 4
+                              ? ("account.orders.paymentRedeemingPoints"
+                                | translate)
+                              : ("account.orders.paymentUnknown" | translate)
+                    }}
+                  </span>
                 </p>
               </div>
               <div>
                 <h3 class="mb-2 font-medium text-gray-700">
+                  <i class="ri-truck-line mr-2"></i>
                   {{ "account.orders.status" | translate }}:
                 </h3>
                 <p class="text-gray-600">
-                  <ng-container *ngIf="orderDetails.orderStatus === 1">
-                    {{ "account.orders.statusNew" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 2">
-                    {{ "account.orders.statusPending" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 3">
-                    {{ "account.orders.statusConfirmed" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 4">
-                    {{ "account.orders.statusPendingShipping" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 5">
-                    {{ "account.orders.statusDeliveryInProgress" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 6">
-                    {{ "account.orders.statusDelivered" | translate }}
-                  </ng-container>
-                  <ng-container *ngIf="orderDetails.orderStatus === 7">
-                    {{ "account.orders.statusCanceled" | translate }}
-                  </ng-container>
+                  <span
+                    [ngClass]="
+                      getStatusClasses(
+                        getCurrentStatus()!,
+                        orderDetails.orderStatus - 1
+                      )
+                    "
+                    class="inline-flex items-center rounded-md px-2 py-1 text-sm"
+                  >
+                    <i [class]="getCurrentStatus()?.icon" class="mr-1"></i>
+                    <ng-container *ngIf="orderDetails.orderStatus === 1">
+                      {{ "account.orders.statusNew" | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 2">
+                      {{ "account.orders.statusPending" | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 3">
+                      {{ "account.orders.statusConfirmed" | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 4">
+                      {{ "account.orders.statusPendingShipping" | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 5">
+                      {{
+                        "account.orders.statusDeliveryInProgress" | translate
+                      }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 6">
+                      {{ "account.orders.statusDelivered" | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="orderDetails.orderStatus === 7">
+                      {{ "account.orders.statusCanceled" | translate }}
+                    </ng-container>
+                  </span>
                 </p>
               </div>
             </div>
@@ -283,14 +348,16 @@
     <div class="md:col-span-1">
       <div class="rounded-lg bg-white p-4 shadow-sm md:p-6">
         <h2 class="mb-4 border-b pb-2 text-lg font-bold text-gray-800">
+          <i class="ri-file-list-3-line mr-2"></i>
           {{ "account.orders.summary" | translate }}
         </h2>
 
         <div class="flex flex-col gap-3">
           <div class="flex justify-between">
-            <span class="text-gray-600">{{
-              "account.orders.subTotal" | translate
-            }}</span>
+            <span class="text-gray-600">
+              <i class="ri-shopping-cart-line mr-1"></i>
+              {{ "account.orders.subTotal" | translate }}
+            </span>
             <span class="font-medium text-gray-800">
               {{ orderDetails.orderPayment.subTotal }}
               {{
@@ -302,9 +369,10 @@
           </div>
 
           <div class="flex justify-between">
-            <span class="text-gray-600">{{
-              "account.orders.shipping" | translate
-            }}</span>
+            <span class="text-gray-600">
+              <i class="ri-truck-line mr-1"></i>
+              {{ "account.orders.shipping" | translate }}
+            </span>
             <span class="font-medium text-gray-800">
               {{ orderDetails.orderPayment.shippingFees }}
               {{
@@ -320,7 +388,10 @@
             *ngIf="orderDetails.orderPayment.promoCodeDeduction > 0"
             class="flex justify-between text-green-600"
           >
-            <span>{{ "account.orders.promoDiscount" | translate }}</span>
+            <span>
+              <i class="ri-coupon-line mr-1"></i>
+              {{ "account.orders.promoDiscount" | translate }}
+            </span>
             <span
               >{{ orderDetails.orderPayment.promoCodeDeduction }}
               {{
@@ -337,6 +408,7 @@
             class="rounded-md bg-blue-50 p-2 text-sm text-blue-700"
           >
             <p>
+              <i class="ri-coins-line mr-1"></i>
               {{ "account.orders.pointsGained" | translate }}:
               {{ orderDetails.gainedPoints }}
             </p>
@@ -347,7 +419,10 @@
             *ngIf="orderDetails.orderPayment.totalDiscount > 0"
             class="flex justify-between text-gray-600"
           >
-            <span>{{ "account.orders.discount" | translate }}</span>
+            <span>
+              <i class="ri-percent-line mr-1"></i>
+              {{ "account.orders.discount" | translate }}
+            </span>
             <span class="font-medium text-gray-800">
               {{ orderDetails.orderPayment.totalDiscount }}
               {{
@@ -363,7 +438,10 @@
             *ngIf="orderDetails.orderPayment.walletAmount > 0"
             class="flex justify-between text-green-600"
           >
-            <span>{{ "account.orders.walletUsed" | translate }}</span>
+            <span>
+              <i class="ri-wallet-3-line mr-1"></i>
+              {{ "account.orders.walletUsed" | translate }}
+            </span>
             <span
               >{{ orderDetails.orderPayment.walletAmount }}
               {{
@@ -379,7 +457,10 @@
             *ngIf="orderDetails.orderPayment.redeemedPointsAmount > 0"
             class="flex justify-between text-purple-600"
           >
-            <span>{{ "account.orders.redeemedPoints" | translate }}</span>
+            <span>
+              <i class="ri-coins-line mr-1"></i>
+              {{ "account.orders.redeemedPoints" | translate }}
+            </span>
             <span
               >-{{ orderDetails.orderPayment.redeemedPointsAmount }}
               {{
@@ -394,9 +475,10 @@
           </div>
 
           <div class="flex justify-between border-t pt-3">
-            <span class="font-bold text-gray-800">{{
-              "account.orders.total" | translate
-            }}</span>
+            <span class="font-bold text-gray-800">
+              <i class="ri-money-dollar-circle-line mr-1"></i>
+              {{ "account.orders.total" | translate }}
+            </span>
             <span class="font-bold text-gray-800">
               {{ orderDetails.orderPayment.total }}
               {{

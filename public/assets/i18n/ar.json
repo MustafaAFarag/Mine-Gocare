@@ -650,7 +650,8 @@
       "paymentWallet": "المحفظة",
       "paymentUnknown": "غير معروف",
       "paymentRedeemingPoints": "استبدال النقاط",
-
+      "orderCancelled": "تم إلغاء الطلب",
+      "orderDelivered": "تم التوصيل",
       "walletUsed": "تم الدفع بالمحفظة",
       "viewDetails": "عرض تفاصيل الطلب",
       "cancelOrder": "إلغاء الطلب",
