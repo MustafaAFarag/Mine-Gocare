@@ -16,7 +16,10 @@ export class OrderService {
 
   private tenantId = '1';
   private language = 'en';
-  private countryId = '224';
+  private get countryId(): string {
+    const country = localStorage.getItem('country');
+    return country === 'SA' ? '103' : '224'; // Default to EG (224) if not SA
+  }
 
   constructor(private http: HttpClient) {}
 

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PointingSystemService } from '../../../services/pointing-system.service';
+import { CountryService } from '../../../services/country.service';
 import {
   PointsClientPreview,
   PointSettings,
@@ -10,6 +11,8 @@ import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PointsRedeemModalComponent } from './points-redeem-modal/points-redeem-modal.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 type Language = 'en' | 'ar';
 
@@ -27,7 +30,8 @@ type Language = 'en' | 'ar';
   templateUrl: './points.component.html',
   styleUrls: ['./points.component.css'],
 })
-export class PointsComponent implements OnInit {
+export class PointsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;
@@ -48,6 +52,7 @@ export class PointsComponent implements OnInit {
     private pointingService: PointingSystemService,
     private translateService: TranslateService,
     private messageService: MessageService,
+    private countryService: CountryService,
   ) {
     this.token = localStorage.getItem('accessToken');
 
@@ -55,12 +60,27 @@ export class PointsComponent implements OnInit {
     this.translateService.onLangChange.subscribe((event) => {
       this.currentLang = event.lang as Language;
     });
+
+    // Subscribe to country changes
+    this.countryService.country$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Refetch all data when country changes
+        this.fetchPointsClientPreview();
+        this.fetchAllPointingSettings();
+        this.fetchClientsTotalPoints();
+      });
   }
 
   ngOnInit(): void {
     this.fetchPointsClientPreview();
     this.fetchAllPointingSettings();
     this.fetchClientsTotalPoints();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   fetchPointsClientPreview(): void {
@@ -163,7 +183,7 @@ export class PointsComponent implements OnInit {
   redeemPoints(points: number): void {
     if (this.token && points > 0) {
       this.isRedeeming = true;
-      this.pointingService.redeemingPoints(this.token, 224, points).subscribe({
+      this.pointingService.redeemingPoints(this.token, points).subscribe({
         next: (response) => {
           this.messageService.add({
             severity: 'success',

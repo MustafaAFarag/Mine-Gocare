@@ -15,6 +15,11 @@ export class PointingSystemService {
   private addPointsUrl = `${environment.apiUrl}/${ApiEndPoint.AddPoints}`;
   private RedeemPointsUrl = `${environment.apiUrl}/${ApiEndPoint.RedeemingPoints}`;
 
+  private get countryId(): string {
+    const country = localStorage.getItem('country');
+    return country === 'SA' ? '103' : '224'; // Default to EG (224) if not SA
+  }
+
   constructor(private http: HttpClient) {}
 
   getClientPointsPreview(
@@ -25,7 +30,7 @@ export class PointingSystemService {
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryId: 224,
+      countryId: this.countryId,
     });
 
     const body = {
@@ -39,26 +44,20 @@ export class PointingSystemService {
     return this.http.post(this.getClientPointsPreviewUrl, body, { headers });
   }
 
-  getAllPointingSettings(
-    token: string,
-    countryId: number = 224,
-  ): Observable<any> {
+  getAllPointingSettings(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryId: countryId.toString(),
+      countryId: this.countryId,
       'Content-Type': 'application/json',
     });
 
     return this.http.post(this.getAllPointingSettingsUrl, {}, { headers });
   }
 
-  getClientsTotalPoints(
-    token: string,
-    countryId: number = 224,
-  ): Observable<any> {
+  getClientsTotalPoints(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryId: countryId.toString(),
+      countryId: this.countryId,
     });
 
     return this.http.get(this.getClientsTotalPointsUrl, { headers });
@@ -68,11 +67,10 @@ export class PointingSystemService {
     token: string,
     pointingCheckpoint: number,
     isHolded: boolean,
-    countryId: number = 224,
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryId: countryId.toString(),
+      countryId: this.countryId,
       'Content-Type': 'application/json',
     });
 
@@ -84,14 +82,10 @@ export class PointingSystemService {
     return this.http.post(this.addPointsUrl, body, { headers });
   }
 
-  redeemingPoints(
-    token: string,
-    countryId: number = 224,
-    points: number,
-  ): Observable<any> {
+  redeemingPoints(token: string, points: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      countryId: countryId.toString(),
+      countryId: this.countryId,
     });
 
     return this.http.post(

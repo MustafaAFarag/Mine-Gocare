@@ -69,7 +69,8 @@
                   'bg-red-100 text-red-600': transaction.transactionType === 6,
                   'bg-green-100 text-green-600':
                     transaction.transactionType === 5 ||
-                    transaction.transactionType === 16,
+                    transaction.transactionType === 16 ||
+                    transaction.transactionType === 14,
                 }"
               >
                 {{ transaction.currency.name[currentLang] }}
