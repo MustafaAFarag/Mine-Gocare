@@ -103,15 +103,6 @@
               >
                 <i class="ri-eye-line"></i>
               </button>
-              <button
-                *ngIf="order.status === 1 && !order.isCanceled"
-                (click)="cancelOrder(order.id)"
-                id="orders-cancel-order-button"
-                class="text-red-500 hover:text-red-700"
-                [attr.aria-label]="'account.orders.cancelOrder' | translate"
-              >
-                <i class="ri-close-circle-line"></i>
-              </button>
             </div>
           </td>
         </tr>
@@ -215,15 +206,6 @@
           [attr.aria-label]="'account.orders.viewDetails' | translate"
         >
           <i class="ri-eye-line"></i>
-        </button>
-        <button
-          *ngIf="order.status === 1 && !order.isCanceled"
-          (click)="cancelOrder(order.id)"
-          id="orders-cancel-order-button"
-          class="text-red-500 hover:text-red-700"
-          [attr.aria-label]="'account.orders.cancelOrder' | translate"
-        >
-          <i class="ri-close-circle-line"></i>
         </button>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { OrderDetails } from '../../../../model/Order';
 import { LoadingComponent } from '../../../../shared/loading/loading.component';
 import { getFullImageUrl } from '../../../../lib/utils';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { OrderService } from '../../../../services/order.service';
 
 interface OrderItem {
   id: number;
@@ -37,7 +38,10 @@ export class OrderDetailsComponent implements OnInit {
 
   currentLang: string = 'en';
 
-  constructor(private translateService: TranslateService) {
+  constructor(
+    private translateService: TranslateService,
+    private orderService: OrderService,
+  ) {
     this.currentLang = this.translateService.currentLang || 'en';
     this.translateService.onLangChange.subscribe((event) => {
       this.currentLang = event.lang;
@@ -246,5 +250,41 @@ export class OrderDetailsComponent implements OnInit {
       return `${amount} ${this.orderDetails.orderPayment.currency.name[lang]}`;
     }
     return `${amount}`;
+  }
+
+  canCancelOrder(): boolean {
+    if (!this.orderDetails) return false;
+    return this.orderDetails.orderStatus === 1 && !this.orderDetails.canReturn;
+  }
+
+  cancelOrder(): void {
+    if (!this.orderId) return;
+
+    if (confirm('Are you sure you want to cancel this order?')) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        this.orderService
+          .cancelOrder(token, this.orderId, 'Order cancelled by user')
+          .subscribe(
+            (response) => {
+              // Refresh the order details
+              this.orderService
+                .getClientOrderDetails(this.orderId!, token)
+                .subscribe(
+                  (response) => {
+                    this.orderDetails = response.result;
+                  },
+                  (error) => {
+                    console.error('Error refreshing order details:', error);
+                  },
+                );
+            },
+            (error) => {
+              console.error('Error cancelling order:', error);
+              alert('Failed to cancel order. Please try again.');
+            },
+          );
+      }
+    }
   }
 }
