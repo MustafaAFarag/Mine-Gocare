@@ -165,4 +165,36 @@
     [(visible)]="showCongratsModal"
     (visibleChange)="handleCongratsModalClose()"
   ></app-congrats-modal>
+
+  <!-- Points Modal -->
+  <p-dialog
+    [(visible)]="showPointsModal"
+    [modal]="true"
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '90vw', maxWidth: '700px' }"
+    [contentStyle]="{ padding: '0' }"
+    [showHeader]="false"
+    styleClass="points-modal"
+  >
+    <div class="flex flex-col items-center gap-8 bg-white text-center">
+      <div class="rounded-full bg-green-100 p-8">
+        <i class="ri-coins-line text-6xl text-green-600"></i>
+      </div>
+      <h3 class="text-3xl font-semibold text-gray-900">
+        {{ "login.pointsEarned" | translate }}
+      </h3>
+      <p class="text-2xl text-gray-600">
+        {{ "login.pointsEarnedMessage" | translate }}
+        <span class="font-bold text-hover-color">{{ pointsGained }}</span>
+        {{ "login.points" | translate }}
+      </p>
+      <button
+        (click)="handlePointsModalClose()"
+        class="mt-6 rounded-md bg-hover-color px-10 py-4 text-xl font-medium text-white hover:bg-opacity-90"
+      >
+        {{ "common.ok" | translate }}
+      </button>
+    </div>
+  </p-dialog>
 </div>

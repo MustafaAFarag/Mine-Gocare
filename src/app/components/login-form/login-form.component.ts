@@ -12,6 +12,8 @@ import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CongratsModalComponent } from '../congrats-modal/congrats-modal.component';
 import { MessageService } from 'primeng/api';
+import { PointingSystemService } from '../../services/pointing-system.service';
+import { DialogModule } from 'primeng/dialog';
 
 interface Country {
   name: string;
@@ -31,6 +33,7 @@ interface Country {
     ReactiveFormsModule,
     TranslateModule,
     CongratsModalComponent,
+    DialogModule,
   ],
 })
 export class LoginFormComponent implements OnInit {
@@ -43,6 +46,8 @@ export class LoginFormComponent implements OnInit {
   showCongratsModal = false;
   showCountryDropdown = false;
   isPhone = false;
+  showPointsModal = false;
+  pointsGained = 0;
 
   countries: Country[] = [
     {
@@ -65,6 +70,7 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private pointingSystemService: PointingSystemService,
   ) {}
 
   getLanguage(): string {
@@ -124,6 +130,23 @@ export class LoginFormComponent implements OnInit {
         next: (res) => {
           this.loading = false;
           this.loginForm.reset();
+
+          // Add points for daily login
+          const token = localStorage.getItem('token');
+          if (token) {
+            this.pointingSystemService.addPoints(token, 2, false).subscribe({
+              next: (pointsResponse) => {
+                if (pointsResponse.success) {
+                  this.pointsGained = pointsResponse.result;
+                  this.showPointsModal = true;
+                }
+              },
+              error: (error) => {
+                console.error('Error adding points:', error);
+              },
+            });
+          }
+
           // Only show congrats modal if user just registered
           if (localStorage.getItem('showCongratsOnLogin') === 'true') {
             this.showCongratsModal = true;
@@ -143,6 +166,10 @@ export class LoginFormComponent implements OnInit {
     this.showCongratsModal = false;
     this.loginForm.reset();
     this.loginSuccess.emit();
+  }
+
+  handlePointsModalClose() {
+    this.showPointsModal = false;
   }
 
   toggleMode(): void {

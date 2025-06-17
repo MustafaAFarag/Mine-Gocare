@@ -1,0 +1,14 @@
+:host ::ng-deep .points-modal {
+  .p-dialog {
+    width: 90vw !important;
+    max-width: 700px !important;
+  }
+}
+
+:host ::ng-deep .p-dialog-content {
+  background: white !important;
+}
+:host ::ng-deep .points-modal .p-dialog {
+  padding: 2rem;
+  background: white !important;
+}
