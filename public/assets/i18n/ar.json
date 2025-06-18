@@ -610,7 +610,7 @@
       "points": "كسب النقاط",
       "bankDetails": "تفاصيل البنك",
       "refundHistory": "سجل الاسترجاع",
-      "savedAddress": "العناوين المحفوظة",
+      "shippingAddress": "العنوان الشحن",
       "logout": "تسجيل الخروج",
       "addEmail": "إضافة بريد إلكتروني",
       "emailPlaceholder": "أدخل بريدك الإلكتروني"

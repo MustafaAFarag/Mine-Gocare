@@ -64,8 +64,8 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       active: false,
     },
     {
-      name: 'Saved Address',
-      nameKey: 'account.sidebar.savedAddress',
+      name: 'Shipping Address',
+      nameKey: 'account.sidebar.shippingAddress',
       icon: 'ri-map-pin-line',
       route: '/account/address',
       active: false,

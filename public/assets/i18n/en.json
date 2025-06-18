@@ -639,7 +639,7 @@
       "points": "Earning Points",
       "bankDetails": "Bank Details",
       "refundHistory": "Refund History",
-      "savedAddress": "Saved Address",
+      "shippingAddress": "Shipping Address",
       "logout": "Logout",
       "addEmail": "Add Email",
       "emailPlaceholder": "Enter your email address"
