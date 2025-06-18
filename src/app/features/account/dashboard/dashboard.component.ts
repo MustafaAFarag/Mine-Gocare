@@ -200,7 +200,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   updateGender(): void {
-    const newGender = this.user.gender === 1 ? 2 : 1; // Toggle between 1 (male) and 2 (female)
+    const newGender = this.user.gender === 1 ? 0 : 1; // Toggle between 0 (male) and 1 (female)
 
     this.authService.updateGender(newGender).subscribe({
       next: (response) => {
