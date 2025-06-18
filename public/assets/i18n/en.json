@@ -638,6 +638,7 @@
   "account": {
     "header": "Account",
     "sidebar": {
+      "myDetails": "My Details",
       "dashboard": "Dashboard",
       "notifications": "Notifications",
       "wallet": "My Wallet",

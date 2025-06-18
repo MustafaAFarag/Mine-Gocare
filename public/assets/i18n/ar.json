@@ -604,6 +604,7 @@
     "header": "الحساب",
     "sidebar": {
       "dashboard": "لوحة التحكم",
+      "myDetails": "تفاصيلي",
       "notifications": "الإشعارات",
       "wallet": "محفظتي",
       "orders": "طلباتي",

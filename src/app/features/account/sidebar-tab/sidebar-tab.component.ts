@@ -35,8 +35,8 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
 
   sidebarItems: SidebarItem[] = [
     {
-      name: 'Dashboard',
-      nameKey: 'account.sidebar.dashboard',
+      name: 'My Details',
+      nameKey: 'account.sidebar.myDetails',
       icon: 'ri-dashboard-line',
       route: '/account/dashboard',
       active: false,
