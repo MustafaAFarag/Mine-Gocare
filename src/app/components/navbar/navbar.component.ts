@@ -27,6 +27,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SearchComponent } from '../search/search.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { LogoutConfirmModalComponent } from '../logout-confirm-modal/logout-confirm-modal.component';
 
 @Component({
   selector: 'app-navbar',
@@ -43,6 +44,7 @@ import { MessageService } from 'primeng/api';
     TranslateModule,
     SearchComponent,
     ToastModule,
+    LogoutConfirmModalComponent,
   ],
   providers: [MessageService],
   templateUrl: './navbar.component.html',
@@ -53,6 +55,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   isMobileMenuOpen = signal(false);
   visible: boolean = false;
+  logoutConfirmVisible: boolean = false;
   userSubscription!: Subscription;
   cartSubscription!: Subscription;
   wishlistSubscription!: Subscription;
@@ -209,7 +212,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.isPagesDropdownOpen = !this.isPagesDropdownOpen;
   }
 
-  logout(): void {
+  showLogoutConfirm() {
+    this.logoutConfirmVisible = true;
+  }
+
+  onLogoutConfirm() {
     this.authService.logout();
     this.closeMobileMenu();
 

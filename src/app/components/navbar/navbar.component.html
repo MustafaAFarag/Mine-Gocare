@@ -78,7 +78,7 @@
           ></i>
           <i
             class="ri-logout-box-line cursor-pointer"
-            (click)="logout()"
+            (click)="showLogoutConfirm()"
             id="navbar-logout-icon-tablet"
           ></i>
         } @else {
@@ -197,7 +197,7 @@
           ></i>
           <i
             class="ri-logout-box-line cursor-pointer"
-            (click)="logout()"
+            (click)="showLogoutConfirm()"
             id="navbar-logout-icon-desktop"
           ></i>
         } @else {
@@ -307,5 +307,10 @@
   [(visible)]="visible"
   (visibleChange)="onVisibleChange($event)"
 ></app-auth-modal>
+
+<app-logout-confirm-modal
+  [(visible)]="logoutConfirmVisible"
+  (confirmLogout)="onLogoutConfirm()"
+></app-logout-confirm-modal>
 
 <app-cart-sidebar></app-cart-sidebar>

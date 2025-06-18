@@ -16,6 +16,12 @@
     "logoutToastSummary": "Logged Out",
     "logoutToast": "You have been successfully logged out"
   },
+  "logout": {
+    "confirmTitle": "Logout",
+    "confirmMessage": "Are you sure you want to logout?",
+    "confirm": "Logout",
+    "cancel": "Cancel"
+  },
   "search": {
     "title": "Search Products",
     "placeholder": "Search for products...",

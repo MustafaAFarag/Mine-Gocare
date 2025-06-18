@@ -615,6 +615,12 @@
       "addEmail": "إضافة بريد إلكتروني",
       "emailPlaceholder": "أدخل بريدك الإلكتروني"
     },
+    "logout": {
+      "confirmTitle": "تسجيل الخروج",
+      "confirmMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+      "confirm": "تسجيل الخروج",
+      "cancel": "إلغاء"
+    },
     "refund": {
       "title": "الاسترجاع",
       "order": "الطلب",
