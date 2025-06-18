@@ -23,6 +23,8 @@ export const ApiEndPoint = {
   getAllDistricts: 'api/services/ClientApp/City/GetAllDistricts',
   getAllCountries: 'api/services/ClientApp/Country/GetCountries?IsActive=true',
   getAllPromoCodes: 'api/services/ClientApp/PromoCode/GetAllPromoCodes',
+  UpdateClientPhoto: 'api/services/ClientApp/Client/UpdatePhoto',
+  uploadClientImage: 'api/Image/UploadClientImage',
   ValidatePromoCode:
     'api/services/ClientApp/PromoCode/ValidateProductPromoCode',
   GetClientPointsPreview:

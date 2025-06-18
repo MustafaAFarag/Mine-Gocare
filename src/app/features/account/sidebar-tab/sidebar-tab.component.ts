@@ -8,6 +8,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+import { getFullImageUrl } from '../../../lib/utils';
 
 interface SidebarItem {
   name: string;
@@ -32,6 +34,9 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   isUpdatingEmail: boolean = false;
   emailInput: string = '';
   showEmailInput: boolean = false;
+  isUploadingImage: boolean = false;
+  defaultProfileImage =
+    'https://gocare-back-testing.salonspace1.com/Attachments/Static/Profile_Images/DefaultUserImage.png';
 
   sidebarItems: SidebarItem[] = [
     {
@@ -193,5 +198,66 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   cancelEmailUpdate(): void {
     this.showEmailInput = false;
     this.emailInput = '';
+  }
+
+  getFullImageUrl = getFullImageUrl;
+
+  getProfileImageUrl(): string {
+    if (this.user?.profileImageUrl) {
+      return this.getFullImageUrl(this.user.profileImageUrl);
+    }
+    return this.defaultProfileImage;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        console.error('Please select an image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        console.error('File size should be less than 5MB');
+        return;
+      }
+
+      this.uploadProfileImage(file);
+    }
+  }
+
+  uploadProfileImage(file: File): void {
+    this.isUploadingImage = true;
+    this.authService.uploadProfileImage(file).subscribe({
+      next: (res) => {
+        if (res.success && res.result?.url) {
+          this.updateProfileImage(res.result.url);
+        } else {
+          console.error('Failed to upload image:', res.error?.message);
+          this.isUploadingImage = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error uploading image:', error);
+        this.isUploadingImage = false;
+      },
+    });
+  }
+
+  updateProfileImage(imageUrl: string): void {
+    this.authService.updateProfileImage(imageUrl).subscribe({
+      next: () => {
+        this.isUploadingImage = false;
+      },
+      error: (error) => {
+        console.error('Error updating profile image:', error);
+        this.isUploadingImage = false;
+      },
+    });
   }
 }

@@ -8,10 +8,34 @@
       ></div>
     </div>
     <div *ngIf="!isLoading" class="flex items-center gap-2">
-      <div
-        class="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 p-2 text-xl font-bold text-gray-700 xl:p-5"
-      >
-        {{ getInitials() }}
+      <div class="relative">
+        <img
+          [src]="getProfileImageUrl()"
+          [alt]="getFullName()"
+          class="h-12 w-12 rounded-md object-cover xl:h-16 xl:w-16"
+        />
+        <label
+          for="profile-image-upload"
+          class="absolute bottom-0 right-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-hover-color text-white transition hover:bg-hover-color/80"
+        >
+          <i class="ri-camera-line text-sm"></i>
+          <input
+            type="file"
+            id="profile-image-upload"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="hidden"
+            [disabled]="isUploadingImage"
+          />
+        </label>
+        <div
+          *ngIf="isUploadingImage"
+          class="absolute inset-0 flex items-center justify-center rounded-md bg-black/50"
+        >
+          <div
+            class="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"
+          ></div>
+        </div>
       </div>
       <div class="min-w-0 flex-1">
         <h3 class="font-medium text-gray-800">{{ getFullName() }}</h3>

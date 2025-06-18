@@ -16,6 +16,8 @@ export interface LoginResponse {
     userId: number;
     fullName: string;
     profileImageUrl: string;
+    gender: number;
+    thumbImageUrl: string;
   };
   success: boolean;
 }
@@ -36,6 +38,8 @@ export interface UserProfileResponse {
   emailAddress: string;
   mobileNumber: string;
   isRegisteredExternally: boolean;
-  profileImageURL: any;
+  profileImageURL: string | null;
+  profileImageUrl: string | null;
+  thumbImageUrl: string | null;
   gender: number;
 }

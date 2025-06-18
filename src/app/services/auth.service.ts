@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { LoginResponse } from '../model/Auth';
 import { ApiEndPoint } from '../constants/api.constant';
 import { environment } from '../../environments/environment';
@@ -23,6 +23,8 @@ export class AuthService {
   private updateEmailAddressUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientEmail}`;
   private updatePasswordUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientPassword}`;
   private updateGenderUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientGender}`;
+  private updateClientPhotoUrl = `${environment.apiUrl}/${ApiEndPoint.UpdateClientPhoto}`;
+  private uploadClientImageUrl = `${environment.apiUrl}/${ApiEndPoint.uploadClientImage}`;
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
@@ -74,26 +76,33 @@ export class AuthService {
     return this.http.post<LoginResponse>(this.loginUrl, body, { headers }).pipe(
       tap((res) => {
         if (res.success) {
-          this.userSubject.next(res.result);
+          // Store tokens separately
           this.setLocalStorageItem('accessToken', res.result.accessToken);
-          const {
-            accessToken,
-            encryptedAccessToken,
-            refreshToken,
-            refreshTokenExpiration,
-            expireInSeconds,
-            ...safeUserData
-          } = res.result;
+          this.setLocalStorageItem('refreshToken', res.result.refreshToken);
+          this.setLocalStorageItem(
+            'refreshTokenExpiration',
+            res.result.refreshTokenExpiration,
+          );
+          this.setLocalStorageItem(
+            'expireInSeconds',
+            res.result.expireInSeconds.toString(),
+          );
 
-          // Add email or phone info to the user data that gets stored
-          const userData = safeUserData as any;
-          if (isEmail) {
-            userData.emailAddress = emailOrPhone;
-          } else {
-            userData.mobileNumber = formattedPhone;
-          }
+          // Create user data object with consistent structure
+          const userData = {
+            userId: res.result.userId,
+            firstName: res.result.fullName.split(' ')[0],
+            lastName: res.result.fullName.split(' ').slice(1).join(' '),
+            emailAddress: isEmail ? emailOrPhone : null,
+            mobileNumber: !isEmail ? formattedPhone : null,
+            gender: res.result.gender,
+            profileImageUrl: res.result.profileImageUrl,
+            thumbImageUrl: res.result.thumbImageUrl,
+            isRegisteredExternally: false,
+          };
 
           this.setLocalStorageItem('user', JSON.stringify(userData));
+          this.userSubject.next(userData);
         } else {
           throw new Error('Login failed');
         }
@@ -237,12 +246,23 @@ export class AuthService {
     return this.http.get<any>(this.getClientProfileUrl, { headers }).pipe(
       tap((res) => {
         if (res.success && res.result) {
-          const updatedUser = {
-            ...this.currentUser,
-            ...res.result,
+          // Create user data object with consistent structure
+          const userData = {
+            userId: this.currentUser?.userId,
+            firstName: res.result.firstName,
+            lastName: res.result.lastName,
+            emailAddress: res.result.emailAddress,
+            mobileNumber: res.result.mobileNumber,
+            gender: res.result.gender,
+            profileImageUrl:
+              res.result.profileImageURL || this.currentUser?.profileImageUrl,
+            thumbImageUrl:
+              res.result.profileImageURL || this.currentUser?.thumbImageUrl,
+            isRegisteredExternally: res.result.isRegisteredExternally,
           };
-          this.setLocalStorageItem('user', JSON.stringify(updatedUser));
-          this.userSubject.next(updatedUser);
+
+          this.setLocalStorageItem('user', JSON.stringify(userData));
+          this.userSubject.next(userData);
         } else {
           throw new Error('Failed to retrieve profile.');
         }
@@ -462,5 +482,90 @@ export class AuthService {
     if (this.isBrowser()) {
       localStorage.removeItem(key);
     }
+  }
+
+  uploadProfileImage(file: File): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    return this.http
+      .post<any>(this.uploadClientImageUrl, formData, {
+        headers,
+        reportProgress: true,
+        observe: 'response',
+      })
+      .pipe(
+        map((response) => response.body),
+        tap((res) => {
+          if (!res.success) {
+            throw new Error(res.error?.message || 'Failed to upload image.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'An error occurred while uploading the image.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage =
+              error.error?.message || `Server returned code ${error.status}`;
+          }
+          return throwError(() => new Error(errorMessage));
+        }),
+      );
+  }
+
+  updateProfileImage(imageUrl: string): Observable<any> {
+    const token = this.getLocalStorageItem('accessToken');
+    if (!token) {
+      return throwError(() => new Error('No access token found.'));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const body = {
+      profileImageURL: imageUrl,
+    };
+
+    return this.http
+      .put<any>(this.updateClientPhotoUrl, body, { headers })
+      .pipe(
+        tap((res) => {
+          if (res.success) {
+            const updatedUser = {
+              ...this.currentUser,
+              profileImageUrl: imageUrl,
+              thumbImageUrl: imageUrl,
+            };
+            this.setLocalStorageItem('user', JSON.stringify(updatedUser));
+            this.userSubject.next(updatedUser);
+          } else {
+            throw new Error('Failed to update profile image.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage =
+            'An error occurred while updating the profile image.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = error.error.message;
+          } else {
+            errorMessage =
+              error.error?.message || `Server returned code ${error.status}`;
+          }
+          return throwError(() => new Error(errorMessage));
+        }),
+      );
   }
 }
