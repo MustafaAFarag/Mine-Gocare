@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserProfileResponse } from '../../../model/Auth';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WalletService } from '../../../services/wallet.service';
 import { AuthService } from '../../../services/auth.service';
 import { Wallet } from '../../../model/Wallet';
@@ -9,10 +9,13 @@ import { OrderService } from '../../../services/order.service';
 import { LanguageService } from '../../../services/language.service';
 import { Subscription, forkJoin } from 'rxjs';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, TranslateModule, LoadingComponent],
+  imports: [CommonModule, TranslateModule, LoadingComponent, ToastModule],
+  providers: [MessageService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -35,6 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private orderService: OrderService,
     private languageService: LanguageService,
+    private messageService: MessageService,
+    private translateService: TranslateService,
   ) {
     this.token = this.authService.getLocalStorageItem('accessToken');
 
@@ -206,12 +211,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success) {
           this.user.gender = newGender;
-          alert('Gender updated successfully');
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant(
+              'dashboard-account.genderUpdated',
+            ),
+            detail: this.translateService.instant(
+              'dashboard-account.genderUpdatedSuccess',
+            ),
+            life: 2000,
+            styleClass: 'black-text-toast',
+          });
         }
       },
       error: (error) => {
         console.error('Error updating gender:', error);
-        alert('Failed to update gender. Please try again.');
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translateService.instant('dashboard-account.error'),
+          detail: this.translateService.instant(
+            'dashboard-account.genderUpdateFailed',
+          ),
+          life: 2000,
+          styleClass: 'black-text-toast',
+        });
       },
     });
   }

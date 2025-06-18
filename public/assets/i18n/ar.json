@@ -699,6 +699,9 @@
   "dashboard-account": {
     "hello": "مرحباً، {{name}}!",
     "welcomeText": "من لوحة تحكم حسابك يمكنك عرض لمحة عامة عن نشاط حسابك الأخير وتحديث معلومات حسابك. اختر رابطاً أدناه لعرض أو تحرير المعلومات.",
+    "genderUpdated": "تحديث الجنس",
+    "genderUpdatedSuccess": "تم تحديث الجنس بنجاح",
+    "genderUpdateFailed": "فشل تحديث الجنس",
     "balance": "الرصيد",
     "totalOrders": "إجمالي الطلبات",
     "totalPoints": "إجمالي النقاط",
