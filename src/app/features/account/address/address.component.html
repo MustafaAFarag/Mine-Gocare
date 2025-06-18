@@ -133,25 +133,57 @@
             class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
             >{{ "address.city" | translate }}</label
           >
-          <select
-            formControlName="cityId"
-            id="address-city-input"
-            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
-            [ngClass]="{
-              'border-red-500':
-                addressForm.get('cityId')?.invalid &&
-                addressForm.get('cityId')?.touched,
-            }"
-          >
-            <option [ngValue]="null" disabled>
-              {{ "address.selectCity" | translate }}
-            </option>
-            @for (city of cities; track $index) {
-              <option value="{{ city.id }}">
-                {{ city.name[currentLang] }}
+          <div class="relative">
+            <select
+              formControlName="cityId"
+              id="address-city-input"
+              class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+              [ngClass]="{
+                'border-red-500':
+                  addressForm.get('cityId')?.invalid &&
+                  addressForm.get('cityId')?.touched,
+                'opacity-50': loadingCities,
+              }"
+              [disabled]="loadingCities"
+            >
+              <option [ngValue]="null" disabled>
+                {{
+                  loadingCities
+                    ? ("common.loading" | translate)
+                    : ("address.selectCity" | translate)
+                }}
               </option>
+              @for (city of cities; track $index) {
+                <option value="{{ city.id }}">
+                  {{ city.name[currentLang] }}
+                </option>
+              }
+            </select>
+            @if (loadingCities) {
+              <div class="absolute right-2 top-1/2 -translate-y-1/2">
+                <svg
+                  class="h-4 w-4 animate-spin text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
             }
-          </select>
+          </div>
           <div
             *ngIf="
               addressForm.get('cityId')?.invalid &&
@@ -169,25 +201,57 @@
             class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
             >{{ "address.district" | translate }}</label
           >
-          <select
-            formControlName="districtId"
-            id="address-district-input"
-            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
-            [ngClass]="{
-              'border-red-500':
-                addressForm.get('districtId')?.invalid &&
-                addressForm.get('districtId')?.touched,
-            }"
-          >
-            <option [ngValue]="null" disabled>
-              {{ "address.selectDistrict" | translate }}
-            </option>
-            @for (district of districts; track $index) {
-              <option value="{{ district.id }}">
-                {{ district.name[currentLang] }}
+          <div class="relative">
+            <select
+              formControlName="districtId"
+              id="address-district-input"
+              class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+              [ngClass]="{
+                'border-red-500':
+                  addressForm.get('districtId')?.invalid &&
+                  addressForm.get('districtId')?.touched,
+                'opacity-50': loadingDistricts,
+              }"
+              [disabled]="loadingDistricts"
+            >
+              <option [ngValue]="null" disabled>
+                {{
+                  loadingDistricts
+                    ? ("common.loading" | translate)
+                    : ("address.selectDistrict" | translate)
+                }}
               </option>
+              @for (district of districts; track $index) {
+                <option value="{{ district.id }}">
+                  {{ district.name[currentLang] }}
+                </option>
+              }
+            </select>
+            @if (loadingDistricts) {
+              <div class="absolute right-2 top-1/2 -translate-y-1/2">
+                <svg
+                  class="h-4 w-4 animate-spin text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
             }
-          </select>
+          </div>
           <div
             *ngIf="
               addressForm.get('districtId')?.invalid &&
@@ -262,7 +326,10 @@
         </div>
 
         <!-- Default Address Checkbox -->
-        <div class="form-group md:col-span-2">
+        <div
+          class="form-group md:col-span-2"
+          *ngIf="editingAddressId || addresses.length === 0"
+        >
           <div class="flex items-center gap-1.5 lg:gap-2">
             <input
               type="checkbox"
@@ -432,3 +499,4 @@
     </div>
   </div>
 </div>
+<p-toast position="top-left" styleClass="black-text-toast"></p-toast>

@@ -744,6 +744,8 @@
     "title": "Address Book",
     "addNew": "Add New",
     "updateAddress": "Update Address",
+    "cannotDeleteDefault": "Cannot delete default address",
+    "cannotDeleteDefaultDetail": "Default address cannot be deleted",
     "fullName": "Address Name",
     "phoneNumber": "Phone Number",
     "district": "District",

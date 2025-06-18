@@ -18,13 +18,22 @@ import {
 } from '../../../model/Address';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ToastModule,
+  ],
+  providers: [MessageService],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css'],
 })
@@ -41,11 +50,14 @@ export class AddressComponent implements OnInit {
   cities!: City[];
   districts!: District[];
   countries!: Country[];
+  loadingCities = false;
+  loadingDistricts = false;
 
   constructor(
     private addressService: AddressService,
     private fb: FormBuilder,
     private translateService: TranslateService,
+    private messageService: MessageService,
   ) {
     this.addressForm = this.createAddressForm();
 
@@ -109,6 +121,7 @@ export class AddressComponent implements OnInit {
   }
 
   fetchAllCitiesAPI(countryId: number) {
+    this.loadingCities = true;
     this.addressForm.get('cityId')?.disable();
     this.cities = [];
 
@@ -116,15 +129,18 @@ export class AddressComponent implements OnInit {
       next: (response) => {
         this.cities = response.result;
         this.addressForm.get('cityId')?.enable();
+        this.loadingCities = false;
       },
       error: (error) => {
         console.error('Error fetching cities:', error);
         this.addressForm.get('cityId')?.disable();
+        this.loadingCities = false;
       },
     });
   }
 
   fetchAllDistrictsAPI(cityId: number) {
+    this.loadingDistricts = true;
     this.addressForm.get('districtId')?.disable();
     this.districts = [];
 
@@ -132,10 +148,12 @@ export class AddressComponent implements OnInit {
       next: (response) => {
         this.districts = response.result;
         this.addressForm.get('districtId')?.enable();
+        this.loadingDistricts = false;
       },
       error: (error) => {
         console.error('Error fetching districts:', error);
         this.addressForm.get('districtId')?.disable();
+        this.loadingDistricts = false;
       },
     });
   }
@@ -205,24 +223,56 @@ export class AddressComponent implements OnInit {
       this.addressForm.get('cityId')?.enable();
       this.addressForm.get('districtId')?.enable();
 
-      // Fetch cities and districts for the existing address
-      this.fetchAllCitiesAPI(addressToEdit.country.id);
-      this.fetchAllDistrictsAPI(addressToEdit.city.id);
+      // First fetch cities for the country
+      this.loadingCities = true;
+      this.addressService.GetCities(addressToEdit.country.id).subscribe({
+        next: (response) => {
+          this.cities = response.result;
+          this.addressForm.get('cityId')?.enable();
+          this.loadingCities = false;
 
-      // Populate the form with existing values
-      this.addressForm.patchValue({
-        countryId: addressToEdit.country.id,
-        cityId: addressToEdit.city.id,
-        districtId: addressToEdit.district.id,
-        address: addressToEdit.address,
-        mapAddress: addressToEdit.mapAddress,
-        phoneNumber: addressToEdit.phoneNumber,
-        isDefault: addressToEdit.isDefault,
-        type: addressToEdit.type,
-        fullName: addressToEdit.fullName,
-        isPhoneVerified: addressToEdit.isPhoneVerified,
-        latitude: addressToEdit.latitude,
-        longitude: addressToEdit.longitude,
+          // Set country and city first
+          this.addressForm.patchValue({
+            countryId: addressToEdit.country.id,
+            cityId: addressToEdit.city.id,
+          });
+
+          // After cities are loaded, fetch districts for the city
+          this.loadingDistricts = true;
+          this.addressService.getDistricts(addressToEdit.city.id).subscribe({
+            next: (districtResponse) => {
+              this.districts = districtResponse.result;
+              this.addressForm.get('districtId')?.enable();
+              this.loadingDistricts = false;
+
+              // Set the rest of the form values including district
+              setTimeout(() => {
+                this.addressForm.patchValue({
+                  districtId: addressToEdit.district.id,
+                  address: addressToEdit.address,
+                  mapAddress: addressToEdit.mapAddress,
+                  phoneNumber: addressToEdit.phoneNumber,
+                  isDefault: addressToEdit.isDefault,
+                  type: addressToEdit.type,
+                  fullName: addressToEdit.fullName,
+                  isPhoneVerified: addressToEdit.isPhoneVerified,
+                  latitude: addressToEdit.latitude,
+                  longitude: addressToEdit.longitude,
+                });
+              }, 0);
+            },
+            error: (error) => {
+              console.error('Error fetching districts:', error);
+              this.addressForm.get('districtId')?.disable();
+              this.loadingDistricts = false;
+            },
+          });
+        },
+        error: (error) => {
+          console.error('Error fetching cities:', error);
+          this.addressForm.get('cityId')?.disable();
+          this.loadingCities = false;
+        },
       });
     }
   }
@@ -232,7 +282,7 @@ export class AddressComponent implements OnInit {
     this.showAddressForm = true;
     this.addressForm.reset({
       type: 0,
-      isDefault: false,
+      isDefault: this.addresses.length === 0,
       isPhoneVerified: false,
     });
   }
@@ -295,16 +345,50 @@ export class AddressComponent implements OnInit {
   }
 
   removeAddress(id: number): void {
+    const addressToDelete = this.addresses.find((a) => a.id === id);
+
+    if (addressToDelete?.isDefault) {
+      // Show error toast for trying to delete default address
+      this.messageService.add({
+        severity: 'error',
+        summary: this.translateService.instant('address.cannotDeleteDefault'),
+        detail: this.translateService.instant(
+          'address.cannotDeleteDefaultDetail',
+        ),
+        life: 3000,
+        styleClass: 'black-text-toast',
+      });
+      return;
+    }
+
     if (confirm(this.translateService.instant('address.confirmDelete'))) {
       this.deletingAddressId = id;
       this.addressService.deleteAddress(this.token as string, id).subscribe({
         next: (response) => {
           this.deletingAddressId = null;
           this.fetchClientAddressesAPI(); // Refresh the address list
+          // Show success toast
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('address.deleteSuccess'),
+            detail: this.translateService.instant(
+              'address.deleteSuccessDetail',
+            ),
+            life: 2000,
+            styleClass: 'black-text-toast',
+          });
         },
         error: (error) => {
           console.error('Error removing address:', error);
           this.deletingAddressId = null;
+          // Show error toast
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('address.deleteError'),
+            detail: this.translateService.instant('address.deleteErrorDetail'),
+            life: 3000,
+            styleClass: 'black-text-toast',
+          });
         },
       });
     }

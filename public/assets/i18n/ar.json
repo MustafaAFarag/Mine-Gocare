@@ -712,6 +712,8 @@
   "address": {
     "title": "دفتر العناوين",
     "addNew": "إضافة جديد",
+    "cannotDeleteDefault": "لا يمكن حذف العنوان الافتراضي",
+    "cannotDeleteDefaultDetail": "لا يمكن حذف العنوان الافتراضي",
     "updateAddress": "تحديث العنوان",
     "fullName": "اسم العنوان",
     "phoneNumber": "رقم الهاتف",
