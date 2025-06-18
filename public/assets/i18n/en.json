@@ -771,6 +771,7 @@
     "validation": {
       "fullNameRequired": "Full name is required",
       "phoneNumberRequired": "Phone number is required",
+      "phoneNumberInvalid": "Please enter a valid phone number",
       "districtRequired": "District is required",
       "cityRequired": "City is required",
       "countryRequired": "Country is required",

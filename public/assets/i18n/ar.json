@@ -740,6 +740,7 @@
     "validation": {
       "fullNameRequired": "الاسم الكامل مطلوب",
       "phoneNumberRequired": "رقم الهاتف مطلوب",
+      "phoneNumberInvalid": "الرجاء إدخال رقم هاتف صحيح",
       "districtRequired": "الحي مطلوب",
       "cityRequired": "المدينة مطلوبة",
       "countryRequired": "الدولة مطلوبة",

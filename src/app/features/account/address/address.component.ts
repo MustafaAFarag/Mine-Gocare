@@ -7,6 +7,8 @@ import {
   FormGroup,
   Validators,
   FormControl,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { AddressService } from '../../../services/address.service';
 import {
@@ -22,6 +24,31 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 type Language = 'en' | 'ar';
+
+interface PhoneCountry {
+  name: string;
+  code: string;
+  phoneCode: string;
+  phoneCodeCountryId: number;
+  flag: string;
+}
+
+const PHONE_COUNTRIES: PhoneCountry[] = [
+  {
+    name: 'common.egypt',
+    code: 'EG',
+    phoneCode: '+20',
+    phoneCodeCountryId: 224,
+    flag: 'assets/images/egypt-flag-icon.svg',
+  },
+  {
+    name: 'common.saudiArabia',
+    code: 'SA',
+    phoneCode: '+966',
+    phoneCodeCountryId: 103,
+    flag: 'assets/images/settings/saudi-flag.svg',
+  },
+];
 
 @Component({
   selector: 'app-address',
@@ -52,6 +79,9 @@ export class AddressComponent implements OnInit {
   countries!: Country[];
   loadingCities = false;
   loadingDistricts = false;
+  showCountryDropdown = false;
+  selectedPhoneCountry: PhoneCountry = PHONE_COUNTRIES[0];
+  phoneCountries = PHONE_COUNTRIES;
 
   constructor(
     private addressService: AddressService,
@@ -95,6 +125,13 @@ export class AddressComponent implements OnInit {
         });
       }
     });
+
+    // Add listener for phone number input
+    this.addressForm.get('phoneNumber')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.onPhoneNumberInput(value);
+      }
+    });
   }
 
   createAddressForm(): FormGroup {
@@ -112,12 +149,64 @@ export class AddressComponent implements OnInit {
       longitude: [''],
       address: ['', Validators.required],
       mapAddress: [''],
-      phoneNumber: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
       isDefault: [false],
       type: [0, Validators.required],
       fullName: ['', Validators.required],
       isPhoneVerified: [false],
     });
+  }
+
+  private phoneNumberValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      // Remove any non-digit characters
+      const digits = value.replace(/\D/g, '');
+
+      if (this.selectedPhoneCountry.code === 'EG') {
+        // Egypt: 11 digits starting with 0, or 10 digits without 0
+        const egyptPatternWithZero = /^0\d{10}$/;
+        const egyptPatternWithoutZero = /^[1-9]\d{9}$/;
+        return egyptPatternWithZero.test(digits) ||
+          egyptPatternWithoutZero.test(digits)
+          ? null
+          : { invalidPhoneNumber: true };
+      } else if (this.selectedPhoneCountry.code === 'SA') {
+        // Saudi: 9 digits
+        const saudiPattern = /^\d{9}$/;
+        return saudiPattern.test(digits) ? null : { invalidPhoneNumber: true };
+      }
+
+      return { invalidPhoneNumber: true };
+    };
+  }
+
+  onPhoneNumberInput(value: string): void {
+    // Only allow numeric input
+    if (!/^\d*$/.test(value)) {
+      // Remove any non-numeric characters
+      const numericOnly = value.replace(/\D/g, '');
+      this.addressForm.get('phoneNumber')?.setValue(numericOnly);
+      return;
+    }
+
+    if (this.selectedPhoneCountry.code === 'EG') {
+      // If it starts with 0, limit to 11 digits
+      if (value.startsWith('0') && value.length > 11) {
+        this.addressForm.get('phoneNumber')?.setValue(value.slice(0, 11));
+      }
+      // If it doesn't start with 0, limit to 10 digits
+      else if (!value.startsWith('0') && value.length > 10) {
+        this.addressForm.get('phoneNumber')?.setValue(value.slice(0, 10));
+      }
+    } else if (this.selectedPhoneCountry.code === 'SA') {
+      // Saudi numbers are 9 digits
+      if (value.length > 9) {
+        this.addressForm.get('phoneNumber')?.setValue(value.slice(0, 9));
+      }
+    }
   }
 
   fetchAllCitiesAPI(countryId: number) {

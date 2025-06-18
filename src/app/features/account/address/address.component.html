@@ -69,17 +69,71 @@
             class="mb-0.5 block text-xs font-medium text-gray-700 lg:mb-1 lg:text-sm"
             >{{ "address.phoneNumber" | translate }}</label
           >
-          <input
-            type="text"
-            formControlName="phoneNumber"
-            id="address-phone-number-input"
-            class="w-full rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
-            [ngClass]="{
-              'border-red-500':
-                addressForm.get('phoneNumber')?.invalid &&
-                addressForm.get('phoneNumber')?.touched,
-            }"
-          />
+          <div class="flex w-full">
+            <!-- Country dropdown with flag -->
+            <div class="relative">
+              <button
+                type="button"
+                (click)="showCountryDropdown = !showCountryDropdown"
+                id="address-phone-country-dropdown-button"
+                class="flex h-full items-center gap-1 rounded-l-md border border-gray-300 bg-white px-2 py-1.5 text-sm hover:bg-gray-50 lg:px-3 lg:py-2 lg:text-base"
+              >
+                <img
+                  [src]="selectedPhoneCountry.flag"
+                  [alt]="selectedPhoneCountry.name | translate"
+                  class="h-4 w-6 object-contain"
+                />
+                <span class="px-2 text-sm font-medium">{{
+                  selectedPhoneCountry.phoneCode
+                }}</span>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                *ngIf="showCountryDropdown"
+                class="absolute top-full z-50 mt-1 w-48 rounded-md border border-gray-300 bg-white shadow-lg"
+                [class.right-0]="currentLang === 'ar'"
+                [class.left-0]="currentLang !== 'ar'"
+              >
+                <div
+                  *ngFor="let country of phoneCountries"
+                  [id]="'address-phone-country-dropdown-item-' + country.code"
+                  (click)="
+                    selectedPhoneCountry = country; showCountryDropdown = false
+                  "
+                  class="flex cursor-pointer items-center gap-2 px-2 py-2 hover:bg-gray-50"
+                >
+                  <img
+                    [src]="country.flag"
+                    [alt]="country.name | translate"
+                    class="h-4 w-6 object-contain"
+                  />
+                  <span class="text-sm"
+                    >{{ country.name | translate }} ({{
+                      country.phoneCode
+                    }})</span
+                  >
+                </div>
+              </div>
+            </div>
+            <input
+              type="text"
+              formControlName="phoneNumber"
+              id="address-phone-number-input"
+              class="w-full rounded-r-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm focus:border-hover-color focus:outline-none lg:px-3 lg:py-2 lg:text-base"
+              [ngClass]="{
+                'border-red-500':
+                  addressForm.get('phoneNumber')?.invalid &&
+                  addressForm.get('phoneNumber')?.touched,
+              }"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              (paste)="$event.preventDefault()"
+              (keypress)="
+                ($event.charCode >= 48 && $event.charCode <= 57) ||
+                  $event.preventDefault()
+              "
+            />
+          </div>
           <div
             *ngIf="
               addressForm.get('phoneNumber')?.invalid &&
@@ -87,7 +141,18 @@
             "
             class="mt-0.5 text-xs text-red-500 lg:mt-1 lg:text-sm"
           >
-            {{ "address.validation.phoneNumberRequired" | translate }}
+            <ng-container
+              *ngIf="addressForm.get('phoneNumber')?.errors?.['required']"
+            >
+              {{ "address.validation.phoneNumberRequired" | translate }}
+            </ng-container>
+            <ng-container
+              *ngIf="
+                addressForm.get('phoneNumber')?.errors?.['invalidPhoneNumber']
+              "
+            >
+              {{ "address.validation.phoneNumberInvalid" | translate }}
+            </ng-container>
           </div>
         </div>
 
