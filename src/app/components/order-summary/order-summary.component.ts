@@ -100,7 +100,11 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   }
 
   incrementQuantity(item: CartItem): void {
-    this.cartService.updateQuantity(item.productId, item.quantity + 1);
+    this.cartService.updateQuantity(
+      item.productId,
+      item.quantity + 1,
+      item.variantId,
+    );
     this.fetchOrderSummary(); // Refresh summary after quantity change
   }
 

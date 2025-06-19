@@ -145,7 +145,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: product.promoCodeDetail,
+      promoCodeDetail: product.promoCodeDetail ?? null,
       currency: product.currency.name,
     };
 

@@ -1006,7 +1006,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       afterPrice: variant.priceAfterDiscount,
       beforePrice: variant.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: variant.promoCodeDetail,
+      promoCodeDetail:
+        variant.promoCodeDetail ?? product.promoCodeDetail ?? null,
       currency:
         (variant.currency && variant.currency.name) ||
         (product.currency && product.currency.name),

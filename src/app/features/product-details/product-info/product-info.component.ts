@@ -134,6 +134,7 @@ export class ProductInfoComponent {
       quantity: this.counter,
       image: variant.mainImageUrl || product.mainImageUrl,
       currency: variant.currency.name,
+      promoCodeDetail: variant.promoCodeDetail ?? null,
     };
     this.cartService.addToCart(item);
     this.cartSidebarService.openCart();

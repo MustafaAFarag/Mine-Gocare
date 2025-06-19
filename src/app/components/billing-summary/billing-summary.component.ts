@@ -346,7 +346,8 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     console.log('cartItems', this.cartItems);
     // Check if any cart item has a promoCodeDetail
     this.hasPromoCodeInCart = this.cartItems.some(
-      (item) => item.promoCodeDetail !== null,
+      (item) =>
+        item.promoCodeDetail !== null && item.promoCodeDetail !== undefined,
     );
 
     // Calculate final total including shipping, tax, and any discounts

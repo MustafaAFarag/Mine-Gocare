@@ -102,6 +102,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       afterPrice: product.priceAfterDiscount,
       beforePrice: product.priceBeforeDiscount,
       quantity: 1,
+      promoCodeDetail: product.promoCodeDetail ?? null,
       currency: product.currency.name,
     };
 

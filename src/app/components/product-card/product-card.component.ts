@@ -157,7 +157,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       afterPrice: variant.priceAfterDiscount || product.priceAfterDiscount,
       beforePrice: variant.priceBeforeDiscount || product.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: variant.promoCodeDetail || product.promoCodeDetail,
+      promoCodeDetail:
+        variant.promoCodeDetail ?? product.promoCodeDetail ?? null,
       currency:
         (variant.currency && variant.currency.name) ||
         (product.currency && product.currency.name),

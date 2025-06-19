@@ -66,6 +66,8 @@ export class QuickProductInfoComponent {
       beforePrice: this.productDetails.productVariants[0].priceBeforeDiscount,
       quantity: this.quantity,
       currency: this.productDetails.productVariants[0].currency.name,
+      promoCodeDetail:
+        this.productDetails.productVariants[0].promoCodeDetail ?? null,
     };
 
     this.cartService.addToCart(cartItem);
