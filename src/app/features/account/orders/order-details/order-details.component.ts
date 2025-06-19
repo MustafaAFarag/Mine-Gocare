@@ -254,7 +254,10 @@ export class OrderDetailsComponent implements OnInit {
 
   canCancelOrder(): boolean {
     if (!this.orderDetails) return false;
-    return this.orderDetails.orderStatus === 1 && !this.orderDetails.canReturn;
+    return (
+      this.orderDetails.orderStatus === 1 ||
+      (this.orderDetails.orderStatus === 2 && !this.orderDetails.canReturn)
+    );
   }
 
   cancelOrder(): void {

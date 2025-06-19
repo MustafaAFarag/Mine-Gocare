@@ -67,7 +67,7 @@
               }"
             >
               {{
-                order.isCanceled
+                order.isCanceled || order.status === 7
                   ? ("account.orders.statusCanceled" | translate)
                   : order.status === 1
                     ? ("account.orders.statusNew" | translate)
