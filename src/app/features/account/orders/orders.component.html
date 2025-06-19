@@ -47,7 +47,7 @@
             {{ order.orderNumber }}
           </td>
           <td class="px-4 py-4 text-gray-700">
-            {{ order.creationDate | date: "medium" : "UTC" }}
+            {{ order.lastStatusHistory.date | date: "medium" : "UTC" }}
           </td>
           <td class="px-4 py-4 text-gray-700">
             {{ order.totalPayment }} {{ order.currency.name[currentLang] }}
@@ -140,7 +140,7 @@
         <div>
           <p class="font-medium text-gray-700">{{ order.orderNumber }}</p>
           <p class="text-sm text-gray-500">
-            {{ order.creationDate | date: "dd MMM yyyy hh:mm a" }}
+            {{ order.lastStatusHistory.date | date: "medium" : "UTC" }}
           </p>
         </div>
         <span

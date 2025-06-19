@@ -646,6 +646,7 @@
       "option": "الخيار",
       "statusCanceled": "ملغي",
       "statusInProgress": "قيد التنفيذ",
+      "statusConfirmed": "الطلب متأكد",
       "statusCompleted": "مكتمل",
       "statusShipped": "تم الشحن",
       "statusRejected": "مرفوض",

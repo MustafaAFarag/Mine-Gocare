@@ -60,6 +60,7 @@ export class OrdersComponent implements OnInit {
       this.orderService.getClientOrders(this.token).subscribe(
         (response) => {
           this.orders = response.result.items;
+          console.log('ORDERS', this.orders);
           this.totalItems = response.result.totalCount;
           this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
           this.isLoading = false;
