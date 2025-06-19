@@ -113,7 +113,9 @@
               />
             </td>
             <td class="px-4 py-4 text-gray-800">
-              {{ item.productName[currentLang === "ar" ? "ar" : "en"] }}
+              <span class="ellipsis-2-lines">
+                {{ item.productName[currentLang === "ar" ? "ar" : "en"] }}
+              </span>
             </td>
             <td class="px-4 py-4 text-gray-800">
               <ng-container
@@ -161,7 +163,7 @@
             class="h-20 w-16 object-cover"
           />
           <div class="flex-1">
-            <h3 class="mb-1 font-medium text-gray-800">
+            <h3 class="ellipsis-2-lines mb-1 font-medium text-gray-800">
               {{ item.productName[currentLang === "ar" ? "ar" : "en"] }}
             </h3>
             <div class="mb-2">
