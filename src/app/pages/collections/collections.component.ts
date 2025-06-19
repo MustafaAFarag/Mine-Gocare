@@ -992,18 +992,25 @@ export class CollectionsComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
-    console.log('PRODUCT ADDED TO CART', product);
+    // Use the selected variant if available, otherwise fallback to product
+    const variant: any =
+      product.productVariants?.find((v: any) => v.isSelected) || product;
     const cartItem: CartItem = {
       productId: product.productId,
-      variantId: product.variantId,
-      name: product.name.en,
-      image: product.mainImageUrl,
-      afterPrice: product.priceAfterDiscount,
-      beforePrice: product.priceBeforeDiscount,
+      variantId:
+        typeof variant.variantId !== 'undefined'
+          ? variant.variantId
+          : variant.id,
+      name: variant.name || variant.variantName || product.name,
+      image: variant.mainImageUrl || product.mainImageUrl,
+      afterPrice: variant.priceAfterDiscount,
+      beforePrice: variant.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: product.promoCodeDetail,
+      promoCodeDetail: variant.promoCodeDetail,
+      currency:
+        (variant.currency && variant.currency.name) ||
+        (product.currency && product.currency.name),
     };
-
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }

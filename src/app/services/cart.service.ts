@@ -64,7 +64,7 @@ export class CartService {
 
     const currentCart = structuredClone(this.cartSubject.value);
     const existingIndex = currentCart.items.findIndex(
-      (i) => i.productId === item.productId,
+      (i) => i.productId === item.productId && i.variantId === item.variantId,
     );
 
     if (existingIndex > -1) {
@@ -83,23 +83,29 @@ export class CartService {
     this.saveCart(currentCart);
   }
 
-  removeFromCart(productId: number): void {
+  removeFromCart(productId: number, variantId?: number): void {
     const currentCart = structuredClone(this.cartSubject.value);
     currentCart.items = currentCart.items.filter(
-      (item) => item.productId !== productId,
+      (item) => !(item.productId === productId && item.variantId === variantId),
     );
     currentCart.total = this.calculateTotal(currentCart.items);
     this.saveCart(currentCart);
   }
 
-  updateQuantity(productId: number, quantity: number): void {
+  updateQuantity(
+    productId: number,
+    quantity: number,
+    variantId?: number,
+  ): void {
     if (quantity < 1) {
-      this.removeFromCart(productId);
+      this.removeFromCart(productId, variantId);
       return;
     }
 
     const currentCart = structuredClone(this.cartSubject.value);
-    const index = currentCart.items.findIndex((i) => i.productId === productId);
+    const index = currentCart.items.findIndex(
+      (i) => i.productId === productId && i.variantId === variantId,
+    );
 
     if (index > -1) {
       const existingItem = currentCart.items[index];

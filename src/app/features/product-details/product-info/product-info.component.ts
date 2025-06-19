@@ -124,17 +124,17 @@ export class ProductInfoComponent {
   }
 
   addToCart(product: ProductDetails): void {
+    const variant = this.selectedVariant;
     const item: CartItem = {
       productId: product.id,
-      variantId: this.selectedVariant.id,
-      name: product.productName,
-      afterPrice: this.selectedVariant.priceAfterDiscount,
-      beforePrice: this.selectedVariant.priceBeforeDiscount,
+      variantId: variant.id,
+      name: variant.variantName || product.productName,
+      afterPrice: variant.priceAfterDiscount,
+      beforePrice: variant.priceBeforeDiscount,
       quantity: this.counter,
-      image: this.selectedVariant.mainImageUrl || product.mainImageUrl,
-      currency: this.selectedVariant.currency.name,
+      image: variant.mainImageUrl || product.mainImageUrl,
+      currency: variant.currency.name,
     };
-
     this.cartService.addToCart(item);
     this.cartSidebarService.openCart();
   }

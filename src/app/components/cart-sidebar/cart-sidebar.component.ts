@@ -92,7 +92,7 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
     }
 
     // Subscribe to cart items and log them
-    this.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
+    this.cartItems$.pipe(takeUntil(this.destroy$)).subscribe((items) => {
       console.log('Cart Items:', items);
     });
   }
@@ -155,12 +155,16 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
     this.cartSidebarService.toggleCart();
   }
 
-  removeFromCart(productId: number): void {
-    this.cartService.removeFromCart(productId);
+  removeFromCart(productId: number, variantId?: number): void {
+    this.cartService.removeFromCart(productId, variantId);
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    this.cartService.updateQuantity(productId, quantity);
+  updateQuantity(
+    productId: number,
+    quantity: number,
+    variantId?: number,
+  ): void {
+    this.cartService.updateQuantity(productId, quantity, variantId);
   }
 
   clearCart(): void {

@@ -130,19 +130,19 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
-    console.log('PRODUCT ADDED TO CART', product);
+    // Use selectedVariant if available, otherwise fallback to product
+    const variant = this.selectedVariant || product;
     const cartItem: CartItem = {
       productId: product.productId,
-      variantId: product.variantId,
-      name: product.name,
-      image: product.mainImageUrl,
-      afterPrice: product.priceAfterDiscount,
-      beforePrice: product.priceBeforeDiscount,
+      variantId: variant.variantId || variant.id,
+      name: variant.name,
+      image: variant.mainImageUrl || product.mainImageUrl,
+      afterPrice: variant.priceAfterDiscount,
+      beforePrice: variant.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: product.promoCodeDetail,
-      currency: product.currency.name,
+      promoCodeDetail: variant.promoCodeDetail,
+      currency: variant.currency?.name || product.currency?.name,
     };
-    console.log('CART ITEM', cartItem);
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
   }

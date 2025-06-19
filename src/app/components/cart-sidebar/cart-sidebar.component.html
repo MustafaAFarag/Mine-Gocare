@@ -83,7 +83,7 @@
             </div>
             <button
               class="bg-gray-200 px-2 text-lg text-hover-color hover:text-red-900"
-              (click)="removeFromCart(item.productId)"
+              (click)="removeFromCart(item.productId, item.variantId)"
               id="cart-sidebar-remove-from-cart-button"
             >
               <i class="ri-delete-bin-line"></i>
@@ -95,7 +95,13 @@
             <div class="ml-auto flex items-center">
               <button
                 class="flex h-6 w-6 items-center justify-center rounded-l border text-gray-500 hover:text-gray-700"
-                (click)="updateQuantity(item.productId, item.quantity - 1)"
+                (click)="
+                  updateQuantity(
+                    item.productId,
+                    item.quantity - 1,
+                    item.variantId
+                  )
+                "
                 id="cart-sidebar-decrement-quantity-button"
               >
                 <i class="ri-subtract-line"></i>
@@ -107,7 +113,13 @@
               </span>
               <button
                 class="flex h-6 w-6 items-center justify-center rounded-r border text-gray-500 hover:text-gray-700"
-                (click)="updateQuantity(item.productId, item.quantity + 1)"
+                (click)="
+                  updateQuantity(
+                    item.productId,
+                    item.quantity + 1,
+                    item.variantId
+                  )
+                "
                 id="cart-sidebar-increment-quantity-button"
               >
                 <i class="ri-add-line"></i>
