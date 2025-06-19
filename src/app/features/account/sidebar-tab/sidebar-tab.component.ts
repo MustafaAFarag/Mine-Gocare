@@ -88,14 +88,12 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
     // Set initial active state based on current URL
     this.setActiveItem(this.router.url);
 
-    // Fetch user profile
-    this.fetchUserProfile();
-
     // Subscribe to user profile changes
     this.userProfileSubscription = this.authService.user$.subscribe(
       (profile: UserProfileResponse | null) => {
         if (profile) {
           this.user = profile;
+          this.isLoading = false;
         }
       },
     );
@@ -123,23 +121,6 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
     if (this.userProfileSubscription) {
       this.userProfileSubscription.unsubscribe();
     }
-  }
-
-  fetchUserProfile(): void {
-    this.isLoading = true;
-    this.authService.getClientProfile().subscribe({
-      next: (res) => {
-        if (res.result) {
-          this.user = res.result;
-          this.cdr.detectChanges();
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching user profile:', error);
-        this.isLoading = false;
-      },
-    });
   }
 
   setActiveItem(url: string): void {

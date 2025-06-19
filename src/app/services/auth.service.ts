@@ -253,7 +253,7 @@ export class AuthService {
             profileImageUrl:
               res.result.profileImageURL || this.currentUser?.profileImageUrl,
             thumbImageUrl:
-              res.result.profileImageURL || this.currentUser?.thumbImageUrl,
+              res.result.thumbImageURL || this.currentUser?.thumbImageUrl,
             isRegisteredExternally: res.result.isRegisteredExternally,
           };
 

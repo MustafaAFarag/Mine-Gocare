@@ -4,13 +4,19 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderService } from '../../../services/order.service';
 import { ClientOrders, OrderDetails } from '../../../model/Order';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 type Language = 'en' | 'ar';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, OrderDetailsComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    OrderDetailsComponent,
+    TranslateModule,
+    LoadingComponent,
+  ],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
@@ -27,6 +33,8 @@ export class OrdersComponent implements OnInit {
   itemsPerPage = 10;
   totalItems = 0;
   totalPages = 0;
+
+  isLoading: boolean = true;
 
   constructor(
     private orderService: OrderService,
@@ -47,19 +55,23 @@ export class OrdersComponent implements OnInit {
   }
 
   fetchClientOrders(): void {
+    this.isLoading = true;
     if (this.token) {
       this.orderService.getClientOrders(this.token).subscribe(
         (response) => {
           this.orders = response.result.items;
           this.totalItems = response.result.totalCount;
           this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error loading orders:', error);
+          this.isLoading = false;
         },
       );
     } else {
       console.error('No access token available');
+      this.isLoading = false;
     }
   }
 

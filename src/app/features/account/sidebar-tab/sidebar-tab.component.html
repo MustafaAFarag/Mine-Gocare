@@ -9,11 +9,15 @@
     </div>
     <div *ngIf="!isLoading" class="flex items-center gap-2">
       <div class="relative">
-        <img
-          [src]="getProfileImageUrl()"
-          [alt]="getFullName()"
-          class="h-12 w-12 rounded-md object-cover xl:h-16 xl:w-16"
-        />
+        <ng-container *ngIf="getProfileImageUrl() as imgUrl">
+          <img
+            *ngIf="imgUrl"
+            [src]="imgUrl"
+            [alt]="getFullName()"
+            [attr.data-img-key]="imgUrl"
+            class="h-12 w-12 rounded-md object-cover xl:h-16 xl:w-16"
+          />
+        </ng-container>
         <label
           for="profile-image-upload"
           class="absolute bottom-0 right-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-hover-color text-white transition hover:bg-hover-color/80"

@@ -64,7 +64,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.fetchUserProfile();
     // Fetch all data in parallel
     this.fetchAllData();
 
@@ -83,20 +82,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.fetchWalletData();
         }
       }
-    });
-  }
-
-  fetchUserProfile(): void {
-    this.authService.getClientProfile().subscribe({
-      next: (res) => {
-        if (res.result) {
-          this.user = res.result;
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching user profile:', error);
-        this.isLoading = false;
-      },
     });
   }
 

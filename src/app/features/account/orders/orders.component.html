@@ -1,4 +1,11 @@
-<div *ngIf="!showOrderDetails" class="rounded-lg bg-white p-4 shadow-sm md:p-6">
+<div *ngIf="isLoading" class="flex justify-center py-8">
+  <app-loading></app-loading>
+</div>
+
+<div
+  *ngIf="!showOrderDetails && !isLoading"
+  class="rounded-lg bg-white p-4 shadow-sm md:p-6"
+>
   <h2 class="mb-4 text-xl font-bold text-gray-800 md:mb-6">
     {{ "account.orders.title" | translate }}
   </h2>
