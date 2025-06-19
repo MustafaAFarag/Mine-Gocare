@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -81,6 +81,7 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     public languageService: LanguageService,
     private translateService: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -130,6 +131,7 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.result) {
           this.user = res.result;
+          this.cdr.detectChanges();
         }
         this.isLoading = false;
       },
