@@ -68,16 +68,28 @@
                     | translate
                       : {
                           quantity: item.quantity,
-                          price: item.afterPrice.toFixed(2),
+                          price: (item.afterPrice !== undefined
+                            ? item.afterPrice
+                            : 0
+                          ).toFixed(2),
                           currency: item.currency[currentLang],
                         }
                 }}
               </span>
               <span
-                *ngIf="item.beforePrice !== item.afterPrice"
+                *ngIf="
+                  item.beforePrice !== item.afterPrice &&
+                  item.beforePrice !== undefined &&
+                  item.afterPrice !== undefined
+                "
                 class="text-sm text-gray-400 line-through"
               >
-                {{ item.beforePrice.toFixed(2) }}
+                {{
+                  (item.beforePrice !== undefined
+                    ? item.beforePrice
+                    : 0
+                  ).toFixed(2)
+                }}
                 {{ item.currency[currentLang] }}
               </span>
             </div>

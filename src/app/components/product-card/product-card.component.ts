@@ -132,16 +132,35 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   addToCart(product: Product): void {
     // Use selectedVariant if available, otherwise fallback to product
     const variant = this.selectedVariant || product;
+    const getCartItemName = () => {
+      // If variantName exists and is not empty, use it; otherwise fallback to product name
+      if (
+        variant.variantName &&
+        (variant.variantName.en || variant.variantName.ar)
+      ) {
+        if (
+          (typeof variant.variantName.en === 'string' &&
+            variant.variantName.en.trim() !== '') ||
+          (typeof variant.variantName.ar === 'string' &&
+            variant.variantName.ar.trim() !== '')
+        ) {
+          return variant.variantName;
+        }
+      }
+      return variant.name || product.name;
+    };
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: variant.variantId || variant.id,
-      name: variant.name,
+      name: getCartItemName(),
       image: variant.mainImageUrl || product.mainImageUrl,
-      afterPrice: variant.priceAfterDiscount,
-      beforePrice: variant.priceBeforeDiscount,
+      afterPrice: variant.priceAfterDiscount || product.priceAfterDiscount,
+      beforePrice: variant.priceBeforeDiscount || product.priceBeforeDiscount,
       quantity: 1,
-      promoCodeDetail: variant.promoCodeDetail,
-      currency: variant.currency?.name || product.currency?.name,
+      promoCodeDetail: variant.promoCodeDetail || product.promoCodeDetail,
+      currency:
+        (variant.currency && variant.currency.name) ||
+        (product.currency && product.currency.name),
     };
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item
