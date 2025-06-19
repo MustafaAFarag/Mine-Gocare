@@ -8,7 +8,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/language.service';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
 import { getFullImageUrl } from '../../../lib/utils';
 
 interface SidebarItem {

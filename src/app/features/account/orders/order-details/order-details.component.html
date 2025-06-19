@@ -4,10 +4,13 @@
     <div class="flex items-center gap-2">
       <a
         (click)="goBack()"
-        class="cursor-pointer text-gray-600"
+        class="flex cursor-pointer items-center gap-1 text-gray-600"
         id="order-details-go-back-button"
       >
-        ←
+        <i
+          class="ri-arrow-left-line text-2xl font-bold"
+          [ngClass]="{ 'rotate-180': currentLang === 'ar' }"
+        ></i>
       </a>
       <h1
         class="text-lg font-bold md:text-xl"
