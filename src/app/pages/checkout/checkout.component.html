@@ -1,4 +1,5 @@
 <div class="container mx-auto max-w-8xl px-4 py-6 md:py-8 lg:py-10">
+  <p-toast position="top-left" styleClass="black-text-toast"></p-toast>
   <h1 class="mb-6 text-2xl font-bold text-gray-800 md:text-3xl">
     {{ "checkout.title" | translate }}
   </h1>
@@ -90,7 +91,6 @@
         [shipping]="shipping"
         [total]="total"
         [isLoading]="isPlacingOrder"
-        [orderProducts]="mappedOrderProducts"
         [selectedAddressId]="getSelectedShippingAddressId()"
         (placeOrderEvent)="placeOrder()"
         (promoApplied)="handlePromoCodeApplied($event)"

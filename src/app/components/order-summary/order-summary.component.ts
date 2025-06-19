@@ -15,11 +15,14 @@ import { LanguageService } from '../../services/language.service';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { Subscription } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-summary',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, ToastModule],
   templateUrl: './order-summary.component.html',
   styleUrls: ['./order-summary.component.css'],
 })
@@ -44,6 +47,8 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private cartService: CartService,
     private orderService: OrderService,
+    private messageService: MessageService,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +105,21 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   }
 
   incrementQuantity(item: CartItem): void {
+    if (item.stockCount !== undefined && item.quantity >= item.stockCount) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translateService.instant(
+          'product-card.stockExceeded.summary',
+        ),
+        detail: this.translateService.instant(
+          'product-card.stockExceeded.detail',
+          { stock: item.stockCount, added: 0 },
+        ),
+        life: 3000,
+        styleClass: 'black-text-toast',
+      });
+      return;
+    }
     this.cartService.updateQuantity(
       item.productId,
       item.quantity + 1,
@@ -110,9 +130,13 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
 
   decrementQuantity(item: CartItem): void {
     if (item.quantity > 1) {
-      this.cartService.updateQuantity(item.productId, item.quantity - 1);
+      this.cartService.updateQuantity(
+        item.productId,
+        item.quantity - 1,
+        item.variantId,
+      );
     } else {
-      this.cartService.removeFromCart(item.productId);
+      this.cartService.removeFromCart(item.productId, item.variantId);
     }
     this.fetchOrderSummary(); // Refresh summary after quantity change
   }

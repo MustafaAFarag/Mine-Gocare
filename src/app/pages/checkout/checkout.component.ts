@@ -33,6 +33,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { WalletService } from '../../services/wallet.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-checkout',
@@ -48,9 +50,11 @@ import { WalletService } from '../../services/wallet.service';
     BillingSummaryComponent,
     AddressFormModalComponent,
     LoadingComponent,
+    ToastModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
+  providers: [MessageService],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   private cartSubscription: Subscription = new Subscription();

@@ -129,9 +129,16 @@ export class CartService {
 
     if (index > -1) {
       const existingItem = currentCart.items[index];
+      let newQuantity = quantity;
+      if (
+        existingItem.stockCount !== undefined &&
+        quantity > existingItem.stockCount
+      ) {
+        newQuantity = existingItem.stockCount;
+      }
       const updatedItem = {
         ...existingItem,
-        quantity,
+        quantity: newQuantity,
         variantId: existingItem.variantId,
       };
       currentCart.items[index] = updatedItem;

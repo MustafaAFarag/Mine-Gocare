@@ -25,7 +25,6 @@ type Language = 'en' | 'ar';
   selector: 'app-billing-summary',
   standalone: true,
   imports: [CommonModule, TranslateModule, ToastModule, ReactiveFormsModule],
-  providers: [MessageService],
   templateUrl: './billing-summary.component.html',
   styleUrls: ['./billing-summary.component.css'],
 })
@@ -45,11 +44,6 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
     return this._selectedAddressId;
   }
   private _selectedAddressId: number | undefined = undefined;
-  @Input() orderProducts: Array<{
-    productVariantId: number;
-    quantity: number;
-    price: number;
-  }> = [];
 
   promoForm!: FormGroup;
   currentLang: Language = 'en';
@@ -385,5 +379,28 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
       return language === 'ar' ? 'ر.س' : 'SAR';
     }
     return 'EGP';
+  }
+
+  get orderProducts() {
+    return this.cartItems.map((item) => ({
+      productVariantId: item.variantId || item.productId,
+      quantity: item.quantity,
+      price: item.afterPrice,
+    }));
+  }
+
+  showStockExceededToast(item: CartItem) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: this.translateService.instant(
+        'product-card.stockExceeded.summary',
+      ),
+      detail: this.translateService.instant(
+        'product-card.stockExceeded.detail',
+        { stock: item.stockCount, added: item.stockCount },
+      ),
+      life: 3000,
+      styleClass: 'black-text-toast',
+    });
   }
 }

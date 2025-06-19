@@ -5,7 +5,7 @@ import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../model/Cart';
 import { CartSidebarService } from '../../../services/cart-sidebar.service';
 import { LanguageService } from '../../../services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WishlistService } from '../../../services/wishlist.service';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
@@ -71,6 +71,7 @@ export class ProductInfoComponent {
     public languageService: LanguageService,
     private wishlistService: WishlistService,
     private messageService: MessageService,
+    private translateService: TranslateService,
   ) {}
 
   private checkWishlistStatus(): void {
@@ -161,8 +162,13 @@ export class ProductInfoComponent {
     if (added < this.counter) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Stock Limit',
-        detail: `Only ${added} could be added to the cart. Max available stock is ${variant.stockCount}.`,
+        summary: this.translateService.instant(
+          'product-card.stockExceeded.summary',
+        ),
+        detail: this.translateService.instant(
+          'product-card.stockExceeded.detail',
+          { stock: variant.stockCount, added },
+        ),
         life: 3000,
         styleClass: 'black-text-toast',
       });
