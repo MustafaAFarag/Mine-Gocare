@@ -59,28 +59,48 @@ export class CartService {
     this.cartSubject.next(cart);
   }
 
-  addToCart(item: CartItem): void {
-    if (item.quantity <= 0) return;
+  /**
+   * Adds item to cart, enforcing stock limits. Returns the quantity actually added (may be less than requested).
+   * If the requested quantity exceeds available stock, only the available amount is added.
+   */
+  addToCart(item: CartItem): number {
+    if (item.quantity <= 0) return 0;
 
     const currentCart = structuredClone(this.cartSubject.value);
     const existingIndex = currentCart.items.findIndex(
       (i) => i.productId === item.productId && i.variantId === item.variantId,
     );
 
+    let availableStock = item.stockCount ?? Infinity;
+    let currentQuantity = 0;
+    if (existingIndex > -1) {
+      currentQuantity = currentCart.items[existingIndex].quantity;
+    }
+    const maxAddable = Math.max(0, availableStock - currentQuantity);
+    const quantityToAdd = Math.min(item.quantity, maxAddable);
+    if (quantityToAdd <= 0) {
+      // No stock left to add
+      return 0;
+    }
+
     if (existingIndex > -1) {
       const existingItem = currentCart.items[existingIndex];
       const updatedItem = {
         ...existingItem,
-        quantity: existingItem.quantity + item.quantity,
+        quantity: existingItem.quantity + quantityToAdd,
         variantId: item.variantId || existingItem.variantId,
       };
       currentCart.items[existingIndex] = updatedItem;
     } else {
-      currentCart.items = [...currentCart.items, item];
+      currentCart.items = [
+        ...currentCart.items,
+        { ...item, quantity: quantityToAdd },
+      ];
     }
 
     currentCart.total = this.calculateTotal(currentCart.items);
     this.saveCart(currentCart);
+    return quantityToAdd;
   }
 
   removeFromCart(productId: number, variantId?: number): void {

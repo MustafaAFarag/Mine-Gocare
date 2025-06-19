@@ -149,6 +149,32 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       }
       return variant.name || product.name;
     };
+
+    // Check current quantity in cart for this variant
+    const currentCartItems = this.cartService.getCart().items;
+    const existingCartItem = currentCartItems.find(
+      (item) =>
+        item.productId === product.productId &&
+        item.variantId === (variant.variantId || variant.id),
+    );
+    const currentQuantity = existingCartItem ? existingCartItem.quantity : 0;
+    const availableStock = variant.stockCount || product.stockCount;
+    if (currentQuantity + 1 > availableStock) {
+      this.messageService.add({
+        severity: 'error',
+        summary: this.translateService.instant(
+          'product-card.stockExceeded.summary',
+        ),
+        detail: this.translateService.instant(
+          'product-card.stockExceeded.detail',
+          { stock: availableStock },
+        ),
+        life: 2500,
+        styleClass: 'black-text-toast',
+      });
+      return;
+    }
+
     const cartItem: CartItem = {
       productId: product.productId,
       variantId: variant.variantId || variant.id,
@@ -162,6 +188,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       currency:
         (variant.currency && variant.currency.name) ||
         (product.currency && product.currency.name),
+      stockCount: variant.stockCount || product.stockCount,
     };
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item

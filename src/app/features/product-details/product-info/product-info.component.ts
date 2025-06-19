@@ -8,13 +8,16 @@ import { LanguageService } from '../../../services/language.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { WishlistService } from '../../../services/wishlist.service';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-product-info',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, ToastModule],
   templateUrl: './product-info.component.html',
   styleUrl: './product-info.component.css',
+  providers: [MessageService],
 })
 export class ProductInfoComponent {
   private _productDetails!: ProductDetails;
@@ -67,6 +70,7 @@ export class ProductInfoComponent {
     private cartSidebarService: CartSidebarService,
     public languageService: LanguageService,
     private wishlistService: WishlistService,
+    private messageService: MessageService,
   ) {}
 
   private checkWishlistStatus(): void {
@@ -125,18 +129,46 @@ export class ProductInfoComponent {
 
   addToCart(product: ProductDetails): void {
     const variant = this.selectedVariant;
+    const getCartItemName = () => {
+      if (
+        variant.variantName &&
+        (variant.variantName.en || variant.variantName.ar)
+      ) {
+        if (
+          (typeof variant.variantName.en === 'string' &&
+            variant.variantName.en.trim() !== '') ||
+          (typeof variant.variantName.ar === 'string' &&
+            variant.variantName.ar.trim() !== '')
+        ) {
+          return variant.variantName;
+        }
+      }
+      return product.productName;
+    };
     const item: CartItem = {
       productId: product.id,
       variantId: variant.id,
-      name: variant.variantName || product.productName,
+      name: getCartItemName(),
       afterPrice: variant.priceAfterDiscount,
       beforePrice: variant.priceBeforeDiscount,
       quantity: this.counter,
       image: variant.mainImageUrl || product.mainImageUrl,
       currency: variant.currency.name,
       promoCodeDetail: variant.promoCodeDetail ?? null,
+      stockCount: variant.stockCount,
     };
-    this.cartService.addToCart(item);
-    this.cartSidebarService.openCart();
+    const added = this.cartService.addToCart(item);
+    if (added < this.counter) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Stock Limit',
+        detail: `Only ${added} could be added to the cart. Max available stock is ${variant.stockCount}.`,
+        life: 3000,
+        styleClass: 'black-text-toast',
+      });
+    }
+    if (added > 0) {
+      this.cartSidebarService.openCart();
+    }
   }
 }

@@ -47,9 +47,14 @@
     "everydayCasual": "EVERYDAY CASUAL"
   },
   "product-card": {
+    "stockExceeded": {
+      "summary": "Stock Limit Exceeded",
+      "detail": "You cannot add more than {{stock}} in stock."
+    },
     "off": "Off",
     "limitedTimeOffer": "Limited Time Offer",
     "stock": "Stock",
+
     "lowStock": "Low Stock"
   },
   "insta-shop": {

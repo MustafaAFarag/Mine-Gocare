@@ -1011,6 +1011,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       currency:
         (variant.currency && variant.currency.name) ||
         (product.currency && product.currency.name),
+      stockCount: variant.stockCount || product.stockCount,
     };
     this.cartService.addToCart(cartItem);
     this.cartSidebarService.openCart(); // Open the cart sidebar after adding the item

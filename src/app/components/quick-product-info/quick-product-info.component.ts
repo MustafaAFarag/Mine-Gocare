@@ -68,6 +68,7 @@ export class QuickProductInfoComponent {
       currency: this.productDetails.productVariants[0].currency.name,
       promoCodeDetail:
         this.productDetails.productVariants[0].promoCodeDetail ?? null,
+      stockCount: this.productDetails.productVariants[0].stockCount,
     };
 
     this.cartService.addToCart(cartItem);

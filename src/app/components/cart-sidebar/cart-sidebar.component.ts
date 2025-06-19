@@ -164,6 +164,31 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
     quantity: number,
     variantId?: number,
   ): void {
+    // Find the cart item to get its stock count
+    const cart = this.cartService.getCart();
+    const item = cart.items.find(
+      (i) => i.productId === productId && i.variantId === variantId,
+    );
+    if (item && item.stockCount !== undefined && quantity > item.stockCount) {
+      this.translateService
+        .get([
+          'product-card.stockExceeded.summary',
+          'product-card.stockExceeded.detail',
+        ])
+        .subscribe((translations) => {
+          (window as any).PrimeToast?.add({
+            severity: 'error',
+            summary: translations['product-card.stockExceeded.summary'],
+            detail: translations['product-card.stockExceeded.detail'].replace(
+              '{{stock}}',
+              item.stockCount,
+            ),
+            life: 2500,
+            styleClass: 'black-text-toast',
+          });
+        });
+      return;
+    }
     this.cartService.updateQuantity(productId, quantity, variantId);
   }
 

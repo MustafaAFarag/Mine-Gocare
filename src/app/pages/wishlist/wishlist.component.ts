@@ -104,6 +104,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       quantity: 1,
       promoCodeDetail: product.promoCodeDetail ?? null,
       currency: product.currency.name,
+      stockCount: product.stockCount,
     };
 
     this.cartService.addToCart(cartItem);

@@ -43,6 +43,10 @@
   "product-card": {
     "off": "خصم",
     "limitedTimeOffer": "عرض لفترة محدودة",
+    "stockExceeded": {
+      "summary": "تجاوز الحد الأقصى للمخزون",
+      "detail": "لا يمكن إضافة أكثر من {{stock}} في المخزون"
+    },
     "stock": "المخزون",
     "lowStock": "مخزون منخفض"
   },
