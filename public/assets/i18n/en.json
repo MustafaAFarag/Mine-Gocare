@@ -403,6 +403,8 @@
     "subtitle": "Dive back into your world with a simple sign-in. Your next adventure awaits - let's get started!",
     "loginToastSummary": "Success",
     "loginToast": "Login successful!",
+    "pointsEarned": "Points Earned!",
+    "pointsEarnedMessage": "You've won {{pointsGained}} points for joining our platform!",
     "fields": {
       "identifier": {
         "label": "Email or Phone",

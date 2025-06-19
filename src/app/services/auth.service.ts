@@ -49,11 +49,7 @@ export class AuthService {
     },
   ): Observable<any> {
     const headers = new HttpHeaders({
-      'accept-language': 'en',
-      countryid: country?.phoneCodeCountryId?.toString() || '224',
       'abp.tenantid': '1',
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
     });
 
     const isEmail = emailOrPhone.includes('@');

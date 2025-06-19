@@ -385,6 +385,8 @@
     "title": "تسجيل الدخول",
     "subtitle": "عد إلى عالمك بتسجيل دخول بسيط. مغامرتك القادمة تنتظر - دعنا نبدأ!",
     "loginToastSummary": "تم بنجاح",
+    "pointsEarned": "تم الحصول على نقاط",
+    "pointsEarnedMessage": "لقد ربحت {{pointsGained}} نقطة لانضمامك إلى منصتنا!",
     "loginToast": "تم تسجيل الدخول بنجاح!",
     "fields": {
       "identifier": {

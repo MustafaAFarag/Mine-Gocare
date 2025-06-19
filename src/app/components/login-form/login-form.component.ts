@@ -132,27 +132,29 @@ export class LoginFormComponent implements OnInit {
           this.loginForm.reset();
 
           // Add points for daily login
-          const token = localStorage.getItem('token');
+          const token = localStorage.getItem('accessToken');
           if (token) {
+            console.log('Attempting to add daily points with token:', token);
             this.pointingSystemService.addPoints(token, 2, false).subscribe({
               next: (pointsResponse) => {
-                if (pointsResponse.success) {
+                console.log('pointsResponse', pointsResponse);
+                if (pointsResponse.success && pointsResponse.result > 0) {
                   this.pointsGained = pointsResponse.result;
                   this.showPointsModal = true;
+                  // Do not emit loginSuccess here, wait for modal close
+                  return;
+                } else {
+                  // No points awarded, proceed as normal
+                  this.handlePostLogin();
                 }
               },
               error: (error) => {
                 console.error('Error adding points:', error);
+                this.handlePostLogin();
               },
             });
-          }
-
-          // Only show congrats modal if user just registered
-          if (localStorage.getItem('showCongratsOnLogin') === 'true') {
-            this.showCongratsModal = true;
-            localStorage.removeItem('showCongratsOnLogin'); // Remove the flag after showing
           } else {
-            this.loginSuccess.emit();
+            this.handlePostLogin();
           }
         },
         error: (error) => {
@@ -160,6 +162,16 @@ export class LoginFormComponent implements OnInit {
           this.errorMessage = error.message || 'Invalid credentials';
         },
       });
+  }
+
+  handlePostLogin() {
+    // Only show congrats modal if user just registered
+    if (localStorage.getItem('showCongratsOnLogin') === 'true') {
+      this.showCongratsModal = true;
+      localStorage.removeItem('showCongratsOnLogin'); // Remove the flag after showing
+    } else {
+      this.loginSuccess.emit();
+    }
   }
 
   handleCongratsModalClose() {
@@ -170,6 +182,7 @@ export class LoginFormComponent implements OnInit {
 
   handlePointsModalClose() {
     this.showPointsModal = false;
+    this.handlePostLogin();
   }
 
   toggleMode(): void {
