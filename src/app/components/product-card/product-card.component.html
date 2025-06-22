@@ -7,9 +7,9 @@
     <div
       *ngIf="product.stockCount === 0"
       class="absolute inset-0 z-20 flex items-center justify-center bg-white/80 text-2xl font-bold text-red-500"
-      style="backdrop-filter: blur(2px);"
+      style="backdrop-filter: blur(2px)"
     >
-      {{ 'product-card.soldOut' | translate }}
+      {{ "product-card.soldOut" | translate }}
     </div>
     <div
       *ngIf="product.rating !== 0 && product.stockCount > 0"
@@ -31,7 +31,9 @@
 
     <div class="icon-wrapper absolute right-4 top-2 z-10">
       <i
-        [class]="isInWishlist ? 'ri-heart-fill text-hover-color' : 'ri-heart-line'"
+        [class]="
+          isInWishlist ? 'ri-heart-fill text-hover-color' : 'ri-heart-line'
+        "
         class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="toggleWishlist($event)"
         [id]="'product-card-wishlist-button-' + product.productId"
@@ -39,7 +41,9 @@
 
       <i
         class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-        (click)="product.stockCount > 0 && addToCart(product); $event.stopPropagation()"
+        (click)="
+          product.stockCount > 0 && addToCart(product); $event.stopPropagation()
+        "
         [class.opacity-50]="product.stockCount === 0"
         [class.cursor-not-allowed]="product.stockCount === 0"
         [id]="'product-card-add-to-cart-button-' + product.productId"
@@ -89,14 +93,20 @@
         <p
           class="text-sm"
           [ngClass]="{
-            'text-red-500': product.lowQuantity,
-            'text-green-500': !product.lowQuantity,
+            'text-red-500': product.stockCount === 0 || product.lowQuantity,
+            'text-green-500': product.stockCount > 0 && !product.lowQuantity,
+            'text-gray-500': product.stockCount === 0,
           }"
         >
           <i class="ri-stock-line mr-1"></i>
-          {{ "product-card.stock" | translate }}: {{ product.stockCount }}
-          <span *ngIf="product.lowQuantity" class="ml-2">
-            ({{ "product-card.lowStock" | translate }})
+          <span *ngIf="product.stockCount === 0">
+            {{ "product-card.soldOut" | translate }}
+          </span>
+          <span *ngIf="product.stockCount > 0">
+            {{ "product-card.stock" | translate }}: {{ product.stockCount }}
+            <span *ngIf="product.lowQuantity" class="ml-2">
+              ({{ "product-card.lowStock" | translate }})
+            </span>
           </span>
         </p>
       </div>

@@ -593,6 +593,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
+    // Reset to first page when applying filters
+    this.currentPage = 1;
+
     // Refresh products when categories change
     this.fetchProductsAPI();
   }
@@ -623,6 +626,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
+    // Reset to first page when applying filters
+    this.currentPage = 1;
+
     // Refresh products when brands change
     this.fetchProductsAPI();
   }
@@ -648,6 +654,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
           );
         }
         this.updateUrlParams();
+        // Reset to first page when removing filters
+        this.currentPage = 1;
         this.fetchProductsAPI();
         return;
       }
@@ -663,6 +671,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
               );
             }
             this.updateUrlParams();
+            // Reset to first page when removing filters
+            this.currentPage = 1;
             this.fetchProductsAPI();
             return;
           }
@@ -679,6 +689,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
                     );
                 }
                 this.updateUrlParams();
+                // Reset to first page when removing filters
+                this.currentPage = 1;
                 this.fetchProductsAPI();
                 return;
               }
@@ -698,6 +710,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
           (id) => id !== brand.id,
         );
         this.updateUrlParams();
+        // Reset to first page when removing filters
+        this.currentPage = 1;
         this.fetchProductsAPI();
         return;
       }
@@ -717,6 +731,8 @@ export class CollectionsComponent implements OnInit, OnDestroy {
       }
 
       this.updateUrlParams();
+      // Reset to first page when removing filters
+      this.currentPage = 1;
       this.fetchProductsAPI();
       return;
     }
@@ -756,6 +772,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     if (this.filterTabComponent) {
       this.filterTabComponent.resetRatingCheckboxes();
     }
+
+    // Reset to first page when clearing all filters
+    this.currentPage = 1;
 
     this.fetchProductsAPI();
   }
@@ -1120,12 +1139,17 @@ export class CollectionsComponent implements OnInit, OnDestroy {
     // Update URL parameters
     this.updateUrlParams();
 
+    // Reset to first page when applying price filter
+    this.currentPage = 1;
+
     // Fetch products with new price filter
     this.fetchProductsAPI();
   }
 
   // Remove client-side price filtering since we're using API filtering
   filterProductsByPrice(): void {
+    // Reset to first page when applying price filter
+    this.currentPage = 1;
     this.fetchProductsAPI();
   }
 
@@ -1136,6 +1160,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Update URL parameters
     this.updateUrlParams();
+
+    // Reset to first page when applying sort order
+    this.currentPage = 1;
 
     // Fetch products with the new sort order
     this.fetchProductsAPI();
@@ -1159,6 +1186,9 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Update URL parameters
     this.updateUrlParams();
+
+    // Reset to first page when applying gender filter
+    this.currentPage = 1;
 
     // Fetch products with the new gender filter
     this.fetchProductsAPI();
