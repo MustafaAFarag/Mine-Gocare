@@ -93,15 +93,21 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('SidebarTabComponent: Initializing...');
+
     // Set initial active state based on current URL
     this.setActiveItem(this.router.url);
 
     // Subscribe to user profile changes
     this.userProfileSubscription = this.authService.user$.subscribe(
       (profile: UserProfileResponse | null) => {
+        console.log('SidebarTabComponent: User profile received:', profile);
         if (profile) {
           this.user = profile;
           this.isLoading = false;
+          console.log('SidebarTabComponent: User set and loading complete');
+        } else {
+          console.log('SidebarTabComponent: No user profile received');
         }
       },
     );
@@ -147,11 +153,17 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   }
 
   getInitials(): string {
-    return this.user ? this.user.firstName.charAt(0) : '';
+    const initials = this.user ? this.user.firstName?.charAt(0) : '';
+    console.log('SidebarTabComponent: Getting initials:', initials);
+    return initials;
   }
 
   getFullName(): string {
-    return this.user ? `${this.user.firstName} ${this.user.lastName}` : '';
+    const fullName = this.user
+      ? `${this.user.firstName || ''} ${this.user.lastName || ''}`.trim()
+      : '';
+    console.log('SidebarTabComponent: Getting full name:', fullName);
+    return fullName;
   }
 
   logout(): void {
@@ -159,7 +171,9 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   }
 
   hasEmailAddress(): boolean {
-    return this.user && !!this.user.emailAddress;
+    const hasEmail = this.user && !!this.user.emailAddress;
+    console.log('SidebarTabComponent: Has email address:', hasEmail);
+    return hasEmail;
   }
 
   addEmail(): void {

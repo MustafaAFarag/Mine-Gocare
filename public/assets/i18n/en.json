@@ -874,6 +874,17 @@
   "points": {
     "totalPoints": "Total Points",
     "points": "Points",
+    "redeem": {
+      "title": "Redeem Points",
+      "subtitle": "You can redeem your points for cash",
+      "availablePoints": "Available Points",
+      "exchangeRate": "Exchange Rate",
+      "redeem": "Redeem Points",
+      "amount": "Amount",
+      "error": {
+        "exceedsAvailable": "Redeem amount exceeds available points"
+      }
+    },
     "balance": "Balance",
     "redeemButton": "Redeem Points",
     "expirationHint": "You have {{points}} points expiring on {{date}}",

@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { PointingSystemService } from '../../services/pointing-system.service';
 import { AuthModalService } from '../../auth-modal.service';
+import { filter, take } from 'rxjs/operators';
 
 interface Country {
   name: string;
@@ -53,6 +54,7 @@ interface Country {
 export class SignupFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
   @Output() signupSuccess = new EventEmitter<void>();
+  @Output() loginSuccess = new EventEmitter<void>();
   signupForm!: FormGroup;
   loading = false;
   showPassword = false;
@@ -218,13 +220,8 @@ export class SignupFormComponent implements OnInit {
 
     // Determine if the identifier is email or phone
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formValue.identifier);
-    console.log('Is Email:', isEmail);
-    console.log('Identifier:', formValue.identifier);
-
-    // Process phone number if it's a phone
     let processedIdentifier = formValue.identifier;
     if (!isEmail && processedIdentifier.startsWith('0')) {
-      // Remove the leading 0 for phone numbers that start with 0
       processedIdentifier = processedIdentifier.substring(1);
     }
 
@@ -239,7 +236,6 @@ export class SignupFormComponent implements OnInit {
         countryCode: 'EG',
         gender: formValue.gender,
       };
-      console.log('Email Signup Payload:', signupData);
     } else {
       signupData = {
         firstName: formValue.firstName,
@@ -252,15 +248,10 @@ export class SignupFormComponent implements OnInit {
         phoneCode: this.selectedCountry.phoneCode,
         PhoneCodeCountryId: this.selectedCountry.phoneCodeCountryId,
       };
-      console.log('Phone Signup Payload:', signupData);
     }
 
     this.authService.signup(signupData).subscribe({
       next: (res) => {
-        console.log('Signup Response:', res);
-        // Emit success event to parent
-        this.signupSuccess.emit();
-
         // After successful signup, automatically log in the user
         const loginIdentifier = isEmail
           ? formValue.identifier
@@ -273,34 +264,46 @@ export class SignupFormComponent implements OnInit {
           )
           .subscribe({
             next: (loginRes) => {
+              // Add registration points
+              const token = localStorage.getItem('accessToken');
+              if (token) {
+                this.pointingSystemService
+                  .addPoints(token, 1, false)
+                  .subscribe({
+                    next: (pointsRes) =>
+                      console.log(
+                        'SignupFormComponent: Points added successfully:',
+                        pointsRes,
+                      ),
+                    error: (pointsErr) =>
+                      console.error(
+                        'SignupFormComponent: Error adding points:',
+                        pointsErr,
+                      ),
+                  });
+              }
+
+              // Reset form
+              this.signupForm.reset();
               this.loading = false;
 
-              // Wait a bit to ensure token is set
-              setTimeout(() => {
-                // Now we have the access token, add the registration points
-                const token = localStorage.getItem('accessToken');
-                console.log('Token for points:', token);
-                if (token) {
-                  this.pointingSystemService
-                    .addPoints(token, 1, false)
-                    .subscribe({
-                      next: (pointsRes) => {
-                        console.log('Points added successfully:', pointsRes);
-                        // Set flag for new registration
-                        localStorage.setItem('showCongratsOnLogin', 'true');
-                      },
-                      error: (pointsErr) => {
-                        console.error('Error adding points:', pointsErr);
-                      },
-                    });
-                } else {
-                  console.error('No token found for points');
-                }
-              }, 100);
+              // Close the auth modal first
+              this.authModalService.hideModal();
 
-              // Reset the form and switch to login mode
-              this.signupForm.reset();
-              this.toggle.emit();
+              // Wait for user state to be set in AuthService, then navigate
+              this.authService.user$
+                .pipe(
+                  filter((user) => !!user), // Wait for user to be truthy
+                  take(1), // Take only the first emission that passes the filter
+                )
+                .subscribe(() => {
+                  this.router.navigate(['/account/points']).then(() => {
+                    // Show congrats modal after successful navigation
+                    setTimeout(() => {
+                      this.authModalService.showCongratsModal();
+                    }, 100);
+                  });
+                });
             },
             error: (loginErr) => {
               this.loading = false;

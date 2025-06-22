@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { CongratsModalComponent } from '../congrats-modal/congrats-modal.component';
 import { MessageService } from 'primeng/api';
 import { PointingSystemService } from '../../services/pointing-system.service';
 import { DialogModule } from 'primeng/dialog';
@@ -28,13 +27,7 @@ interface Country {
   standalone: true,
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    CongratsModalComponent,
-    DialogModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DialogModule],
 })
 export class LoginFormComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
@@ -43,7 +36,6 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   errorMessage = '';
   showPassword = false;
-  showCongratsModal = false;
   showCountryDropdown = false;
   isPhone = false;
   showPointsModal = false;
@@ -145,16 +137,16 @@ export class LoginFormComponent implements OnInit {
                   return;
                 } else {
                   // No points awarded, proceed as normal
-                  this.handlePostLogin();
+                  this.loginSuccess.emit();
                 }
               },
               error: (error) => {
                 console.error('Error adding points:', error);
-                this.handlePostLogin();
+                this.loginSuccess.emit();
               },
             });
           } else {
-            this.handlePostLogin();
+            this.loginSuccess.emit();
           }
         },
         error: (error) => {
@@ -164,25 +156,9 @@ export class LoginFormComponent implements OnInit {
       });
   }
 
-  handlePostLogin() {
-    // Only show congrats modal if user just registered
-    if (localStorage.getItem('showCongratsOnLogin') === 'true') {
-      this.showCongratsModal = true;
-      localStorage.removeItem('showCongratsOnLogin'); // Remove the flag after showing
-    } else {
-      this.loginSuccess.emit();
-    }
-  }
-
-  handleCongratsModalClose() {
-    this.showCongratsModal = false;
-    this.loginForm.reset();
-    this.loginSuccess.emit();
-  }
-
   handlePointsModalClose() {
     this.showPointsModal = false;
-    this.handlePostLogin();
+    this.loginSuccess.emit();
   }
 
   toggleMode(): void {

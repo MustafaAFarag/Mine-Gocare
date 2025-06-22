@@ -28,6 +28,7 @@ import { SearchComponent } from '../search/search.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LogoutConfirmModalComponent } from '../logout-confirm-modal/logout-confirm-modal.component';
+import { AuthModalService } from '../../auth-modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -54,7 +55,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @ViewChild(CartSidebarComponent) cartSidebar!: CartSidebarComponent;
 
   isMobileMenuOpen = signal(false);
-  visible: boolean = false;
   logoutConfirmVisible: boolean = false;
   userSubscription!: Subscription;
   cartSubscription!: Subscription;
@@ -65,33 +65,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isPagesDropdownOpen: boolean = false;
   isSearchOpen: boolean = false;
 
-  showDialog() {
-    this.visible = !this.visible;
-  }
-
-  onVisibleChange(newValue: boolean) {
-    this.visible = newValue;
-  }
-
-  toggleMode(isLoginMode: boolean) {
-    this.visible = true;
-  }
-
-  toggleCart(): void {
-    this.cartSidebar.toggleCart();
-  }
-
   constructor(
     private authService: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
     private translateService: TranslateService,
     private messageService: MessageService,
+    private authModalService: AuthModalService,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
-
-  navigateToCart() {}
 
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
@@ -246,4 +229,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   closeSearch(): void {
     this.isSearchOpen = false;
   }
+
+  showDialog() {
+    this.authModalService.showModal();
+  }
+
+  toggleCart(): void {
+    this.cartSidebar.toggleCart();
+  }
+
+  navigateToCart() {}
 }

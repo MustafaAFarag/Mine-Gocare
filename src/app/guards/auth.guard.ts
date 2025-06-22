@@ -1,8 +1,10 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AuthModalService } from '../auth-modal.service';
 import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,25 +18,35 @@ export class AuthGuard implements CanActivate {
     private authModalService: AuthModalService,
   ) {}
 
-  canActivate(): boolean {
-    if (this.authService.isAuthenticated) {
-      return true;
-    }
+  canActivate(): Observable<boolean | UrlTree> {
+    return this.authService.user$.pipe(
+      map((user) => {
+        const isLoggedIn = !!user;
 
-    // Only show modal in browser environment
-    if (isPlatformBrowser(this.platformId)) {
-      // Store the attempted URL for redirecting
-      const currentUrl = this.router.url;
-      localStorage.setItem('redirectUrl', currentUrl);
+        // Additional check for access token
+        const hasToken =
+          isPlatformBrowser(this.platformId) &&
+          localStorage.getItem('accessToken');
 
-      // Show modal and redirect to home
-      this.authModalService.showModal();
-      this.router.navigate(['/']);
-    } else {
-      // In SSR, redirect to home
-      this.router.navigate(['/']);
-    }
+        if (isLoggedIn || hasToken) {
+          return true;
+        }
 
-    return false;
+        if (isPlatformBrowser(this.platformId)) {
+          // Store the current URL for redirect after login
+          const currentUrl = this.router.url;
+          if (currentUrl !== '/') {
+            localStorage.setItem('redirectUrl', currentUrl);
+          }
+
+          // Small delay to prevent interference with signup flow
+          setTimeout(() => {
+            this.authModalService.showModal();
+          }, 100);
+        }
+
+        return this.router.createUrlTree(['/']);
+      }),
+    );
   }
 }

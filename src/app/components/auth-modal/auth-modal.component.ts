@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthModalService } from '../../auth-modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-modal',
@@ -41,6 +42,7 @@ export class AuthModalComponent implements OnInit {
     private messageService: MessageService,
     private translateService: TranslateService,
     private authModalService: AuthModalService,
+    private router: Router,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -48,6 +50,10 @@ export class AuthModalComponent implements OnInit {
   ngOnInit() {
     this.authModalService.showModal$.subscribe((show) => {
       this.visible = show;
+      // Reset to login mode whenever modal is shown
+      if (show) {
+        this.isLoginMode = true;
+      }
     });
   }
 
@@ -58,6 +64,8 @@ export class AuthModalComponent implements OnInit {
 
   closeDialog() {
     this.authModalService.hideModal();
+    // Reset to login mode when modal is closed
+    this.isLoginMode = true;
   }
 
   handleLoginSuccess() {
@@ -71,6 +79,15 @@ export class AuthModalComponent implements OnInit {
       });
     }
     this.closeDialog();
+
+    // Handle redirect after login
+    if (this.isBrowser) {
+      const redirectUrl = localStorage.getItem('redirectUrl');
+      if (redirectUrl) {
+        localStorage.removeItem('redirectUrl');
+        this.router.navigate([redirectUrl]);
+      }
+    }
   }
 
   handleSignupSuccess() {
@@ -83,7 +100,7 @@ export class AuthModalComponent implements OnInit {
         styleClass: 'black-text-toast',
       });
     }
-    this.toggleMode();
+    this.closeDialog();
   }
 
   handleLoginError(error: string) {

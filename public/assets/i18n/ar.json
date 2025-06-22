@@ -844,6 +844,17 @@
   },
   "points": {
     "totalPoints": "إجمالي النقاط",
+    "redeem": {
+      "availablePoints": "النقاط المتاحة",
+      "title": "استبدال النقاط",
+      "subtitle": "يمكنك استبدال نقاطك للحصول على نقود",
+      "exchangeRate": "سعر التبادل",
+      "redeem": "استبدال النقاط",
+      "amount": "المبلغ",
+      "error": {
+        "exceedsAvailable": "لا يمكن استبدال المبلغ المطلوب لأنه يتجاوز النقاط المتاحة"
+      }
+    },
     "pointsHistory": "سجل النقاط",
     "howToGetPoints": "كيفية الحصول على النقاط",
     "pointEarningRules": "قواعد كسب النقاط",

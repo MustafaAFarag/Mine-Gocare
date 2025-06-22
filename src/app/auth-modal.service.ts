@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
 })
 export class AuthModalService {
   private showModalSubject = new BehaviorSubject<boolean>(false);
+  private showCongratsModalSubject = new BehaviorSubject<boolean>(false);
+
   showModal$ = this.showModalSubject.asObservable();
+  showCongratsModal$ = this.showCongratsModalSubject.asObservable();
 
   constructor(private router: Router) {}
 
@@ -24,5 +27,13 @@ export class AuthModalService {
       localStorage.removeItem('redirectUrl');
       this.router.navigate([redirectUrl]);
     }
+  }
+
+  showCongratsModal() {
+    this.showCongratsModalSubject.next(true);
+  }
+
+  hideCongratsModal() {
+    this.showCongratsModalSubject.next(false);
   }
 }

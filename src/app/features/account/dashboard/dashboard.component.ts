@@ -1,5 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UserProfileResponse } from '../../../model/Auth';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WalletService } from '../../../services/wallet.service';
@@ -32,6 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoadingWallet: boolean = true;
   isLoadingOrders: boolean = true;
   user!: UserProfileResponse;
+  private platformId = inject(PLATFORM_ID);
 
   constructor(
     private walletService: WalletService,
@@ -42,13 +49,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
   ) {
     this.token = this.authService.getLocalStorageItem('accessToken');
+    console.log('DashboardComponent: Token found:', !!this.token);
 
     const userString = this.authService.getLocalStorageItem('user');
     if (userString) {
       const user = JSON.parse(userString);
       this.clientId = user.userId;
+      console.log('DashboardComponent: Client ID found:', this.clientId);
     } else {
-      console.error('User not found in localStorage');
+      console.error('DashboardComponent: User not found in localStorage');
       this.clientId = 0;
     }
   }
@@ -63,29 +72,49 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('DashboardComponent: ngOnInit called');
     this.isLoading = true;
+
+    // Subscribe to user changes first
+    this.userSubscription = this.authService.user$.subscribe((userData) => {
+      console.log(
+        'DashboardComponent: User data received in subscription:',
+        userData,
+      );
+      if (userData) {
+        this.user = userData;
+        // Update clientId and token if they changed
+        if (userData.userId !== this.clientId) {
+          console.log(
+            'DashboardComponent: ClientId changed from',
+            this.clientId,
+            'to',
+            userData.userId,
+          );
+          this.clientId = userData.userId;
+          this.token = this.authService.getLocalStorageItem('accessToken');
+          console.log('DashboardComponent: Updated token:', !!this.token);
+          // Refresh wallet data if clientId changed
+          this.fetchWalletData();
+        }
+      } else {
+        console.log('DashboardComponent: No user data received');
+      }
+    });
+
     // Fetch all data in parallel
     this.fetchAllData();
 
     this.langSubscription = this.languageService.language$.subscribe((lang) => {
       this.currentLang = lang as 'en' | 'ar';
     });
-
-    // Subscribe to user changes
-    this.userSubscription = this.authService.user$.subscribe((userData) => {
-      if (userData) {
-        this.user = userData;
-        // Update clientId if it changed
-        if (userData.userId !== this.clientId) {
-          this.clientId = userData.userId;
-          // Refresh wallet data if clientId changed
-          this.fetchWalletData();
-        }
-      }
-    });
   }
 
   fetchAllData(): void {
+    console.log('DashboardComponent: Starting fetchAllData');
+    console.log('DashboardComponent: Token:', this.token);
+    console.log('DashboardComponent: ClientId:', this.clientId);
+
     this.isLoadingProfile = true;
     this.isLoadingWallet = true;
     this.isLoadingOrders = true;
@@ -97,14 +126,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     observables.push(
       this.authService.getClientProfile().subscribe({
         next: (response) => {
+          console.log('DashboardComponent: Profile response:', response);
           if (response.success && response.result) {
             this.user = response.result;
+            console.log('DashboardComponent: User set:', this.user);
           }
           this.isLoadingProfile = false;
           this.checkAllLoadingComplete();
         },
         error: (error) => {
-          console.error('Error fetching client profile:', error);
+          console.error(
+            'DashboardComponent: Error fetching client profile:',
+            error,
+          );
           this.isLoadingProfile = false;
           this.checkAllLoadingComplete();
         },
@@ -113,42 +147,80 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // Add wallet fetch if token and clientId are available
     if (this.token && this.clientId) {
+      console.log('DashboardComponent: Fetching wallet data...');
       observables.push(
         this.walletService.getWallet(this.token, this.clientId).subscribe({
           next: (res) => {
-            this.wallet = res.result;
+            console.log('DashboardComponent: Wallet response:', res);
+            if (res && res.result) {
+              this.wallet = res.result;
+              console.log('DashboardComponent: Wallet set:', this.wallet);
+            } else {
+              console.log(
+                'DashboardComponent: No wallet result, creating default wallet',
+              );
+              this.wallet = {
+                walletAmount: 0,
+                currency: {
+                  name: { en: '', ar: '' },
+                },
+              } as any;
+            }
             this.isLoadingWallet = false;
             this.checkAllLoadingComplete();
           },
           error: (error) => {
-            console.error('Error fetching wallet:', error);
+            console.error('DashboardComponent: Error fetching wallet:', error);
+            console.log(
+              'DashboardComponent: Creating default wallet due to error',
+            );
+            this.wallet = {
+              walletAmount: 0,
+              currency: {
+                name: { en: '', ar: '' },
+              },
+            } as any;
             this.isLoadingWallet = false;
             this.checkAllLoadingComplete();
           },
         }),
       );
     } else {
+      console.log(
+        'DashboardComponent: Missing token or clientId, skipping wallet fetch',
+      );
+      this.wallet = {
+        walletAmount: 0,
+        currency: {
+          name: { en: '', ar: '' },
+        },
+      } as any;
       this.isLoadingWallet = false;
       this.checkAllLoadingComplete();
     }
 
     // Add orders fetch if token is available
     if (this.token) {
+      console.log('DashboardComponent: Fetching orders...');
       observables.push(
         this.orderService.getClientOrders(this.token).subscribe({
           next: (response) => {
+            console.log('DashboardComponent: Orders response:', response);
             this.ordersCount = response.result.totalCount;
             this.isLoadingOrders = false;
             this.checkAllLoadingComplete();
           },
           error: (error) => {
-            console.error('Error loading orders:', error);
+            console.error('DashboardComponent: Error loading orders:', error);
+            this.ordersCount = 0;
             this.isLoadingOrders = false;
             this.checkAllLoadingComplete();
           },
         }),
       );
     } else {
+      console.log('DashboardComponent: No token, skipping orders fetch');
+      this.ordersCount = 0;
       this.isLoadingOrders = false;
       this.checkAllLoadingComplete();
     }
@@ -304,24 +376,63 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Helper method to get full name from firstName and lastName
   getFullName(): string {
-    return `${this.user.firstName || ''} ${this.user.lastName || ''}`.trim();
+    if (!this.user) {
+      console.log('DashboardComponent: No user available for getFullName');
+      return '';
+    }
+    const fullName =
+      `${this.user.firstName || ''} ${this.user.lastName || ''}`.trim();
+    console.log('DashboardComponent: getFullName returning:', fullName);
+    return fullName;
   }
 
   fetchWalletData(): void {
+    console.log(
+      'DashboardComponent: fetchWalletData called with token:',
+      !!this.token,
+      'clientId:',
+      this.clientId,
+    );
     if (this.token && this.clientId) {
       this.isLoadingWallet = true;
       this.walletService.getWallet(this.token, this.clientId).subscribe({
         next: (res) => {
-          this.wallet = res.result;
+          console.log('DashboardComponent: Wallet data fetched:', res);
+          if (res && res.result) {
+            this.wallet = res.result;
+          } else {
+            console.log(
+              'DashboardComponent: No wallet result, creating default wallet',
+            );
+            this.wallet = {
+              walletAmount: 0,
+              currency: {
+                name: { en: '', ar: '' },
+              },
+            } as any;
+          }
           this.isLoadingWallet = false;
           this.checkAllLoadingComplete();
         },
         error: (error) => {
-          console.error('Error fetching wallet:', error);
+          console.error(
+            'DashboardComponent: Error fetching wallet in fetchWalletData:',
+            error,
+          );
+          this.wallet = {
+            walletAmount: 0,
+            currency: {
+              name: { en: '', ar: '' },
+            },
+          } as any;
           this.isLoadingWallet = false;
           this.checkAllLoadingComplete();
         },
       });
+    } else {
+      console.log(
+        'DashboardComponent: fetchWalletData - missing token or clientId',
+      );
     }
   }
 }

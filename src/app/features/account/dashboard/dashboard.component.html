@@ -26,11 +26,18 @@
             </div>
             <div>
               <h3 class="text-xl font-bold text-hover-color">
-                <ng-container *ngIf="!isLoadingWallet">
-                  <span *ngIf="wallet.walletAmount > 0">{{
-                    wallet.currency.name[currentLang]
-                  }}</span>
-                  {{ wallet.walletAmount.toFixed(2) }}
+                <ng-container *ngIf="!isLoadingWallet && wallet">
+                  <span
+                    *ngIf="
+                      wallet.walletAmount > 0 &&
+                      wallet.currency?.name?.[currentLang]
+                    "
+                    >{{ wallet.currency.name[currentLang] }}</span
+                  >
+                  {{ (wallet.walletAmount || 0).toFixed(2) }}
+                </ng-container>
+                <ng-container *ngIf="!isLoadingWallet && !wallet">
+                  0.00
                 </ng-container>
                 <ng-container *ngIf="isLoadingWallet">
                   <div class="h-6 w-24 animate-pulse rounded bg-gray-200"></div>
