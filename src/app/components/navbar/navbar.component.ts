@@ -16,7 +16,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
@@ -40,7 +39,6 @@ import { AuthModalService } from '../../auth-modal.service';
     DialogModule,
     ButtonModule,
     InputTextModule,
-    AuthModalComponent,
     CartSidebarComponent,
     TranslateModule,
     SearchComponent,

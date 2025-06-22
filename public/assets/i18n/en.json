@@ -434,7 +434,8 @@
 
     "button": {
       "submit": "Login",
-      "submitting": "Logging in..."
+      "submitting": "Logging in...",
+      "processingPoints": "Processing Points..."
     },
 
     "error": {
@@ -444,7 +445,9 @@
     "or": "OR",
 
     "noAccount": "Don't have an account?",
-    "registerNow": "Register Now"
+    "registerNow": "Register Now",
+
+    "processingDailyPoints": "Processing daily login points..."
   },
 
   "signup": {

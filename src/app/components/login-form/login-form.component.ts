@@ -34,6 +34,7 @@ export class LoginFormComponent implements OnInit {
   @Output() loginSuccess = new EventEmitter<void>();
   loginForm!: FormGroup;
   loading = false;
+  loadingPoints = false;
   errorMessage = '';
   showPassword = false;
   showCountryDropdown = false;
@@ -126,9 +127,11 @@ export class LoginFormComponent implements OnInit {
           // Add points for daily login
           const token = localStorage.getItem('accessToken');
           if (token) {
+            this.loadingPoints = true;
             console.log('Attempting to add daily points with token:', token);
             this.pointingSystemService.addPoints(token, 2, false).subscribe({
               next: (pointsResponse) => {
+                this.loadingPoints = false;
                 console.log('pointsResponse', pointsResponse);
                 if (pointsResponse.success && pointsResponse.result > 0) {
                   this.pointsGained = pointsResponse.result;
@@ -141,6 +144,7 @@ export class LoginFormComponent implements OnInit {
                 }
               },
               error: (error) => {
+                this.loadingPoints = false;
                 console.error('Error adding points:', error);
                 this.loginSuccess.emit();
               },

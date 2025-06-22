@@ -415,14 +415,17 @@
     "forgotPassword": "نسيت كلمة المرور؟",
     "button": {
       "submit": "تسجيل الدخول",
-      "submitting": "جاري تسجيل الدخول..."
+      "submitting": "جاري تسجيل الدخول...",
+      "processingPoints": "جاري معالجة النقاط..."
     },
     "error": {
       "invalidCredentials": "البريد الإلكتروني/رقم الهاتف أو كلمة المرور غير صحيحة"
     },
     "or": "أو",
     "noAccount": "ليس لديك حساب؟",
-    "registerNow": "سجل الآن"
+    "registerNow": "سجل الآن",
+
+    "processingDailyPoints": "جاري معالجة نقاط تسجيل الدخول اليومية..."
   },
   "signup": {
     "title": "إنشاء حساب",

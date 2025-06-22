@@ -25,7 +25,10 @@ export class AuthService {
   private updateGenderUrl = `${environment.apiUrl}/${ApiEndPoint.updateClientGender}`;
   private updateClientPhotoUrl = `${environment.apiUrl}/${ApiEndPoint.UpdateClientPhoto}`;
   private uploadClientImageUrl = `${environment.apiUrl}/${ApiEndPoint.uploadClientImage}`;
-
+  private get countryId(): string {
+    const country = localStorage.getItem('country');
+    return country === 'SA' ? '103' : '224'; // Default to EG (224) if not SA
+  }
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
@@ -130,7 +133,7 @@ export class AuthService {
   }): Observable<any> {
     const headers = new HttpHeaders({
       'accept-language': 'en',
-      countryid: '224',
+      countryid: this.countryId,
       'abp.tenantid': '1',
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -290,7 +293,7 @@ export class AuthService {
     });
 
     const body = {
-      countryCode: 'EG',
+      countryCode: this.countryId === '103' ? 'SA' : 'EG',
       mobileNumber: mobileNumber,
       isPhoneNumberConfirmed: true,
     };
@@ -303,7 +306,7 @@ export class AuthService {
             const updatedUser = {
               ...this.currentUser,
               mobileNumber: mobileNumber,
-              countryCode: 'EG',
+              countryCode: this.countryId === '103' ? 'SA' : 'EG',
             };
             this.setLocalStorageItem('user', JSON.stringify(updatedUser));
             this.userSubject.next(updatedUser);
