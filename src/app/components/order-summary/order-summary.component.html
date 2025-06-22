@@ -18,19 +18,64 @@
   </div>
 
   <div class="space-y-4 p-4">
+    <!-- Out of Stock Warning Banner -->
+    <div
+      *ngIf="hasOutOfStockItems()"
+      class="rounded border-l-4 border-red-400 bg-red-50 p-4"
+    >
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <i class="ri-error-warning-line text-xl text-red-400"></i>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-700">
+            {{ "order-summary.outOfStockBanner" | translate }}
+          </p>
+          <p class="mt-1 text-sm text-red-600">
+            {{ "order-summary.outOfStockBannerSubtext" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div
       *ngFor="let item of cartItems"
       id="order-item-{{ item.productId }}"
       class="flex flex-col gap-3 border-b pb-4"
     >
+      <!-- Out of Stock Warning for Item -->
+      <div
+        *ngIf="isItemOutOfStock(item)"
+        class="rounded-md border border-red-200 bg-red-50 p-3"
+      >
+        <div class="flex items-center">
+          <i class="ri-error-warning-line mr-2 text-red-500"></i>
+          <span class="text-sm font-medium text-red-700">
+            {{ "order-summary.itemOutOfStock" | translate }}
+          </span>
+        </div>
+      </div>
+
       <div class="flex items-center gap-3">
-        <div class="h-16 w-16 flex-shrink-0">
+        <div class="relative h-16 w-16 flex-shrink-0">
           <img
             id="order-item-image-{{ item.productId }}"
             [src]="getfullImageUrl(item.image)"
             [alt]="currentLang === 'en' ? item.name.en : item.name.ar"
             class="h-full w-full rounded object-cover"
+            [class.opacity-50]="isItemOutOfStock(item)"
           />
+          <!-- Out of Stock Overlay -->
+          <div
+            *ngIf="isItemOutOfStock(item)"
+            class="absolute inset-0 flex items-center justify-center rounded bg-red-500 bg-opacity-20"
+          >
+            <span
+              class="rounded bg-red-500 px-2 py-1 text-xs font-bold text-white"
+            >
+              {{ "order-summary.outOfStock" | translate }}
+            </span>
+          </div>
         </div>
         <div class="flex-1">
           <h3 id="order-item-name-{{ item.productId }}" class="text-gray-800">
@@ -68,8 +113,9 @@
             id="decrease-quantity-{{ item.productId }}"
             type="button"
             (click)="decrementQuantity(item)"
-            class="flex h-full w-8 items-center justify-center rounded-l border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
+            class="flex h-full w-8 items-center justify-center rounded-l border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:cursor-not-allowed disabled:bg-gray-300"
             aria-label="Decrease quantity"
+            [disabled]="isItemOutOfStock(item)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,6 +135,7 @@
           <div
             id="item-quantity-{{ item.productId }}"
             class="flex h-full min-w-[2rem] items-center justify-center border-y border-gray-300 px-2 text-sm"
+            [class.text-red-500]="isItemOutOfStock(item)"
           >
             {{ item.quantity }}
           </div>
@@ -96,8 +143,9 @@
             id="increase-quantity-{{ item.productId }}"
             type="button"
             (click)="incrementQuantity(item)"
-            class="flex h-full w-8 items-center justify-center rounded-r border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
+            class="flex h-full w-8 items-center justify-center rounded-r border border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:cursor-not-allowed disabled:bg-gray-300"
             aria-label="Increase quantity"
+            [disabled]="isItemOutOfStock(item)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

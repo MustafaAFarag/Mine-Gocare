@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cart, CartItem, CART_STORAGE_KEY } from '../model/Cart';
+import {
+  StockValidationService,
+  StockValidationResponse,
+} from './stock-validation.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +14,7 @@ export class CartService {
   private cartSubject = new BehaviorSubject<Cart>(this.getInitialCart());
   cart$ = this.cartSubject.asObservable();
 
-  constructor() {
+  constructor(private stockValidationService: StockValidationService) {
     this.loadCart();
   }
 
@@ -175,6 +179,148 @@ export class CartService {
     return items.reduce(
       (total, item) => total + item.afterPrice * item.quantity,
       0,
+    );
+  }
+
+  /**
+   * Check if there are any out-of-stock items in the cart
+   */
+  hasOutOfStockItems(): boolean {
+    const cart = this.cartSubject.value;
+    return cart.items.some((item) => item.stockCount === 0);
+  }
+
+  /**
+   * Get all out-of-stock items from the cart
+   */
+  getOutOfStockItems(): CartItem[] {
+    const cart = this.cartSubject.value;
+    return cart.items.filter((item) => item.stockCount === 0);
+  }
+
+  /**
+   * Get all items with stock issues (out of stock or low stock) - local check only
+   */
+  getItemsWithLocalStockIssues(): CartItem[] {
+    const cart = this.cartSubject.value;
+    return cart.items.filter(
+      (item) =>
+        item.stockCount === 0 ||
+        (item.stockCount !== undefined && item.quantity > item.stockCount),
+    );
+  }
+
+  /**
+   * Check if a specific item is out of stock
+   */
+  isItemOutOfStock(productId: number, variantId?: number): boolean {
+    const cart = this.cartSubject.value;
+    const item = cart.items.find(
+      (i) => i.productId === productId && i.variantId === variantId,
+    );
+    return item ? item.stockCount === 0 : false;
+  }
+
+  /**
+   * Update stock information for cart items from server data
+   * This should be called when product data is refreshed
+   */
+  updateStockInfo(
+    updatedItems: {
+      productId: number;
+      variantId?: number;
+      stockCount: number;
+    }[],
+  ): void {
+    const currentCart = structuredClone(this.cartSubject.value);
+    let hasChanges = false;
+
+    currentCart.items = currentCart.items.map((item) => {
+      const updatedItem = updatedItems.find(
+        (updated) =>
+          updated.productId === item.productId &&
+          updated.variantId === item.variantId,
+      );
+
+      if (updatedItem && updatedItem.stockCount !== item.stockCount) {
+        hasChanges = true;
+        return { ...item, stockCount: updatedItem.stockCount };
+      }
+
+      return item;
+    });
+
+    if (hasChanges) {
+      this.saveCart(currentCart);
+    }
+  }
+
+  /**
+   * Remove out-of-stock items from cart
+   */
+  removeOutOfStockItems(): void {
+    const currentCart = structuredClone(this.cartSubject.value);
+    const originalLength = currentCart.items.length;
+
+    currentCart.items = currentCart.items.filter(
+      (item) => item.stockCount !== 0,
+    );
+
+    if (currentCart.items.length !== originalLength) {
+      currentCart.total = this.calculateTotal(currentCart.items);
+      this.saveCart(currentCart);
+    }
+  }
+
+  /**
+   * Validate stock levels for all cart items against current server data
+   */
+  validateStockBeforeCheckout(): Observable<StockValidationResponse> {
+    const cart = this.cartSubject.value;
+    return this.stockValidationService.validateCartStock(cart.items);
+  }
+
+  /**
+   * Get detailed stock validation with product information
+   */
+  validateStockWithDetails(): Observable<
+    StockValidationResponse & { details: any[] }
+  > {
+    const cart = this.cartSubject.value;
+    return this.stockValidationService.validateCartStockWithDetails(cart.items);
+  }
+
+  /**
+   * Check if cart has stock issues (out of stock or insufficient stock)
+   */
+  hasStockIssues(): Observable<boolean> {
+    return this.validateStockBeforeCheckout().pipe(
+      map((validation) => !validation.isValid),
+    );
+  }
+
+  /**
+   * Get items with stock issues (out of stock or insufficient stock)
+   */
+  getItemsWithStockIssues(): Observable<CartItem[]> {
+    return this.validateStockWithDetails().pipe(
+      map((validation) => {
+        if (validation.isValid) return [];
+
+        const cart = this.cartSubject.value;
+        return validation.invalidItems
+          .map((invalidItem) => {
+            const cartItem = cart.items.find(
+              (item) =>
+                item.productId === invalidItem.productId &&
+                item.variantId === invalidItem.variantId,
+            );
+            return cartItem
+              ? { ...cartItem, currentStock: invalidItem.currentStock }
+              : null;
+          })
+          .filter((item) => item !== null) as CartItem[];
+      }),
     );
   }
 }

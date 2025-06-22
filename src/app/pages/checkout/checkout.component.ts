@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Address } from './models/checkout.models';
 import { Subscription } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 
 // Import services
@@ -26,11 +26,11 @@ import { PaymentOptionsComponent } from '../../components/payment-options/paymen
 import { OrderSummaryComponent } from '../../components/order-summary/order-summary.component';
 import { BillingSummaryComponent } from '../../components/billing-summary/billing-summary.component';
 import { AddressFormModalComponent } from '../../components/address-form-modal/address-form-modal.component';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 // Import models
 import { CartItem } from '../../model/Cart';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { WalletService } from '../../services/wallet.service';
 import { ToastModule } from 'primeng/toast';
@@ -51,6 +51,7 @@ import { MessageService } from 'primeng/api';
     AddressFormModalComponent,
     LoadingComponent,
     ToastModule,
+    ConfirmationDialogComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
@@ -63,6 +64,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   // Address Form Modal
   showAddressFormModal = false;
+
+  // Confirmation dialog properties
+  showOutOfStockErrorDialog = false;
+  showLoginRequiredDialog = false;
+  showEmptyCartDialog = false;
+  showAddressRequiredDialog = false;
+  showOrderSuccessDialog = false;
+  showOrderFailedDialog = false;
+  showOrderErrorDialog = false;
+  showStockValidationErrorDialog = false;
+  stockValidationError: any = null;
 
   // Loading states
   loading: boolean = false;
@@ -405,22 +417,42 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('User is not authenticated');
-      alert(this.translate.instant('alerts.loginRequired'));
+      this.showLoginRequiredDialog = true;
       return;
     }
 
     // Check if cart is empty
     if (this.cartItems.length === 0) {
       console.error('Cart is empty');
-      alert(this.translate.instant('alerts.emptyCart'));
+      this.showEmptyCartDialog = true;
       return;
     }
 
+    // Validate stock levels before proceeding
+    this.cartService.validateStockBeforeCheckout().subscribe({
+      next: (validation) => {
+        if (!validation.isValid) {
+          console.error('Stock validation failed:', validation.invalidItems);
+          this.showStockValidationError(validation);
+          return;
+        }
+
+        // Continue with order placement
+        this.proceedWithOrder(token);
+      },
+      error: (error) => {
+        console.error('Error validating stock:', error);
+        this.showOrderErrorDialog = true;
+      },
+    });
+  }
+
+  private proceedWithOrder(token: string): void {
     // Get selected address ID
     const selectedAddressId = this.getSelectedShippingAddressId();
     if (!selectedAddressId) {
       console.error('No address selected');
-      alert(this.translate.instant('alerts.selectShippingAddress'));
+      this.showAddressRequiredDialog = true;
       return;
     }
 
@@ -480,28 +512,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
 
           // Show success message
-          alert(this.translate.instant('alerts.orderSuccess'));
+          this.showOrderSuccessDialog = true;
 
           // Redirect to orders page
           this.router.navigate(['/account/orders']);
         } else {
           console.error('Failed to place order:', response);
-          alert(
-            this.translate.instant('alerts.orderFailed', {
-              error: response.error?.message || 'Unknown error',
-            }),
-          );
+          this.showOrderFailedDialog = true;
         }
         this.isPlacingOrder = false;
       },
       error: (error) => {
         this.isPlacingOrder = false;
         console.error('Error placing order:', error);
-        alert(
-          this.translate.instant('alerts.orderError', {
-            error: error.message || 'Unknown error',
-          }),
-        );
+        this.showOrderErrorDialog = true;
       },
     });
   }
@@ -551,5 +575,95 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }));
       }
     }
+  }
+
+  // Check if there are out-of-stock items
+  hasOutOfStockItems(): boolean {
+    return this.cartItems.some((item) => item.stockCount === 0);
+  }
+
+  // Get out-of-stock items
+  getOutOfStockItems(): any[] {
+    return this.cartItems.filter((item) => item.stockCount === 0);
+  }
+
+  // Check if a specific item is out of stock
+  isItemOutOfStock(item: any): boolean {
+    return item.stockCount === 0;
+  }
+
+  // Dialog event handlers
+  onOutOfStockErrorConfirmed(): void {
+    this.router.navigate(['/cart']);
+  }
+
+  onLoginRequiredConfirmed(): void {
+    // Could redirect to login or show auth modal
+  }
+
+  onEmptyCartConfirmed(): void {
+    this.router.navigate(['/collections']);
+  }
+
+  onAddressRequiredConfirmed(): void {
+    // Could focus on address selection
+  }
+
+  onOrderSuccessConfirmed(): void {
+    // Dialog will close and user will be redirected
+  }
+
+  onOrderFailedConfirmed(): void {
+    // Dialog will close
+  }
+
+  onOrderErrorConfirmed(): void {
+    // Dialog will close
+  }
+
+  showStockValidationError(validation: any): void {
+    this.showStockValidationErrorDialog = true;
+    this.stockValidationError = validation;
+  }
+
+  getStockValidationErrorMessage(): string {
+    if (!this.stockValidationError) {
+      return this.translate.instant('checkout.stockValidationError');
+    }
+
+    const invalidItems = this.stockValidationError.invalidItems || [];
+    if (invalidItems.length === 0) {
+      return this.translate.instant('checkout.stockValidationError');
+    }
+
+    const messages = invalidItems.map((item: any) => {
+      const cartItem = this.cartItems.find(
+        (ci) =>
+          ci.productId === item.productId && ci.variantId === item.variantId,
+      );
+      const productName = cartItem?.name
+        ? this.currentLang === 'en'
+          ? cartItem.name.en
+          : cartItem.name.ar
+        : 'Unknown Product';
+
+      if (item.currentStock === 0) {
+        return `${productName}: ${this.translate.instant('checkout.outOfStock')}`;
+      } else {
+        return `${productName}: ${this.translate.instant(
+          'checkout.insufficientStock',
+          {
+            requested: item.requestedQuantity,
+            available: item.currentStock,
+          },
+        )}`;
+      }
+    });
+
+    return (
+      this.translate.instant('checkout.stockValidationErrorDetails') +
+      '\n\n' +
+      messages.join('\n')
+    );
   }
 }

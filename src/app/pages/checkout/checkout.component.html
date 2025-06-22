@@ -4,6 +4,34 @@
     {{ "checkout.title" | translate }}
   </h1>
 
+  <!-- Out of Stock Warning Banner -->
+  <div
+    *ngIf="hasOutOfStockItems()"
+    class="mb-6 rounded border-l-4 border-red-400 bg-red-50 p-4"
+  >
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <i class="ri-error-warning-line text-xl text-red-400"></i>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-700">
+          {{ "checkout.outOfStockBanner" | translate }}
+        </p>
+        <p class="mt-1 text-sm text-red-600">
+          {{ "checkout.outOfStockBannerSubtext" | translate }}
+        </p>
+        <div class="mt-2">
+          <a
+            href="/cart"
+            class="text-sm text-red-600 underline hover:text-red-800"
+          >
+            {{ "checkout.returnToCart" | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Loading State -->
   <app-loading *ngIf="cartLoading"></app-loading>
 
@@ -118,13 +146,24 @@
           {{ getCurrency() }} {{ total.toFixed(2) }}
         </p>
       </div>
-      <button
-        id="mobile-place-order"
-        (click)="placeOrder()"
-        class="rounded-lg bg-hover-color px-5 py-3 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300"
-      >
-        {{ "checkout.placeOrder" | translate }}
-      </button>
+      <div class="flex flex-col gap-2">
+        <!-- Out of Stock Warning for Mobile Checkout -->
+        <div
+          *ngIf="hasOutOfStockItems()"
+          class="text-center text-xs text-red-600"
+        >
+          <i class="ri-error-warning-line mr-1"></i>
+          {{ "checkout.mobileOutOfStockWarning" | translate }}
+        </div>
+        <button
+          id="mobile-place-order"
+          (click)="placeOrder()"
+          class="rounded-lg bg-hover-color px-5 py-3 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300 disabled:cursor-not-allowed disabled:bg-gray-400"
+          [disabled]="hasOutOfStockItems()"
+        >
+          {{ "checkout.placeOrder" | translate }}
+        </button>
+      </div>
     </div>
   </div>
 
@@ -133,4 +172,85 @@
     *ngIf="!cartLoading && cartItems.length > 0"
     class="h-24 md:hidden"
   ></div>
+
+  <!-- Confirmation Dialogs -->
+  <app-confirmation-dialog
+    [(visible)]="showOutOfStockErrorDialog"
+    [title]="'checkout.outOfStockErrorTitle' | translate"
+    [message]="'checkout.outOfStockError' | translate"
+    [confirmText]="'checkout.returnToCart' | translate"
+    [cancelText]="'checkout.cancel' | translate"
+    type="error"
+    (confirmed)="onOutOfStockErrorConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showStockValidationErrorDialog"
+    [title]="'checkout.stockValidationErrorTitle' | translate"
+    [message]="getStockValidationErrorMessage()"
+    [confirmText]="'checkout.returnToCart' | translate"
+    [cancelText]="'checkout.cancel' | translate"
+    type="error"
+    (confirmed)="onOutOfStockErrorConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showLoginRequiredDialog"
+    [title]="'alerts.loginRequiredTitle' | translate"
+    [message]="'alerts.loginRequired' | translate"
+    [confirmText]="'alerts.ok' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="warning"
+    (confirmed)="onLoginRequiredConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showEmptyCartDialog"
+    [title]="'alerts.emptyCartTitle' | translate"
+    [message]="'alerts.emptyCart' | translate"
+    [confirmText]="'alerts.continueShopping' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="info"
+    (confirmed)="onEmptyCartConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showAddressRequiredDialog"
+    [title]="'alerts.selectShippingAddressTitle' | translate"
+    [message]="'alerts.selectShippingAddress' | translate"
+    [confirmText]="'alerts.ok' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="warning"
+    (confirmed)="onAddressRequiredConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showOrderSuccessDialog"
+    [title]="'alerts.orderSuccessTitle' | translate"
+    [message]="'alerts.orderSuccess' | translate"
+    [confirmText]="'alerts.ok' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="info"
+    (confirmed)="onOrderSuccessConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showOrderFailedDialog"
+    [title]="'alerts.orderFailedTitle' | translate"
+    [message]="'alerts.orderFailed' | translate"
+    [confirmText]="'alerts.ok' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="error"
+    (confirmed)="onOrderFailedConfirmed()"
+  ></app-confirmation-dialog>
+
+  <app-confirmation-dialog
+    [(visible)]="showOrderErrorDialog"
+    [title]="'alerts.orderErrorTitle' | translate"
+    [message]="'alerts.orderError' | translate"
+    [confirmText]="'alerts.ok' | translate"
+    [cancelText]="'alerts.cancel' | translate"
+    type="error"
+    (confirmed)="onOrderErrorConfirmed()"
+  ></app-confirmation-dialog>
 </div>

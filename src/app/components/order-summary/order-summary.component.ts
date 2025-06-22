@@ -144,4 +144,19 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   onDeliveryNotesChange(notes: string): void {
     this.deliveryNotesChange.emit(notes);
   }
+
+  // Check if there are out-of-stock items
+  hasOutOfStockItems(): boolean {
+    return this.cartItems.some((item) => item.stockCount === 0);
+  }
+
+  // Check if a specific item is out of stock
+  isItemOutOfStock(item: CartItem): boolean {
+    return item.stockCount === 0;
+  }
+
+  // Get out-of-stock items
+  getOutOfStockItems(): CartItem[] {
+    return this.cartItems.filter((item) => item.stockCount === 0);
+  }
 }

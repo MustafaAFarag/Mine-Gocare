@@ -30,6 +30,28 @@
     </button>
   </div>
 
+  <!-- Out of Stock Warning Banner -->
+  <div
+    *ngIf="hasOutOfStockItems()"
+    class="mx-4 mt-2 rounded border-l-4 border-red-400 bg-red-50 p-3"
+  >
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <i class="ri-error-warning-line mr-2 text-red-400"></i>
+        <span class="text-sm text-red-700">
+          {{ "cart-sidebar.outOfStockWarning" | translate }}
+        </span>
+      </div>
+      <button
+        (click)="removeOutOfStockItems()"
+        class="rounded bg-red-500 px-2 py-1 text-xs text-white transition hover:bg-red-600"
+        id="sidebar-remove-out-of-stock-items"
+      >
+        {{ "cart-sidebar.removeOutOfStockItems" | translate }}
+      </button>
+    </div>
+  </div>
+
   <!-- Clear Cart -->
   <div class="flex justify-end px-4 py-2" *ngIf="(cartItems$ | async)?.length">
     <button
@@ -48,12 +70,32 @@
         *ngFor="let item of cartItems$ | async"
         class="flex items-center gap-4 border-b py-4"
       >
-        <div class="h-20 w-20 flex-shrink-0">
+        <!-- Out of Stock Warning for Item -->
+        <div
+          *ngIf="isItemOutOfStock(item)"
+          class="absolute right-2 top-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white"
+        >
+          {{ "cart-sidebar.outOfStock" | translate }}
+        </div>
+
+        <div class="relative h-20 w-20 flex-shrink-0">
           <img
             [src]="getFullImageUrl(item.image)"
             [alt]="getLocalizedText(item.name)"
             class="h-full w-full object-cover"
+            [class.opacity-50]="isItemOutOfStock(item)"
           />
+          <!-- Out of Stock Overlay -->
+          <div
+            *ngIf="isItemOutOfStock(item)"
+            class="absolute inset-0 flex items-center justify-center rounded bg-red-500 bg-opacity-20"
+          >
+            <span
+              class="rounded bg-red-500 px-2 py-1 text-xs font-bold text-white"
+            >
+              {{ "cart-sidebar.outOfStock" | translate }}
+            </span>
+          </div>
         </div>
 
         <div class="flex-1">
@@ -106,7 +148,7 @@
           <div class="mt-2 flex items-center">
             <div class="ml-auto flex items-center">
               <button
-                class="flex h-6 w-6 items-center justify-center rounded-l border text-gray-500 hover:text-gray-700"
+                class="flex h-6 w-6 items-center justify-center rounded-l border text-gray-500 hover:text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-300"
                 (click)="
                   updateQuantity(
                     item.productId,
@@ -115,16 +157,18 @@
                   )
                 "
                 id="cart-sidebar-decrement-quantity-button"
+                [disabled]="isItemOutOfStock(item)"
               >
                 <i class="ri-subtract-line"></i>
               </button>
               <span
                 class="flex h-6 w-8 items-center justify-center border-b border-t"
+                [class.text-red-500]="isItemOutOfStock(item)"
               >
                 {{ item.quantity }}
               </span>
               <button
-                class="flex h-6 w-6 items-center justify-center rounded-r border text-gray-500 hover:text-gray-700"
+                class="flex h-6 w-6 items-center justify-center rounded-r border text-gray-500 hover:text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-300"
                 (click)="
                   updateQuantity(
                     item.productId,
@@ -133,6 +177,7 @@
                   )
                 "
                 id="cart-sidebar-increment-quantity-button"
+                [disabled]="isItemOutOfStock(item)"
               >
                 <i class="ri-add-line"></i>
               </button>
@@ -177,11 +222,31 @@
       <button
         routerLink="/checkout"
         (click)="closeCart()"
-        class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900"
+        class="rounded bg-hover-color px-4 py-3 text-center font-medium text-white transition hover:bg-red-900 disabled:cursor-not-allowed disabled:bg-gray-400"
         id="cart-sidebar-checkout-button"
+        [disabled]="hasOutOfStockItems()"
       >
         {{ "cart-sidebar.checkout" | translate }}
       </button>
     </div>
+
+    <!-- Out of Stock Warning for Checkout -->
+    <div *ngIf="hasOutOfStockItems()" class="mt-2 text-center">
+      <p class="text-xs text-red-600">
+        <i class="ri-error-warning-line mr-1"></i>
+        {{ "cart-sidebar.checkoutDisabledWarning" | translate }}
+      </p>
+    </div>
   </div>
 </div>
+
+<!-- Confirmation Dialog -->
+<app-confirmation-dialog
+  [(visible)]="showRemoveOutOfStockDialog"
+  [title]="'cart-sidebar.removeOutOfStockTitle' | translate"
+  [message]="'cart-sidebar.removeOutOfStockConfirm' | translate"
+  [confirmText]="'cart-sidebar.removeOutOfStockConfirmButton' | translate"
+  [cancelText]="'cart-sidebar.cancel' | translate"
+  type="warning"
+  (confirmed)="confirmRemoveOutOfStockItems()"
+></app-confirmation-dialog>

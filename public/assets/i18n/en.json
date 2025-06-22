@@ -63,7 +63,20 @@
   },
   "checkout": {
     "title": "Checkout",
+    "outOfStockBanner": "Cannot proceed with checkout",
+    "outOfStockBannerSubtext": "Some items in your cart are out of stock",
+    "outOfStockError": "Cannot place order with out-of-stock items. Please remove them from your cart first.",
+    "mobileOutOfStockWarning": "Remove out-of-stock items first",
+    "outOfStockErrorTitle": "Out of Stock Items",
+    "stockValidationErrorTitle": "Stock Validation Failed",
+    "stockValidationError": "Some items in your cart have stock issues",
+    "outOfStock": "Out of Stock",
+    "insufficientStock": "Requested {{requested}} but only {{available}} available",
+    "cancel": "Cancel",
+    "returnToCart": "Return to Cart",
+    "stockValidationErrorDetails": "The following items are out of stock:",
     "checkoutDiscount": "Checkout Discount",
+
     "earnedPointsLabel": "You will earn +{{points}} points when order deliver",
     "wallet": "Wallet",
     "points": "points",
@@ -332,6 +345,12 @@
       }
     }
   },
+  "order-summary": {
+    "outOfStockBanner": "Some items are out of stock",
+    "outOfStockBannerSubtext": "Please remove these items before proceeding",
+    "itemOutOfStock": "This item is out of stock",
+    "outOfStock": "Out of Stock"
+  },
   "contactUs": {
     "header": "Contact Us",
     "description": "Choose your preferred method to get in touch with our team.",
@@ -522,6 +541,14 @@
   },
   "cart-sidebar": {
     "title": "My Cart",
+    "outOfStockWarning": "Out of stock items in cart",
+    "outOfStock": "Out of Stock",
+    "checkoutDisabledWarning": "Cannot checkout with out-of-stock items",
+    "removeOutOfStockConfirm": "Are you sure you want to remove all out-of-stock items from your cart?",
+    "removeOutOfStockItems": "Remove",
+    "removeOutOfStockTitle": "Remove Out of Stock Items",
+    "removeOutOfStockConfirmButton": "Remove Items",
+    "cancel": "Cancel",
     "empty": "Your cart is currently empty",
     "freeShippingMessage": "Spend ${{amount}} More And Enjoy Free Shipping!",
     "freeShippingCongrats": "🎉 Congratulations! Enjoy Free Shipping On Us!",
@@ -534,6 +561,24 @@
   },
   "cart": {
     "header": "Cart",
+    "outOfStockBanner": "Some items in your cart are out of stock",
+    "outOfStockBannerSubtext": "Please remove out-of-stock items before checkout",
+    "itemOutOfStock": "This item is out of stock",
+    "outOfStock": "Out of Stock",
+    "checkoutDisabledWarning": "Cannot checkout with out-of-stock items",
+    "outOfStockWarning": "Please remove out-of-stock items before checkout",
+    "removeOutOfStockConfirm": "Are you sure you want to remove all out-of-stock items from your cart?",
+    "removeOutOfStockItems": "Remove Out of Stock Items",
+    "removeOutOfStockTitle": "Remove Out of Stock Items",
+    "removeOutOfStockConfirmButton": "Remove Items",
+    "outOfStockWarningTitle": "Cannot Proceed to Checkout",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "stockValidationErrorTitle": "Stock Validation Failed",
+    "stockValidationError": "Some items in your cart have stock issues",
+    "stockValidationErrorDetails": "The following items have stock problems:",
+    "insufficientStock": "Requested {{requested}} but only {{available}} available",
+    "returnToCart": "Return to Cart",
     "noProducts": "Your cart is currently empty",
     "ADDED_TO_CART": "Added to Cart",
     "PRODUCT_ADDED_MESSAGE": "{{productName}} has been added to your cart",
@@ -804,6 +849,8 @@
   "common": {
     "save": "Save",
     "ok": "Accept",
+    "confirm": "Confirm",
+    "continue": "Continue",
     "egypt": "Egypt",
     "saudiArabia": "Saudi Arabia",
     "update": "Update",
@@ -908,6 +955,15 @@
     "selectShippingAddress": "Please select a shipping address",
     "orderSuccess": "Order placed successfully!",
     "orderFailed": "Failed to place order: {{error}}",
-    "orderError": "Error placing order: {{error}}"
+    "orderError": "Error placing order: {{error}}",
+    "loginRequiredTitle": "Login Required",
+    "emptyCartTitle": "Empty Cart",
+    "continueShopping": "Continue Shopping",
+    "selectShippingAddressTitle": "Shipping Address Required",
+    "orderSuccessTitle": "Order Placed Successfully",
+    "orderFailedTitle": "Order Failed",
+    "orderErrorTitle": "Order Error",
+    "ok": "OK",
+    "cancel": "Cancel"
   }
 }

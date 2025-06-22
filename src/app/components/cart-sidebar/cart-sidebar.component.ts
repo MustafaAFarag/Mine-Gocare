@@ -14,6 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 type Language = 'en' | 'ar';
 type Country = 'EG' | 'SA';
@@ -26,7 +27,12 @@ interface Currency {
 @Component({
   selector: 'app-cart-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    ConfirmationDialogComponent,
+  ],
   templateUrl: './cart-sidebar.component.html',
   styleUrls: ['./cart-sidebar.component.css'],
 })
@@ -36,6 +42,9 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
   currentCountry: Country = 'EG';
   private destroy$ = new Subject<void>();
   private isBrowser: boolean;
+
+  // Confirmation dialog properties
+  showRemoveOutOfStockDialog = false;
 
   getFullImageUrl = getFullImageUrl;
 
@@ -200,5 +209,32 @@ export class CartSidebarComponent implements OnInit, OnDestroy {
     if (!textObj) return '';
     const currentLang = this.languageService.getCurrentLanguage();
     return currentLang === 'ar' && textObj?.ar ? textObj.ar : textObj.en;
+  }
+
+  // Check if there are out-of-stock items
+  hasOutOfStockItems(): boolean {
+    return this.cartService.hasOutOfStockItems();
+  }
+
+  // Check if a specific item is out of stock
+  isItemOutOfStock(item: any): boolean {
+    return item.stockCount === 0;
+  }
+
+  // Get out-of-stock items
+  getOutOfStockItems(): any[] {
+    return this.cartService.getOutOfStockItems();
+  }
+
+  // Remove out-of-stock items from cart
+  removeOutOfStockItems(): void {
+    if (this.hasOutOfStockItems()) {
+      this.showRemoveOutOfStockDialog = true;
+    }
+  }
+
+  confirmRemoveOutOfStockItems(): void {
+    this.cartService.removeOutOfStockItems();
+    this.showRemoveOutOfStockDialog = false;
   }
 }
