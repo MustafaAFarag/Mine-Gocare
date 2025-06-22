@@ -63,6 +63,7 @@
   "checkout": {
     "title": "Checkout",
     "checkoutDiscount": "Checkout Discount",
+    "earnedPointsLabel": "You will earn +{{points}} points when order deliver",
     "wallet": "Wallet",
     "points": "points",
     "insufficientPoints": "Insufficient Points",
@@ -748,8 +749,8 @@
     "accountInfo": "Account Information",
     "fullName": "Full Name",
     "gender": "Gender",
-    "male": "Male",
-    "female": "Female",
+    "men": "Men",
+    "women": "Women",
     "phone": "Phone",
     "notProvided": "Not provided",
     "addNew": "Add New",

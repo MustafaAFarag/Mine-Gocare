@@ -150,3 +150,21 @@ interface ProductName {
   en: string;
   ar: string;
 }
+
+export interface OrderSummary {
+  subTotal: number;
+  proomoCodeAmount: number;
+  totalDiscount: number;
+  shippingFees: number;
+  total: number;
+  currency: Currency;
+  points: Points;
+  sla: number;
+  earnedPoints: number;
+  availableWalletAmount: number;
+}
+
+export interface Points {
+  totalActivePoints: number;
+  cost: number;
+}

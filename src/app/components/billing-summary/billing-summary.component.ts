@@ -18,6 +18,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../model/Cart';
 import { OrderService } from '../../services/order.service';
+import { OrderSummary } from '../../model/Order';
 
 type Language = 'en' | 'ar';
 
@@ -58,7 +59,7 @@ export class BillingSummaryComponent implements OnInit, OnDestroy {
   appliedPromoCode: PromoCode | null = null;
   private cartSubscription: Subscription = new Subscription();
   private langSubscription: Subscription = new Subscription();
-  orderSummary: any = null;
+  orderSummary!: OrderSummary;
   loading: boolean = false;
 
   @Output() placeOrderEvent = new EventEmitter<void>();
