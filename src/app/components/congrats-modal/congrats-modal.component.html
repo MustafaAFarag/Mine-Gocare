@@ -8,19 +8,27 @@
   [showHeader]="false"
   styleClass="congrats-modal"
 >
-  <div class="flex flex-col items-center gap-4 text-center">
-    <div class="text-6xl">🎉</div>
-    <h2 class="text-2xl font-bold text-hover-color">
-      {{ "congrats.title" | translate }}
-    </h2>
-    <p class="text-gray-600">
-      {{ "congrats.message" | translate }}
-    </p>
-    <button
-      (click)="closeDialog()"
-      class="mt-4 rounded-lg bg-hover-color px-6 py-2 text-white hover:bg-opacity-90"
+  <div class="flex flex-col items-center gap-6 text-center">
+    <div
+      class="flex h-20 w-20 items-center justify-center rounded-full bg-green-50"
     >
-      {{ "congrats.button" | translate }}
-    </button>
+      <i class="ri-gift-line text-4xl text-green-500"></i>
+    </div>
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold text-gray-800">
+        {{ "congrats.title" | translate }}
+      </h2>
+      <p class="text-gray-600">
+        {{ "congrats.message" | translate }}
+      </p>
+    </div>
+    <div class="mt-2 w-full">
+      <button
+        (click)="closeDialog()"
+        class="w-full rounded-lg bg-green-500 px-6 py-3 text-white transition-colors hover:bg-green-600"
+      >
+        {{ "congrats.button" | translate }}
+      </button>
+    </div>
   </div>
 </p-dialog>

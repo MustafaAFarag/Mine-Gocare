@@ -6,7 +6,7 @@ import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.componen
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
+import { AuthModalService } from '../../auth-modal.service';
 import { CartNoProductsComponent } from '../../components/cart-no-products/cart-no-products.component';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,6 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     CommonModule,
     BreadcrumbComponent,
-    AuthModalComponent,
     CartNoProductsComponent,
     TranslateModule,
   ],
@@ -28,13 +27,13 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
-  showAuthModal: boolean = false;
   private cartSubscription?: Subscription;
 
   constructor(
     private router: Router,
     private cartService: CartService,
     private authService: AuthService,
+    private authModalService: AuthModalService,
     private languageService: LanguageService,
   ) {}
 
@@ -84,8 +83,8 @@ export class CartComponent implements OnInit, OnDestroy {
       // TODO: Implement checkout logic for authenticated users
       this.router.navigate(['/checkout']);
     } else {
-      // Show auth modal instead of redirecting
-      this.showAuthModal = true;
+      // Show auth modal using the service
+      this.authModalService.showModal();
     }
   }
 

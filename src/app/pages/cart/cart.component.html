@@ -224,7 +224,7 @@
         (click)="continueShopping()"
         id="cart-continue-shopping"
       >
-        {{ "cart.cartActions.continueShopping" | translate }} 
+        {{ "cart.cartActions.continueShopping" | translate }}
       </button>
       <button
         class="hover:bg-hover-cotext-hover-color rounded bg-hover-color px-6 py-3 text-white transition"
@@ -235,9 +235,4 @@
       </button>
     </div>
   </div>
-
-  <app-auth-modal
-    [(visible)]="showAuthModal"
-    (visibleChange)="showAuthModal = $event"
-  ></app-auth-modal>
 </div>
