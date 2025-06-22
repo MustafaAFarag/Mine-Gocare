@@ -135,6 +135,25 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.selectedBrandIds = [];
         this.brandsLoading = true;
 
+        // Refetch brands when country changes
+        this.brandService.getBrands().subscribe({
+          next: (response) => {
+            const currentLang = this.languageService.getCurrentLanguage();
+            this.brands = response.result.map((brand: any) => ({
+              name: currentLang === 'ar' ? brand.name.ar : brand.name.en,
+              en: brand.name.en,
+              ar: brand.name.ar,
+              id: brand.id,
+              selected: this.selectedBrandIds.includes(brand.id),
+            }));
+            this.brandsLoading = false;
+          },
+          error: (error) => {
+            console.error('Error fetching brands:', error);
+            this.brandsLoading = false;
+          },
+        });
+
         // Refetch products when country changes
         if (this.categories.length > 0) {
           this.fetchProductsAPI();
