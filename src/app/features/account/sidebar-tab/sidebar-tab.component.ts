@@ -9,6 +9,7 @@ import { LanguageService } from '../../../services/language.service';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { getFullImageUrl } from '../../../lib/utils';
+import { LogoutConfirmModalComponent } from '../../../components/logout-confirm-modal/logout-confirm-modal.component';
 
 interface SidebarItem {
   name: string;
@@ -20,7 +21,13 @@ interface SidebarItem {
 
 @Component({
   selector: 'app-sidebar-tab',
-  imports: [CommonModule, RouterModule, TranslateModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    FormsModule,
+    LogoutConfirmModalComponent,
+  ],
   templateUrl: './sidebar-tab.component.html',
   styleUrl: './sidebar-tab.component.css',
 })
@@ -33,6 +40,7 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
   isUpdatingEmail: boolean = false;
   emailInput: string = '';
   showEmailInput: boolean = false;
+  logoutConfirmVisible: boolean = false;
   isUploadingImage: boolean = false;
   defaultProfileImage =
     'https://gocare-back-testing.salonspace1.com/Attachments/Static/Profile_Images/DefaultUserImage.png';
@@ -189,6 +197,14 @@ export class SidebarTabComponent implements OnInit, OnDestroy {
       return this.getFullImageUrl(this.user.profileImageUrl);
     }
     return this.defaultProfileImage;
+  }
+
+  showLogoutConfirm() {
+    this.logoutConfirmVisible = true;
+  }
+
+  onLogoutConfirm() {
+    this.logout();
   }
 
   onFileSelected(event: Event): void {

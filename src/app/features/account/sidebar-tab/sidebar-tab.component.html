@@ -120,7 +120,7 @@
   <div class="p-4">
     <button
       class="flex w-full items-center justify-center rounded bg-hover-color py-3 text-white transition hover:bg-hover-color/80"
-      (click)="logout()"
+      (click)="showLogoutConfirm()"
       id="account-sidebar-logout-button"
     >
       <i class="ri-logout-box-line mr-2"></i>
@@ -128,3 +128,8 @@
     </button>
   </div>
 </div>
+
+<app-logout-confirm-modal
+  [(visible)]="logoutConfirmVisible"
+  (confirmLogout)="onLogoutConfirm()"
+></app-logout-confirm-modal>
