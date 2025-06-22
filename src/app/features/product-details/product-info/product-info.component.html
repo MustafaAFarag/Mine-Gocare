@@ -230,13 +230,6 @@
     <!-- Stock Information -->
     <div class="flex items-center gap-4 text-sm">
       <div
-        *ngIf="selectedVariant?.hasLowQuantity"
-        class="flex items-center text-lg text-orange-500"
-      >
-        <i class="ri-alert-line mr-2"></i>
-        <span>{{ "product-info.lowStock" | translate }}</span>
-      </div>
-      <div
         *ngIf="selectedVariant?.stockCount === 0"
         class="flex items-center text-lg text-red-500"
       >
@@ -244,9 +237,14 @@
         <span>{{ "product-info.outOfStock" | translate }}</span>
       </div>
       <div
-        *ngIf="
-          selectedVariant?.stockCount > 0 && !selectedVariant?.hasLowQuantity
-        "
+        *ngIf="selectedVariant?.stockCount > 0 && selectedVariant?.hasLowQuantity"
+        class="flex items-center text-lg text-orange-500"
+      >
+        <i class="ri-alert-line mr-2"></i>
+        <span>{{ "product-info.lowStock" | translate }}</span>
+      </div>
+      <div
+        *ngIf="selectedVariant?.stockCount > 0 && !selectedVariant?.hasLowQuantity"
         class="flex items-center text-lg text-green-500"
       >
         <i class="ri-checkbox-circle-line mr-2"></i>

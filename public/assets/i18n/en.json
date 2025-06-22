@@ -51,11 +51,12 @@
       "summary": "Stock Limit Exceeded",
       "detail": "You cannot add more than {{stock}} in stock."
     },
+    "soldOut": "Sold Out",
     "off": "Off",
     "limitedTimeOffer": "Limited Time Offer",
     "stock": "Stock",
 
-    "lowStock": "Low Stock"
+    "lowStock": "Low Quantity"
   },
   "insta-shop": {
     "instaShop": "INSTA SHOP"
@@ -636,7 +637,7 @@
     "deliveryTime": "3-5 Business days",
     "returnPolicy": "Returnable",
     "nonReturnable": "Non-Returnable",
-    "lowStock": "Low Stock",
+    "lowStock": "Low Quantity",
     "outOfStock": "Out of Stock",
     "inStock": "In Stock",
     "availableInStock": "Available in Stock",

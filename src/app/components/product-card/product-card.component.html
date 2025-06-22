@@ -5,7 +5,14 @@
   <!-- Image container with relative positioning -->
   <div class="relative h-64 w-full">
     <div
-      *ngIf="product.rating !== 0"
+      *ngIf="product.stockCount === 0"
+      class="absolute inset-0 z-20 flex items-center justify-center bg-white/80 text-2xl font-bold text-red-500"
+      style="backdrop-filter: blur(2px);"
+    >
+      {{ 'product-card.soldOut' | translate }}
+    </div>
+    <div
+      *ngIf="product.rating !== 0 && product.stockCount > 0"
       class="absolute bottom-2 left-2 z-10 bg-gray-100 px-2 py-1 shadow"
     >
       <span class="flex items-center font-medium">
@@ -24,9 +31,7 @@
 
     <div class="icon-wrapper absolute right-4 top-2 z-10">
       <i
-        [class]="
-          isInWishlist ? 'ri-heart-fill text-hover-color' : 'ri-heart-line'
-        "
+        [class]="isInWishlist ? 'ri-heart-fill text-hover-color' : 'ri-heart-line'"
         class="relative z-20 rounded-full bg-white p-1 text-xl text-hover-color shadow"
         (click)="toggleWishlist($event)"
         [id]="'product-card-wishlist-button-' + product.productId"
@@ -34,7 +39,9 @@
 
       <i
         class="ri-shopping-cart-line extra-icon-1 absolute left-0 rounded-full bg-white p-1 text-xl text-hover-color shadow"
-        (click)="addToCart(product); $event.stopPropagation()"
+        (click)="product.stockCount > 0 && addToCart(product); $event.stopPropagation()"
+        [class.opacity-50]="product.stockCount === 0"
+        [class.cursor-not-allowed]="product.stockCount === 0"
         [id]="'product-card-add-to-cart-button-' + product.productId"
       ></i>
       <i
