@@ -127,6 +127,16 @@
                 {{ "cart.mobileView.save" | translate }}:
                 {{ getSavings(item).toFixed(2) }}
               </div>
+              <div *ngIf="item.promoCodeDetail">
+                <span class="text-xs font-semibold text-blue-600">
+                  <i class="ri-gift-line me-1"></i>
+                  Promo Code: {{ item.promoCodeDetail.code }}<br />
+
+                  <span *ngIf="item.promoCodeDetail.amount">
+                    Amount: {{ item.promoCodeDetail.amount }}
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
           <button
@@ -206,6 +216,18 @@
             <i class="ri-error-warning-line mr-1 text-sm text-red-500"></i>
             <span class="text-xs text-red-600">
               {{ "cart.itemOutOfStock" | translate }}
+            </span>
+          </div>
+          <div *ngIf="item.promoCodeDetail">
+            <span class="text-xs font-semibold text-blue-600">
+              <i class="ri-gift-line mr-1"></i>
+              Promo Code: {{ item.promoCodeDetail.code }}<br />
+              <span *ngIf="item.promoCodeDetail.name">
+                Name: {{ getLocalizedText(item.promoCodeDetail.name) }}<br />
+              </span>
+              <span *ngIf="item.promoCodeDetail.amount">
+                Amount: {{ item.promoCodeDetail.amount }}
+              </span>
             </span>
           </div>
         </div>

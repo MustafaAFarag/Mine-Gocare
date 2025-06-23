@@ -15,7 +15,7 @@ export interface Product {
   variantQuantityInCart: any;
   variantInCartId: any;
   isInWishlist: boolean;
-  promoCodeDetail: any;
+  promoCodeDetail?: any;
   productVariants: ProductVariant[];
   rating: number;
 }

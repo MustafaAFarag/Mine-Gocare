@@ -10,7 +10,7 @@ import { CartSidebarService } from '../../services/cart-sidebar.service';
 import { CartItem } from '../../model/Cart';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
 import { LoadingComponent } from '../../shared/loading/loading.component';
@@ -21,6 +21,7 @@ import { LoadingComponent } from '../../shared/loading/loading.component';
   imports: [
     CommonModule,
     BreadcrumbComponent,
+    RouterModule,
     ToastModule,
     TranslateModule,
     LoadingComponent,

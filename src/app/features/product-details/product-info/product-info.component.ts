@@ -30,6 +30,7 @@ export class ProductInfoComponent {
 
   @Input()
   set productDetails(value: ProductDetails) {
+    console.log('Product Details:', value);
     this._productDetails = value;
     if (value && value.productVariants?.length > 0) {
       // Set initial selected variant
@@ -110,7 +111,7 @@ export class ProductInfoComponent {
           variantQuantityInCart: 0,
           variantInCartId: 0,
           isInWishlist: true,
-          promoCodeDetail: null,
+          promoCodeDetail: this.selectedVariant.promoCodeDetail ?? null,
           productVariants: [],
           rating: this.selectedVariant.rating,
         });

@@ -5,7 +5,7 @@
   <!-- Image container with relative positioning -->
   <div class="relative h-64 w-full">
     <div
-      *ngIf="product.stockCount === 0"
+      *ngIf="product.stockCount <= 0"
       class="absolute inset-0 z-20 flex items-center justify-center bg-white/80 text-2xl font-bold text-red-500"
       style="backdrop-filter: blur(2px)"
     >
@@ -93,13 +93,13 @@
         <p
           class="text-sm"
           [ngClass]="{
-            'text-red-500': product.stockCount === 0 || product.lowQuantity,
+            'text-red-500': product.stockCount <= 0 || product.lowQuantity,
             'text-green-500': product.stockCount > 0 && !product.lowQuantity,
-            'text-gray-500': product.stockCount === 0,
+            'text-gray-500': product.stockCount <= 0,
           }"
         >
           <i class="ri-stock-line mr-1"></i>
-          <span *ngIf="product.stockCount === 0">
+          <span *ngIf="product.stockCount <= 0">
             {{ "product-card.soldOut" | translate }}
           </span>
           <span *ngIf="product.stockCount > 0">

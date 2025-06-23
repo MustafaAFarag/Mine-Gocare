@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CartItem, CART_STORAGE_KEY } from '../../model/Cart';
 import { getFullImageUrl } from '../../lib/utils';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { AuthModalService } from '../../auth-modal.service';
@@ -19,6 +19,7 @@ import { ConfirmationDialogComponent } from '../../components/confirmation-dialo
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     BreadcrumbComponent,
     CartNoProductsComponent,
     TranslateModule,

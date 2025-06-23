@@ -58,6 +58,19 @@
                 <h3 class="font-medium text-gray-800">
                   {{ getLocalizedText(item.name) }}
                 </h3>
+                <div *ngIf="item.promoCodeDetail">
+                  <span class="text-xs font-semibold text-blue-600">
+                    <i class="ri-gift-line mr-1"></i>
+                    Promo Code: {{ item.promoCodeDetail.code }}<br />
+                    <span *ngIf="item.promoCodeDetail.name">
+                      Name: {{ getLocalizedText(item.promoCodeDetail.name)
+                      }}<br />
+                    </span>
+                    <span *ngIf="item.promoCodeDetail.amount">
+                      Amount: {{ item.promoCodeDetail.amount }}
+                    </span>
+                  </span>
+                </div>
                 <div class="mt-1">
                   <ng-container
                     *ngIf="
@@ -138,6 +151,16 @@
             <h3 class="font-medium text-gray-800">
               {{ getLocalizedText(item.name) }}
             </h3>
+            <div *ngIf="item.promoCodeDetail">
+              <span class="text-xs font-semibold text-blue-600">
+                <i class="ri-gift-line me-1"></i>
+                Promo Code: {{ item.promoCodeDetail.code }}<br />
+
+                <span *ngIf="item.promoCodeDetail.amount">
+                  Amount: {{ item.promoCodeDetail.amount }}
+                </span>
+              </span>
+            </div>
           </div>
 
           <!-- Price -->

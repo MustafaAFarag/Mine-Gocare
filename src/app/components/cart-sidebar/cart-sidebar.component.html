@@ -104,6 +104,12 @@
               <h3 class="font-medium text-gray-800">
                 {{ getLocalizedText(item.name) }}
               </h3>
+              <div *ngIf="item.promoCodeDetail">
+                <span class="text-xs font-semibold text-blue-600">
+                  <i class="ri-gift-line me-1"></i>
+                  Promo Code: {{ item.promoCodeDetail.code }}<br />
+                </span>
+              </div>
               <span class="black text-sm font-bold">
                 {{
                   "cart-sidebar.pricePerUnit"
@@ -118,6 +124,7 @@
                         }
                 }}
               </span>
+
               <span
                 *ngIf="
                   item.beforePrice !== item.afterPrice &&
