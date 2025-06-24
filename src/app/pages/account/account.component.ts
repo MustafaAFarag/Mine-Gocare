@@ -22,6 +22,14 @@ export class AccountComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.getClientProfile().subscribe();
+    // Only fetch profile if user data is not already loaded
+    // This prevents race conditions during signup/login flow
+    if (!this.authService.currentUser) {
+      this.authService.getClientProfile().subscribe({
+        error: (error) => {
+          console.error('Error fetching client profile:', error);
+        },
+      });
+    }
   }
 }

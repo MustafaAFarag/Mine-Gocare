@@ -39,7 +39,7 @@
           },
           "configurations": {
             "production": {
-              "outputPath": "dist/mine-gocare-production-18-06-25",
+              "outputPath": "dist/mine-gocare-production-23-06-25",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -61,7 +61,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "outputPath": "dist/mine-gocare-development-18-06-25",
+              "outputPath": "dist/mine-gocare-development-23-06-25",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -73,7 +73,7 @@
               "sourceMap": true
             },
             "testing": {
-              "outputPath": "dist/mine-gocare-testing-18-06-25",
+              "outputPath": "dist/mine-gocare-testing-23-06-25",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

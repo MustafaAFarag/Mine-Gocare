@@ -297,12 +297,15 @@ export class SignupFormComponent implements OnInit {
                   take(1), // Take only the first emission that passes the filter
                 )
                 .subscribe(() => {
-                  this.router.navigate(['/account/points']).then(() => {
-                    // Show congrats modal after successful navigation
-                    setTimeout(() => {
-                      this.authModalService.showCongratsModal();
-                    }, 100);
-                  });
+                  // Add a small delay to ensure all localStorage operations are complete
+                  setTimeout(() => {
+                    this.router.navigate(['/account/points']).then(() => {
+                      // Show congrats modal after successful navigation
+                      setTimeout(() => {
+                        this.authModalService.showCongratsModal();
+                      }, 100);
+                    });
+                  }, 150); // Small delay to ensure token is stored
                 });
             },
             error: (loginErr) => {

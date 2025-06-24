@@ -28,6 +28,10 @@ export class PointingSystemService {
     pageNumber: number = 1,
     pageSize: number = 10,
   ): Observable<any> {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       countryId: this.countryId,
@@ -45,6 +49,10 @@ export class PointingSystemService {
   }
 
   getAllPointingSettings(token: string): Observable<any> {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       countryId: this.countryId,
@@ -55,6 +63,10 @@ export class PointingSystemService {
   }
 
   getClientsTotalPoints(token: string): Observable<any> {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       countryId: this.countryId,
@@ -68,6 +80,10 @@ export class PointingSystemService {
     pointingCheckpoint: number,
     isHolded: boolean,
   ): Observable<any> {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       countryId: this.countryId,
@@ -83,6 +99,10 @@ export class PointingSystemService {
   }
 
   redeemingPoints(token: string, points: number): Observable<any> {
+    if (!token) {
+      throw new Error('No access token provided');
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       countryId: this.countryId,

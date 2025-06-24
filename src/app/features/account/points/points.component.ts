@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PointingSystemService } from '../../../services/pointing-system.service';
 import { CountryService } from '../../../services/country.service';
+import { AuthService } from '../../../services/auth.service';
 import {
   PointsClientPreview,
   PointSettings,
@@ -12,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PointsRedeemModalComponent } from './points-redeem-modal/points-redeem-modal.component';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 
 type Language = 'en' | 'ar';
 
@@ -35,7 +36,6 @@ export class PointsComponent implements OnInit, OnDestroy {
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 1;
-  token: string | null;
   pointsClientPreview!: PointsClientPreview;
   pointSettings!: PointSettings;
   clientPoints!: number;
@@ -53,9 +53,8 @@ export class PointsComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private messageService: MessageService,
     private countryService: CountryService,
+    private authService: AuthService,
   ) {
-    this.token = localStorage.getItem('accessToken');
-
     this.currentLang = this.translateService.currentLang as Language;
     this.translateService.onLangChange.subscribe((event) => {
       this.currentLang = event.lang as Language;
@@ -72,8 +71,22 @@ export class PointsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fetchPointsClientPreview();
-    this.fetchClientsTotalPoints();
+    // Wait for user to be available before making API calls
+    this.authService.user$
+      .pipe(
+        filter((user) => !!user), // Only proceed when user is available
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.fetchPointsClientPreview();
+        this.fetchClientsTotalPoints();
+      });
+
+    // If user is already available, fetch immediately
+    if (this.authService.currentUser) {
+      this.fetchPointsClientPreview();
+      this.fetchClientsTotalPoints();
+    }
   }
 
   ngOnDestroy(): void {
@@ -81,11 +94,16 @@ export class PointsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  private getToken(): string | null {
+    return this.authService.getLocalStorageItem('accessToken');
+  }
+
   fetchPointsClientPreview(): void {
-    if (this.token) {
+    const token = this.getToken();
+    if (token) {
       this.isLoadingPoints = true;
       this.pointingService
-        .getClientPointsPreview(this.token, 1, this.currentPage, this.pageSize)
+        .getClientPointsPreview(token, 1, this.currentPage, this.pageSize)
         .subscribe({
           next: (response) => {
             this.pointsClientPreview = response.result;
@@ -100,13 +118,16 @@ export class PointsComponent implements OnInit, OnDestroy {
             this.isLoadingPoints = false;
           },
         });
+    } else {
+      console.warn('No access token available for points preview');
     }
   }
 
   fetchClientsTotalPoints(): void {
-    if (this.token) {
+    const token = this.getToken();
+    if (token) {
       this.isLoadingTotalPoints = true;
-      this.pointingService.getClientsTotalPoints(this.token).subscribe({
+      this.pointingService.getClientsTotalPoints(token).subscribe({
         next: (response) => {
           this.clientPoints = response.result;
         },
@@ -117,6 +138,8 @@ export class PointsComponent implements OnInit, OnDestroy {
           this.isLoadingTotalPoints = false;
         },
       });
+    } else {
+      console.warn('No access token available for total points');
     }
   }
 
@@ -174,9 +197,10 @@ export class PointsComponent implements OnInit, OnDestroy {
   }
 
   redeemPoints(points: number): void {
-    if (this.token && points > 0) {
+    const token = this.getToken();
+    if (token && points > 0) {
       this.isRedeeming = true;
-      this.pointingService.redeemingPoints(this.token, points).subscribe({
+      this.pointingService.redeemingPoints(token, points).subscribe({
         next: (response) => {
           this.messageService.add({
             severity: 'success',
