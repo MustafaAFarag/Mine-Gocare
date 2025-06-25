@@ -178,7 +178,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Fetch categories first, as we need them to map names to IDs
     this.categoriesLoading = true;
-    this.productService.getCategories().subscribe({
+    this.productService.getCategories(true).subscribe({
       next: (res) => {
         this.categories = this.transformCategories(res.result);
         this.categoriesLoading = false;
