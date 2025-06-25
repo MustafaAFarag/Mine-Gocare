@@ -47,6 +47,7 @@
     "everydayCasual": "EVERYDAY CASUAL"
   },
   "product-card": {
+    "skuNumber": "SKU Number",
     "stockExceeded": {
       "summary": "Stock Limit Exceeded",
       "detail": "You cannot add more than {{stock}} in stock."
@@ -662,6 +663,7 @@
   "No brands found": "No brands found",
   "product-info": {
     "trending": "Selling fast! 5 people have this in their carts",
+    "skuNumber": "SKU Number",
     "ratings": "Ratings",
     "color": "Color",
     "size": "Size",
