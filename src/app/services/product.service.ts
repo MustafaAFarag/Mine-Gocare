@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { ApiEndPoint } from '../constants/api.constant';
 import { Observable } from 'rxjs';
 import { Category } from '../model/Categories';
-import { Product, ProductApiResponse } from '../model/Product';
+import { ProductApiResponse } from '../model/Product';
 
 @Injectable({
   providedIn: 'root',

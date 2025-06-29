@@ -136,7 +136,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
         this.brandsLoading = true;
 
         // Refetch brands when country changes
-        this.brandService.getBrands().subscribe({
+        this.brandService.getBrands(true).subscribe({
           next: (response) => {
             const currentLang = this.languageService.getCurrentLanguage();
             this.brands = response.result.map((brand: any) => ({
@@ -195,7 +195,7 @@ export class CollectionsComponent implements OnInit, OnDestroy {
 
     // Fetch brands from brandService
     this.brandsLoading = true;
-    this.brandService.getBrands().subscribe({
+    this.brandService.getBrands(true).subscribe({
       next: (response) => {
         const currentLang = this.languageService.getCurrentLanguage();
         this.brands = response.result.map((brand: any) => ({

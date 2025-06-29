@@ -10,7 +10,11 @@ import { ApiEndPoint } from '../constants/api.constant';
 export class BrandService {
   constructor(private http: HttpClient) {}
 
-  getBrands(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/${ApiEndPoint.getBrands}`);
+  getBrands(noCache: boolean = true): Observable<any> {
+    let url = `${environment.apiUrl}/${ApiEndPoint.getBrands}`;
+    if (noCache) {
+      url += `?_=${Date.now()}`;
+    }
+    return this.http.get<any>(url);
   }
 }
