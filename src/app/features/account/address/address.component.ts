@@ -274,9 +274,9 @@ export class AddressComponent implements OnInit {
       case 0:
         return this.translateService.instant('address.types.home');
       case 1:
-        return this.translateService.instant('address.types.work');
-      case 2:
         return this.translateService.instant('address.types.office');
+      case 2:
+        return this.translateService.instant('address.types.other');
       default:
         return this.translateService.instant('address.types.other');
     }
