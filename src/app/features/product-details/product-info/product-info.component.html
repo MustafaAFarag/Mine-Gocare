@@ -96,6 +96,10 @@
     "
   ></div>
 
+  <div class="mt-4 text-sm text-gray-700">
+    {{ "product-info.skuNumber" | translate }}: {{ selectedVariant.skuNumber }}
+  </div>
+
   <div *ngIf="productDetails.hasVariant" class="mt-6">
     <!-- Color Variants -->
     <div

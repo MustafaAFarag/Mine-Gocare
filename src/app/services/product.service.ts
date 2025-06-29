@@ -17,10 +17,12 @@ export class ProductService {
   ) {}
 
   // CATEGORY API
-  getCategories(): Observable<{ result: Category[] }> {
-    return this.http.get<{ result: Category[] }>(
-      `${environment.apiUrl}/${ApiEndPoint.allCategoriesApi}`,
-    );
+  getCategories(noCache: boolean = true): Observable<{ result: Category[] }> {
+    let url = `${environment.apiUrl}/${ApiEndPoint.allCategoriesApi}`;
+    if (noCache) {
+      url += `?_=${Date.now()}`;
+    }
+    return this.http.get<{ result: Category[] }>(url);
   }
 
   // Product API

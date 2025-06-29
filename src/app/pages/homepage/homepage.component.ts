@@ -1,5 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { ProductService } from '../../services/product.service';
+import { isPlatformBrowser } from '@angular/common';
+
 import { Category } from '../../model/Categories';
 import { Product } from '../../model/Product';
 import { BannerSectionComponent } from '../../features/homepage/banner-section/banner-section.component';
@@ -37,6 +45,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private countryService: CountryService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     // Subscribe to country changes
     this.countrySubscription = this.countryService.country$.subscribe(() => {
@@ -48,6 +57,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchCategoriesAPI();
+
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.fetchCategoriesAPI(true); // Pass a flag to force no-cache
+      }, 0);
+    }
   }
 
   ngOnDestroy(): void {
@@ -56,8 +71,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchCategoriesAPI() {
-    this.productService.getCategories().subscribe({
+  fetchCategoriesAPI(noCache: boolean = false) {
+    this.productService.getCategories(noCache).subscribe({
       next: (res) => {
         this.categories = res.result;
         this.isLoadingCategories = false;
