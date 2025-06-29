@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderDetails } from '../../../../model/Order';
 import { LoadingComponent } from '../../../../shared/loading/loading.component';
@@ -6,6 +13,7 @@ import { getFullImageUrl } from '../../../../lib/utils';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OrderService } from '../../../../services/order.service';
 import { ConfirmationModalComponent } from '../../../../components/confirmation-modal/confirmation-modal.component';
+import { Subscription } from 'rxjs';
 
 interface OrderItem {
   id: number;
@@ -37,7 +45,7 @@ interface OrderStatus {
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css',
 })
-export class OrderDetailsComponent implements OnInit {
+export class OrderDetailsComponent implements OnInit, OnDestroy {
   @Input() orderId: number | null = null;
   @Input() orderDetails: OrderDetails | null = null;
   @Output() backClicked = new EventEmitter<void>();
@@ -46,6 +54,8 @@ export class OrderDetailsComponent implements OnInit {
 
   // Confirmation modal properties
   showConfirmationModal = false;
+
+  private languageSubscription?: Subscription;
 
   constructor(
     private translateService: TranslateService,
@@ -105,6 +115,21 @@ export class OrderDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentLang = this.translateService.currentLang || 'en';
+
+    // Subscribe to language changes to reset modal state
+    this.languageSubscription = this.translateService.onLangChange.subscribe(
+      () => {
+        this.currentLang = this.translateService.currentLang || 'en';
+        // Reset modal state when language changes to prevent issues
+        this.showConfirmationModal = false;
+      },
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
   }
 
   goBack(): void {

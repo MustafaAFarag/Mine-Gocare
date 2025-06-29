@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -10,7 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './confirmation-modal.component.html',
   styleUrl: './confirmation-modal.component.css',
 })
-export class ConfirmationModalComponent {
+export class ConfirmationModalComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = false;
   @Input() title: string = '';
   @Input() message: string = '';
@@ -20,6 +28,28 @@ export class ConfirmationModalComponent {
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() confirmed = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
+
+  private languageSubscription?: Subscription;
+
+  constructor(private translateService: TranslateService) {}
+
+  ngOnInit() {
+    // Subscribe to language changes to ensure modal works properly
+    this.languageSubscription = this.translateService.onLangChange.subscribe(
+      () => {
+        // Force a change detection cycle when language changes
+        setTimeout(() => {
+          // This ensures the modal content is properly updated
+        }, 0);
+      },
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
 
   closeDialog() {
     this.visibleChange.emit(false);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderService } from '../../../services/order.service';
@@ -6,6 +6,7 @@ import { ClientOrders, OrderDetails } from '../../../model/Order';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
 import { ConfirmationModalComponent } from '../../../components/confirmation-modal/confirmation-modal.component';
+import { Subscription } from 'rxjs';
 
 type Language = 'en' | 'ar';
 
@@ -22,7 +23,7 @@ type Language = 'en' | 'ar';
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit, OnDestroy {
   token: string | null = null;
   orders: ClientOrders[] = [];
   showOrderDetails = false;
@@ -42,6 +43,8 @@ export class OrdersComponent implements OnInit {
   showConfirmationModal = false;
   orderToCancel: number | null = null;
 
+  private languageSubscription?: Subscription;
+
   constructor(
     private orderService: OrderService,
     private translateService: TranslateService,
@@ -58,6 +61,21 @@ export class OrdersComponent implements OnInit {
       this.token = localStorage.getItem('accessToken');
     }
     this.fetchClientOrders();
+
+    // Subscribe to language changes to reset modal state
+    this.languageSubscription = this.translateService.onLangChange.subscribe(
+      () => {
+        // Reset modal state when language changes to prevent issues
+        this.showConfirmationModal = false;
+        this.orderToCancel = null;
+      },
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
   }
 
   fetchClientOrders(): void {
