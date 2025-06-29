@@ -7,7 +7,6 @@ export interface CartItem {
   beforePrice: number;
   quantity: number;
   currency?: any;
-
   promoCodeDetail?: any;
   stockCount?: number;
 }

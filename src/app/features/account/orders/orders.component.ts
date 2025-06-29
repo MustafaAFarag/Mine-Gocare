@@ -5,6 +5,7 @@ import { OrderService } from '../../../services/order.service';
 import { ClientOrders, OrderDetails } from '../../../model/Order';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { ConfirmationModalComponent } from '../../../components/confirmation-modal/confirmation-modal.component';
 
 type Language = 'en' | 'ar';
 
@@ -16,6 +17,7 @@ type Language = 'en' | 'ar';
     OrderDetailsComponent,
     TranslateModule,
     LoadingComponent,
+    ConfirmationModalComponent,
   ],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
@@ -35,6 +37,10 @@ export class OrdersComponent implements OnInit {
   totalPages = 0;
 
   isLoading: boolean = true;
+
+  // Confirmation modal properties
+  showConfirmationModal = false;
+  orderToCancel: number | null = null;
 
   constructor(
     private orderService: OrderService,
@@ -118,24 +124,33 @@ export class OrdersComponent implements OnInit {
   }
 
   cancelOrder(orderId: number): void {
-    if (this.token) {
-      // Show confirmation dialog
-      if (confirm('Are you sure you want to cancel this order?')) {
-        this.orderService
-          .cancelOrder(this.token, orderId, 'Order cancelled by user')
-          .subscribe(
-            (response) => {
-              // Refresh the orders list
-              this.fetchClientOrders();
-            },
-            (error) => {
-              console.error('Error cancelling order:', error);
-              alert('Failed to cancel order. Please try again.');
-            },
-          );
-      }
-    } else {
-      console.error('No access token available');
+    this.orderToCancel = orderId;
+    this.showConfirmationModal = true;
+  }
+
+  onConfirmCancel(): void {
+    if (this.orderToCancel && this.token) {
+      this.orderService
+        .cancelOrder(this.token, this.orderToCancel, 'Order cancelled by user')
+        .subscribe(
+          (response) => {
+            // Refresh the orders list
+            this.fetchClientOrders();
+          },
+          (error) => {
+            console.error('Error cancelling order:', error);
+            alert('Failed to cancel order. Please try again.');
+          },
+        );
     }
+    this.orderToCancel = null;
+  }
+
+  onCancelConfirmation(): void {
+    this.orderToCancel = null;
+  }
+
+  canCancelOrder(order: ClientOrders): boolean {
+    return order.status === 1 || order.status === 2;
   }
 }

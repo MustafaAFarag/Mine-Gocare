@@ -1,0 +1,42 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '90vw', maxWidth: '500px' }"
+  [contentStyle]="{ padding: '2rem' }"
+  [showHeader]="false"
+  styleClass="confirmation-modal"
+>
+  <div class="flex flex-col items-center gap-6 text-center">
+    <div
+      class="flex h-20 w-20 items-center justify-center rounded-full"
+      [ngClass]="getBgClass()"
+    >
+      <i [class]="getIconClass()" class="text-4xl"></i>
+    </div>
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold text-gray-800">
+        {{ title }}
+      </h2>
+      <p class="text-gray-600">
+        {{ message }}
+      </p>
+    </div>
+    <div class="mt-2 flex w-full gap-3">
+      <button
+        (click)="cancel()"
+        class="flex-1 rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+      >
+        {{ cancelText }}
+      </button>
+      <button
+        (click)="confirm()"
+        class="flex-1 rounded-lg px-6 py-3 text-white transition-colors"
+        [ngClass]="getButtonClass()"
+      >
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</p-dialog>

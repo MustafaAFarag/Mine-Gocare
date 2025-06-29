@@ -5,6 +5,7 @@ import { LoadingComponent } from '../../../../shared/loading/loading.component';
 import { getFullImageUrl } from '../../../../lib/utils';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OrderService } from '../../../../services/order.service';
+import { ConfirmationModalComponent } from '../../../../components/confirmation-modal/confirmation-modal.component';
 
 interface OrderItem {
   id: number;
@@ -27,7 +28,12 @@ interface OrderStatus {
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [CommonModule, LoadingComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    LoadingComponent,
+    TranslateModule,
+    ConfirmationModalComponent,
+  ],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css',
 })
@@ -37,6 +43,9 @@ export class OrderDetailsComponent implements OnInit {
   @Output() backClicked = new EventEmitter<void>();
 
   currentLang: string = 'en';
+
+  // Confirmation modal properties
+  showConfirmationModal = false;
 
   constructor(
     private translateService: TranslateService,
@@ -261,33 +270,39 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   cancelOrder(): void {
+    this.showConfirmationModal = true;
+  }
+
+  onConfirmCancel(): void {
     if (!this.orderId) return;
 
-    if (confirm('Are you sure you want to cancel this order?')) {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        this.orderService
-          .cancelOrder(token, this.orderId, 'Order cancelled by user')
-          .subscribe(
-            (response) => {
-              // Refresh the order details
-              this.orderService
-                .getClientOrderDetails(this.orderId!, token)
-                .subscribe(
-                  (response) => {
-                    this.orderDetails = response.result;
-                  },
-                  (error) => {
-                    console.error('Error refreshing order details:', error);
-                  },
-                );
-            },
-            (error) => {
-              console.error('Error cancelling order:', error);
-              alert('Failed to cancel order. Please try again.');
-            },
-          );
-      }
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      this.orderService
+        .cancelOrder(token, this.orderId, 'Order cancelled by user')
+        .subscribe(
+          (response) => {
+            // Refresh the order details
+            this.orderService
+              .getClientOrderDetails(this.orderId!, token)
+              .subscribe(
+                (response) => {
+                  this.orderDetails = response.result;
+                },
+                (error) => {
+                  console.error('Error refreshing order details:', error);
+                },
+              );
+          },
+          (error) => {
+            console.error('Error cancelling order:', error);
+            alert('Failed to cancel order. Please try again.');
+          },
+        );
     }
+  }
+
+  onCancelConfirmation(): void {
+    // User cancelled the confirmation, do nothing
   }
 }

@@ -694,6 +694,9 @@
     },
     "orders": {
       "title": "طلباتي",
+      "cancelOrderTitle": "إلغاء الطلب",
+      "cancelOrderMessage": "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟",
+      "cancel": "العودة",
       "orderNumber": "رقم الطلب",
       "promoDiscount": "خصم كود الخصم",
       "date": "التاريخ",

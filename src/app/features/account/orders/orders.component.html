@@ -110,6 +110,15 @@
               >
                 <i class="ri-eye-line"></i>
               </button>
+              <button
+                *ngIf="canCancelOrder(order)"
+                (click)="cancelOrder(order.id)"
+                id="orders-cancel-order-button"
+                class="text-red-500 hover:text-red-700"
+                [attr.aria-label]="'account.orders.cancelOrder' | translate"
+              >
+                <i class="ri-close-circle-line"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -214,6 +223,15 @@
         >
           <i class="ri-eye-line"></i>
         </button>
+        <button
+          *ngIf="canCancelOrder(order)"
+          (click)="cancelOrder(order.id)"
+          id="orders-cancel-order-button"
+          class="text-red-500 hover:text-red-700"
+          [attr.aria-label]="'account.orders.cancelOrder' | translate"
+        >
+          <i class="ri-close-circle-line"></i>
+        </button>
       </div>
     </div>
 
@@ -277,3 +295,14 @@
   [orderDetails]="orderDetails"
   (backClicked)="hideOrderDetails()"
 ></app-order-details>
+
+<app-confirmation-modal
+  [(visible)]="showConfirmationModal"
+  [title]="'account.orders.cancelOrderTitle' | translate"
+  [message]="'account.orders.cancelOrderMessage' | translate"
+  [confirmText]="'account.orders.cancelOrder' | translate"
+  [cancelText]="'account.orders.cancel' | translate"
+  type="danger"
+  (confirmed)="onConfirmCancel()"
+  (cancelled)="onCancelConfirmation()"
+></app-confirmation-modal>

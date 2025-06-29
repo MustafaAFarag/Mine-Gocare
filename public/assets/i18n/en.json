@@ -723,7 +723,9 @@
     },
     "orders": {
       "title": "My Orders",
-
+      "cancelOrderTitle": "Cancel Order",
+      "cancelOrderMessage": "Are you sure you want to cancel this order?",
+      "cancel": "Go back",
       "orderNumber": "Order Number",
       "promoDiscount": "Promocode Discount",
       "date": "Date",
